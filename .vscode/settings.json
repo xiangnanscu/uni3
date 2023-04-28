@@ -1,0 +1,62 @@
+{
+  "Lua.runtime.version": "LuaJIT",
+  "Lua.diagnostics.globals": [
+    "ngx",
+    "xodel",
+    "loger"
+  ],
+  // https://github.com/sumneko/lua-language-server/tree/master/meta/3rd
+  "Lua.workspace.library": [
+    "${3rd}/lfs/library",
+    "${3rd}/luassert/library",
+    "${3rd}/busted/library",
+    "${3rd}/OpenResty/library"
+  ],
+  "html.format.wrapAttributesIndentSize": 2,
+  "html.format.wrapAttributes": "force-expand-multiline", //volar格式化template的选项
+  "html.format.wrapLineLength": 80,
+  "Lua.runtime.unicodeName": true,
+  "Lua.typeFormat.config": {
+    "format_line": "false",
+    "auto_complete_end": "false",
+    "auto_complete_table_sep": "false"
+  },
+  "[conf]": {
+    "editor.formatOnSave": false
+  },
+  "Lua.workspace.checkThirdParty": false,
+  "files.associations": {
+    "*.json": "jsonc"
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true,
+    "source.fixAll.eslint": true,
+    "source.fixAll.stylelint": true
+  },
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript"
+  ],
+  "editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
+  // "editor.detectIndentation": false,
+  // "editor.insertSpaces": false, // 加了这个会导致ts文件的空格在save时被转换为tab
+  "editor.tabSize": 2,
+  "editor.wordWrapColumn": 120,
+  "editor.formatOnPaste": false, // required
+  "editor.formatOnType": false, // required
+  "editor.formatOnSave": true, // optional
+  "editor.formatOnSaveMode": "file", // required to format on save
+  "files.autoSave": "onFocusChange", // optional but recommended
+  "volar.inlayHints.eventArgumentInInlineHandlers": false,
+  "[vue]": {
+    "editor.defaultFormatter": "Vue.volar"
+    // "editor.defaultFormatter": "Vue.volar"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
+  } // optional but recommended
+}

@@ -1,7 +1,8 @@
 <template>
   <view class="fui-wrap">
+    <uni-tag text="标签">IT</uni-tag>
     <view class="fui-page__hd">
-      <navigator url="/pages/ButtonList/ButtonList">按钮23</navigator>
+      <navigator url="/pages/ButtonList/ButtonList">按钮213</navigator>
       <view class="fui-page__title">BottomPopup</view>
       <view class="fui-page__desc">BottomPopup 底部弹出层，从底部弹出的浮层，引导用户进行相关操作。</view>
     </view>
