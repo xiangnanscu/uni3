@@ -1,4 +1,3 @@
-<!--本文件由FirstUI授权予江安红云智慧科技有限公司（手机号：  19  9600 9  07  6 0，身份证尾号：49 7 8   24）专用，请尊重知识产权，勿私下传播，违者追究法律责任。-->
 <template>
 	<view class="fui-steps__wrap" :class="{'fui-steps__flex':direction==='row'}"
 		:style="{paddingTop:padding[0] || 0,paddingRight:padding[1]||0,paddingBottom:padding[2] || padding[0]||0,paddingLeft:padding[3] || padding[1]||0,background:background}">

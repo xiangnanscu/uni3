@@ -1,4 +1,3 @@
-// 本文件由FirstUI授权予江安红云智慧科技有限公司（手机号：   1   9  9 6009 0760，身份证尾号： 4978   2 4）专用，请尊重知识产权，勿私下传播，违者追究法律责任。
 // #ifdef APP-NVUE
 //BindingX实现滑动比较流畅（已实现），缺点不好实时更新数据，暂时废弃
 // const BindingX = uni.requireNativePlugin('bindingx');

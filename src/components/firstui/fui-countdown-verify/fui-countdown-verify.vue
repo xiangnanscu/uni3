@@ -1,4 +1,3 @@
-<!--本文件由FirstUI授权予江安红云智慧科技有限公司（手机号：199 6   00    9076  0，身份证尾号：4 9   782 4）专用，请尊重知识产权，勿私下传播，违者追究法律责任。-->
 <template>
 	<view class="fui-countdown__verify" :class="{'fui-cdv__disabled':status>1}"
 		:style="{ width: width+'rpx', height: height+'rpx', marginLeft: marginLeft+'rpx',marginRight:marginRight+'rpx', borderRadius: radius+'rpx',  background: background,borderColor:!borderColor || borderColor==='true'?background:borderColor }">

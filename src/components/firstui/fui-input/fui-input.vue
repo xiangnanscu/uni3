@@ -1,4 +1,3 @@
-<!--本文件由FirstUI授权予江安红云智慧科技有限公司（手机号： 19 96  009 0    76 0，身份证尾号：    4 97824）专用，请尊重知识产权，勿私下传播，违者追究法律责任。-->
 <template>
 	<view :class="{'fui-input__border':inputBorder,'fui-radius__fillet':isFillet}" :style="getStyles" @tap="fieldClick">
 		<view class="fui-input__wrap"

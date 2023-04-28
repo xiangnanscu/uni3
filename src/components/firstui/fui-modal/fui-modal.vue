@@ -1,4 +1,3 @@
-<!--本文件由FirstUI授权予江安红云智慧科技有限公司（手机号：  199 6 0 0    9076 0，身份证尾号：4 97  8  24）专用，请尊重知识产权，勿私下传播，违者追究法律责任。-->
 <template>
 	<view class="fui-modal__wrap" :style="{background:maskBackground,zIndex:zIndex}"
 		:class="{'fui-modal__fadein':isShow}" @tap="closeModal" @touchmove.stop.prevent="stop" v-if="isShow || !isNvue"

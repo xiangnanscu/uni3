@@ -1,4 +1,3 @@
-<!--本文件由FirstUI授权予江安红云智慧科技有限公司（手机号： 19960 0       9 0760，身份证尾号： 4 9782   4）专用，请尊重知识产权，勿私下传播，违者追究法律责任。-->
 <template>
 	<view class="fui-uploadv__wrap">
 		<view class="fui-uploadv__item" :style="{width:width+'rpx',height:height+'rpx'}" v-for="(item,index) in urls"

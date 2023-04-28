@@ -1,4 +1,3 @@
-<!--本文件由FirstUI授权予江安红云智慧科技有限公司（手机号：  1     996 00 9 0760，身份证尾号：497  8 2  4）专用，请尊重知识产权，勿私下传播，违者追究法律责任。-->
 <template>
 	<view class="fui-row__box" :class="[flex?'fui-row__flex':'', justifyClass,alignClass]" :style="{marginTop:marginTop,marginBottom:marginBottom,marginLeft:`-${marginValue}rpx`,
 		marginRight:`-${marginValue}rpx`}">

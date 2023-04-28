@@ -1,4 +1,3 @@
-<!--本文件由FirstUI授权予江安红云智慧科技有限公司（手机号：    1996 0  0 9076  0，身份证尾号：4     97824）专用，请尊重知识产权，勿私下传播，违者追究法律责任。-->
 <template>
 	<view class="fui-backtop__wrap"
 		:style="{width:width+'rpx',height:width+'rpx',borderRadius:isNvue?width+'rpx':'50%' ,bottom: bottom + 'rpx', right: right + 'rpx',background:background }"

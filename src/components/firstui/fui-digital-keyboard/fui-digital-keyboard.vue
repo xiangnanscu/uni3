@@ -1,4 +1,3 @@
-<!--本文件由FirstUI授权予江安红云智慧科技有限公司（手机号：1  99 6   00 907   60，身份证尾号：4   9 7 824）专用，请尊重知识产权，勿私下传播，违者追究法律责任。-->
 <template>
 	<view class="fui-digital__keyboard-wrap"
 		:class="{'fui-digital__keyboard__ani':show,'fui-dk__theme-light':theme==='light','fui-dk__theme-dark':theme==='dark','fui-dk__safe-weex':iphoneX && safeArea}"

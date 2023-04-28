@@ -1,4 +1,3 @@
-// 本文件由FirstUI授权予江安红云智慧科技有限公司（手机号：1  9 96     0 09 0760，身份证尾号： 4 97  8 24）专用，请尊重知识产权，勿私下传播，违者追究法律责任。
 export default {
 	"addressbook":"\ue80c",
 	"addfriends-fill": "\ue80a",

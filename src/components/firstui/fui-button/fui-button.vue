@@ -1,4 +1,3 @@
-<!--本文件由FirstUI授权予江安红云智慧科技有限公司（手机号： 1996 0  0    90 7 60，身份证尾号： 49 7 82  4）专用，请尊重知识产权，勿私下传播，违者追究法律责任。-->
 <template>
 	<view class="fui-button__wrap" :class="[!width || width==='100%' || width===true?'fui-button__flex-1':'',disabled && !disabledBackground ? 'fui-button__opacity' : '']"
 		:style="{width: width,height: getHeight,marginTop:margin[0] || 0,	marginRight:margin[1]||0,marginBottom:margin[2] || margin[0]||0,marginLeft:margin[3] || margin[1]||0,borderRadius: getRadius,background:getBackground}"

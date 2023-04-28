@@ -1,4 +1,3 @@
-<!--本文件由FirstUI授权予江安红云智慧科技有限公司（手机号：  1  9 96   00  90760，身份证尾号：4 97 8   24）专用，请尊重知识产权，勿私下传播，违者追究法律责任。-->
 <template>
 	<view class="fui-alert__wrap" :class="[background?'':('fui-alert__'+type)]"
 		:style="{background:background || getColor(type),borderRadius:radius,paddingTop:padding[0] || 0,paddingRight:padding[1]||0,paddingBottom:padding[2] || padding[0]||0,paddingLeft:padding[3] || padding[1]||0,marginTop:marginTop+'rpx',marginBottom:marginBottom+'rpx'}">

@@ -1,4 +1,3 @@
-// 本文件由FirstUI授权予江安红云智慧科技有限公司（手机号：19 96   0   0  9 0760，身份证尾号： 49   7 824）专用，请尊重知识产权，勿私下传播，违者追究法律责任。
 // #ifndef APP-PLUS || MP-WEIXIN || H5
 export default {
 	data() {

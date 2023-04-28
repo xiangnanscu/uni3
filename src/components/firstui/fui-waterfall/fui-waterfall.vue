@@ -1,4 +1,3 @@
-<!--本文件由FirstUI授权予江安红云智慧科技有限公司（手机号： 1   99600   9 0 7 60，身份证尾号：  497 82  4）专用，请尊重知识产权，勿私下传播，违者追究法律责任。-->
 <template>
 	<view class="fui-waterfall__wrap" :style="{height:height+'px'}">
 		<slot></slot>

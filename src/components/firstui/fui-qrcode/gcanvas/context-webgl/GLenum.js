@@ -1,4 +1,3 @@
-// 本文件由FirstUI授权予江安红云智慧科技有限公司（手机号： 1   99600 9 0 7   60，身份证尾号：49 7 8   24）专用，请尊重知识产权，勿私下传播，违者追究法律责任。
 export default {
     "DEPTH_BUFFER_BIT": 256,
     "STENCIL_BUFFER_BIT": 1024,

@@ -1,4 +1,3 @@
-<!--本文件由FirstUI授权予江安红云智慧科技有限公司（手机号： 199 600    9   0 760，身份证尾号：4   97  824）专用，请尊重知识产权，勿私下传播，违者追究法律责任。-->
 <template>
 	<view class="fui-footer" :class="[isFixed?'fui-footer__fixed-bottom':'']" :style='{background:background}'>
 		<view class="fui-footer__link" v-if="navigate.length>0">

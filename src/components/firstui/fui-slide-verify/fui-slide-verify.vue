@@ -1,4 +1,3 @@
-<!--本文件由FirstUI授权予江安红云智慧科技有限公司（手机号：1  996     009 076  0，身份证尾号：497    8 24）专用，请尊重知识产权，勿私下传播，违者追究法律责任。-->
 <template>
 	<view class="fui-slideverify__wrap" :style="{width:totalWidth+'px',height:height+'rpx',background:background}">
 		<text class="fui-sv__text-tip" :style="{fontSize:size+'rpx',background:getBackground,color:color}"

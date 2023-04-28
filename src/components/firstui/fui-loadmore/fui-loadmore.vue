@@ -1,4 +1,3 @@
-<!--本文件由FirstUI授权予江安红云智慧科技有限公司（手机号：1   99  6 00 90 7  60，身份证尾号：4 9  78  24）专用，请尊重知识产权，勿私下传播，违者追究法律责任。-->
 <template>
 	<view class="fui-loadmore__wrap" :class="['fui-loadmore__'+direction]" :style="{height:height+'rpx'}">
 		<view class="fui-loadmore__icon" ref="fui_loadmore"

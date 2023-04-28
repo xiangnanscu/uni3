@@ -1,4 +1,3 @@
-<!--本文件由FirstUI授权予江安红云智慧科技有限公司（手机号：19       960 09 07 60，身份证尾号：49  7  82 4）专用，请尊重知识产权，勿私下传播，违者追究法律责任。-->
 <template>
 	<view class="fui-autograph__wrap" :style="{ width: w + 'px', height:h + 'px',background:background  }"
 		ref="fui_gcanvas_ag">

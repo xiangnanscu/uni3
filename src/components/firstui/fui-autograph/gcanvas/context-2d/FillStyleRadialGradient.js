@@ -1,4 +1,3 @@
-// 本文件由FirstUI授权予江安红云智慧科技有限公司（手机号：   1   9 9  60090 760，身份证尾号： 497  82  4）专用，请尊重知识产权，勿私下传播，违者追究法律责任。
 class FillStyleRadialGradient {
     constructor(x0, y0, r0, x1, y1, r1) {
         this._start_pos = { _x: x0, _y: y0, _r: r0 };

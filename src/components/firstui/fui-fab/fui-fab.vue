@@ -1,4 +1,3 @@
-<!--本文件由FirstUI授权予江安红云智慧科技有限公司（手机号：19      9 6009 076  0，身份证尾号：4 9  78 2 4）专用，请尊重知识产权，勿私下传播，违者追究法律责任。-->
 <template>
 	<view @touchmove.stop.prevent="stop">
 		<view class="fui-fab__mask" :class="{'fui-fab__mask-show':isShow}" :style="getStyle" ref="fui_mask_ani"

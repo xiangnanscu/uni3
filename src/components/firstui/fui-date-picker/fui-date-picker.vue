@@ -1,4 +1,3 @@
-<!--本文件由FirstUI授权予江安红云智慧科技有限公司（手机号： 1  9  9600  907 6  0，身份证尾号：  4  9782 4）专用，请尊重知识产权，勿私下传播，违者追究法律责任。-->
 <template>
 	<view class="fui-date__picker-wrap" @touchend="stop">
 		<view class="fui-date__picker-mask" @touchmove.stop.prevent="stop" :class="{'fui-dpk__mask-show':isShow}"

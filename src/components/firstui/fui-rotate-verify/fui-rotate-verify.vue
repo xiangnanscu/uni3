@@ -1,4 +1,3 @@
-<!--本文件由FirstUI授权予江安红云智慧科技有限公司（手机号：1    9 96 009 07   60，身份证尾号： 49  78  24）专用，请尊重知识产权，勿私下传播，违者追究法律责任。-->
 <template>
 	<view class="fui-rotate__verify-wrap" :class="{'fui-rv__wrap-show':isShow}"
 		:style="{background:maskBgColor,zIndex:zIndex}" @tap="maskClose" @touchmove.stop.prevent="stop"

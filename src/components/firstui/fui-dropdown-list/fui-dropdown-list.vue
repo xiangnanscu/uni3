@@ -1,4 +1,3 @@
-<!--本文件由FirstUI授权予江安红云智慧科技有限公司（手机号：199 6    00  90  76 0，身份证尾号：4 9 7 82  4）专用，请尊重知识产权，勿私下传播，违者追究法律责任。-->
 <template>
 	<view class="fui-dropdown__list-wrap" :class="{'fui-dropdown__list-show':isShow}"
 		:style="{background:maskBackground,zIndex:zIndex}" v-if="isShow || !isNvue" ref="fui_ddl_ani" @tap="close(1)">

@@ -1,4 +1,3 @@
-<!--本文件由FirstUI授权予江安红云智慧科技有限公司（手机号：1 996    00 907 6   0，身份证尾号：   497  824）专用，请尊重知识产权，勿私下传播，违者追究法律责任。-->
 <template>
 	<view :class="{'fui-loading__mask':(isMask || isNvue) && isFixed}">
 		<view class="fui-loading fui-loading__wrap" :class="{'fui-loading__fixed':isFixed && !isNvue}"
