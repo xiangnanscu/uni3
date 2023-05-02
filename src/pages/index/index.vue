@@ -2,52 +2,112 @@
   <view class="fui-wrap">
     <uni-tag text="标签">IT</uni-tag>
     <view class="fui-page__hd">
-      <navigator url="/pages/ButtonList/ButtonList">按钮213</navigator>
+      <navigator url="/pages/ButtonList/ButtonList">按钮21344556</navigator>
       <view class="fui-page__title">BottomPopup</view>
       <view class="fui-page__desc">BottomPopup 底部弹出层，从底部弹出的浮层，引导用户进行相关操作。</view>
     </view>
     <view class="fui-page__bd">
-      <fui-button type="gray" width="400rpx" height="84rpx" text="基础使用" bold :margin="['24rpx']"
-        @click="showPopup(1)"></fui-button>
-      <fui-button type="gray" width="400rpx" height="84rpx" text="案例一" bold @click="showPopup(2)">
+      <fui-button
+        type="gray"
+        width="400rpx"
+        height="84rpx"
+        text="基础使用"
+        bold
+        :margin="['24rpx']"
+        @click="showPopup(1)"
+      ></fui-button>
+      <fui-button
+        type="gray"
+        width="400rpx"
+        height="84rpx"
+        text="案例一"
+        bold
+        @click="showPopup(2)"
+      >
       </fui-button>
-      <fui-button type="gray" width="400rpx" height="84rpx" text="内容可滚动" :margin="['24rpx']" bold @click="showPopup(3)">
+      <fui-button
+        type="gray"
+        width="400rpx"
+        height="84rpx"
+        text="内容可滚动"
+        :margin="['24rpx']"
+        bold
+        @click="showPopup(3)"
+      >
       </fui-button>
     </view>
 
-    <fui-bottom-popup :show="show" @close="closePopup(1)">
+    <fui-bottom-popup
+      :show="show"
+      @close="closePopup(1)"
+    >
       <view class="fui-custom__wrap">
         这是自定义内容区
       </view>
     </fui-bottom-popup>
 
     <!--案例一-->
-    <fui-bottom-popup :show="show2" :maskClosable="false">
+    <fui-bottom-popup
+      :show="show2"
+      :maskClosable="false"
+    >
       <view class="fui-popup__container">
         <text class="fui-title">测试标题一</text>
         <text class="fui-sub__title">测试标题一的副标题</text>
         <text class="fui-descr">辅助描述内容，可根据实际需要安排</text>
         <text class="fui-sub__descr">辅助提示内容，可根据实际需要安排</text>
         <view class="fui-btn__box">
-          <fui-button type="gray" width="240rpx" height="80rpx" text="辅助操作" :margin="['0', '16rpx']">
+          <fui-button
+            type="gray"
+            width="240rpx"
+            height="80rpx"
+            text="辅助操作"
+            :margin="['0', '16rpx']"
+          >
           </fui-button>
-          <fui-button width="240rpx" height="80rpx" text="主操作" :margin="['0', '16rpx']"></fui-button>
+          <fui-button
+            width="240rpx"
+            height="80rpx"
+            text="主操作"
+            :margin="['0', '16rpx']"
+          ></fui-button>
         </view>
 
-        <view class="fui-icon__close" @tap="closePopup(2)">
-          <fui-icon name="close" :size="48"></fui-icon>
+        <view
+          class="fui-icon__close"
+          @tap="closePopup(2)"
+        >
+          <fui-icon
+            name="close"
+            :size="48"
+          ></fui-icon>
         </view>
       </view>
     </fui-bottom-popup>
 
-    <fui-bottom-popup :show="show3" @close="closePopup(3)">
+    <fui-bottom-popup
+      :show="show3"
+      @close="closePopup(3)"
+    >
       <view class="fui-scroll__wrap">
         <view class="fui-title fui-title__pb">测试标题二</view>
-        <scroll-view scroll-y class="fui-scroll__view">
-          <fui-list-cell v-for="(item, index) in itemList" :key="index">item{{ index + 1 }}</fui-list-cell>
+        <scroll-view
+          scroll-y
+          class="fui-scroll__view"
+        >
+          <fui-list-cell
+            v-for="(item, index) in itemList"
+            :key="index"
+          >item{{ index + 1 }}</fui-list-cell>
         </scroll-view>
-        <view class="fui-icon__close" @tap="closePopup(3)">
-          <fui-icon name="close" :size="48"></fui-icon>
+        <view
+          class="fui-icon__close"
+          @tap="closePopup(3)"
+        >
+          <fui-icon
+            name="close"
+            :size="48"
+          ></fui-icon>
         </view>
       </view>
     </fui-bottom-popup>
