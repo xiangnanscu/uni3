@@ -2,7 +2,7 @@
   <view class="fui-wrap">
     <uni-tag text="标签">IT</uni-tag>
     <view class="fui-page__hd">
-      <navigator url="/pages/ButtonList/ButtonList">按钮21344556</navigator>
+      <navigator url="/pages/ButtonList/ButtonList">按钮</navigator>
       <view class="fui-page__title">BottomPopup</view>
       <view class="fui-page__desc">BottomPopup 底部弹出层，从底部弹出的浮层，引导用户进行相关操作。</view>
     </view>
@@ -48,6 +48,7 @@
 
     <!--案例一-->
     <fui-bottom-popup
+      radius="0"
       :show="show2"
       :maskClosable="false"
     >
@@ -153,7 +154,7 @@ page {
 }
 
 .fui-page__title {
-  color: red;
+  color: rgb(0, 255, 106);
 }
 
 .fui-page__bd {

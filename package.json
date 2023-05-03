@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "ISC",
   "scripts": {
-    "git": "python3 bin/git.py",
+    "git": "python bin/git.py",
     "b": "yarn p -bb -gg",
     "p": "yarn git -pp -gg",
     "g": "yarn git -gg",
