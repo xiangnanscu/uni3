@@ -39,7 +39,7 @@
     "@dcloudio/uni-ui": "^1.4.27",
     "@vueuse/core": "^9.6.0",
     "@vueuse/integrations": "^9.11.0",
-    "@xiangnanscu/fui": "^1.2.0",
+    "@xiangnanscu/fui": "^1.9.6",
     "axios": "^1.2.1",
     "bootstrap": "^5.2.2",
     "buffer": "^6.0.3",
