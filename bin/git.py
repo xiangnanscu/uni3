@@ -35,7 +35,7 @@ print(args)
 if args.build:
     exec(f'''yarn build''')
 
-exec(f'''git add . && git commit -am '{args.message}';''')
+exec(f'''git add . && git commit -am "{args.message}";''')
 
 if args.production:
     migrate_token = "--push-option=migrate:commit"  if args.migrate else ""

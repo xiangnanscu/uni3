@@ -1,0 +1,87 @@
+name: Test Openresty
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  setup_openresty_and_postgresql:
+    runs-on: ubuntu-20.04
+    permissions:
+      packages: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          registry-url: https://npm.pkg.github.com/
+
+      - name: Install npm dependencies 🚀
+        run: |
+          echo "@xiangnanscu:registry=https://npm.pkg.github.com/" > .npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.NPM_TOKEN }}" >> .npmrc
+          npm ci --prefer-offline --no-audit --no-optional
+        # env:
+        #   NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+
+      - uses: harmon758/postgresql-action@v1
+        with:
+          postgresql version: "15"
+          postgresql db: "test"
+          postgresql user: "postgres"
+          postgresql password: "postgres"
+
+      # - name: install postgres
+      #   run: |
+      #     sudo bash ./bin/install-pg.sh
+
+      - uses: xiangnanscu/gh-actions-openresty@main
+        with:
+          openrestyVersion: "1.21.4.1"
+
+      # - name: install openresty
+      #   run: |
+      #     sudo bash ./bin/install-openresty.sh
+
+      # - name: add path
+      #   run: echo "/usr/local/openresty/bin" >> $GITHUB_PATH
+
+      - name: install opm
+        run: |
+          echo "PWD: $PWD, NODE_ENV: $NODE_ENV"
+          opm --cwd install spacewander/lua-resty-rsa
+          opm --cwd install ledgetech/lua-resty-http
+          opm --cwd install bungle/lua-resty-template
+          opm --cwd install bungle/lua-resty-prettycjson
+          opm --cwd install fffonion/lua-resty-openssl
+          opm --cwd install xiangnanscu/pgmoon
+          opm --cwd install xiangnanscu/lua-resty-inspect
+          git clone https://github.com/xiangnanscu/lua-resty-rax.git --depth=1
+          pdir=$PWD
+          cd lua-resty-rax
+          make && INST_PREFIX=$pdir/resty_modules make install && make clean
+          ls $pdir/resty_modules/lualib/resty
+          echo $pdir/resty_modules/site/lualib/resty
+          ls $pdir/resty_modules/site/lualib/resty
+
+      - uses: leafo/gh-actions-luarocks@v4
+        with:
+          luarocksVersion: "3.1.3"
+          withLuaPath: "/usr/local/openresty/luajit/"
+      - name: luarocks dependencies
+        run: |
+          luarocks install busted
+          luarocks install luaossl
+          luarocks install luasocket
+          luarocks install ljsyscall
+          luarocks install lpeg
+          luarocks install luacheck
+          luarocks install argparse
+          luarocks install xml2lua
+      - name: Lua Busted
+        run: |
+          yarn boot
+          yarn busted

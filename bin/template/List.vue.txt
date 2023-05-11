@@ -1,0 +1,38 @@
+<route lang="json">
+{
+  "name": "{*component_name*}List",
+  "meta": {
+  }
+}
+</route>
+<template>
+  <model-panel
+    v-if="adminModel"
+    :model="adminModel"
+    :get-list-url="(name)=>`/{*table_name*}/`"
+    :get-create-url="(name)=>`/{*table_name*}/create`"
+    :get-update-url="(name, id)=>`/{*table_name*}/update/${id}`"
+    :get-delete-url="(name, id)=>`/{*table_name*}/delete/${id}`"
+    :get-detail-url="(name, id)=>`/{*table_name*}/detail/${id}`"
+  />
+</template>
+<script setup >
+import { computed, onMounted } from "vue";
+import { useRoute } from "vue-router";
+import { Axios } from "@/globals/Axios";
+import Model from "@/model.mjs";
+
+
+const route = useRoute();
+const adminModel = shallowRef(null);
+
+const setModel = async () => {
+  const { data } = await Axios.get(`/{*table_name*}/json`);
+  const model = await Model.createModelAsync(data);
+  adminModel.value = model;
+};
+onMounted(async () => {
+  await setModel();
+});
+
+</script>

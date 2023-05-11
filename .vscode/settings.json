@@ -48,15 +48,19 @@
   "editor.formatOnSave": true, // optional
   "editor.formatOnSaveMode": "file", // required to format on save
   "files.autoSave": "onFocusChange", // optional but recommended
-  "volar.inlayHints.eventArgumentInInlineHandlers": false,
+  "vs-code-prettier-eslint.prettierLast": false,
   "[vue]": {
     "editor.defaultFormatter": "Vue.volar"
     // "editor.defaultFormatter": "Vue.volar"
   },
   "[typescript]": {
-    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
+    "editor.defaultFormatter": "Vue.volar" // "rvest.vs-code-prettier-eslint"
   },
   "[javascript]": {
-    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
-  } // optional but recommended
+    "editor.defaultFormatter": "Vue.volar"
+  }, // optional but recommended
+  "json.schemaDownload.enable": true,
+  "yaml.schemas": {
+    ".vscode/github-workflow.json": "busted.yml"
+  }
 }

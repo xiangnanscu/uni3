@@ -1,0 +1,133 @@
+<route lang="json">
+{
+  "name": "{*component_name*}Form",
+  "meta": {
+  }
+}
+</route>
+<script setup>
+import { onBeforeMount, computed, ref, reactive } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import Model from "@/model.mjs";
+import { PlusOutlined, UploadOutlined } from "@ant-design/icons-vue";
+import { Axios } from "@/globals/Axios";
+
+const props = defineProps({
+  layout: { type: String, default: "horizontal" },
+  labelCol: { type: Number, default: 3 },
+  trigger: { type: String, default: "blur" },
+});
+const formItemLayout = computed(() => {
+  return props.layout === "horizontal"
+    ? {
+        labelCol: { span: props.labelCol },
+        wrapperCol: { span: 24 - props.labelCol },
+      }
+    : {};
+});
+const buttonItemLayout = computed(() => {
+  return props.layout === "horizontal"
+    ? {
+        wrapperCol: { span: 24 - props.labelCol, offset: props.labelCol },
+      }
+    : {};
+});
+const route = useRoute();
+const router = useRouter();
+const formRef = ref();
+const formError = ref("");
+const submiting = ref(false);
+const errors = ref({});
+const values = ref({});
+const rules = {};
+const fields = {};
+const {*model_name*}Id = route.query.id;
+const actionUrl = {*model_name*}Id ? `/{*table_name*}/update/` + {*model_name*}Id : `/{*table_name*}/create`;
+const modelLoaded = ref(false);
+let {*component_name*} = null;
+
+const clearBackendErrors = () => {
+  formError.value = "";
+  for (const key in errors.value) {
+    errors.value[key] = "";
+  }
+};
+onBeforeMount(async () => {
+  const { data } = await Axios.get(`/{*table_name*}/json`);
+  {*component_name*} = await Model.createModelAsync(data);
+  modelLoaded.value = true;
+  for (const name of {*component_name*}.fieldNames) {
+    const field = {*component_name*}.fields[name];
+    fields[name] = field;
+    rules[name] = field.getAntdRule();
+  }
+  if ({*model_name*}Id) {
+    const { data: {*model_name*}Data } = await Axios.get(`/{*table_name*}/detail/` + {*model_name*}Id);
+    values.value = {*component_name*}.toFormValue({*model_name*}Data);
+  } else {
+    values.value = {*component_name*}.toFormValue({});
+  }
+});
+
+const onFinish = async (values) => {
+  clearBackendErrors();
+  submiting.value = true;
+  try {
+    const postData = {*component_name*}.toPostValue(values);
+    await Axios.post(actionUrl, postData);
+    router.push({ name: "{*form_route_name*}List" });
+  } catch (error) {
+    if (error.name == "AxiosError") {
+      const { data, status } = error.response;
+      if (status == 422) {
+        errors.value[data.name] = data.message;
+      } else {
+        formError.value = typeof data == "object" ? JSON.stringify(data) : data;
+      }
+    } else {
+      formError.value = error.message;
+    }
+  } finally {
+    submiting.value = false;
+  }
+};
+const onFinishFailed = (errorInfo) => {
+  console.log("Failed:", errorInfo);
+};
+</script>
+<template>
+  <a-alert v-if="formError" message="发生错误" type="error" show-icon>
+    <template #description>
+      <pre>\{{ formError }}</pre>
+    </template>
+  </a-alert>
+  <a-form
+    v-if="modelLoaded"
+    ref="formRef"
+    :rules="rules"
+    style="margin-top: 5px"
+    v-bind="formItemLayout"
+    :layout="props.layout"
+    :validateTrigger="props.trigger"
+    :model="values"
+    autocomplete="off"
+    @finish="onFinish"
+    @finishFailed="onFinishFailed"
+  >
+{*form_field_token*}
+    <a-form-item v-bind="buttonItemLayout">
+      <a-button :disabled="submiting" type="primary" html-type="submit"
+        >提交</a-button
+      >
+    </a-form-item>
+  </a-form>
+</template>
+
+<style scoped>
+.array-field-width {
+  width: 80%
+}
+:deep(.ant-form-item-label) {
+  padding: 0px
+}
+</style>
