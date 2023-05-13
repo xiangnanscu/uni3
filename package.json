@@ -69,7 +69,7 @@
     "jest": "yarn node --experimental-vm-modules $(yarn bin jest)",
     "diff": "diff --exclude=node_modules --exclude=.git --exclude=logs  --exclude=dist -bur ~/xodel ~/jahy",
     "stat": "bin/goaccess-stat.sh",
-    "update": "bin/update.sh",
+    "update": "bin/update-mini.sh",
     "type-check": "vue-tsc --noEmit"
   },
   "dependencies": {
@@ -116,7 +116,7 @@
     "@dcloudio/vite-plugin-uni": "3.0.0-alpha-3080120230428001",
     "@originjs/vite-plugin-require-context": "^1.0.9",
     "@rushstack/eslint-patch": "^1.1.4",
-    "@types/node": "^16.11.68",
+    "@types/node": "^16.18.29",
     "@typescript-eslint/parser": "^5.47.0",
     "@vitejs/plugin-vue": "^4.1.0",
     "@vitejs/plugin-vue-jsx": "^3.0.1",

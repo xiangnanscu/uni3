@@ -3,7 +3,8 @@
   "compilerOptions": {
     "sourceMap": true,
     "types": [
-      "@dcloudio/types"
+      "@dcloudio/types",
+      "@types/node"
     ],
     "baseUrl": ".",
     "paths": {

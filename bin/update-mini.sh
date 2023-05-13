@@ -26,10 +26,10 @@ cp -r xodel/spec .
 cp -r xodel/README.md .
 cp -r xodel/init.lua .
 cp -r xodel/install.sh .
-cp -r xodel/tsconfig.json .
+# cp -r xodel/tsconfig.json .
 cp -r xodel/tsconfig.node.json .
 cp -r xodel/src/vite-env.d.ts src
-cp -r xodel/vite.config.ts .
+# cp -r xodel/vite.config.ts .
 cp -r xodel/.eslintrc.js .
 cp -r xodel/bin .
 cp -r xodel/.gitignore .
