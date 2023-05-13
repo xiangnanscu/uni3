@@ -1,4 +1,5 @@
 local Object = require("xodel.object")
+local Model = require("xodel.model")
 local models = require("models.models")
 local utils = require("xodel.utils")
 

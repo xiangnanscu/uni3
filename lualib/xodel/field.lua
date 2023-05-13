@@ -799,6 +799,7 @@ local alioss_option_names = utils.list(basefield.option_names, {
   'input_type', 'image', 'maxlength', 'width', 'prefix', 'hash',
   'upload_url',
   'payload_url',
+  'media_type',
   "list_type",   -- antdv
   "max_count",   -- antdv
   "multiple",    -- antdv

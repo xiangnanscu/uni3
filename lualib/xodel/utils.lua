@@ -1061,7 +1061,23 @@ local function get_list_search_condition(data)
   end
   return condition
 end
+local function pg_datetime_to_timestamp(str)
+  local pattern = "(%d+)-(%d+)-(%d+) (%d+):(%d+):(%d+)(.+)"
+  local year, month, day, hour, min, sec, tz_offset = str:match(pattern)
+  local date_table = {
+    year = tonumber(year),
+    month = tonumber(month),
+    day = tonumber(day),
+    hour = tonumber(hour),
+    min = tonumber(min),
+    sec = tonumber(sec),
+    isdst = false
+  }
+  local timestamp = os.time(date_table)
+  return timestamp
+end
 return {
+  pg_datetime_to_timestamp = pg_datetime_to_timestamp,
   get_list_search_condition = get_list_search_condition,
   chaining_operator = chaining_operator,
   get_keys = get_keys,

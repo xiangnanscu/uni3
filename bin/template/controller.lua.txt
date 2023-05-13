@@ -1,11 +1,17 @@
 local view = require("xodel.view")
 local utils = require("xodel.utils")
+local Model = require("xodel.model")
 local models = require("models.models")
 local {*component_name*} = require("models.models").{*component_name*}
 {*fk_import_statement*}
 local tonumber = tonumber
 
-local {*component_name*}Json = {*component_name*}:to_camel_json()
+local {*component_name*}Json = Model:create_model({
+  extends = {*component_name*},
+  fields = {
+
+  }
+}):to_camel_json()
 local {*table_name*}_json = view:class {
   user_require = true,
 }
@@ -18,8 +24,8 @@ function {*table_name*}_json:get(request)
     return {*component_name*}Json
   end
 end
-
-local {*table_name*}_names = { "{*model_pk*}", "ctime", {*field_names_token*} }
+-- {*field_names_token*}
+local {*table_name*}_names = utils.list({ "{*model_pk*}", "ctime" }, {*component_name*}.names)
 
 local {*table_name*}_list = view:class {
   user_require = true,
@@ -62,7 +68,7 @@ local {*table_name*}_update = view:class {
 function {*table_name*}_update:post(request)
   local id = request.params.id
   local data = request:get_post_data()
-  return {*component_name*}:update(data, {*table_name*}_update_names):where { id = id }:execr()
+  return {*component_name*}:update(data):where { id = id }:execr()
 end
 
 local {*table_name*}_delete = view:class {

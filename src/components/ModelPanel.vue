@@ -15,6 +15,7 @@ const route = useRoute();
 const router = useRouter();
 const props = defineProps({
   model: { type: [Object, Function], required: true },
+  rowKey: { type: [String, Function], default: "id" },
   // searchInputValue: { type: [String, Array], default: "" },
   // searchSelectName: { type: [String, Array], default: "" },
   // page: { type: [Number, String], default: 1 },
@@ -116,6 +117,7 @@ const toAntdColumns = (names) => {
     title: adminModel.value.nameToLabel[k],
     dataIndex: k,
     field: adminModel.value.fields[k],
+    key: k,
   }));
 };
 const tableColumns = computed(() =>
@@ -306,6 +308,7 @@ const search = async () => {
     </a-col>
   </a-row>
   <a-table
+    :rowKey="props.rowKey"
     :dataSource="records"
     :columns="tableColumns"
     :pagination="{ hideOnSinglePage: true, pageSize: pagesize }"
@@ -327,6 +330,14 @@ const search = async () => {
           :src="Array.isArray(value) ? value[0].ossUrl : value"
           class="admin-list-avatar"
         />
+      </template>
+      <template v-else-if="column?.field?.mediaType === 'video'">
+        <video
+          controls
+          width="250"
+        >
+          <source :src="value">
+        </video>
       </template>
       <template v-else-if="column?.field?.type === 'array'">
         <div

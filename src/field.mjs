@@ -947,6 +947,7 @@ const aliossOptionNames = [
   "payload",
   "payloadUrl",
   "uploadUrl",
+  "mediaType",
   "inputType",
   "image",
   "maxlength",

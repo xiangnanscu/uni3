@@ -119,7 +119,7 @@ local function collect_controller_callback(opts)
       end
     end
   else
-    error(string.format("url: %s, invalid route type: %s", url, type(view)))
+    error(string.format("invalid route type: url(%s) %s (%s)", url, type(view), view))
   end
 end
 

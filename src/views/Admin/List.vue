@@ -35,8 +35,9 @@ const modelList = computed(() => {
         v-for="(item, i) of modelList"
         :key="item.modelName"
       >
-        <router-link :to="{ name: 'AdminListModel', query: item.query }"><span>{{
-          item.label }} </span></router-link>
+        <router-link :to="{ name: 'AdminListModel', query: item.query }">
+          <span>{{ item.label }}</span>
+        </router-link>
       </a-menu-item>
     </a-menu>
   </a-layout-sider>

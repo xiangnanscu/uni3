@@ -206,7 +206,7 @@ export default {
           "onUpdate:fileList": (value) => {
             values[name] = value;
           },
-          data: Alioss.makeAntdDataCallback(field),
+          data: Alioss.antdDataCallback,
           action: field.uploadUrl || process.env.ALIOSS_URL,
           multiple: field.multiple ?? false,
         };

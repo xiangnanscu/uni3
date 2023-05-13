@@ -1257,7 +1257,8 @@ end
 function Xodel.normalize(cls, options)
   local extends = options.extends
   local model = {
-    admin = options.admin or {}
+    admin = options.admin or {},
+    table_name = options.table_name or (extends and extends.table_name) or nil
   }
   local opts_fields, opts_field_names = normalize_array_and_hash_fields(options.fields or {})
   local opts_names = options.field_names
@@ -1277,7 +1278,7 @@ function Xodel.normalize(cls, options)
     end
     local field = opts_fields[name]
     if not field then
-      local tname = options.table_name or '[abstract model]'
+      local tname = model.table_name or '[abstract model]'
       if extends then
         field = extends.fields[name]
         if not field then
@@ -1322,7 +1323,7 @@ function Xodel.normalize(cls, options)
   if options.abstract ~= nil then
     abstract = not not options.abstract
   else
-    abstract = options.table_name == nil
+    abstract = model.table_name == nil
   end
   model.abstract = abstract
   model.__normalized__ = true
