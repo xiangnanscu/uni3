@@ -4,6 +4,7 @@
   "license": "ISC",
   "scripts": {
     "env": "dotenv -e .env -e .env.local --",
+    "cli": "C:/Users/Admin/Documents/HBuilderX/cli.exe",
     "uni": "yarn env uni",
     "uni:build": "vue-tsc --noEmit && npm --no-git-tag-version version minor && yarn uni build",
     "dev": "yarn uni",
