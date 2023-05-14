@@ -1,5 +1,4 @@
 import axios from "axios";
-import router2 from "@/router";
 import { useMyStore } from "@/store/store.ts";
 
 const viteEnv = import.meta.env;

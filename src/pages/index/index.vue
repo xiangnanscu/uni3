@@ -1,17 +1,19 @@
 <template>
   <view class="fui-wrap">
     <uni-tag text="标签">IT</uni-tag>
+    <ant-loading></ant-loading>
+    <h1>global test: {{ byteSizeParser2('1m') }}</h1>
     <view class="fui-page__hd">
       <navigator url="/pages/ButtonList/ButtonList">按钮</navigator>
       <view class="fui-page__title">BottomPopup</view>
-      <view class="fui-page__desc">BottomPopup 底部弹出层，从底部弹出的浮层，引导用户进行相关操作。</view>
+      <view class="fui-page__desc">111f</view>
     </view>
     <view class="fui-page__bd">
       <fui-button
         type="gray"
         width="400rpx"
         height="84rpx"
-        text="基础使用"
+        text="基础使用2"
         bold
         :margin="['24rpx']"
         @click="showPopup(1)"
@@ -118,6 +120,7 @@
 <script>
 export default {
   data() {
+    console.log(process.env.ALIOSS_PAYLOAD_URL)
     return {
       show: false,
       show2: false,
