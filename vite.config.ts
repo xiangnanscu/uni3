@@ -10,14 +10,9 @@ import Components from "unplugin-vue-components/vite";
 import { fileURLToPath, URL } from "node:url";
 import ViteRequireContext from "@originjs/vite-plugin-require-context";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
+import { VantResolver } from 'unplugin-vue-components/resolvers';
 
-const { parsed: exposedEnvs } = expand({
-  ...dotenv.config({
-    override: false,
-    path: ".env",
-  }),
-  ignoreProcessEnv: true,
-});
+
 const plugins = [
   Components({
     // https://github.com/antfu/unplugin-vue-components#configuration
@@ -25,7 +20,7 @@ const plugins = [
     extensions: ["vue", "jsx"],
     dts: "./src/unplugin/components.d.ts",
     directoryAsNamespace: false,
-    resolvers: [],
+    resolvers: [VantResolver()],
   }),
   AutoImport({
     //https://github.com/antfu/unplugin-auto-import#configuration
@@ -73,12 +68,22 @@ const plugins = [
   }),
   vueJsx()
 ]
+const toLiteral = (s) => `"${s.replaceAll(/"/g, '\\"')}"`
+const { parsed: exposedEnvs } = expand({
+  ...dotenv.config({
+    override: false,
+    path: ".env",
+  }),
+  ignoreProcessEnv: true,
+});
+const envKeys = Object.fromEntries(Object.entries(exposedEnvs).map(([k, v]) => [`process.env.${k}`, toLiteral(v)]))
+const VITE_PROXY_PREFIX = process.env.VITE_PROXY_PREFIX || "/toXodel";
+const VITE_PROXY_PREFIX_REGEX = new RegExp("^" + VITE_PROXY_PREFIX);
+console.log(`http://localhost:${exposedEnvs.NGINX_listen}`)
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins,
-  define: {
-    "process.env": exposedEnvs,
-  },
+  define: envKeys,
   optimizeDeps: {
     // include: ["vue"],
   },
@@ -94,6 +99,19 @@ export default defineConfig({
     preprocessorOptions: {
       less: {
         javascriptEnabled: true,
+      },
+    },
+  },
+  server: {
+    // https://vitejs.dev/config/server-options.html#server-proxy
+    // https://github.com/http-party/node-http-proxy#options
+    port: Number(exposedEnvs.VITE_APP_PORT) || 5173,
+    strictPort: true,
+    proxy: {
+      [VITE_PROXY_PREFIX]: {
+        target: `http://localhost:${exposedEnvs.NGINX_listen}`,
+        changeOrigin: true,
+        rewrite: (path) => path.replace(VITE_PROXY_PREFIX_REGEX, ""),
       },
     },
   },

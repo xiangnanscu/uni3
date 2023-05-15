@@ -3,8 +3,8 @@ import { useStore } from "@/store";
 
 const viteEnv = import.meta.env;
 const baseURL = process.env.NODE_ENV == "production"
-  ? `${viteEnv.VITE_HttpS == "on" ? "Https" : "Http"}://${viteEnv.VITE_HOST}`
-  : `Http://localhost:${viteEnv.VITE_APP_PORT}${viteEnv.VITE_PROXY_PREFIX}`;
+  ? `${viteEnv.VITE_HTTPS == "on" ? "https" : "http"}://${viteEnv.VITE_HOST}`
+  : `http://localhost:${viteEnv.VITE_APP_PORT}${viteEnv.VITE_PROXY_PREFIX}`;
 const cookieNames = ["session"];
 
 uni.addInterceptor("request", {

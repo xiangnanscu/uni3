@@ -7,7 +7,6 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    AntLoading: typeof import('./../components/AntLoading.vue')['default']
     Favicon: typeof import('./../components/favicon.vue')['default']
     JsxH1: typeof import('./../components/JsxH1.vue')['default']
     ModelBatchButton: typeof import('./../components/ModelBatchButton.vue')['default']

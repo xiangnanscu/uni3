@@ -1,17 +1,13 @@
 <template>
   <view class="fui-wrap">
     <uni-tag text="标签">IT</uni-tag>
-    <ant-loading></ant-loading>
     <h1>global test: {{ byteSizeParser2('1m') }}</h1>
     <view class="fui-page__hd">
       <navigator url="/pages/LoginList/LoginList">登录</navigator>
       <view class="fui-page__title">BottomPopup</view>
       <view class="fui-page__desc">111f</view>
     </view>
-    <navigator
-      url="navigate/navigate?title=navigate"
-      hover-class="navigator-hover"
-    >
+    <navigator url="/pages/Hello">
       <button type="default">跳转到新页面</button>
     </navigator>
     <view class="fui-page__bd">

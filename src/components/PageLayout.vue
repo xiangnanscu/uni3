@@ -1,36 +1,40 @@
 <template>
+  <fui-spin
+    v-if="loading"
+    class="fui-spin"
+  >
+    <view class="fui-loading"></view>
+  </fui-spin>
   <view class="page-layout">
     <div
-      v-if="store.message"
+      v-if="message"
       class="global-message"
-    >{{ store.message }}</div>
+    >{{ message }}</div>
     <div
-      v-if="store.error"
+      v-if="error"
       class="global-error"
-    >{{ store.error }}</div>
-    <fui-spin
-      v-if="!store.loading"
-      class="fui-spin"
-    >
-      <view class="fui-loading"></view>
-    </fui-spin>
+    >{{ error }}</div>
     <slot />
   </view>
 </template>
-<script>
+<script setup>
 
-export default {
-  data() {
-    return {
-      store: useStore()
-    };
-  },
-}
+const { message, error, loading } = storeToRefs(useStore())
+onMounted(() => Http.get('/h1'))
+
 </script>
 <style>
+.page-layout {
+  padding: 0 8px;
+}
+
 .fui-spin {
   position: fixed;
-
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 90vh;
+  min-width: 100vw;
   z-index: 999;
 }
 
@@ -47,6 +51,7 @@ export default {
   color: #b02a37;
   background-color: #f8d7da;
   text-align: center;
+  border-radius: 16rpx;
 }
 
 .global-message {
@@ -54,9 +59,6 @@ export default {
   color: #0a58ca;
   background-color: #cfe2ff;
   text-align: center;
-}
-
-.page-layout {
-  padding: 8px 15px;
+  border-radius: 16rpx;
 }
 </style>

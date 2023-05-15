@@ -4,7 +4,7 @@ onLaunch(() => {
   console.log("App Launch");
 });
 onShow(() => {
-  console.log("App Show", uni, process.env, process.env.ALIOSS_PAYLOAD_URL);
+  console.log("App Show", uni, process.env.DEBUG_SQL, process.env.ALIOSS_PAYLOAD_URL);
 });
 onHide(() => {
   console.log("App Hide");
