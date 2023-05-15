@@ -45,7 +45,7 @@
     "mrs": "yarn migrate -commit && yarn ms",
     "mrr": "yarn migrate -clear && yarn mrc",
     "make-conf": "yarn env ./bin/make-conf.sh",
-    "pages": "yarn resty ./bin/make-form-view.lua",
+    "pages": "node --trace-uncaught bin/pages.js",
     "nginx": "yarn make-conf && yarn nginx:stop; yarn nginx:start",
     "nginx:start": "openresty -p $PWD/ -c conf/nginx.conf",
     "nginx:stop": "yarn nginx:start -s stop",
