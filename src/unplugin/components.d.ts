@@ -15,6 +15,7 @@ declare module '@vue/runtime-core' {
     ModelFormTableField: typeof import('./../components/ModelFormTableField.vue')['default']
     ModelFormVant: typeof import('./../components/ModelFormVant.vue')['default']
     ModelPanel: typeof import('./../components/ModelPanel.vue')['default']
+    PageLayout: typeof import('./../components/PageLayout.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     ScoreRadar: typeof import('./../components/ScoreRadar.vue')['default']

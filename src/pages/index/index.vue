@@ -4,10 +4,16 @@
     <ant-loading></ant-loading>
     <h1>global test: {{ byteSizeParser2('1m') }}</h1>
     <view class="fui-page__hd">
-      <navigator url="/pages/ButtonList/ButtonList">按钮</navigator>
+      <navigator url="/pages/LoginList/LoginList">登录</navigator>
       <view class="fui-page__title">BottomPopup</view>
       <view class="fui-page__desc">111f</view>
     </view>
+    <navigator
+      url="navigate/navigate?title=navigate"
+      hover-class="navigator-hover"
+    >
+      <button type="default">跳转到新页面</button>
+    </navigator>
     <view class="fui-page__bd">
       <fui-button
         type="gray"

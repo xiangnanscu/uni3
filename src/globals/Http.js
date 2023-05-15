@@ -1,4 +1,4 @@
-const cookie = require("cookie");
+import cookie from "cookie"
 import { useStore } from "@/store";
 
 const viteEnv = import.meta.env;

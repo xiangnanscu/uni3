@@ -9,15 +9,15 @@
   "pages": [
     {
       "path": "pages/index/index",
-      "style": {
-        "navigationBarTitleText": "uni-app"
-      }
+      "style": { "navigationBarTitleText": "uni-app" }
     },
     {
       "path": "pages/ButtonList/ButtonList",
-      "style": {
-        "navigationBarTitleText": "..."
-      }
+      "style": { "navigationBarTitleText": "..." }
+    },
+    {
+      "path": "pages/LoginList/LoginList",
+      "style": { "navigationBarTitleText": "..." }
     }
   ],
   "globalStyle": {
