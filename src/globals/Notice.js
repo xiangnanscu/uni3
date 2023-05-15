@@ -1,6 +1,3 @@
-import { notification } from "ant-design-vue";
-import "ant-design-vue/lib/notification/style/css";
-
 class Notice {
   constructor(opts) {
     notification[opts.type](opts);

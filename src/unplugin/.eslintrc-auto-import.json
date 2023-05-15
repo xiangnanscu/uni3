@@ -1,7 +1,7 @@
 {
   "globals": {
     "Alioss": true,
-    "Axios": true,
+    "Http": true,
     "Docx": true,
     "EffectScope": true,
     "Model": true,
@@ -209,7 +209,7 @@
     "useMouseInElement": true,
     "useMousePressed": true,
     "useMutationObserver": true,
-    "useMyStore": true,
+    "useStore": true,
     "useNavigatorLanguage": true,
     "useNetwork": true,
     "useNow": true,

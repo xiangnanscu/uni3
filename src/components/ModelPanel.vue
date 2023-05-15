@@ -3,7 +3,7 @@
 import { computed, ref, createVNode } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ExclamationCircleOutlined, PlusOutlined } from "@ant-design/icons-vue";
-import { Axios } from "@/globals/Axios";
+import { Http } from "@/globals/Http";
 import ModelBatchButton from "@/components/ModelBatchButton.vue";
 import { Modal } from "ant-design-vue";
 import "ant-design-vue/lib/modal/style/css";
@@ -72,7 +72,7 @@ const searchChoices = computed(() => {
 const currentSearchSelectName = ref(getLast(searchSelectName.value) || searchChoices.value[0]?.value || "")
 const currentSearchInputValue = ref(getLast(searchInputValue.value) || "")
 const setRecordsByPage = async (page, old) => {
-  const { data } = await Axios.post(
+  const { data } = await Http.post(
     props.getListUrl(modelName.value),
     {
       key: searchSelectName.value,
@@ -157,7 +157,7 @@ const deleteRecord = (row) => {
     okText: "删除",
     okType: "danger",
     async onOk() {
-      const { data } = await Axios.post(props.getDeleteUrl(modelName.value, row.id));
+      const { data } = await Http.post(props.getDeleteUrl(modelName.value, row.id));
       records.value = records.value.filter((r) => r.id !== row.id);
       notification.success({ message: `成功删除${data.affected_rows}条记录` });
     },
@@ -174,7 +174,7 @@ const onSuccessUpdate = ({ data }) => {
   editId.value = 0;
 };
 const onClickEdit = async (record) => {
-  const { data } = await Axios.get(props.getDetailUrl(modelName.value, record.id));
+  const { data } = await Http.get(props.getDetailUrl(modelName.value, record.id));
   Object.assign(record, data);
   editId.value = record.id;
 };

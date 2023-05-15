@@ -1,5 +1,5 @@
 import { nanoid } from "nanoid"
-import { Axios } from "@/globals/Axios";
+import { Http } from "@/globals/Http";
 
 const ALIOSS_PAYLOAD_URL = process.env.ALIOSS_PAYLOAD_URL;
 const ALIOSS_SIZE = process.env.ALIOSS_SIZE;
@@ -47,7 +47,7 @@ const videoExtMap = {
 // }
 class Alioss {
   static getPayload = async (opts) => {
-    const { data } = await Axios.post(ALIOSS_PAYLOAD_URL, {
+    const { data } = await Http.post(ALIOSS_PAYLOAD_URL, {
       size: ALIOSS_SIZE,
       lifetime: ALIOSS_LIFETIME,
       ...opts,
@@ -64,7 +64,7 @@ class Alioss {
     for (const [key, value] of Object.entries({ ...data, ...await Alioss.getPayload({ size }), key: ossKey, file })) {
       formData.append(key, value)
     }
-    await Axios.post(
+    await Http.post(
       url || ALIOSS_URL,
       formData,
       {

@@ -1,5 +1,5 @@
 import Field from "./field";
-import { Axios } from "@/globals/Axios";
+import { Http } from "@/globals/Http";
 
 const DEFAULT_STRING_MAXLENGTH = 256;
 const FOREIGN_KEY = 2;
@@ -577,11 +577,11 @@ class Model {
   static async createModelAsync(options) {
     for (const [name, field] of Object.entries(options.fields)) {
       if (field.choicesUrl) {
-        const { data: choices } = await Axios[field.choicesUrlMethod || 'post'](field.choicesUrl);
+        const { data: choices } = await Http[field.choicesUrlMethod || 'post'](field.choicesUrl);
         field.choices = options.choicesCallback ? options.choicesCallback(choices, field) : choices;
       }
       if (typeof field.reference == "string") {
-        const { data } = await Axios.get(
+        const { data } = await Http.get(
           field.referenceUrl || `/admin/model/${field.reference}`
         );
         field.reference = await Model.createModelAsync(data);

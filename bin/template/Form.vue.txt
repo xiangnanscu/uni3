@@ -10,7 +10,7 @@ import { onBeforeMount, computed, ref, reactive } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Model from "@/model.mjs";
 import { PlusOutlined, UploadOutlined } from "@ant-design/icons-vue";
-import { Axios } from "@/globals/Axios";
+import { Http } from "@/globals/Http";
 
 const props = defineProps({
   layout: { type: String, default: "horizontal" },
@@ -53,7 +53,7 @@ const clearBackendErrors = () => {
   }
 };
 onBeforeMount(async () => {
-  const { data } = await Axios.get(`/{*table_name*}/json`);
+  const { data } = await Http.get(`/{*table_name*}/json`);
   {*component_name*} = await Model.createModelAsync(data);
   modelLoaded.value = true;
   for (const name of {*component_name*}.fieldNames) {
@@ -62,7 +62,7 @@ onBeforeMount(async () => {
     rules[name] = field.getAntdRule();
   }
   if ({*model_name*}Id) {
-    const { data: {*model_name*}Data } = await Axios.get(`/{*table_name*}/detail/` + {*model_name*}Id);
+    const { data: {*model_name*}Data } = await Http.get(`/{*table_name*}/detail/` + {*model_name*}Id);
     values.value = {*component_name*}.toFormValue({*model_name*}Data);
   } else {
     values.value = {*component_name*}.toFormValue({});
@@ -74,7 +74,7 @@ const onFinish = async (values) => {
   submiting.value = true;
   try {
     const postData = {*component_name*}.toPostValue(values);
-    await Axios.post(actionUrl, postData);
+    await Http.post(actionUrl, postData);
     router.push({ name: "{*form_route_name*}List" });
   } catch (error) {
     if (error.name == "AxiosError") {

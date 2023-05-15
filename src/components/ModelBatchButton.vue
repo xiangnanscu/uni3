@@ -4,7 +4,7 @@ import XlsxReadButton from "@/components/XlsxReadButton.vue";
 import { findDups } from "@/globals/Utils";
 import Model from "@/model.mjs";
 
-const store = useMyStore();
+const store = useStore();
 const emit = defineEmits(["findDuplicates", "uploadRows", "successPost"]);
 const props = defineProps({
   model: { type: [Object, Function], required: true },
@@ -63,7 +63,7 @@ const onXlsxRead = async ({ ok, message, rows }) => {
       );
       emit("uploadRows", cleanedRows);
       if (!props.rows) {
-        const response = await Axios.post(props.uploadUrl, cleanedRows);
+        const response = await Http.post(props.uploadUrl, cleanedRows);
         emit("successPost", { response });
         Notice.success("操作成功");
       }
@@ -86,7 +86,7 @@ const onXlsxRead = async ({ ok, message, rows }) => {
 const downloadRows = async () => {
   const { data } = props.rows
     ? { data: props.rows }
-    : await Axios.get(props.downloadUrl);
+    : await Http.get(props.downloadUrl);
   Xlsx.arrayToFile({
     filename: `${batchModel.label}-${new Date().getTime()}`,
     data: [

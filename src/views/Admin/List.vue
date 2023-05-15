@@ -6,7 +6,7 @@ import { RouterLink, RouterView, useRoute } from "vue-router";
 const modelName = useRoute().query.modelName;
 const models = ref([]);
 onMounted(async () => {
-  const { data } = await Axios.get("/admin/model_list");
+  const { data } = await Http.get("/admin/model_list");
   models.value = data;
 });
 const siderKeys = ref([modelName]);

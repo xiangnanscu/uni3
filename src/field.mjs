@@ -1,5 +1,5 @@
 import Validator from "./validator";
-import { Axios } from "@/globals/Axios";
+import { Http } from "@/globals/Http";
 
 const TABLE_MAX_ROWS = 1;
 const CHOICES_ERROR_DISPLAY_COUNT = 30;
@@ -986,7 +986,7 @@ class AliossField extends StringField {
     return aliossOptionNames;
   }
   async getPayload(options) {
-    const { data } = await Axios.post(this.payloadUrl, {
+    const { data } = await Http.post(this.payloadUrl, {
       ...options,
       size: options.size || this.size,
       lifetime: options.lifetime || this.lifetime,

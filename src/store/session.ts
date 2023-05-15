@@ -1,23 +1,3 @@
-import { useCookies } from "@vueuse/integrations/useCookies";
-const cookies = useCookies();
-const sessionCookie = cookies.get("session");
-const sessionStorage = localStorage.getItem("session");
-// console.log({ sessionCookie, sessionStorage });
-
-const getAnonymousSession = () =>
-  reactive({
-    user: { nickname: "游客", id: null, permission: 0, openid: "", avatar: "" },
-  });
-const getSession = () => {
-  if (!sessionCookie || !sessionStorage) {
-    return getAnonymousSession();
-  }
-  const session = JSON.parse(sessionStorage);
-  if (!session || !session.user || session.user.id === 0) {
-    return getAnonymousSession();
-  }
-  return reactive(session);
-};
 interface SessionUser {
   id: number;
   username: string;
@@ -26,16 +6,41 @@ interface SessionUser {
   openid: string;
   avatar: string;
 }
+
+const cookieSession = uni.getStorageSync("cookie_session")
+const storageSession = uni.getStorageSync("session");
+// console.log({ cookieSession, storageSession });
+
+const getAnonymousSession = () =>
+  reactive({
+    user: { nickname: "游客", id: null, permission: 0, openid: "", avatar: "" },
+  });
+
+const getSession = () => {
+  if (!cookieSession || !storageSession) {
+    return getAnonymousSession();
+  }
+  try {
+    const session = JSON.parse(storageSession);
+    if (typeof session !== 'object' || typeof session.user !== 'object') {
+      return getAnonymousSession();
+    }
+    return reactive(session);
+  } catch (error) {
+    return getAnonymousSession();
+  }
+};
+
 export const useSession = defineStore("session", () => {
   const session = getSession();
   function login(user: SessionUser) {
     Object.assign(session.user, user);
-    localStorage.setItem("session", JSON.stringify(session));
+    uni.setStorageSync("session", JSON.stringify(session));
   }
   function logout() {
     Object.assign(session.user, getAnonymousSession().user);
-    localStorage.removeItem("session");
-    cookies.remove("session");
+    uni.removeStorageSync("session");
+    uni.removeStorageSync("cookie_session");
   }
   return {
     session,

@@ -7,6 +7,10 @@ module.exports = {
     node: true,
     amd: true,
   },
+  globals: {
+    uni: true,
+    wx: true
+  },
   rules: {
     "prefer-const": [
       "error",

@@ -48,7 +48,7 @@ sudo snap install core; sudo snap refresh core
 apt-get remove certbot -y
 sudo snap install --classic certbot
 sudo ln -s /snap/bin/certbot /usr/bin/certbot
-certbot certonly --webroot -w /root/zzb/dist -d zzb.jahykj.cn
+certbot certonly --webroot -w /root/jaqn/dist -d jaqn.jahykj.cn
 sudo certbot renew --dry-run
 ```
 
@@ -94,6 +94,7 @@ OnCalendar=*-*-* 15:48
 WantedBy=timers.target
 
 ```
+
 ## 企业微信内网穿透
 
 安装

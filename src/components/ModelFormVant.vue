@@ -2,8 +2,8 @@
 import { useRouter } from "vue-router";
 import { PlusOutlined, UploadOutlined } from "@ant-design/icons-vue";
 import Model from "@/model.mjs";
-import { Axios, Alioss } from "@/globals";
-import { useMyStore } from "@/store/store";
+import { Http, Alioss } from "@/globals";
+import { useStore } from "@/store";
 
 const deepcopy = (o) => JSON.parse(JSON.stringify(o));
 export default {
@@ -32,7 +32,7 @@ export default {
       ? reactive(props.values)
       : reactive(deepcopy(props.values));
     const errors = reactive(props.errors);
-    const { loading } = storeToRefs(useMyStore());
+    const { loading } = storeToRefs(useStore());
     onBeforeMount(async () => {
       if (!props.model.__isModelClass__) {
         model.value = await Model.createModelAsync({
@@ -77,7 +77,7 @@ export default {
       }
       try {
         submiting.value = true;
-        const response = await Axios.post(props.actionUrl, data);
+        const response = await Http.post(props.actionUrl, data);
         emit("successPost", { data, response });
         if (props.successRoute) {
           router.push(

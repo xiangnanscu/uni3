@@ -11,7 +11,7 @@ const { login } = useSession();
 
 const submitLogin = async () => {
   errMsg.value = "";
-  const res = await Axios.post("/admin/login", formState);
+  const res = await Http.post("/admin/login", formState);
   const { code, user, msg, name } = unref(res.data);
   // console.log({ code, user, msg, name });
   if (code == 200) {
