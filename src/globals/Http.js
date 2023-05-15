@@ -4,7 +4,7 @@ import { useStore } from "@/store";
 const viteEnv = import.meta.env;
 const baseURL = process.env.NODE_ENV == "production"
   ? `${viteEnv.VITE_HTTPS == "on" ? "https" : "http"}://${viteEnv.VITE_HOST}`
-  : `http://localhost:${viteEnv.VITE_APP_PORT}${viteEnv.VITE_PROXY_PREFIX}`;
+  : `http://localhost:${process.env.NGINX_listen}`;
 const cookieNames = ["session"];
 
 uni.addInterceptor("request", {

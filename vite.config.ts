@@ -77,9 +77,6 @@ const { parsed: exposedEnvs } = expand({
   ignoreProcessEnv: true,
 });
 const envKeys = Object.fromEntries(Object.entries(exposedEnvs).map(([k, v]) => [`process.env.${k}`, toLiteral(v)]))
-const VITE_PROXY_PREFIX = process.env.VITE_PROXY_PREFIX || "/toXodel";
-const VITE_PROXY_PREFIX_REGEX = new RegExp("^" + VITE_PROXY_PREFIX);
-console.log(`http://localhost:${exposedEnvs.NGINX_listen}`)
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins,
@@ -99,19 +96,6 @@ export default defineConfig({
     preprocessorOptions: {
       less: {
         javascriptEnabled: true,
-      },
-    },
-  },
-  server: {
-    // https://vitejs.dev/config/server-options.html#server-proxy
-    // https://github.com/http-party/node-http-proxy#options
-    port: Number(exposedEnvs.VITE_APP_PORT) || 5173,
-    strictPort: true,
-    proxy: {
-      [VITE_PROXY_PREFIX]: {
-        target: `http://localhost:${exposedEnvs.NGINX_listen}`,
-        changeOrigin: true,
-        rewrite: (path) => path.replace(VITE_PROXY_PREFIX_REGEX, ""),
       },
     },
   },
