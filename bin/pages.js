@@ -108,7 +108,7 @@ renderTemplate({
   context
 });
 
-const pagePath = `pages/${pageName}/${pageName}`;
+const pagePath = `pages/${pageName}`;
 pages.pages = [
   ...pages.pages.filter((p) => p.path !== pagePath),
   {
