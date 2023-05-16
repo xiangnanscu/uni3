@@ -24,8 +24,8 @@ const pageName =
   type == "list"
     ? `${modelName}List`
     : type == "detail"
-      ? `${modelName}Detail`
-      : `${modelName}`;
+    ? `${modelName}Detail`
+    : `${modelName}`;
 
 console.log({ modelName, tableName, pageName });
 var pages = require("../src/pages.json");
@@ -51,7 +51,7 @@ const renderTemplate = ({ src, dest, context, srcString }) => {
 
 const context = {
   modelName,
-  tableName,
+  tableName
 };
 const formItemSnippet = `
       <uni-forms-item label="{{label}}" name="{{name}}">
@@ -88,13 +88,13 @@ if (type == "list") {
     rulesToken.push(
       renderTemplate({
         srcString: formRuleSnippet,
-        context: { ...context, name: name.trim(), label: label.trim() },
+        context: { ...context, name: name.trim(), label: label.trim() }
       })
     );
     formItemToken.push(
       renderTemplate({
         srcString: formItemSnippet,
-        context: { ...context, name: name.trim(), label: label.trim() },
+        context: { ...context, name: name.trim(), label: label.trim() }
       })
     );
   }
@@ -104,8 +104,8 @@ if (type == "list") {
 }
 renderTemplate({
   src: `bin/pages/${type}.vue`,
-  dest: `src/pages/${pageName}/${pageName}.vue`,
-  context,
+  dest: `src/pages/${pageName}.vue`,
+  context
 });
 
 const pagePath = `pages/${pageName}/${pageName}`;
@@ -113,10 +113,10 @@ pages.pages = [
   ...pages.pages.filter((p) => p.path !== pagePath),
   {
     path: pagePath,
-    style: { navigationBarTitleText: label || "..." },
-  },
+    style: { navigationBarTitleText: label || "..." }
+  }
 ];
 const pageJson = JSON.stringify(pages);
 const formatedJson = prettier.format(pageJson, { parser: "json" });
 
-fs.writeFileSync('src/pages.json', formatedJson);
+fs.writeFileSync("src/pages.json", formatedJson);
