@@ -39,7 +39,7 @@ const boolMap = {
   ["TRUE"]: true,
   ["FALSE"]: false,
   ["是"]: true,
-  ["否"]: false,
+  ["否"]: false
 };
 function boolean(v) {
   const bv = boolMap[v];
@@ -298,7 +298,7 @@ function sfzh(v) {
   return validateSfzh(v);
 }
 
-export default {
+export {
   SkipValidateError,
   required,
   notRequired,
@@ -327,5 +327,5 @@ export default {
   booleanCn,
   sfzh,
   validateSfzh,
-  boolMap,
+  boolMap
 };

@@ -120,9 +120,11 @@
 </template>
 
 <script>
+// import { utils } from "@/globals/index.mjs"
+
 export default {
   data() {
-    console.log(process.env.ALIOSS_PAYLOAD_URL)
+    console.log({ utils, Model });
     return {
       show: false,
       show2: false,

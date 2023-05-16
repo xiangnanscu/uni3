@@ -4,15 +4,12 @@ declare global {
   const Alioss: typeof import('../globals/Alioss.js')['Alioss']
   const EffectScope: typeof import('vue')['EffectScope']
   const Http: typeof import('../globals/Http.js')['Http']
-  const Model: typeof import('../globals/Utils.js')['Model']
+  const Model: typeof import('../globals/index.mjs')['Model']
   const Notice: typeof import('../globals/Notice.js')['Notice']
   const acceptHMRUpdate: typeof import('pinia')['acceptHMRUpdate']
   const asyncComputed: typeof import('@vueuse/core')['asyncComputed']
   const autoResetRef: typeof import('@vueuse/core')['autoResetRef']
   const byteSizeParser2: typeof import('../globals/Test.js')['byteSizeParser2']
-  const byteSizeParser: typeof import('../globals/Utils.js')['byteSizeParser']
-  const capitalize: typeof import('../globals/Utils.js')['capitalize']
-  const chunk: typeof import('../globals/Utils.js')['chunk']
   const computed: typeof import('vue')['computed']
   const computedAsync: typeof import('@vueuse/core')['computedAsync']
   const computedEager: typeof import('@vueuse/core')['computedEager']
@@ -31,16 +28,12 @@ declare global {
   const customRef: typeof import('vue')['customRef']
   const debouncedRef: typeof import('@vueuse/core')['debouncedRef']
   const debouncedWatch: typeof import('@vueuse/core')['debouncedWatch']
-  const decodeBase64: typeof import('../globals/Utils.js')['decodeBase64']
   const defineAsyncComponent: typeof import('vue')['defineAsyncComponent']
   const defineComponent: typeof import('vue')['defineComponent']
   const defineStore: typeof import('pinia')['defineStore']
   const eagerComputed: typeof import('@vueuse/core')['eagerComputed']
   const effectScope: typeof import('vue')['effectScope']
-  const encodeBase64: typeof import('../globals/Utils.js')['encodeBase64']
   const extendRef: typeof import('@vueuse/core')['extendRef']
-  const findDups: typeof import('../globals/Utils.js')['findDups']
-  const fromNow: typeof import('../globals/Utils.js')['fromNow']
   const getActivePinia: typeof import('pinia')['getActivePinia']
   const getCurrentInstance: typeof import('vue')['getCurrentInstance']
   const getCurrentScope: typeof import('vue')['getCurrentScope']
@@ -52,8 +45,6 @@ declare global {
   const isReactive: typeof import('vue')['isReactive']
   const isReadonly: typeof import('vue')['isReadonly']
   const isRef: typeof import('vue')['isRef']
-  const isSame: typeof import('../globals/Utils.js')['isSame']
-  const isWeixin: typeof import('../globals/Utils.js')['isWeixin']
   const makeDestructurable: typeof import('@vueuse/core')['makeDestructurable']
   const mapActions: typeof import('pinia')['mapActions']
   const mapGetters: typeof import('pinia')['mapGetters']
@@ -62,7 +53,6 @@ declare global {
   const mapWritableState: typeof import('pinia')['mapWritableState']
   const markRaw: typeof import('vue')['markRaw']
   const nextTick: typeof import('vue')['nextTick']
-  const objectContains: typeof import('../globals/Utils.js')['objectContains']
   const onActivated: typeof import('vue')['onActivated']
   const onBeforeMount: typeof import('vue')['onBeforeMount']
   const onBeforeUnmount: typeof import('vue')['onBeforeUnmount']
@@ -95,7 +85,6 @@ declare global {
   const refDefault: typeof import('@vueuse/core')['refDefault']
   const refThrottled: typeof import('@vueuse/core')['refThrottled']
   const refWithControl: typeof import('@vueuse/core')['refWithControl']
-  const repr: typeof import('../globals/Utils.js')['repr']
   const resolveComponent: typeof import('vue')['resolveComponent']
   const resolveDirective: typeof import('vue')['resolveDirective']
   const resolveRef: typeof import('@vueuse/core')['resolveRef']
@@ -279,6 +268,7 @@ declare global {
   const useWindowFocus: typeof import('@vueuse/core')['useWindowFocus']
   const useWindowScroll: typeof import('@vueuse/core')['useWindowScroll']
   const useWindowSize: typeof import('@vueuse/core')['useWindowSize']
+  const utils: typeof import('../globals/index.mjs')['utils']
   const watch: typeof import('vue')['watch']
   const watchArray: typeof import('@vueuse/core')['watchArray']
   const watchAtMost: typeof import('@vueuse/core')['watchAtMost']
@@ -301,15 +291,12 @@ declare module 'vue' {
     readonly Alioss: UnwrapRef<typeof import('../globals/Alioss.js')['Alioss']>
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
     readonly Http: UnwrapRef<typeof import('../globals/Http.js')['Http']>
-    readonly Model: UnwrapRef<typeof import('../globals/Utils.js')['Model']>
+    readonly Model: UnwrapRef<typeof import('../globals/index.mjs')['Model']>
     readonly Notice: UnwrapRef<typeof import('../globals/Notice.js')['Notice']>
     readonly acceptHMRUpdate: UnwrapRef<typeof import('pinia')['acceptHMRUpdate']>
     readonly asyncComputed: UnwrapRef<typeof import('@vueuse/core')['asyncComputed']>
     readonly autoResetRef: UnwrapRef<typeof import('@vueuse/core')['autoResetRef']>
     readonly byteSizeParser2: UnwrapRef<typeof import('../globals/Test.js')['byteSizeParser2']>
-    readonly byteSizeParser: UnwrapRef<typeof import('../globals/Utils.js')['byteSizeParser']>
-    readonly capitalize: UnwrapRef<typeof import('../globals/Utils.js')['capitalize']>
-    readonly chunk: UnwrapRef<typeof import('../globals/Utils.js')['chunk']>
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
     readonly computedAsync: UnwrapRef<typeof import('@vueuse/core')['computedAsync']>
     readonly computedEager: UnwrapRef<typeof import('@vueuse/core')['computedEager']>
@@ -328,16 +315,12 @@ declare module 'vue' {
     readonly customRef: UnwrapRef<typeof import('vue')['customRef']>
     readonly debouncedRef: UnwrapRef<typeof import('@vueuse/core')['debouncedRef']>
     readonly debouncedWatch: UnwrapRef<typeof import('@vueuse/core')['debouncedWatch']>
-    readonly decodeBase64: UnwrapRef<typeof import('../globals/Utils.js')['decodeBase64']>
     readonly defineAsyncComponent: UnwrapRef<typeof import('vue')['defineAsyncComponent']>
     readonly defineComponent: UnwrapRef<typeof import('vue')['defineComponent']>
     readonly defineStore: UnwrapRef<typeof import('pinia')['defineStore']>
     readonly eagerComputed: UnwrapRef<typeof import('@vueuse/core')['eagerComputed']>
     readonly effectScope: UnwrapRef<typeof import('vue')['effectScope']>
-    readonly encodeBase64: UnwrapRef<typeof import('../globals/Utils.js')['encodeBase64']>
     readonly extendRef: UnwrapRef<typeof import('@vueuse/core')['extendRef']>
-    readonly findDups: UnwrapRef<typeof import('../globals/Utils.js')['findDups']>
-    readonly fromNow: UnwrapRef<typeof import('../globals/Utils.js')['fromNow']>
     readonly getActivePinia: UnwrapRef<typeof import('pinia')['getActivePinia']>
     readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
@@ -349,8 +332,6 @@ declare module 'vue' {
     readonly isReactive: UnwrapRef<typeof import('vue')['isReactive']>
     readonly isReadonly: UnwrapRef<typeof import('vue')['isReadonly']>
     readonly isRef: UnwrapRef<typeof import('vue')['isRef']>
-    readonly isSame: UnwrapRef<typeof import('../globals/Utils.js')['isSame']>
-    readonly isWeixin: UnwrapRef<typeof import('../globals/Utils.js')['isWeixin']>
     readonly makeDestructurable: UnwrapRef<typeof import('@vueuse/core')['makeDestructurable']>
     readonly mapActions: UnwrapRef<typeof import('pinia')['mapActions']>
     readonly mapGetters: UnwrapRef<typeof import('pinia')['mapGetters']>
@@ -359,7 +340,6 @@ declare module 'vue' {
     readonly mapWritableState: UnwrapRef<typeof import('pinia')['mapWritableState']>
     readonly markRaw: UnwrapRef<typeof import('vue')['markRaw']>
     readonly nextTick: UnwrapRef<typeof import('vue')['nextTick']>
-    readonly objectContains: UnwrapRef<typeof import('../globals/Utils.js')['objectContains']>
     readonly onActivated: UnwrapRef<typeof import('vue')['onActivated']>
     readonly onBeforeMount: UnwrapRef<typeof import('vue')['onBeforeMount']>
     readonly onBeforeUnmount: UnwrapRef<typeof import('vue')['onBeforeUnmount']>
@@ -392,7 +372,6 @@ declare module 'vue' {
     readonly refDefault: UnwrapRef<typeof import('@vueuse/core')['refDefault']>
     readonly refThrottled: UnwrapRef<typeof import('@vueuse/core')['refThrottled']>
     readonly refWithControl: UnwrapRef<typeof import('@vueuse/core')['refWithControl']>
-    readonly repr: UnwrapRef<typeof import('../globals/Utils.js')['repr']>
     readonly resolveComponent: UnwrapRef<typeof import('vue')['resolveComponent']>
     readonly resolveDirective: UnwrapRef<typeof import('vue')['resolveDirective']>
     readonly resolveRef: UnwrapRef<typeof import('@vueuse/core')['resolveRef']>
@@ -576,6 +555,7 @@ declare module 'vue' {
     readonly useWindowFocus: UnwrapRef<typeof import('@vueuse/core')['useWindowFocus']>
     readonly useWindowScroll: UnwrapRef<typeof import('@vueuse/core')['useWindowScroll']>
     readonly useWindowSize: UnwrapRef<typeof import('@vueuse/core')['useWindowSize']>
+    readonly utils: UnwrapRef<typeof import('../globals/index.mjs')['utils']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>
     readonly watchArray: UnwrapRef<typeof import('@vueuse/core')['watchArray']>
     readonly watchAtMost: UnwrapRef<typeof import('@vueuse/core')['watchAtMost']>

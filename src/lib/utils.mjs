@@ -1,7 +1,5 @@
 import { Buffer } from "buffer";
-import Model from "@/model.mjs";
 
-export { Model };
 export function isWeixin() {
   var ua = navigator.userAgent.toLowerCase();
   if (ua.match(/MicroMessenger/i) == "micromessenger") {
@@ -89,11 +87,11 @@ export function objectContains(a, b) {
   for (const key in b) {
     if (Object.hasOwnProperty.call(b, key)) {
       if (!isSame(a[key], b[key])) {
-        return false
+        return false;
       }
     }
   }
-  return true
+  return true;
 }
 export function isSame(a, b) {
   if (typeof a !== typeof b) {
@@ -116,7 +114,7 @@ export function isSame(a, b) {
   if (a instanceof Array || b instanceof Array) {
     return false;
   }
-  return objectContains(a, b) && objectContains(b, a)
+  return objectContains(a, b) && objectContains(b, a);
 }
 const sizeTable = {
   k: 1024,

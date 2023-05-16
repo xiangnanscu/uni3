@@ -1,4 +1,4 @@
-import Validator from "./validator";
+import * as Validator from "./validator";
 import { Http } from "@/globals/Http";
 
 const TABLE_MAX_ROWS = 1;
@@ -10,7 +10,7 @@ const PRIMITIVE_TYPES = {
   string: true,
   number: true,
   boolean: true,
-  bigint: true,
+  bigint: true
 };
 
 // const repr = (e) => JSON.stringify(e);
@@ -22,7 +22,9 @@ function assert(bool, errMsg) {
   }
 }
 function getLocalTime(d = new Date()) {
-  return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()} ${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
+  return `${d.getFullYear()}-${
+    d.getMonth() + 1
+  }-${d.getDate()} ${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
 }
 function cleanChoice(c) {
   let v;
@@ -105,7 +107,7 @@ const baseOptionNames = [
   "verifyUrl",
   "postNames",
   "codeLifetime",
-  "tooltipVisible",
+  "tooltipVisible"
 ];
 
 class BaseField {
@@ -160,7 +162,7 @@ class BaseField {
     }
     const ret = {
       name: options.name,
-      type: options.type,
+      type: options.type
     };
     for (const name of this.optionNames) {
       if (options[name] !== undefined) {
@@ -205,7 +207,7 @@ class BaseField {
   }
   getAntdRule() {
     const rule = {
-      whitespace: true,
+      whitespace: true
     };
     rule.validator = async (_rule, value) => {
       try {
@@ -295,7 +297,7 @@ const stringOptionNames = [
   "pattern",
   "length",
   "minlength",
-  "maxlength",
+  "maxlength"
 ];
 const stringValidatorNames = ["pattern", "length", "minlength", "maxlength"];
 class StringField extends BaseField {
@@ -324,7 +326,7 @@ class StringField extends BaseField {
       assert(
         n > 0,
         "invalid string choices(empty choices or zero length value):" +
-        this.name
+          this.name
       );
       const m = this.length || this.maxlength;
       if (!m || n > m) {
@@ -465,7 +467,7 @@ const floatOptionNames = [
   "min",
   "max",
   "step",
-  "precision",
+  "precision"
 ];
 class FloatField extends BaseField {
   type = "float";
@@ -497,7 +499,7 @@ class FloatField extends BaseField {
 
 const DEFAULT_BOOLEAN_CHOICES = [
   { label: "是", value: true },
-  { label: "否", value: false },
+  { label: "否", value: false }
 ];
 const booleanOptionNames = [...baseOptionNames, "cn"];
 class BooleanField extends BaseField {
@@ -625,7 +627,7 @@ class TableField extends ArrayField {
     if (!this.model.tableName) {
       this.model.materializeWithTableName({
         tableName: this.name,
-        label: this.label,
+        label: this.label
       });
     }
     return this;
@@ -679,7 +681,7 @@ const datetimeOptionNames = [
   "precision",
   "timezone",
   "valueFormat", // antdv
-  "timeFormat", // antdv
+  "timeFormat" // antdv
 ];
 class DatetimeField extends BaseField {
   type = "datetime";
@@ -767,7 +769,7 @@ const VALID_FOREIGN_KEY_TYPES = {
   float: Number,
   datetime: Validator.datetime,
   date: Validator.date,
-  time: Validator.time,
+  time: Validator.time
 };
 const foreignkeyOptionNames = [
   ...baseOptionNames,
@@ -782,7 +784,7 @@ const foreignkeyOptionNames = [
   "limitQueryName",
   "autocomplete",
   "choicesUrl",
-  "tableName",
+  "tableName"
 ];
 class ForeignkeyField extends BaseField {
   type = "foreignkey";
@@ -806,14 +808,16 @@ class ForeignkeyField extends BaseField {
     const fk = fkModel.fields[rc];
     assert(
       fk,
-      `invalid foreignkey name ${rc} for foreign model ${fkModel.tableName || "[TABLE NAME NOT DEFINED YET]"
+      `invalid foreignkey name ${rc} for foreign model ${
+        fkModel.tableName || "[TABLE NAME NOT DEFINED YET]"
       }`
     );
     this.referenceColumn = rc;
     const rlc = this.referenceLabelColumn || this.referenceColumn;
     assert(
       fkModel.fields[rlc],
-      `invalid foreignkey label name ${rlc} for foreign model ${fkModel.tableName || "[TABLE NAME NOT DEFINED YET]"
+      `invalid foreignkey label name ${rlc} for foreign model ${
+        fkModel.tableName || "[TABLE NAME NOT DEFINED YET]"
       }`
     );
     this.referenceLabelColumn = rlc;
@@ -915,7 +919,7 @@ const sizeTable = {
   g: 1024 * 1024 * 1024,
   kb: 1024,
   mb: 1024 * 1024,
-  gb: 1024 * 1024 * 1024,
+  gb: 1024 * 1024 * 1024
 };
 function byteSizeParser(t) {
   if (typeof t === "string") {
@@ -958,17 +962,17 @@ const aliossOptionNames = [
   "maxCount", // antdv
   "multiple", // antdv
   "accept", // antdv
-  "buttonText", // antdv
+  "buttonText" // antdv
 ];
 const mapToAntdFileValue = (url = "") => {
   return typeof url == "object"
     ? url
     : {
-      name: url.split("/").pop(),
-      status: "done",
-      url: url,
-      ossUrl: url,
-    };
+        name: url.split("/").pop(),
+        status: "done",
+        url: url,
+        ossUrl: url
+      };
 };
 class AliossField extends StringField {
   type = "alioss";
@@ -989,7 +993,7 @@ class AliossField extends StringField {
     const { data } = await Http.post(this.payloadUrl, {
       ...options,
       size: options.size || this.size,
-      lifetime: options.lifetime || this.lifetime,
+      lifetime: options.lifetime || this.lifetime
     });
     return data;
   }
@@ -1050,13 +1054,13 @@ class AliossListField extends AliossField {
       ...ArrayField.prototype.getOptions.call(this, options),
       ...AliossField.prototype.getOptions.call(this, options),
       type: "aliossList",
-      dbType: "jsonb",
+      dbType: "jsonb"
     };
   }
   json() {
     return {
       ...ArrayField.prototype.json.call(this),
-      ...AliossField.prototype.json.call(this),
+      ...AliossField.prototype.json.call(this)
     };
   }
   toFormValue(urls) {
@@ -1084,30 +1088,6 @@ class AliossImageListField extends AliossListField {
     this.image = true;
   }
 }
-export default {
-  BaseField,
-  StringField,
-  EmailField,
-  PasswordField,
-  YearMonthField,
-  YearField,
-  TextField,
-  IntegerField,
-  FloatField,
-  DatetimeField,
-  DateField,
-  TimeField,
-  JsonField,
-  ArrayField,
-  TableField,
-  ForeignkeyField,
-  BooleanField,
-  AliossField,
-  AliossImageField,
-  AliossListField,
-  AliossImageListField,
-  SfzhField,
-};
 export {
   BaseField,
   StringField,
@@ -1130,5 +1110,5 @@ export {
   AliossImageField,
   AliossListField,
   AliossImageListField,
-  SfzhField,
+  SfzhField
 };

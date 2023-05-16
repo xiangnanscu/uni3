@@ -20,7 +20,6 @@
 <script setup>
 
 const { message, error, loading } = storeToRefs(useStore())
-onMounted(() => Http.get('/h1'))
 
 </script>
 <style>

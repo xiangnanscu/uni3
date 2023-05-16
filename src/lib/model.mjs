@@ -1,4 +1,4 @@
-import Field from "./field";
+import * as Field from "./field";
 import { Http } from "@/globals/Http";
 
 const DEFAULT_STRING_MAXLENGTH = 256;
@@ -11,7 +11,7 @@ const COMPARE_OPERATORS = {
   gt: ">",
   gte: ">=",
   ne: "<>",
-  eq: "=",
+  eq: "="
 };
 const IS_PG_KEYWORDS = {};
 const NON_MERGE_NAMES = {
@@ -20,7 +20,7 @@ const NON_MERGE_NAMES = {
   fieldNames: true,
   extend: true,
   mixins: true,
-  admin: true,
+  admin: true
 };
 const isEmptyObject = (obj) => {
   for (var i in obj) {
@@ -59,8 +59,8 @@ const baseModel = {
   fields: {
     id: { type: "integer", primaryKey: true, serial: true },
     ctime: { label: "创建时间", type: "datetime", autoNowAdd: true },
-    utime: { label: "更新时间", type: "datetime", autoNow: true },
-  },
+    utime: { label: "更新时间", type: "datetime", autoNow: true }
+  }
 };
 const unique = (arr) => {
   return arr.filter((e, i) => arr.indexOf(e) === i);
@@ -231,7 +231,7 @@ const PG_SET_MAP = {
   _except: "EXCEPT",
   _exceptAll: "EXCEPT ALL",
   _intersect: "INTERSECT",
-  _intersectAll: "INTERSECT ALL",
+  _intersectAll: "INTERSECT ALL"
 };
 function _escapeFactory(isLiteral, isBracket) {
   function asSqlToken(value) {
@@ -345,214 +345,9 @@ class ModelProxy {
       set(obj, prop, value) {
         obj[prop] = value;
         return true;
-      },
+      }
     });
   }
-  // get admin() {
-  //   return this.modelclass.admin;
-  // }
-  // get tableName() {
-  //   return this.modelclass.tableName;
-  // }
-  // set tableName(name) {
-  //   this.modelclass.tableName = name;
-  // }
-  // get label() {
-  //   return this.modelclass.label;
-  // }
-  // get names() {
-  //   return this.modelclass.names;
-  // }
-  // get fieldNames() {
-  //   return this.modelclass.fieldNames;
-  // }
-  // get labelToName() {
-  //   return this.modelclass.labelToName;
-  // }
-  // get nameToLabel() {
-  //   return this.modelclass.nameToLabel;
-  // }
-  // get fields() {
-  //   return this.modelclass.fields;
-  // }
-  // get __isModelClass__() {
-  //   return true;
-  // }
-  // get abstract() {
-  //   return this.modelclass.abstract;
-  // }
-  // set abstract(name) {
-  //   this.modelclass.abstract = name;
-  // }
-  // new(attr) {
-  //   return this.modelclass.new(attr);
-  // }
-  // newRecord(attr) {
-  //   return this.modelclass.newRecord(attr);
-  // }
-  // validate(input, names, key) {
-  //   return this.modelclass.validate(input, names, key);
-  // }
-  // validateCreate(input, names) {
-  //   return this.modelclass.validateCreate(input, names);
-  // }
-  // validateUpdate(input, names) {
-  //   return this.modelclass.validateUpdate(input, names);
-  // }
-  // load(data) {
-  //   return this.modelclass.load(data);
-  // }
-  // getDefaults() {
-  //   return this.modelclass.getDefaults();
-  // }
-  // toFormValue(data, names) {
-  //   return this.modelclass.toFormValue(data, names);
-  // }
-  // toPostValue(data, names) {
-  //   return this.modelclass.toPostValue(data, names);
-  // }
-  // async all() {
-  //   return await this.modelclass.all();
-  // }
-  // async save(input, names, key) {
-  //   return await this.modelclass.save(input, names, key);
-  // }
-  // async saveCreate(input, names, key) {
-  //   return await this.modelclass.saveCreate(input, names, key);
-  // }
-  // async saveUpdate(input, names, key) {
-  //   return await this.modelclass.saveUpdate(input, names, key);
-  // }
-  // async filter(kwargs) {
-  //   return await this.modelclass.filter(kwargs);
-  // }
-  // // methods proxy to newSql
-  // async create(rows, columns) {
-  //   return await this.modelclass.newSql().create(rows, columns);
-  // }
-  // async count(cond, op, dval) {
-  //   return await this.modelclass.newSql().count(cond, op, dval);
-  // }
-  // async getOrCreate(params, defaults) {
-  //   return await this.modelclass.newSql().getOrCreate(params, defaults);
-  // }
-  // async get(cond, op, dval) {
-  //   return await this.modelclass.newSql().get(cond, op, dval);
-  // }
-  // async tryGet(cond, op, dval) {
-  //   return await this.modelclass.newSql().tryGet(cond, op, dval);
-  // }
-  // async getMultiple(keys, columns) {
-  //   return await this.modelclass.newSql().getMultiple(keys, columns);
-  // }
-  // async merge(rows, key, columns) {
-  //   return await this.modelclass.newSql().merge(rows, key, columns);
-  // }
-  // async upsert(rows, key, columns) {
-  //   return await this.modelclass.newSql().upsert(rows, key, columns);
-  // }
-  // async updates(rows, key, columns) {
-  //   return await this.modelclass.newSql().updates(rows, key, columns);
-  // }
-  // select(a, b, ...varargs) {
-  //   return this.modelclass.newSql().select(a, b, ...varargs);
-  // }
-  // returning(a, b, ...varargs) {
-  //   return this.modelclass.newSql().returning(a, b, ...varargs);
-  // }
-  // as(tableAlias) {
-  //   return this.modelclass.newSql().as(tableAlias);
-  // }
-  // limit(n) {
-  //   return this.modelclass.newSql().limit(n);
-  // }
-  // offset(n) {
-  //   return this.modelclass.newSql().offset(n);
-  // }
-  // commit(bool) {
-  //   return this.modelclass.newSql().commit(bool);
-  // }
-  // skipValidate(bool) {
-  //   return this.modelclass.newSql().skipValidate(bool);
-  // }
-  // with(name, token) {
-  //   return this.modelclass.newSql().with(name, token);
-  // }
-  // withValues(name, rows) {
-  //   return this.modelclass.newSql().withValues(name, rows);
-  // }
-  // insert(rows, columns) {
-  //   return this.modelclass.newSql().insert(rows, columns);
-  // }
-  // update(row, columns) {
-  //   return this.modelclass.newSql().update(row, columns);
-  // }
-  // delete(cond, op, dval) {
-  //   return this.modelclass.newSql().delete(cond, op, dval);
-  // }
-  // getMerge(rows, key) {
-  //   return this.modelclass.newSql().getMerge(rows, key);
-  // }
-  // group(...varargs) {
-  //   return this.modelclass.newSql().group(...varargs);
-  // }
-  // groupBy(...varargs) {
-  //   return this.modelclass.newSql().groupBy(...varargs);
-  // }
-  // order(...varargs) {
-  //   return this.modelclass.newSql().order(...varargs);
-  // }
-  // orderBy(...varargs) {
-  //   return this.modelclass.newSql().orderBy(...varargs);
-  // }
-  // join(joinArgs, key, op, val) {
-  //   return this.modelclass.newSql().join(joinArgs, key, op, val);
-  // }
-  // leftJoin(joinArgs, key, op, val) {
-  //   return this.modelclass.newSql().leftJoin(joinArgs, key, op, val);
-  // }
-  // rightJoin(joinArgs, key, op, val) {
-  //   return this.modelclass.newSql().rightJoin(joinArgs, key, op, val);
-  // }
-  // fullJoin(joinArgs, key, op, val) {
-  //   return this.modelclass.newSql().fullJoin(joinArgs, key, op, val);
-  // }
-  // loadFk(fkName, selectNames, ...varargs) {
-  //   return this.modelclass.newSql().loadFk(fkName, selectNames, ...varargs);
-  // }
-  // where(cond, op, dval) {
-  //   return this.modelclass.newSql().where(cond, op, dval);
-  // }
-  // whereOr(cond, op, dval) {
-  //   return this.modelclass.newSql().whereOr(cond, op, dval);
-  // }
-  // whereNot(cond, op, dval) {
-  //   return this.modelclass.newSql().whereNot(cond, op, dval);
-  // }
-  // whereExists(builder) {
-  //   return this.modelclass.newSql().whereExists(builder);
-  // }
-  // whereNotExists(builder) {
-  //   return this.modelclass.newSql().whereNotExists(builder);
-  // }
-  // whereIn(cols, range) {
-  //   return this.modelclass.newSql().whereIn(cols, range);
-  // }
-  // whereNotIn(cols, range) {
-  //   return this.modelclass.newSql().whereNotIn(cols, range);
-  // }
-  // whereNull(col) {
-  //   return this.modelclass.newSql().whereNull(col);
-  // }
-  // whereNotNull(col) {
-  //   return this.modelclass.newSql().whereNotNull(col);
-  // }
-  // whereBetween(col, low, high) {
-  //   return this.modelclass.newSql().whereBetween(col, low, high);
-  // }
-  // whereNotBetween(col, low, high) {
-  //   return this.modelclass.newSql().whereNotBetween(col, low, high);
-  // }
 }
 
 class Model {
@@ -577,8 +372,12 @@ class Model {
   static async createModelAsync(options) {
     for (const [name, field] of Object.entries(options.fields)) {
       if (field.choicesUrl) {
-        const { data: choices } = await Http[field.choicesUrlMethod || 'post'](field.choicesUrl);
-        field.choices = options.choicesCallback ? options.choicesCallback(choices, field) : choices;
+        const { data: choices } = await Http[field.choicesUrlMethod || "post"](
+          field.choicesUrl
+        );
+        field.choices = options.choicesCallback
+          ? options.choicesCallback(choices, field)
+          : choices;
       }
       if (typeof field.reference == "string") {
         const { data } = await Http.get(
@@ -605,7 +404,7 @@ class Model {
   }
   static setClassName(tableName) {
     const className = {
-      value: `${capitalize(tableName)}Model`,
+      value: `${capitalize(tableName)}Model`
     };
     Object.defineProperty(this, "name", className);
   }
@@ -661,7 +460,7 @@ class Model {
     ConcreteModel.__isModelClass__ = true;
     if (ConcreteModel.tableName) {
       return ConcreteModel.materializeWithTableName({
-        tableName: ConcreteModel.tableName,
+        tableName: ConcreteModel.tableName
       });
     } else {
       ConcreteModel.setClassName("Abstract");
@@ -688,7 +487,7 @@ class Model {
       this.fields[pkName] = Field.IntegerField.new({
         name: pkName,
         primaryKey: true,
-        serial: true,
+        serial: true
       });
       this.fieldNames.unshift(pkName);
     }
@@ -728,7 +527,7 @@ class Model {
     const model = {
       admin: options.admin,
       tableName: options.tableName || extend?.tableName,
-      sqlQuery: options.sqlQuery,
+      sqlQuery: options.sqlQuery
     };
     const [optsFields, optsFieldNames] = normalizeArrayAndHashFields(
       options.fields || []
@@ -773,7 +572,7 @@ class Model {
                 abstract: true,
                 extend: pfield.model,
                 fields: field.model.fields,
-                fieldNames: field.model.fieldNames,
+                fieldNames: field.model.fieldNames
               });
             }
           }
@@ -784,7 +583,7 @@ class Model {
       } else {
         model.fields[name] = makeFieldFromJson(field.getOptions(), {
           name: name,
-          type: field.type,
+          type: field.type
         });
       }
     }
@@ -960,7 +759,7 @@ class Model {
             return this.throwFieldError({
               message: "不能为空",
               index: i,
-              name: key,
+              name: key
             });
           }
         }
@@ -971,7 +770,7 @@ class Model {
               return this.throwFieldError({
                 message: "不能为空",
                 index: i,
-                name: k,
+                name: k
               });
             }
           }
@@ -981,7 +780,7 @@ class Model {
       if (rows[key] === undefined || rows[key] === "") {
         return this.throwFieldError({
           message: "不能为空",
-          name: key,
+          name: key
         });
       }
     } else {
@@ -989,7 +788,7 @@ class Model {
         if (rows[k] === undefined || rows[k] === "") {
           return this.throwFieldError({
             message: "不能为空",
-            name: k,
+            name: k
           });
         }
       }
@@ -1018,7 +817,7 @@ class Model {
       } catch (error) {
         return this.throwFieldError({
           name,
-          message: error.message,
+          message: error.message
         });
       }
       if (field.default && (value === undefined || value === "")) {
@@ -1030,7 +829,7 @@ class Model {
           } catch (error) {
             return this.throwFieldError({
               name,
-              message: error.message,
+              message: error.message
             });
           }
         }
@@ -1065,7 +864,7 @@ class Model {
         } catch (error) {
           return this.throwFieldError({
             name,
-            message: error.message,
+            message: error.message
           });
         }
       }
@@ -1116,7 +915,7 @@ class Model {
             return this.throwFieldError({
               index,
               name: error.name,
-              message: error.message,
+              message: error.message
             });
           } else {
             throw error;
@@ -1141,7 +940,7 @@ class Model {
             return this.throwFieldError({
               index,
               name: error.name,
-              message: error.message,
+              message: error.message
             });
           } else {
             throw error;
@@ -1213,7 +1012,7 @@ class Model {
         } catch (error) {
           return this.throwFieldError({
             name: name,
-            message: error.message,
+            message: error.message
           });
         }
       } else {
@@ -1946,7 +1745,7 @@ class Model {
         alias: joinArgs.alias || model.tableName,
         fkModel: fkModel,
         fkColumn: fkColumn,
-        fkAlias: "T" + this._getJoinNumber(),
+        fkAlias: "T" + this._getJoinNumber()
       };
       const joinTable = `${fkModel.tableName} ${joinObj.fkAlias}`;
       const joinCond = `${joinObj.alias}.${joinObj.column} = ${joinObj.fkAlias}.${joinObj.fkColumn}`;
@@ -1969,7 +1768,7 @@ class Model {
         return [
           fkField,
           joinObj.fkModel,
-          joinObj.fkAlias || joinObj.fkModel.tableName,
+          joinObj.fkAlias || joinObj.fkModel.tableName
         ];
       }
     }
@@ -2020,7 +1819,7 @@ class Model {
             column: fieldName,
             alias: prefix || model.tableName,
             fkModel: fkModel,
-            fkColumn: rc,
+            fkColumn: rc
           });
           prefix = joinObj.fkAlias;
           if (fieldOfFk.reference) {
@@ -2165,7 +1964,9 @@ class Model {
     if (!this[innerAttr]) {
       this[innerAttr] = otherSql.statement();
     } else {
-      this[innerAttr] = `(${this[innerAttr]}) ${PG_SET_MAP[innerAttr]} (${otherSql.statement()})`;
+      this[innerAttr] = `(${this[innerAttr]}) ${
+        PG_SET_MAP[innerAttr]
+      } (${otherSql.statement()})`;
     }
     this.statement = this._statementForSet;
     return this;
@@ -2207,7 +2008,7 @@ class Model {
       having: this._having,
       order: this._order,
       limit: this._limit,
-      offset: this._offset,
+      offset: this._offset
     });
     return statement;
   }
@@ -2976,7 +2777,7 @@ class Model {
       joinKey: joinKey,
       column: fkName,
       fkModel: fkModel,
-      fkColumn: fk.referenceColumn,
+      fkColumn: fk.referenceColumn
     });
     if (!this._loadFk) {
       this._loadFk = {};
@@ -3021,4 +2822,4 @@ class Model {
   }
 }
 
-export default Model;
+export { Model };
