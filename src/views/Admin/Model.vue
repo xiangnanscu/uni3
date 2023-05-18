@@ -11,7 +11,7 @@ import { useRoute } from "vue-router";
 import { Http } from "@/globals/Http";
 
 
-import Model from "@/model.mjs";
+import { Model } from "@/lib/model.mjs";
 
 const route = useRoute();
 const adminModel = shallowRef(null);

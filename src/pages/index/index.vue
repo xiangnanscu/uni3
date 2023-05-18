@@ -1,5 +1,6 @@
 <template>
   <view class="fui-wrap">
+    <model-form-uni></model-form-uni>
     <uni-tag text="标签">IT</uni-tag>
     <h1>global test: {{ byteSizeParser2('1m') }}</h1>
     <view class="fui-page__hd">

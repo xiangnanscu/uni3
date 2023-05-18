@@ -9,22 +9,15 @@
   "pages": [
     {
       "path": "pages/index/index",
-      "style": {
-        "navigationBarTitleText": "uni-app"
-      }
+      "style": { "navigationBarTitleText": "uni-app" }
     },
-    {
-      "path": "pages/Hello",
-      "style": {
-        "navigationBarTitleText": "..."
-      }
-    },
+    { "path": "pages/Hello", "style": { "navigationBarTitleText": "..." } },
     {
       "path": "pages/LoginList/LoginList",
-      "style": {
-        "navigationBarTitleText": "..."
-      }
-    }
+      "style": { "navigationBarTitleText": "..." }
+    },
+    { "path": "pages/Formtest", "style": { "navigationBarTitleText": "..." } },
+    { "path": "pages/Uform", "style": { "navigationBarTitleText": "..." } }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",

@@ -103,7 +103,7 @@ if (type == "list") {
   context.rulesToken = `{${rulesToken.join("\n")}}`;
 }
 renderTemplate({
-  src: `bin/pages/${type}.vue`,
+  src: `bin/pages/${type || "detail"}.vue`,
   dest: `src/pages/${pageName}.vue`,
   context
 });

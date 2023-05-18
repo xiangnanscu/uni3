@@ -2,7 +2,7 @@
 import { DownloadOutlined } from "@ant-design/icons-vue";
 import XlsxReadButton from "@/components/XlsxReadButton.vue";
 import { findDups } from "@/globals/Utils";
-import Model from "@/model.mjs";
+import { Model } from "@/lib/model.mjs";
 
 const store = useStore();
 const emit = defineEmits(["findDuplicates", "uploadRows", "successPost"]);

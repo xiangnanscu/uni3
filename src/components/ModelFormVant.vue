@@ -1,7 +1,7 @@
 <script lang="jsx">
 import { useRouter } from "vue-router";
 import { PlusOutlined, UploadOutlined } from "@ant-design/icons-vue";
-import Model from "@/model.mjs";
+import { Model } from "@/lib/model.mjs";
 import { Http, Alioss } from "@/globals";
 import { useStore } from "@/store";
 

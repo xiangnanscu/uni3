@@ -1,13 +1,12 @@
 <script lang="jsx">
 import { useRouter } from "vue-router";
-import { PlusOutlined, UploadOutlined } from "@ant-design/icons-vue";
 import { Model } from "@/lib/model.mjs";
 import { Http, Alioss } from "@/globals";
 import { useStore } from "@/store";
 
 const deepcopy = (o) => JSON.parse(JSON.stringify(o));
 export default {
-  name: "ModelForm",
+  name: "ModelFormUni",
   inheritAttrs: true,
   emits: ["submit", "successPost"],
   props: {
@@ -45,21 +44,6 @@ export default {
       Object.assign(values, model.value.toFormValue(values, model.value.names));
     });
     const formRef = ref();
-    const formItemLayout = computed(() => {
-      return props.layout === "horizontal"
-        ? {
-          labelCol: { span: props.labelCol },
-          wrapperCol: { span: 24 - props.labelCol },
-        }
-        : {};
-    });
-    const buttonItemLayout = computed(() => {
-      return props.layout === "horizontal"
-        ? {
-          wrapperCol: { span: 24 - props.labelCol, offset: props.labelCol },
-        }
-        : {};
-    });
     const formError = ref("");
     const submiting = ref(false);
     const clearBackendErrors = () => {
@@ -106,23 +90,11 @@ export default {
     const onFinishFailed = ({ values, errorFields, outOfDate }) => {
       console.log("Failed:", { values, errorFields, outOfDate });
     };
-    // const ruleTypes = {
-    //   float: "float",
-    //   integer: "integer",
-    //   boolean: "boolean",
-    //   email: "email",
-    //   date: "date",
-    // };
-    const getAntdRule = (field) => {
+    const getUniRule = (field) => {
       const rule = {
         whitespace: true,
         trigger: props.trigger,
       };
-      // validator定义了时, type会被忽略
-      // const type = ruleTypes[field.type];
-      // if (type) {
-      //   rule.type = type;
-      // }
       rule.validator = async (_rule, value) => {
         try {
           return Promise.resolve(field.validate(value));
@@ -156,7 +128,7 @@ export default {
           });
         };
         return (
-          <a-auto-complete
+          <uni-auto-complete
             onKeydown={disableEnterKeyDown} //防止按enter选择时表单提交
             v-model:value={values[name]}
             v-slots={{
@@ -169,35 +141,35 @@ export default {
             }}
             options={field.searchOptions}
             onSearch={onSearch}
-          ></a-auto-complete>
+          ></uni-auto-complete>
         );
       } else if (field.choices) {
         if (field.tag == "radio") {
           return (
-            <a-radio-group v-model:value={values[name]}>
+            <uni-radio-group v-model:value={values[name]}>
               {field.choices.map((c) => (
-                <a-radio-button value={c.value}>{c.label}</a-radio-button>
+                <uni-radio-button value={c.value}>{c.label}</uni-radio-button>
               ))}
-            </a-radio-group>
+            </uni-radio-group>
           );
         } else {
           return (
-            <a-select v-model:value={values[name]}>
+            <uni-select v-model:value={values[name]}>
               {field.choices.map((c) => (
-                <a-select-option value={c.value}>{c.label}</a-select-option>
+                <uni-select-option value={c.value}>{c.label}</uni-select-option>
               ))}
-            </a-select>
+            </uni-select>
           );
         }
       } else if (tag == "slider") {
         return (
-          <a-slider
+          <uni-slider
             v-model:value={values[name]}
             min={field.min}
             max={field.max}
             step={field.step}
             tooltipVisible={field.tooltipVisible}
-          ></a-slider>
+          ></uni-slider>
         );
       } else if (type.startsWith("alioss")) {
         // console.log("alioss value:", values[name]);
@@ -217,7 +189,7 @@ export default {
           case "aliossImage":
           case "aliossImageList":
             return (
-              <a-upload
+              <uni-upload
                 {...commonProps}
                 list-type={field.listType || "picture-card"}
               >
@@ -225,21 +197,21 @@ export default {
                   <PlusOutlined />
                   <div>{field.buttonText || "上传图片"}</div>
                 </div>
-              </a-upload>
+              </uni-upload>
             );
           default:
             return (
-              <a-upload {...commonProps}>
-                <a-button>
+              <uni-upload {...commonProps}>
+                <uni-button>
                   <UploadOutlined></UploadOutlined>
                   {field.buttonText || "上传文件"}
-                </a-button>
-              </a-upload>
+                </uni-button>
+              </uni-upload>
             );
         }
       } else if (type == "boolean") {
         return (
-          <a-switch
+          <uni-switch
             v-model:checked={values[name]}
             checked-children="开"
             un-checked-children="关"
@@ -247,14 +219,14 @@ export default {
         );
       } else if (type == "date") {
         return (
-          <a-date-picker
+          <uni-date-picker
             v-model:value={values[name]}
             value-format={field.valueFormat || "YYYY-MM-DD"}
           />
         );
       } else if (type == "yearMonth") {
         return (
-          <a-date-picker
+          <uni-date-picker
             v-model:value={values[name]}
             format={"YYYY.MM"}
             value-format={"YYYY.MM"}
@@ -263,7 +235,7 @@ export default {
         );
       } else if (type == "year") {
         return (
-          <a-date-picker
+          <uni-date-picker
             v-model:value={values[name]}
             format={"YYYY"}
             value-format={"YYYY"}
@@ -276,7 +248,7 @@ export default {
         };
         // 如果设置v-model:value={values[name]},time部分始终是00:00:00
         return (
-          <a-date-picker
+          <uni-date-picker
             show-time={{ format: field.timeFormat || "HH:mm" }}
             onChange={change}
             value-format={field.valueFormat || "YYYY-MM-DD"}
@@ -285,24 +257,24 @@ export default {
       } else if (type == "password") {
         // https://github.com/yiminghe/async-validator#type
         return (
-          <a-input-password
+          <uni-input-password
             v-model:value={values[name]}
             onKeydown={disableEnterKeyDown}
-          ></a-input-password>
+          ></uni-input-password>
         );
       } else if (type == "float" || type == "integer") {
         return (
-          <a-input-number
+          <uni-input-number
             v-model:value={values[name]}
             onKeydown={disableEnterKeyDown}
-          ></a-input-number>
+          ></uni-input-number>
         );
       } else {
         return (
-          <a-input
+          <uni-input
             v-model:value={values[name]}
             onKeydown={disableEnterKeyDown}
-          ></a-input>
+          ></uni-input>
         );
       }
     };
@@ -311,7 +283,7 @@ export default {
         return;
       }
       return (
-        <a-form
+        <uni-form
           {...formItemLayout.value}
           ref={formRef}
           layout={props.layout}
@@ -320,7 +292,7 @@ export default {
           onFinishFailed={onFinishFailed}
         >
           {formError.value && (
-            <a-alert
+            <uni-alert
               message="发生错误"
               description={formError.value}
               type="error"
@@ -334,7 +306,7 @@ export default {
               return (
                 <>
                   {arr.map((value, index) => (
-                    <a-form-item
+                    <uni-form-item
                       key={index}
                       label={index === 0 ? field.label : ""}
                       name={[name, index]}
@@ -342,10 +314,10 @@ export default {
                       extra={field.hint}
                       style="margin-bottom: 8px"
                     >
-                      {/* <a-input
+                      {/* <uni-input
                         style="width: 80%; margin-right: 8px"
                         v-model:value={arr[index]}
-                      ></a-input> */}
+                      ></uni-input> */}
                       <Wigdet
                         style="width: 80%; margin-right: 8px"
                         field={{ ...field, type: field.arrayType || "string" }}
@@ -361,14 +333,14 @@ export default {
                           }}
                         />
                       )}
-                    </a-form-item>
+                    </uni-form-item>
                   ))}
-                  <a-form-item
+                  <uni-form-item
                     {...(arr.length === 0
                       ? { label: field.label }
                       : buttonItemLayout.value)}
                   >
-                    <a-button
+                    <uni-button
                       type="dashed"
                       style="width: 80%"
                       onClick={() => {
@@ -377,13 +349,13 @@ export default {
                     >
                       <PlusOutlined />
                       添加
-                    </a-button>
-                  </a-form-item>
+                    </uni-button>
+                  </uni-form-item>
                 </>
               );
             } else if (field.type == "table") {
               return (
-                <a-form-item
+                <uni-form-item
                   name={field.name}
                   label={field.label}
                   extra={field.hint}
@@ -399,40 +371,40 @@ export default {
                     }}
                   ></model-form-table-field>
                   {errors[name] && (
-                    <a-alert message={errors[name]} type="error" show-icon />
+                    <uni-alert message={errors[name]} type="error" show-icon />
                   )}
-                </a-form-item>
+                </uni-form-item>
               );
             } else {
               return (
-                <a-form-item
+                <uni-form-item
                   name={name}
                   label={field.label}
-                  rules={[getAntdRule(field)]}
+                  rules={[getUniRule(field)]}
                   extra={field.hint}
                   style={props.layout == "inline" ? { "min-width": "20%" } : {}}
                 >
                   <Wigdet field={field} name={name} values={values}></Wigdet>
                   {errors[name] && (
-                    <a-alert message={errors[name]} type="error" show-icon />
+                    <uni-alert message={errors[name]} type="error" show-icon />
                   )}
-                </a-form-item>
+                </uni-form-item>
               );
             }
           })}
           {!props.hideSubmitButton && (
-            <a-form-item {...buttonItemLayout.value}>
-              <a-button
+            <uni-form-item {...buttonItemLayout.value}>
+              <uni-button
                 disabled={submiting.value}
                 type="primary"
                 html-type="submit"
                 loading={loading.value}
               >
                 {props.buttonText || "提交"}
-              </a-button>
-            </a-form-item>
+              </uni-button>
+            </uni-form-item>
           )}
-        </a-form>
+        </uni-form>
       );
     };
   },

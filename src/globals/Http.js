@@ -1,10 +1,11 @@
-import cookie from "cookie"
+import cookie from "cookie";
 import { useStore } from "@/store";
 
 const viteEnv = import.meta.env;
-const baseURL = process.env.NODE_ENV == "production"
-  ? `${viteEnv.VITE_HTTPS == "on" ? "https" : "http"}://${viteEnv.VITE_HOST}`
-  : `http://localhost:${process.env.NGINX_listen}`;
+const baseURL =
+  process.env.NODE_ENV == "production"
+    ? `${viteEnv.VITE_HTTPS == "on" ? "https" : "http"}://${viteEnv.VITE_HOST}`
+    : `http://localhost:${process.env.NGINX_listen}`;
 const cookieNames = ["session"];
 
 uni.addInterceptor("request", {
@@ -26,15 +27,20 @@ uni.addInterceptor("request", {
       }
     }
     args.header = header;
-    args.url = baseURL + args.url;
+    if (args.url.startsWith("/")) args.url = baseURL + args.url;
   },
   success({ data, statusCode, header, cookies }) {
-    console.log("global uni.request success:", { data, statusCode, header, cookies });
+    console.log("global uni.request success:", {
+      data,
+      statusCode,
+      header,
+      cookies
+    });
     if (statusCode < 600 && statusCode >= 500) {
       uni.showToast({
         icon: "none",
         title: `发生错误`,
-        duration: 5000,
+        duration: 5000
       });
     }
   },
@@ -54,16 +60,15 @@ uni.addInterceptor("request", {
         }
       }
     }
-  },
+  }
 });
 
 class Http {
-  static async get(url, data, opts) {
+  static async get(url, opts) {
     return await uni.request({
       url,
-      data,
       method: "get",
-      ...opts,
+      ...opts
     });
   }
 
@@ -72,7 +77,7 @@ class Http {
       url,
       data,
       method: "post",
-      ...opts,
+      ...opts
     });
   }
 }

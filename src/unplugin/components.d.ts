@@ -7,12 +7,15 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    copy: typeof import('./../components/ModelForm/ModelFormUni copy.vue')['default']
     Favicon: typeof import('./../components/favicon.vue')['default']
     JsxH1: typeof import('./../components/JsxH1.vue')['default']
     ModelBatchButton: typeof import('./../components/ModelBatchButton.vue')['default']
     ModelForm: typeof import('./../components/ModelForm.vue')['default']
     ModelFormTableField: typeof import('./../components/ModelFormTableField.vue')['default']
+    ModelFormUni: typeof import('./../components/ModelForm/ModelFormUni.vue')['default']
     ModelFormVant: typeof import('./../components/ModelFormVant.vue')['default']
+    ModelFormWidgetUni: typeof import('./../components/ModelForm/ModelFormWidgetUni.vue')['default']
     ModelPanel: typeof import('./../components/ModelPanel.vue')['default']
     PageLayout: typeof import('./../components/PageLayout.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

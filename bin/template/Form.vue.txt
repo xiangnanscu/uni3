@@ -8,7 +8,7 @@
 <script setup>
 import { onBeforeMount, computed, ref, reactive } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import Model from "@/model.mjs";
+import { Model } from "@/lib/model.mjs";
 import { PlusOutlined, UploadOutlined } from "@ant-design/icons-vue";
 import { Http } from "@/globals/Http";
 
