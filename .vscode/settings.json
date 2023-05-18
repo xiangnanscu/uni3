@@ -50,7 +50,7 @@
   "files.autoSave": "onFocusChange", // optional but recommended
   "vs-code-prettier-eslint.prettierLast": false,
   "[vue]": {
-    "editor.defaultFormatter": "Vue.volar"
+    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
     // "editor.defaultFormatter": "Vue.volar"
   },
   "[typescript]": {

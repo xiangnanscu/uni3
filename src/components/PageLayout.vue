@@ -1,26 +1,15 @@
 <template>
-  <fui-spin
-    v-if="loading"
-    class="fui-spin"
-  >
+  <fui-spin v-if="loading" class="fui-spin">
     <view class="fui-loading"></view>
   </fui-spin>
   <view class="page-layout">
-    <div
-      v-if="message"
-      class="global-message"
-    >{{ message }}</div>
-    <div
-      v-if="error"
-      class="global-error"
-    >{{ error }}</div>
+    <div v-if="message" class="global-message">{{ message }}</div>
+    <div v-if="error" class="global-error">{{ error }}</div>
     <slot />
   </view>
 </template>
 <script setup>
-
-const { message, error, loading } = storeToRefs(useStore())
-
+const { message, error, loading } = storeToRefs(useStore());
 </script>
 <style>
 .page-layout {
@@ -41,7 +30,7 @@ const { message, error, loading } = storeToRefs(useStore())
   width: 50rpx;
   height: 50rpx;
   border-radius: 50%;
-  border: 2px solid #465CFF;
+  border: 2px solid #465cff;
   border-left-color: transparent;
 }
 

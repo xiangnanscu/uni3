@@ -9,7 +9,7 @@
 const testModel = Model.createModel({
   fieldNames: ['xm', 'sfzh'],
   fields: {
-    xm: { label: "姓名" },
+    xm: { label: "姓名", required: true },
     sfzh: { label: "身份证号", type: 'sfzh' }
   }
 })
