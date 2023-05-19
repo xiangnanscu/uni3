@@ -1,10 +1,9 @@
 <template>
   <view class="fui-wrap">
-    <model-form-uni></model-form-uni>
     <uni-tag text="标签">IT</uni-tag>
-    <h1>global test: {{ byteSizeParser2('1m') }}</h1>
+    <h1>global test: {{ byteSizeParser2("1m") }}</h1>
     <view class="fui-page__hd">
-      <navigator url="/pages/LoginList/LoginList">登录</navigator>
+      <navigator url="/pages/Uform">表单测试</navigator>
       <view class="fui-page__title">BottomPopup</view>
       <view class="fui-page__desc">111f</view>
     </view>
@@ -42,21 +41,12 @@
       </fui-button>
     </view>
 
-    <fui-bottom-popup
-      :show="show"
-      @close="closePopup(1)"
-    >
-      <view class="fui-custom__wrap">
-        这是自定义内容区
-      </view>
+    <fui-bottom-popup :show="show" @close="closePopup(1)">
+      <view class="fui-custom__wrap"> 这是自定义内容区 </view>
     </fui-bottom-popup>
 
     <!--案例一-->
-    <fui-bottom-popup
-      radius="0"
-      :show="show2"
-      :maskClosable="false"
-    >
+    <fui-bottom-popup radius="0" :show="show2" :maskClosable="false">
       <view class="fui-popup__container">
         <text class="fui-title">测试标题一</text>
         <text class="fui-sub__title">测试标题一的副标题</text>
@@ -79,41 +69,22 @@
           ></fui-button>
         </view>
 
-        <view
-          class="fui-icon__close"
-          @tap="closePopup(2)"
-        >
-          <fui-icon
-            name="close"
-            :size="48"
-          ></fui-icon>
+        <view class="fui-icon__close" @tap="closePopup(2)">
+          <fui-icon name="close" :size="48"></fui-icon>
         </view>
       </view>
     </fui-bottom-popup>
 
-    <fui-bottom-popup
-      :show="show3"
-      @close="closePopup(3)"
-    >
+    <fui-bottom-popup :show="show3" @close="closePopup(3)">
       <view class="fui-scroll__wrap">
         <view class="fui-title fui-title__pb">测试标题二</view>
-        <scroll-view
-          scroll-y
-          class="fui-scroll__view"
-        >
-          <fui-list-cell
-            v-for="(item, index) in itemList"
-            :key="index"
-          >item{{ index + 1 }}</fui-list-cell>
+        <scroll-view scroll-y class="fui-scroll__view">
+          <fui-list-cell v-for="(item, index) in itemList" :key="index"
+            >item{{ index + 1 }}</fui-list-cell
+          >
         </scroll-view>
-        <view
-          class="fui-icon__close"
-          @tap="closePopup(3)"
-        >
-          <fui-icon
-            name="close"
-            :size="48"
-          ></fui-icon>
+        <view class="fui-icon__close" @tap="closePopup(3)">
+          <fui-icon name="close" :size="48"></fui-icon>
         </view>
       </view>
     </fui-bottom-popup>
@@ -131,29 +102,29 @@ export default {
       show2: false,
       show3: false,
       itemList: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-    }
+    };
   },
   methods: {
     showPopup(type) {
       if (type === 1) {
-        this.show = true
+        this.show = true;
       } else if (type === 2) {
-        this.show2 = true
+        this.show2 = true;
       } else {
-        this.show3 = true
+        this.show3 = true;
       }
     },
     closePopup(type) {
       if (type === 1) {
-        this.show = false
+        this.show = false;
       } else if (type === 2) {
-        this.show2 = false
+        this.show2 = false;
       } else {
-        this.show3 = false
+        this.show3 = false;
       }
     }
   }
-}
+};
 </script>
 
 <style>
@@ -203,8 +174,8 @@ page {
   /* #endif */
   text-align: center;
   font-size: 24rpx;
-  color: #7F7F7F;
-  transform: scale(.9);
+  color: #7f7f7f;
+  transform: scale(0.9);
 }
 
 .fui-descr {
@@ -214,7 +185,7 @@ page {
 
 .fui-sub__descr {
   font-size: 26rpx;
-  color: #B2B2B2;
+  color: #b2b2b2;
   padding: 32rpx 0;
 }
 

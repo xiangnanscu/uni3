@@ -5,7 +5,7 @@ module.exports = {
   root: true,
   env: {
     node: true,
-    amd: true,
+    amd: true
   },
   globals: {
     uni: true,
@@ -16,20 +16,21 @@ module.exports = {
       "error",
       {
         destructuring: "all",
-        ignoreReadBeforeAssign: false,
-      },
+        ignoreReadBeforeAssign: false
+      }
     ],
     "vue/no-unused-vars": [
       "warn",
       {
-        ignorePattern: "^_",
-      },
+        ignorePattern: "^_"
+      }
     ],
     "no-unused-vars": [
       "warn",
-      { vars: "all", args: "after-used", argsIgnorePattern: "^_" },
+      { vars: "all", args: "after-used", argsIgnorePattern: "^_" }
     ],
     "vue/multi-word-component-names": "off",
+    "vue/no-setup-props-destructure": "off"
   },
   extends: [
     // 这里必须以./开头,否则不会被识别为文件路径
@@ -37,11 +38,11 @@ module.exports = {
     "plugin:vue/vue3-essential",
     "eslint:recommended",
     "@vue/eslint-config-typescript",
-    "@vue/eslint-config-prettier/skip-formatting",
+    "@vue/eslint-config-prettier/skip-formatting"
     // "@vue/eslint-config-prettier",
   ],
   parserOptions: {
-    ecmaVersion: "latest",
+    ecmaVersion: "latest"
     // parserOptions: { tsconfigRootDir: __dirname }
-  },
+  }
 };

@@ -48,10 +48,10 @@ function getChoices(rawChoices) {
   const choices = [];
   for (let c of rawChoices) {
     if (typeof c === "string" || typeof c === "number") {
-      c = { value: c, label: c };
+      c = { value: c, label: c, text: c };
     } else if (typeof c === "object") {
       const [value, label, hint] = cleanChoice(c);
-      c = { value, label, hint };
+      c = { value, label, hint, text: label };
     } else {
       throw new Error("invalid choice type:" + typeof c);
     }
@@ -498,8 +498,8 @@ class FloatField extends BaseField {
 }
 
 const DEFAULT_BOOLEAN_CHOICES = [
-  { label: "是", value: true },
-  { label: "否", value: false }
+  { label: "是", value: true, text: "是" },
+  { label: "否", value: false, text: "否" }
 ];
 const booleanOptionNames = [...baseOptionNames, "cn"];
 class BooleanField extends BaseField {

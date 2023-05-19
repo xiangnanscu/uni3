@@ -1,4 +1,4 @@
-import { nanoid } from "nanoid"
+import { nanoid } from "nanoid";
 import { Http } from "@/globals/Http";
 
 const ALIOSS_PAYLOAD_URL = process.env.ALIOSS_PAYLOAD_URL;
@@ -13,7 +13,7 @@ const imgExtMap = {
   "image/png": "png",
   "image/tiff": "tif",
   "image/webp": "webp",
-  "image/vnd.microsoft.icon": "ico",
+  "image/vnd.microsoft.icon": "ico"
 };
 const videoExtMap = {
   "video/mp4": "mp4",
@@ -26,7 +26,7 @@ const videoExtMap = {
   "video/x-matroska": "mkv",
   "video/3gpp": "3gp",
   "video/ogg": "ogg"
-}
+};
 // interface aliossOpts {
 //   size?: string | number;
 //   key?: string;
@@ -50,54 +50,77 @@ class Alioss {
     const { data } = await Http.post(ALIOSS_PAYLOAD_URL, {
       size: ALIOSS_SIZE,
       lifetime: ALIOSS_LIFETIME,
-      ...opts,
+      ...opts
     });
     return data;
   };
-  static getOssVideoKey = (file) => {
-    return `${ALIOSS_UPLOAD_PREFIX}/video/${nanoid()}.${videoExtMap[file.type] || file.name.split(".").pop()
-      }`
-  }
-  static async uploadVideo({ file, url, data, config, size }) {
+  static getOssKey = (file, subprefix = "file") => {
+    return `${ALIOSS_UPLOAD_PREFIX}/${subprefix}/${nanoid()}.${
+      videoExtMap[file.type] || file.name.split(".").pop()
+    }`;
+  };
+  static async upload({ file, url, data, config, size, prefix }) {
     const formData = new FormData();
-    const ossKey = Alioss.getOssVideoKey(file)
-    for (const [key, value] of Object.entries({ ...data, ...await Alioss.getPayload({ size }), key: ossKey, file })) {
-      formData.append(key, value)
+    const ossKey = Alioss.getOssKey(file, prefix);
+    for (const [key, value] of Object.entries({
+      ...data,
+      ...(await Alioss.getPayload({ size })),
+      key: ossKey,
+      file
+    })) {
+      formData.append(key, value);
     }
-    await Http.post(
-      url || ALIOSS_URL,
-      formData,
-      {
-        method: "POST",
-        headers: { "X-Requested-With": "XMLHttpRequest", 'Content-Type': 'multipart/form-data' },
-        params: {
-          t: new Date().getTime(),
-        },
-        responseType: "json", // 'arraybuffer', 'document', 'json', 'text', 'stream','blob'
-        responseEncoding: "utf8",
-        ...config,
-      });
-    return `${ALIOSS_URL}${ossKey}`
+    await Http.post(url || ALIOSS_URL, formData, {
+      method: "POST",
+      header: {
+        "X-Requested-With": "XMLHttpRequest",
+        "Content-Type": "multipart/form-data",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE"
+      },
+      params: {
+        t: new Date().getTime()
+      },
+      responseType: "json", // 'arraybuffer', 'document', 'json', 'text', 'stream','blob'
+      responseEncoding: "utf8",
+      ...config
+    });
+    return `${ALIOSS_URL}${ossKey}`;
+  }
+  static async uploadUni({ file, url, size, prefix }) {
+    const ossKey = Alioss.getOssKey(file, prefix);
+    const res = await uni.uploadFile({
+      url: url || ALIOSS_URL,
+      filePath: file.path,
+      name: "file",
+      formData: {
+        key: ossKey,
+        ...(await Alioss.getPayload({ size }))
+      }
+    });
+    console.log({ res });
+    file.url = `${ALIOSS_URL}${ossKey}`;
+    return `${ALIOSS_URL}${ossKey}`;
   }
   static antdDataCallback = async (file) => {
-    const ext = imgExtMap[file.type] || file.name.split(".").pop()
+    const ext = imgExtMap[file.type] || file.name.split(".").pop();
     const key = `${ALIOSS_UPLOAD_PREFIX}/${file.uid}.${ext}`;
     const payload = await this.getPayload({
       key,
       size: ALIOSS_SIZE,
-      lifetime: ALIOSS_LIFETIME,
+      lifetime: ALIOSS_LIFETIME
     });
     payload.key = key;
     file.ossUrl = `${ALIOSS_URL}${key}`;
     return payload;
   };
   static makeAntdDataCallback = (field) => async (file) => {
-    const ext = imgExtMap[file.type] || file.name.split(".").pop()
+    const ext = imgExtMap[file.type] || file.name.split(".").pop();
     const key = `${ALIOSS_UPLOAD_PREFIX}/${file.uid}.${ext}`;
     const payload = await this.getPayload({
       key,
       size: field.size || ALIOSS_SIZE,
-      lifetime: field.lifetime || ALIOSS_LIFETIME,
+      lifetime: field.lifetime || ALIOSS_LIFETIME
     });
     payload.key = key;
     file.ossUrl = `${ALIOSS_URL}${key}`;

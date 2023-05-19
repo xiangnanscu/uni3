@@ -27,7 +27,7 @@ uni.addInterceptor("request", {
       }
     }
     args.header = header;
-    if (args.url.startsWith("/")) args.url = baseURL + args.url;
+    if (!/^https?|^\/\//.test(args.url)) args.url = baseURL + args.url;
   },
   success({ data, statusCode, header, cookies }) {
     console.log("global uni.request success:", {
