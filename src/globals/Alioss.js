@@ -59,7 +59,7 @@ class Alioss {
       videoExtMap[file.type] || file.name.split(".").pop()
     }`;
   };
-  static async upload({ file, url, data, config, size, prefix }) {
+  static async uploadH5({ file, url, data, config, size, prefix }) {
     const formData = new FormData();
     const ossKey = Alioss.getOssKey(file, prefix);
     for (const [key, value] of Object.entries({
@@ -89,27 +89,25 @@ class Alioss {
   }
   static async uploadUni({ file, url, size, prefix }) {
     const ossKey = Alioss.getOssKey(file, prefix);
-    const res = await uni.uploadFile({
+    const { statusCode } = await uni.uploadFile({
       url: url || ALIOSS_URL,
       filePath: file.path,
       name: "file",
       formData: {
         key: ossKey,
-        ...(await Alioss.getPayload({ size }))
+        ...(await Alioss.getPayload({ size, key: ossKey }))
       }
     });
-    console.log({ res });
-    file.url = `${ALIOSS_URL}${ossKey}`;
-    return `${ALIOSS_URL}${ossKey}`;
+    if (statusCode > 399) {
+      throw new Error(`上传出错`);
+    } else {
+      return `${ALIOSS_URL}${ossKey}`;
+    }
   }
   static antdDataCallback = async (file) => {
     const ext = imgExtMap[file.type] || file.name.split(".").pop();
     const key = `${ALIOSS_UPLOAD_PREFIX}/${file.uid}.${ext}`;
-    const payload = await this.getPayload({
-      key,
-      size: ALIOSS_SIZE,
-      lifetime: ALIOSS_LIFETIME
-    });
+    const payload = await this.getPayload({ key, size: ALIOSS_SIZE });
     payload.key = key;
     file.ossUrl = `${ALIOSS_URL}${key}`;
     return payload;

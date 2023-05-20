@@ -958,6 +958,7 @@ const aliossOptionNames = [
   "width",
   "prefix",
   "hash",
+  "limit", // uni
   "listType", // antdv
   "maxCount", // antdv
   "multiple", // antdv
@@ -965,12 +966,14 @@ const aliossOptionNames = [
   "buttonText" // antdv
 ];
 const mapToAntdFileValue = (url = "") => {
+  const name = url.split("/").pop();
   return typeof url == "object"
     ? url
     : {
-        name: url.split("/").pop(),
+        name,
         status: "done",
         url: url,
+        extname: name.split(".")[1], // uni
         ossUrl: url
       };
 };

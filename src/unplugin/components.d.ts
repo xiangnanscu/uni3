@@ -7,7 +7,9 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    copy: typeof import('./../components/ModelForm/ModelFormUni copy.vue')['default']
     Favicon: typeof import('./../components/favicon.vue')['default']
+    InlineTest: typeof import('./../components/InlineTest.vue')['default']
     JsxH1: typeof import('./../components/JsxH1.vue')['default']
     ModelBatchButton: typeof import('./../components/ModelBatchButton.vue')['default']
     ModelForm: typeof import('./../components/ModelForm.vue')['default']

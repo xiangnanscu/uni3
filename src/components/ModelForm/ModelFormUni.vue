@@ -80,6 +80,7 @@ const submit = async (ref) => {
     clearBackendErrors();
     const cleanedData = await formRef.value.validate();
     const data = props.model.toPostValue(cleanedData, props.model.names);
+    log(data);
     emit("submit", data);
     if (!props.actionUrl) {
       return;
@@ -115,23 +116,74 @@ const submit = async (ref) => {
   }
 };
 
-// { attrs, slots, emit, expose }
-const autocompletePopupRefs = Object.fromEntries(
-  fieldsArray.value
-    .filter((f) => f.autocomplete)
-    .map((f) => [f.name, ref(null)])
-);
-const filePickerRefs = Object.fromEntries(
-  fieldsArray.value
-    .filter((f) => f.type.startsWith("alioss"))
-    .map((f) => [f.name, ref(null)])
-);
+// const uniFile = {
+//   cloudPath: "1684568038130_0.png",
+//   extname: "png",
+//   fileType: "image",
+//   image: {
+//     width: 480,
+//     height: 320,
+//     location: "blob:http://localhost:5173/04cacb45-6257-4bbb-aa8a-3776cf839ef1"
+//   },
+//   name: "hx2.png",
+//   path: "blob:http://localhost:5173/04cacb45-6257-4bbb-aa8a-3776cf839ef1",
+//   progress: 0,
+//   size: 7942,
+//   status: "ready", // error|success|ready
+//   url: "blob:http://localhost:5173/04cacb45-6257-4bbb-aa8a-3776cf839ef1",
+//   uuid: 1684568038130
+// };
+const getUniMediatype = (field) =>
+  field.mediaType == "video"
+    ? "video"
+    : field.type.includes("Image")
+    ? "image"
+    : "all";
+const autocompletePopupRefs = {};
+const filePickerRefs = {};
+const fuiFileStatus = {};
+const filePickerSelectHanlder = {};
+for (const field of fieldsArray.value) {
+  if (field.autocomplete) {
+    autocompletePopupRefs[field.name] = ref(null);
+  } else if (field.type.startsWith("alioss")) {
+    filePickerRefs[field.name] = ref(null);
+    fuiFileStatus[field.name] = "";
+    filePickerSelectHanlder[field.name] = async ({
+      tempFiles,
+      tempFilePaths
+    }) => {
+      const files = filePickerRefs[field.name].files;
+      for (const file of tempFiles) {
+        const uniFileIndex = files.findIndex((f) => f.uuid == file.uuid);
+        if (file.size > field.size) {
+          errors[field.name] = `文件过大(当前${Math.round(
+            file.size / 1024 / 1024
+          )}MB,上限${field.sizeArg})`;
+          files.splice(uniFileIndex, 1);
+          continue;
+        }
+        try {
+          const url = await Alioss.uploadUni({
+            file,
+            size: field.size,
+            prefix: "img"
+          });
+          values[field.name].push({ ossUrl: url });
+        } catch (error) {
+          errors[field.name] = error.message || "上传出错";
+          // files[uniFileIndex].errMsg = "上传出错";
+          // files[uniFileIndex].status = "error";
+          files.splice(uniFileIndex, 1);
+        }
+      }
+    };
+  }
+}
 const fileValues = ref({});
+// 以下三个都是uniCloud专用的
 const filePickerFail = ({ tempFiles, tempFilePaths }) => {};
 const filePickerSuccess = ({ tempFiles, tempFilePaths }) => {};
-const filePickerSelect = ({ tempFiles, tempFilePaths }) => {
-  console.log(tempFiles, tempFilePaths);
-};
 const filePickerProgress = ({
   progress,
   index,
@@ -245,35 +297,20 @@ const log = console.log;
             />
           </picker>
           <uni-file-picker
-            v-else-if="field.type == 'aliossImage'"
-            :ref="(el) => (filePickerRefs[field.name] = el)"
+            v-else-if="field.type.startsWith('alioss')"
             v-model="fileValues[field.name]"
+            :file-mediatype="getUniMediatype(field)"
+            :limit="field.type.endsWith('List') ? field.limit || 9 : 1"
+            :ref="(el) => (filePickerRefs[field.name] = el)"
             :disabled="field.disabled"
-            file-mediatype="image"
+            :title="' '"
             mode="grid"
-            file-extname="png,jpg"
-            :limit="1"
-            return-type="object"
+            :disable-preview="true"
+            return-type="array"
+            @select="filePickerSelectHanlder[field.name]"
+            @success="filePickerSuccess"
             @progress="filePickerProgress"
-            @success="
-              (res) => {
-                log('success', { res });
-              }
-            "
             @fail="filePickerFail"
-            @select="
-              async ({ tempFiles, tempFilePaths }) => {
-                const file = tempFiles[0].file;
-                const url = await Alioss.uploadUni({
-                  file,
-                  size: field.size,
-                  prefix: 'img'
-                });
-                log(url);
-                formsItemRefs[field.name].onFieldChange(url);
-                log(fileValues);
-              }
-            "
           />
           <uni-easyinput
             v-else-if="field.type == 'integer'"
@@ -330,7 +367,7 @@ const log = console.log;
           </uni-section>
         </uni-popup>
       </template>
-      <button type="primary" @click="submit()" :disabled="loading">提交</button>
+      <button type="primary" @click="submit" :disabled="loading">提交</button>
     </uni-forms>
   </div>
 </template>

@@ -1,3 +1,4 @@
+fuck(1);
 const Wigdet = ({ name, field, values }) => {
   const type = field.type;
   const tag = field.tag;

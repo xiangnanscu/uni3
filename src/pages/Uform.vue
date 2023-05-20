@@ -21,7 +21,26 @@ const testModel = Model.createModel({
     tx: {
       label: "头像",
       required: false,
+      size: "1M",
       type: "aliossImage"
+    },
+    xz: {
+      label: "写真",
+      required: false,
+      type: "aliossImageList"
+    },
+    shsp: {
+      label: "生活视频",
+      required: false,
+      size: "50M",
+      mediaType: "video",
+      type: "alioss"
+    },
+    bg: {
+      label: "表格",
+      required: false,
+      size: "50M",
+      type: "alioss"
     },
     xm: {
       label: "姓名",

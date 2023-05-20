@@ -17,7 +17,8 @@
       "style": { "navigationBarTitleText": "..." }
     },
     { "path": "pages/Formtest", "style": { "navigationBarTitleText": "..." } },
-    { "path": "pages/Uform", "style": { "navigationBarTitleText": "..." } }
+    { "path": "pages/Uform", "style": { "navigationBarTitleText": "..." } },
+    { "path": "pages/Ttest", "style": { "navigationBarTitleText": "..." } }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
