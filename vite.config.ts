@@ -17,7 +17,7 @@ const plugins = [
     dirs: ["./src/components"],
     extensions: ["vue", "jsx"],
     dts: "./src/unplugin/components.d.ts",
-    directoryAsNamespace: false,
+    directoryAsNamespace: true,
     resolvers: []
   }),
   AutoImport({

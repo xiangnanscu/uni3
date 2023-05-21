@@ -33,7 +33,11 @@ export const decodeBase64 = (s) =>
   Buffer.from(s.replace(/_/g, "/").replace(/-/g, "+"), "base64").toString(
     "utf-8"
   );
-export const repr = (s) => JSON.stringify(s);
+export const repr = (s) => {
+  const res = JSON.stringify(s);
+  console.log(res);
+  return res;
+};
 export const fromNow = (value) => {
   // 拿到当前时间戳和发布时的时间戳
   var curTime = new Date();

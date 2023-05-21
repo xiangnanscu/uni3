@@ -1,6 +1,5 @@
 <script setup>
 import { read, utils } from "xlsx";
-import { UploadOutlined } from "@ant-design/icons-vue";
 
 const emit = defineEmits(["read"]);
 const reading = ref(false);
@@ -22,7 +21,7 @@ const onAntdUpload = ({ file, fileList, event }) => {
     if (n !== 1) {
       emit("read", {
         ok: false,
-        message: `上传的电子文档只能包含1个工作表，当前${n}个`,
+        message: `上传的电子文档只能包含1个工作表，当前${n}个`
       });
       reading.value = false;
       return;
@@ -44,9 +43,6 @@ const onAntdUpload = ({ file, fileList, event }) => {
     :showUploadList="false"
     :beforeUpload="() => false"
   >
-    <a-button>
-      <upload-outlined></upload-outlined>
-      上传名单
-    </a-button>
+    <a-button> 上传名单 </a-button>
   </a-upload>
 </template>

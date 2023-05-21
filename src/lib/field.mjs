@@ -498,8 +498,8 @@ class FloatField extends BaseField {
 }
 
 const DEFAULT_BOOLEAN_CHOICES = [
-  { label: "是", value: true, text: "是" },
-  { label: "否", value: false, text: "否" }
+  { label: "是", value: "true", text: "是" },
+  { label: "否", value: "false", text: "否" }
 ];
 const booleanOptionNames = [...baseOptionNames, "cn"];
 class BooleanField extends BaseField {
@@ -579,9 +579,7 @@ function nonEmptyArrayRequired(message) {
   return arrayValidator;
 }
 const arrayOptionNames = [...baseOptionNames, "arrayType"];
-class ArrayField extends JsonField {
-  type = "array";
-  dbType = "jsonb";
+class BaseArrayField extends JsonField {
   get optionNames() {
     return arrayOptionNames;
   }
@@ -605,12 +603,54 @@ class ArrayField extends JsonField {
     }
   }
 }
+class ArrayField extends BaseArrayField {
+  type = "array";
+  dbType = "jsonb";
+  constructor(options) {
+    super(options);
+    const maps = {
+      BaseField,
+      StringField,
+      EmailField,
+      PasswordField,
+      YearMonthField,
+      YearField,
+      TextField,
+      IntegerField,
+      FloatField,
+      DatetimeField,
+      DateField,
+      TimeField,
+      JsonField,
+      // ArrayField,
+      // TableField,
+      ForeignkeyField,
+      BooleanField,
+      AliossField,
+      AliossImageField,
+      AliossListField,
+      AliossImageListField,
+      SfzhField
+    };
+    const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+    const cls = maps[`${capitalize(this.arrayType || "string")}Field`];
+    this.arrayField = cls.new(options);
+  }
+  getValidators(validators) {
+    validators.unshift((v) =>
+      v.map((e) => {
+        return this.arrayField.validate(e);
+      })
+    );
+    return super.getValidators(validators);
+  }
+}
 function makeEmptyArray() {
   return [];
 }
 
 const tableOptionNames = [...baseOptionNames, "model", "maxRows", "uploadable"];
-class TableField extends ArrayField {
+class TableField extends BaseArrayField {
   type = "table";
   maxRows = TABLE_MAX_ROWS;
   get optionNames() {
@@ -633,6 +673,7 @@ class TableField extends ArrayField {
     return this;
   }
   getValidators(validators) {
+    const model = this.model;
     function validateByEachField(rows) {
       for (let [i, row] of rows.entries()) {
         assert(
@@ -640,7 +681,7 @@ class TableField extends ArrayField {
           "elements of table field must be object"
         );
         try {
-          row = this.model.validateCreate(row);
+          row = model.validateCreate(row);
         } catch (err) {
           err.index = i;
           throw err;

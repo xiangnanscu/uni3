@@ -1,0 +1,257 @@
+<script setup>
+import { useRouter } from "vue-router";
+import { useStore } from "@/store";
+import { onReady } from "@dcloudio/uni-app";
+import { repr } from "@/lib/utils.mjs";
+
+const emit = defineEmits(["submit", "successPost"]);
+const props = defineProps({
+  model: { type: [Object, Function], required: true },
+  values: { type: Object, default: () => ({}) },
+  errors: { type: Object, default: () => ({}) },
+  syncValues: { type: Boolean, default: false },
+  actionUrl: { type: String, required: false },
+  method: { type: String, default: "POST" },
+  hideSubmitButton: { type: Boolean, default: false },
+  buttonText: { type: String },
+  itemWidth: { type: String },
+  successRoute: { type: [Object, String] },
+  layout: { type: String, default: "horizontal" }, // horizontal
+  trigger: { type: String, default: "blur" },
+  labelCol: { type: Number, default: 3 }
+});
+const deepcopy = (o) => JSON.parse(JSON.stringify(o));
+const router = useRouter();
+const values = props.syncValues
+  ? reactive(props.values)
+  : reactive(deepcopy(props.values));
+const errors = reactive(props.errors);
+const { loading } = storeToRefs(useStore());
+const formRef = ref();
+const getUniRule = (field) => {
+  return {
+    validateFunction: function (rule, value, data, callback) {
+      // const name = field.name;
+      data[field.name] = field.validate(value, data);
+      // console.log("validateFunction", data === formRef.value.formData);
+      // if (value === undefined) {
+      //   data[name] = "";
+      // } else {
+      //   data[name] = value;
+      // }
+      return true;
+      // try {
+      //   value = field.validate(value, data);
+      //   console.log("validateFunction", data === formRef.value.formData);
+      //   if (value === undefined) {
+      //     data[name] = "";
+      //   } else {
+      //     data[name] = value;
+      //   }
+      //   return true;
+      // } catch (error) {
+      //   console.error(error);
+      //   callback(error.message);
+      // }
+    }
+  };
+};
+const getFieldRules = (field) => [
+  { required: field.required, errorMessage: `必须填写${field.label}` },
+  {
+    validateFunction: function (rule, value, data, callback) {
+      data[field.name] = field.validate(value, data);
+      return true;
+    }
+  }
+];
+
+const fieldsArray = computed(() =>
+  props.model.names.map((name) => props.model.fields[name])
+);
+const formsItemRefs = {};
+const rules = {};
+for (const field of fieldsArray.value) {
+  const name = field.name;
+  if (field.type == "array") {
+    errors[name] = [];
+  }
+  formsItemRefs[name] = ref(null);
+  rules[name] = {
+    rules: getFieldRules(field)
+  };
+}
+onBeforeMount(() => {
+  Object.assign(values, props.model.toFormValue(values, props.model.names));
+});
+onMounted(() => {
+  formRef.value.setRules(rules);
+});
+
+const formError = ref("");
+const submiting = ref(false);
+const clearBackendErrors = () => {
+  formError.value = "";
+  for (const key in errors) {
+    errors[key] = "";
+  }
+};
+const submit = async () => {
+  formRef.value.clearValidate();
+  clearBackendErrors();
+  try {
+    const cleanedData = await formRef.value.validate();
+    const data = props.model.toPostValue(cleanedData, props.model.names);
+    emit("submit", data);
+    console.log("success submit:", data);
+    if (!props.actionUrl) {
+      return;
+    }
+    try {
+      submiting.value = true;
+      const response = await Http.post(props.actionUrl, data);
+      emit("successPost", { data, response });
+      if (props.successRoute) {
+        router.push(
+          typeof props.successRoute == "string"
+            ? { path: props.successRoute }
+            : props.successRoute
+        );
+      }
+    } catch (error) {
+      console.error(error);
+      if (error.name == "AxiosError") {
+        const { data, status } = error.response;
+        if (status == 422) {
+          errors[data.name] = data.message;
+        } else {
+          formError.value =
+            typeof data == "object" ? JSON.stringify(data) : data;
+        }
+      } else {
+        formError.value = error.message;
+      }
+    } finally {
+      submiting.value = false;
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+const log = console.log;
+</script>
+<template>
+  <div>
+    <uni-forms
+      ref="formRef"
+      :model="values"
+      label-width="5em"
+      label-align="right"
+    >
+      <button type="primary" @click="submit()" :disabled="loading">提交</button>
+      <template v-for="(field, index) in fieldsArray" :key="index">
+        <template v-if="field.type == 'array'">
+          <template v-for="(value, index) in values[field.name]" :key="index">
+            <uni-forms-item
+              :ref="(el) => (formsItemRefs[field.name + index] = el)"
+              :label="index > 0 ? '' : field.label"
+              :required="field.required"
+              :name="[field.name, index]"
+              :error-message="errors[field.name][index]"
+              :rules="getFieldRules(field.arrayField)"
+              style2="margin-bottom: 2px"
+            >
+              <div
+                style="display: flex; flex-direction: row; align-items: center"
+              >
+                <div style="flex: auto; width: 80%">
+                  <model-form-uni-widget
+                    v-model="values[field.name][index]"
+                    v-model:error="errors[field.name][index]"
+                    @blur:validate="
+                      formsItemRefs[field.name + index].onFieldChange($event)
+                    "
+                    :field="field.arrayField"
+                  />
+                </div>
+                <uni-icons
+                  @click="values[field.name].splice(index, 1)"
+                  style="
+                    flex: auto;
+                    cursor: pointer;
+                    text-align: center;
+                    color: red;
+                  "
+                  type="closeempty"
+                  style2="color: red"
+                ></uni-icons>
+              </div>
+            </uni-forms-item>
+          </template>
+          <uni-forms-item
+            :label="values[field.name].length > 0 ? '' : field.label"
+          >
+            <button
+              type="primary"
+              size="mini"
+              @click="values[field.name].push(field.getDefault())"
+            >
+              <uni-icons type="plusempty" style="color: white"></uni-icons>
+              添加{{ field.label }}
+            </button>
+          </uni-forms-item>
+        </template>
+        <template v-else-if="field.type == 'table'">
+          <uni-forms-item
+            :ref="(el) => (formsItemRefs[field.name] = el)"
+            :label="field.label"
+            :required="field.required"
+            :name="field.name"
+            :error-message="errors[field.name]"
+          >
+            <model-form-uni-table-field
+              :modelValue="values[field.name]"
+              @update:modelValue="
+                formsItemRefs[field.name].onFieldChange($event);
+                values[field.name] = $event;
+              "
+              v-model:error="errors[field.name]"
+              :field="field"
+            />
+          </uni-forms-item>
+        </template>
+        <uni-forms-item
+          v-else
+          :ref="(el) => (formsItemRefs[field.name] = el)"
+          :label="field.label"
+          :required="field.required"
+          :name="field.name"
+          :error-message="errors[field.name]"
+        >
+          <model-form-uni-widget
+            :modelValue="values[field.name]"
+            @update:modelValue="values[field.name] = $event"
+            @blur:validate="formsItemRefs[field.name].onFieldChange($event)"
+            v-model:error="errors[field.name]"
+            :field="field"
+          />
+        </uni-forms-item>
+      </template>
+      <button type="primary" @click="submit" :disabled="loading">提交</button>
+    </uni-forms>
+  </div>
+</template>
+<style scoped>
+.dynamic-delete-button {
+  cursor: pointer;
+  position: relative;
+  top: 4px;
+  font-size: 24px;
+  color: #999;
+  transition: all 0.3s;
+}
+
+.dynamic-delete-button:hover {
+  color: red;
+}
+</style>

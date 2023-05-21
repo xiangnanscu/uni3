@@ -20,15 +20,32 @@ const testModel = Model.createModel({
   fields: {
     tx: {
       label: "头像",
-      required: false,
       size: "1M",
       type: "aliossImage"
+    },
+    grjl: {
+      label: "个人简历",
+      type: "table",
+      model: Model.createModel({
+        fields: {
+          // ksny: { label: "开始年月", type: "yearMonth" },
+          // jsny: { label: "结束年月", type: "yearMonth" },
+          xq: { label: "详情", maxlength: 3 }
+        }
+      })
+    },
+    family: {
+      label: "家人姓名",
+      maxlength: 2,
+      // arrayType: "boolean"
+      type: "array"
     },
     xz: {
       label: "写真",
       required: false,
       type: "aliossImageList"
     },
+
     shsp: {
       label: "生活视频",
       required: false,
@@ -44,7 +61,6 @@ const testModel = Model.createModel({
     },
     xm: {
       label: "姓名",
-      required: false,
       disabled: false,
       choices: ["李四", "张三"],
       autocomplete: true
