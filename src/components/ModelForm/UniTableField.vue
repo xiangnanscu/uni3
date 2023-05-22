@@ -104,28 +104,37 @@ const tagColorArray = [
           :values="currentRow"
         ></model-form-uni>
       </uni-popup>
-      <model-form-uni-batch-button
-        @findDuplicates="findDuplicates"
-        @uploadRows="emit('uploadRows', $event)"
-        :uniqueKey="uniqueKey"
-        :model="adminModel"
-        :rows="props.modelValue"
-      ></model-form-uni-batch-button>
+
       <uni-tag style="cursor: pointer" text="添加" @click="openCreateForm">
       </uni-tag>
     </uni-col>
   </uni-row>
-  <uni-table class="uni-table" stripe emptyText="点击上方添加按钮">
+  <uni-table
+    class="uni-table"
+    stripe
+    emptyText="点击上方添加按钮"
+    style="width: 100%"
+  >
     <uni-tr>
-      <uni-th>#</uni-th>
-      <uni-th v-for="col in tableColumns" :key="col.index" align="center">
+      <uni-th class="compact-td">#</uni-th>
+      <uni-th
+        class="compact-td"
+        v-for="col in tableColumns"
+        :key="col.index"
+        align="center"
+      >
         {{ col.label }}
       </uni-th>
-      <uni-th>操作</uni-th>
+      <uni-th class="compact-td">操作</uni-th>
     </uni-tr>
     <uni-tr v-for="(row, index) in props.modelValue" :key="index">
-      <uni-td>{{ index + 1 }}</uni-td>
-      <uni-td v-for="col in tableColumns" :key="col.index" align="center">
+      <uni-td class="compact-td">{{ index + 1 }}</uni-td>
+      <uni-td
+        class="compact-td"
+        v-for="col in tableColumns"
+        :key="col.index"
+        align="center"
+      >
         <template v-if="col.field.type === 'foreignkey'">
           {{
             typeof row[col.name] == "object"
@@ -158,23 +167,23 @@ const tagColorArray = [
           {{ row[col.name] }}
         </template>
       </uni-td>
-      <uni-td>
+      <uni-td class="compact-td">
+        <button style="margin-right: 2px" @click.prevent="onClickEdit(index)">
+          编辑
+        </button>
         <span>
-          <button
-            type="primary"
-            size="mini"
-            @click.prevent="onClickEdit(index)"
+          <model-form-uni-mini-button
+            style="margin-right: 2px"
+            @click="onClickEdit(index)"
           >
             编辑
-          </button>
-          <button
-            type="primary"
-            size="mini"
+          </model-form-uni-mini-button>
+          <model-form-uni-mini-button
             style="color: red"
             @click.prevent="deleteRecord(index)"
           >
             删除
-          </button>
+          </model-form-uni-mini-button>
         </span>
       </uni-td>
     </uni-tr>
@@ -182,13 +191,10 @@ const tagColorArray = [
 </template>
 
 <style scoped lang="scss">
-:deep(.uni-table) {
-  th,
-  td {
-    padding: 0;
-    margin: 0;
-    border: none;
-  }
+:deep(.compact-td) {
+  padding: 0;
+  margin: 0;
+  border: none;
 }
 .admin-list-avatar {
   max-width: 100px;

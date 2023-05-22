@@ -82,11 +82,22 @@ for (const field of fieldsArray.value) {
   };
 }
 onBeforeMount(() => {
+  console.log("onBeforeMount");
   Object.assign(values, props.model.toFormValue(values, props.model.names));
 });
-onMounted(() => {
+// #ifdef MP-WEIXIN
+onReady(() => {
+  console.log("onReady", formRef);
   formRef.value.setRules(rules);
 });
+// #endif
+
+// #ifdef H5
+onMounted(() => {
+  console.log("onMounted", formRef);
+  formRef.value.setRules(rules);
+});
+// #endif
 
 const formError = ref("");
 const submiting = ref(false);
@@ -139,9 +150,13 @@ const submit = async () => {
   }
 };
 const log = console.log;
+const testHmr = () => {
+  uni.showToast({ title: "haha2" });
+};
 </script>
 <template>
   <div>
+    <button @click="testHmr">测试34</button>
     <uni-forms
       ref="formRef"
       :model="values"
@@ -189,15 +204,15 @@ const log = console.log;
             </uni-forms-item>
           </template>
           <uni-forms-item
-            :label="values[field.name].length > 0 ? '' : field.label"
+            :label="values[field.name]?.length > 0 ? '' : field.label"
           >
             <button
               type="primary"
               size="mini"
               @click="values[field.name].push(field.getDefault())"
             >
-              <uni-icons type="plusempty" style="color: white"></uni-icons>
-              添加{{ field.label }}
+              <uni-icons type="plusempty" style="color: #fff"></uni-icons>
+              添加1{{ field.label }}
             </button>
           </uni-forms-item>
         </template>
@@ -218,6 +233,16 @@ const log = console.log;
               v-model:error="errors[field.name]"
               :field="field"
             />
+          </uni-forms-item>
+          <uni-forms-item>
+            <button
+              type="primary"
+              size="mini"
+              @click="values[field.name].push({})"
+            >
+              <uni-icons type="plusempty" style="color: #fff"></uni-icons>
+              添加{{ field.label }}
+            </button>
           </uni-forms-item>
         </template>
         <uni-forms-item

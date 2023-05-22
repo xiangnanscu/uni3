@@ -41,6 +41,7 @@ const autocompletePopupRef = ref(null);
 //   uuid: 1684568038130
 // };
 const filePickerSelectHanlder = async ({ tempFiles, tempFilePaths }) => {
+  console.log("filePickerSelectHanlder");
   const files = filePickerRef.value.files;
   for (const file of tempFiles) {
     const uniFileIndex = files.findIndex((f) => f.uuid == file.uuid);
@@ -62,6 +63,7 @@ const filePickerSelectHanlder = async ({ tempFiles, tempFilePaths }) => {
       });
       sendValue([...(props.modelValue || []), { ossUrl: url }]);
     } catch (error) {
+      console.error(error);
       emit("update:error", error.message || "上传出错");
       files.splice(uniFileIndex, 1);
     }

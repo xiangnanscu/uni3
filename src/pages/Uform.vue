@@ -1,9 +1,13 @@
 <template>
   <page-layout>
+    <button @click="testHmr">测试xx</button>
     <model-form-uni :model="testModel"> </model-form-uni>
   </page-layout>
 </template>
 <script setup>
+const testHmr = () => {
+  uni.showToast({ title: "****bbb" });
+};
 const showButton = ref(false);
 const btn = ref();
 const onClick = () => {
@@ -56,7 +60,7 @@ const testModel = Model.createModel({
     bg: {
       label: "表格",
       required: false,
-      size: "50M",
+      size: "350M",
       type: "alioss"
     },
     xm: {

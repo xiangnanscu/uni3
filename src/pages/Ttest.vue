@@ -1,5 +1,5 @@
 <template>
-  <inline-test
+  <div
     text="BUG"
     @select-files="
       ({ files }) => {
@@ -12,8 +12,6 @@
   <inline-test text="OK" @select-files="selectFiles" />
 </template>
 <script setup>
-import InlineTest from "./InlineTest.vue";
-
 const log = console.log;
 const selectFiles = ({ files }) => {
   for (const file of files) {
