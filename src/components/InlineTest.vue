@@ -1,7 +1,9 @@
 <template>
-  <button @click="emit('selectFiles', { files: [{ name: 1 }] })">点击</button>
+  <button @click="testHmr">组件热</button>
 </template>
 
 <script setup>
-const emit = defineEmits(["selectFiles"]);
+const testHmr = () => {
+  uni.showToast({ title: "安1" });
+};
 </script>

@@ -29,6 +29,7 @@ module.exports = {
       "warn",
       { vars: "all", args: "after-used", argsIgnorePattern: "^_" }
     ],
+    "vue/no-dupe-keys": "off", // 出了bug,先取消
     "vue/multi-word-component-names": "off",
     "vue/no-setup-props-destructure": "off"
   },

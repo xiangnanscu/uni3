@@ -1,12 +1,13 @@
 <template>
   <page-layout>
-    <button @click="testHmr">测试xx</button>
+    <inline-test></inline-test>
+    <button @click="testHmr">当前热</button>
     <model-form-uni :model="testModel"> </model-form-uni>
   </page-layout>
 </template>
 <script setup>
 const testHmr = () => {
-  uni.showToast({ title: "****bbb" });
+  uni.showToast({ title: "212" });
 };
 const showButton = ref(false);
 const btn = ref();

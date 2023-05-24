@@ -151,7 +151,7 @@ const submit = async () => {
 };
 const log = console.log;
 const testHmr = () => {
-  uni.showToast({ title: "haha2" });
+  uni.showToast({ title: "11" });
 };
 </script>
 <template>

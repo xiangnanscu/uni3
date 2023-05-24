@@ -41,7 +41,7 @@ const autocompletePopupRef = ref(null);
 //   uuid: 1684568038130
 // };
 const filePickerSelectHanlder = async ({ tempFiles, tempFilePaths }) => {
-  console.log("filePickerSelectHanlder");
+  emit("update:error", "");
   const files = filePickerRef.value.files;
   for (const file of tempFiles) {
     const uniFileIndex = files.findIndex((f) => f.uuid == file.uuid);
