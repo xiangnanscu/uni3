@@ -86,30 +86,30 @@ const tagColorArray = [
 ];
 </script>
 <template>
-  <uni-row type="flex" justify="space-between">
-    <uni-col>
-      <uni-popup ref="createFormRef" type="bottom" background-color="#fff">
-        <model-form-uni
-          v-if="showCreateForm"
-          @submit="onSuccessCreate"
-          :model="adminModel"
-          :values="adminModel.getDefaults()"
-        ></model-form-uni>
-      </uni-popup>
-      <uni-popup ref="updateFormRef" type="bottom" background-color="#fff">
-        <model-form-uni
-          v-if="showUpdateForm"
-          @submit="onSuccessUpdate"
-          :model="adminModel"
-          :values="currentRow"
-        ></model-form-uni>
-      </uni-popup>
-
-      <uni-tag style="cursor: pointer" text="添加" @click="openCreateForm">
-      </uni-tag>
-    </uni-col>
-  </uni-row>
+  <uni-popup ref="createFormRef" type="bottom" background-color="#fff">
+    <model-form-uni
+      v-if="showCreateForm"
+      @submit="onSuccessCreate"
+      :model="adminModel"
+      :values="adminModel.getDefaults()"
+      style="padding: 1em 3px"
+    ></model-form-uni>
+  </uni-popup>
+  <uni-popup ref="updateFormRef" type="bottom" background-color="#fff">
+    <model-form-uni
+      v-if="showUpdateForm"
+      @submit="onSuccessUpdate"
+      :model="adminModel"
+      :values="currentRow"
+      style="padding: 1em 3px"
+    ></model-form-uni>
+  </uni-popup>
+  <button type="primary" size="mini" @click="openCreateForm">
+    <uni-icons type="plusempty" style="color: #fff"></uni-icons>
+    添加{{ field.label }}
+  </button>
   <uni-table
+    v-if="props.modelValue.length"
     class="uni-table"
     stripe
     emptyText="点击上方添加按钮"
@@ -168,9 +168,6 @@ const tagColorArray = [
         </template>
       </uni-td>
       <uni-td class="compact-td">
-        <button style="margin-right: 2px" @click.prevent="onClickEdit(index)">
-          编辑
-        </button>
         <span>
           <model-form-uni-mini-button
             style="margin-right: 2px"

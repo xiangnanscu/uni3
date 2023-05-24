@@ -7,18 +7,11 @@
     }
   },
   "pages": [
-    {
-      "path": "pages/index/index",
-      "style": { "navigationBarTitleText": "uni-app" }
-    },
-    { "path": "pages/Hello", "style": { "navigationBarTitleText": "..." } },
-    {
-      "path": "pages/LoginList/LoginList",
-      "style": { "navigationBarTitleText": "..." }
-    },
-    { "path": "pages/Formtest", "style": { "navigationBarTitleText": "..." } },
-    { "path": "pages/Uform", "style": { "navigationBarTitleText": "..." } },
-    { "path": "pages/Ttest", "style": { "navigationBarTitleText": "..." } }
+    { "path": "pages/index", "style": { "navigationBarTitleText": "青年E家" } },
+    { "path": "pages/Formtest", "style": { "navigationBarTitleText": "" } },
+    { "path": "pages/Hello", "style": { "navigationBarTitleText": "" } },
+    { "path": "pages/Ttest", "style": { "navigationBarTitleText": "" } },
+    { "path": "pages/Uform", "style": { "navigationBarTitleText": "" } }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",

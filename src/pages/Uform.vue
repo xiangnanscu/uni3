@@ -1,7 +1,7 @@
 <template>
   <page-layout>
-    <inline-test></inline-test>
-    <button @click="testHmr">当前热</button>
+    <!-- <inline-test></inline-test>
+    <button @click="testHmr">当前热</button> -->
     <model-form-uni :model="testModel"> </model-form-uni>
   </page-layout>
 </template>

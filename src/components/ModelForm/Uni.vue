@@ -1,5 +1,4 @@
 <script setup>
-import { useRouter } from "vue-router";
 import { useStore } from "@/store";
 import { onReady } from "@dcloudio/uni-app";
 import { repr } from "@/lib/utils.mjs";
@@ -21,41 +20,13 @@ const props = defineProps({
   labelCol: { type: Number, default: 3 }
 });
 const deepcopy = (o) => JSON.parse(JSON.stringify(o));
-const router = useRouter();
 const values = props.syncValues
   ? reactive(props.values)
   : reactive(deepcopy(props.values));
+Object.assign(values, props.model.toFormValue(values, props.model.names));
 const errors = reactive(props.errors);
 const { loading } = storeToRefs(useStore());
 const formRef = ref();
-const getUniRule = (field) => {
-  return {
-    validateFunction: function (rule, value, data, callback) {
-      // const name = field.name;
-      data[field.name] = field.validate(value, data);
-      // console.log("validateFunction", data === formRef.value.formData);
-      // if (value === undefined) {
-      //   data[name] = "";
-      // } else {
-      //   data[name] = value;
-      // }
-      return true;
-      // try {
-      //   value = field.validate(value, data);
-      //   console.log("validateFunction", data === formRef.value.formData);
-      //   if (value === undefined) {
-      //     data[name] = "";
-      //   } else {
-      //     data[name] = value;
-      //   }
-      //   return true;
-      // } catch (error) {
-      //   console.error(error);
-      //   callback(error.message);
-      // }
-    }
-  };
-};
 const getFieldRules = (field) => [
   { required: field.required, errorMessage: `必须填写${field.label}` },
   {
@@ -81,20 +52,17 @@ for (const field of fieldsArray.value) {
     rules: getFieldRules(field)
   };
 }
-onBeforeMount(() => {
-  console.log("onBeforeMount");
-  Object.assign(values, props.model.toFormValue(values, props.model.names));
-});
+
 // #ifdef MP-WEIXIN
 onReady(() => {
-  console.log("onReady", formRef);
+  console.log("onReady modelform uni");
   formRef.value.setRules(rules);
 });
 // #endif
 
 // #ifdef H5
 onMounted(() => {
-  console.log("onMounted", formRef);
+  console.log("onMounted modelform uni");
   formRef.value.setRules(rules);
 });
 // #endif
@@ -122,13 +90,6 @@ const submit = async () => {
       submiting.value = true;
       const response = await Http.post(props.actionUrl, data);
       emit("successPost", { data, response });
-      if (props.successRoute) {
-        router.push(
-          typeof props.successRoute == "string"
-            ? { path: props.successRoute }
-            : props.successRoute
-        );
-      }
     } catch (error) {
       console.error(error);
       if (error.name == "AxiosError") {
@@ -156,14 +117,12 @@ const testHmr = () => {
 </script>
 <template>
   <div>
-    <button @click="testHmr">测试34</button>
     <uni-forms
       ref="formRef"
       :model="values"
       label-width="5em"
       label-align="right"
     >
-      <button type="primary" @click="submit()" :disabled="loading">提交</button>
       <template v-for="(field, index) in fieldsArray" :key="index">
         <template v-if="field.type == 'array'">
           <template v-for="(value, index) in values[field.name]" :key="index">
@@ -212,7 +171,7 @@ const testHmr = () => {
               @click="values[field.name].push(field.getDefault())"
             >
               <uni-icons type="plusempty" style="color: #fff"></uni-icons>
-              添加1{{ field.label }}
+              添加{{ field.label }}
             </button>
           </uni-forms-item>
         </template>
@@ -233,16 +192,6 @@ const testHmr = () => {
               v-model:error="errors[field.name]"
               :field="field"
             />
-          </uni-forms-item>
-          <uni-forms-item>
-            <button
-              type="primary"
-              size="mini"
-              @click="values[field.name].push({})"
-            >
-              <uni-icons type="plusempty" style="color: #fff"></uni-icons>
-              添加{{ field.label }}
-            </button>
           </uni-forms-item>
         </template>
         <uni-forms-item
