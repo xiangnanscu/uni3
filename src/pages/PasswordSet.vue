@@ -49,12 +49,12 @@ export default {
     async fetchData(params) {},
     async submit(ref) {
       await this.$refs[ref].validate();
-      const { data } = await this.$http.post(
+      const { data } = await $Http.post(
         `/usr/set_password`,
         this.PasswordSetData
       );
       console.log({ data });
-      await this.tryGotoPage();
+      await utils.tryGotoPage();
       // this.$store.commit("setMessage", "修改成功");
       uni.showToast({
         icon: "success",

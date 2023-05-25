@@ -13,7 +13,7 @@
       <uni-list-item
         title="我的帖子"
         link="navigateTo"
-        to="/pages/ThreadListMy/ThreadListMy"
+        to="/pages/ThreadListMy"
         :show-extra-icon="true"
         :extra-icon="{ color: '#666', size: '32', type: 'chatboxes' }"
       >
@@ -21,7 +21,7 @@
       <uni-list-item
         title="个人信息"
         link="navigateTo"
-        to="/pages/ProfileForm/ProfileForm"
+        to="/pages/ProfileForm"
         :show-extra-icon="true"
         :extra-icon="{ color: '#666', size: '32', type: 'auth-filled' }"
       >
@@ -29,7 +29,7 @@
       <uni-list-item
         title="实名认证"
         link="navigateTo"
-        to="/pages/cert/cert"
+        to="/pages/cert"
         :show-extra-icon="true"
         :extra-icon="{ color: '#666', size: '32', type: 'contact-filled' }"
       >
@@ -37,7 +37,7 @@
       <uni-list-item
         title="设置密码"
         link="navigateTo"
-        to="/pages/PasswordSet/PasswordSet"
+        to="/pages/PasswordSet"
         :show-extra-icon="true"
         :extra-icon="{ color: '#666', size: '32', type: 'locked' }"
       >
@@ -45,7 +45,7 @@
       <uni-list-item
         title="缴费记录"
         link="navigateTo"
-        to="/pages/OrdersList/OrdersList"
+        to="/pages/OrdersList"
         :show-extra-icon="true"
         :extra-icon="{ color: '#666', size: '32', type: 'list' }"
       >
@@ -98,7 +98,7 @@ export default {
   },
   async onShow() {
     if (this.isLogin) {
-      const { data: profile } = await this.$http.get("/usr/profile/my");
+      const { data: profile } = await $Http.get("/usr/profile/my");
       this.profile = profile;
     }
   },

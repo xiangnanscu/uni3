@@ -3,7 +3,7 @@
     <view class="search-bar">
       <uni-easyinput
         suffixIcon="search"
-        v-model:value="value"
+        v-model:value="searchValue"
         placeholder="请输入查找内容"
         @iconClick="onClick"
       ></uni-easyinput>
@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import ThreadList from "../../ThreadList/ThreadList.vue";
+import ThreadList from "../ThreadList.vue";
 
 // console.log({ ThreadList });
 export default {
@@ -76,43 +76,44 @@ export default {
   },
   data() {
     return {
+      searchValue:"",
       goddess: null,
       imageList: [],
       threads: [],
       noticeText: "",
       mainKist: [
         {
-          url: "../../../static/img/volunteer.png",
+          url: "../../static/img/volunteer.png",
           text: "志愿者",
           badge: "",
-          pagePath: "/pages/VolplanList/VolplanList",
+          pagePath: "/pages/VolplanList",
           type: "error"
         },
         {
-          url: "../../../static/img/chat.png",
+          url: "../../static/img/chat.png",
           text: "论坛",
-          pagePath: "/pages/ThreadList/ThreadList",
+          pagePath: "/pages/ThreadList",
           badge: "",
           type: "error"
         },
         {
-          url: "../../../static/img/files3.png",
+          url: "../../static/img/files3.png",
           text: "资讯",
-          pagePath: "/pages/NewsList/NewsList",
+          pagePath: "/pages/NewsList",
           badge: "",
           type: "error"
         },
         {
-          url: "../../../static/img/fee8.png",
+          url: "../../static/img/fee8.png",
           text: "团费",
-          pagePath: "/pages/FeeplanList/FeeplanList",
+          pagePath: "/pages/FeeplanList",
           badge: "",
           type: "error"
         }
         // {
-        //   url: "../../../static/img/fee8.png",
+        //   url: "../../static/img/fee8.png",
         //   text: "缴费",
-        //   pagePath: "/pages/fee/fee",
+        //   pagePath: "/pages/fee",
         //   badge: "",
         //   type: "error",
         // },
@@ -142,28 +143,31 @@ export default {
     this.goddess = await this.getCoverGoddess();
   },
   methods: {
+    onClick() {
+
+    },
     async onGoddessClick() {
-      this.gotoPage({
-        url: "/pages/GoddessDetail/GoddessDetail",
+      utils.gotoPage({
+        url: "/pages/GoddessDetail",
         query: { id: this.goddess.id }
       });
     },
     async getNoticeBar() {
-      const { data } = await this.$http.get("/settings?key=notice_bar");
+      const { data } = await $Http.get("/settings?key=notice_bar");
       return data;
     },
     async getCoverGoddess() {
       const {
         data: [goddess]
-      } = await this.$http.get("/goddess/cover");
+      } = await $Http.get("/goddess/cover");
       return goddess;
     },
     async getThreads() {
       const {
         data: { records: threads }
-      } = await this.$http.get("/thread", {
+      } = await $Http.get("/thread", {data:{
         pagesize: 3
-      });
+      }});
       console.log({ threads });
       return threads;
     },
@@ -192,7 +196,7 @@ export default {
       // 用户拒绝: e.detail = {errMsg: "getPhoneNumber:fail user deny"}
       const { code } = e.detail;
       if (code) {
-        const { data } = await this.$http.post("/wx_phone", { code });
+        const { data } = await $Http.post("/wx_phone", { code });
         this.phone = data.purePhoneNumber;
       }
     },
@@ -225,7 +229,7 @@ export default {
           this.log_err = JSON.stringify(res);
         },
         success: async (res) => {
-          const { data } = await this.$http.post("/wx_login", {
+          const { data } = await $Http.post("/wx_login", {
             code: res.code
           });
           this.openid = data.openid;
@@ -249,7 +253,7 @@ export default {
   right: 15px;
 }
 .notice-bar {
-  margin-top: 150px;
+  /* margin-top: 150px; */
 }
 .search-bar {
   margin-bottom: 10px;

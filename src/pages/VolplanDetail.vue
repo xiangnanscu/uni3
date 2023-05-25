@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     async fetchData(query) {
-      const { data: volplan } = await this.$http.get(
+      const { data: volplan } = await $Http.get(
         `/volplan/detail/${query.id}`
       );
       this.volplan = volplan;

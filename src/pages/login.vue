@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import login from "~/login.js";
+import login from "@/lib/login.js";
 
 export default {
   mixins: [login],
@@ -53,7 +53,7 @@ export default {
     await uni.showLoading({
       title: "登陆中"
     });
-    const user = await this.getWxUser();
+    const user = await utils.getWxUser();
     uni.hideLoading();
     this.profileData.id = user.id;
     this.profileData.openid = user.id;
@@ -83,14 +83,14 @@ export default {
           ? process.env.UNI_HOME_PAGE
           : this.redirect;
       console.log({ safeRedirect });
-      await this.gotoPage({
+      await utils.gotoPage({
         url: safeRedirect || process.env.UNI_HOME_PAGE,
         redirect: true
       });
     },
     async submitLoginData(ref) {
       await this.$refs[ref].validate();
-      await this.$http.post("/update_profile", {
+      await $Http.post("/update_profile", {
         id: this.userData.id,
         nickname: this.userData.nickname,
         avatar: this.userData.avatar

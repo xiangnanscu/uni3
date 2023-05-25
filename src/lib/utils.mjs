@@ -67,6 +67,25 @@ export const fromNow = (value) => {
     return value.slice(0, 10);
   }
 };
+export function uuid() {
+  let timestamp = new Date().getTime();
+  let perforNow =
+    (typeof performance !== "undefined" &&
+      performance.now &&
+      performance.now() * 1000) ||
+    0;
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+    let random = Math.random() * 16;
+    if (timestamp > 0) {
+      random = (timestamp + random) % 16 | 0;
+      timestamp = Math.floor(timestamp / 16);
+    } else {
+      random = (perforNow + random) % 16 | 0;
+      perforNow = Math.floor(perforNow / 16);
+    }
+    return (c === "x" ? random : (random & 0x3) | 0x8).toString(16);
+  });
+}
 const FIRST_DUP_ADDED = {};
 export const findDups = (arr, callback) => {
   var already = {};
@@ -126,9 +145,9 @@ const sizeTable = {
   g: 1024 * 1024 * 1024,
   kb: 1024,
   mb: 1024 * 1024,
-  gb: 1024 * 1024 * 1024
+  gb: 1024 * 1024 * 1024,
 };
-export function byteSizeParser(t) {
+export function parseSize(t) {
   if (typeof t === "string") {
     const unit = t.replace(/^(\d+)([^\d]+)$/, "$2").toLowerCase();
     const ts = t.replace(/^(\d+)([^\d]+)$/, "$1").toLowerCase();
@@ -142,4 +161,75 @@ export function byteSizeParser(t) {
   } else {
     throw new Error("invalid type: " + typeof t);
   }
+}
+const UNI_HOME_PAGE = process.env.UNI_HOME_PAGE;
+const toURLSearchParams = (obj) => {
+  return Object.entries(obj)
+    .map(([k, v]) => `${k}=${v}`)
+    .join("&");
+};
+const appendAnimationParams = (opts) => {
+  return { animationType: "pop-out", animationDuration: 200, ...opts };
+};
+export function getPage(delta = 0) {
+  const pages = getCurrentPages();
+  const page = pages[pages.length - delta - 1];
+  return page;
+}
+export function getLastPageUrl() {
+  const lastPage = getPage(1);
+  // lastPage.$page.fullPath
+  return lastPage ? "/" + lastPage.route : UNI_HOME_PAGE;
+}
+export async function gotoPage(opts) {
+  let err, res;
+  if (opts.query) {
+    opts.url = opts.url + "?" + toURLSearchParams(opts.query);
+  }
+  [err, res] = opts.redirect
+    ? await uni.redirectTo(
+        appendAnimationParams({
+          url: opts.url,
+        })
+      )
+    : await uni.navigateTo(
+        appendAnimationParams({
+          url: opts.url,
+        })
+      );
+  // console.log("navigateTo:", { err, res });
+  if (err) {
+    [err, res] = await uni.switchTab(
+      appendAnimationParams({
+        url: opts.url,
+      })
+    );
+    // console.log("switchTab:", { err, res });
+  }
+  return err ? false : true;
+}
+export async function tryGotoPage(opts) {
+  if (!opts?.url) {
+    if (opts.redirect) {
+      return await gotoPage({
+        url: opts.redirect,
+      });
+    }
+    const lastUrl = getLastPageUrl();
+    // console.log("tryGotoPage", getCurrentPages(), { lastUrl });
+    return await gotoPage({
+      url: lastUrl,
+    });
+  }
+  await gotoPage(opts);
+}
+export async function getWxUser() {
+  const res = await uni.login();
+  if (res[0]) {
+    throw new Error(res[0]);
+  }
+  const { data: user } = await $Http.post("/wx_login", {
+    code: res[1].code,
+  });
+  return user;
 }

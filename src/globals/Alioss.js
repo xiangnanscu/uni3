@@ -89,8 +89,7 @@ class Alioss {
   }
   static async uploadUni({ file, url, size, prefix }) {
     const ossKey = Alioss.getOssKey(file, prefix);
-    const uploadUrl = url || "http:" + ALIOSS_URL;
-    console.log("11", { uploadUrl });
+    const uploadUrl = url ||  ALIOSS_URL;
     const { statusCode } = await uni.uploadFile({
       url: uploadUrl,
       filePath: file.path,

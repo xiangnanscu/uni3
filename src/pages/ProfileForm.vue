@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import login from "~/login.js";
+import login from "@/lib/login.js";
 // import wxPicker from "../../components/w-picker/w-picker.vue";
 
 export default {
@@ -53,7 +53,7 @@ export default {
   },
 
   async mounted() {
-    const { data } = await this.$http.get("/usr/profile/my");
+    const { data } = await $Http.get("/usr/profile/my");
     this.profileData.intro = data.intro;
     this.profileData.avatar.url = data.avatar;
     this.profileData.nickname = data.nickname;
@@ -70,12 +70,12 @@ export default {
           nickname: this.profileData.nickname,
           avatar: this.profileData.avatar.url
         };
-        await this.$http.post("/update_profile", user);
+        await $Http.post("/update_profile", user);
         this.$store.commit("login", {
           ...this.user,
           ...user
         });
-        await this.gotoPage({
+        await utils.gotoPage({
           url: this.redirect || "/pages/tabbar/ProfileMy/ProfileMy"
         });
       }

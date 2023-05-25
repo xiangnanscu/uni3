@@ -1,5 +1,6 @@
 import * as Validator from "./validator";
 import { Http } from "@/globals/Http";
+import {parseSize} from "@/lib/utils.mjs"
 
 const TABLE_MAX_ROWS = 1;
 const CHOICES_ERROR_DISPLAY_COUNT = 30;
@@ -10,7 +11,7 @@ const PRIMITIVE_TYPES = {
   string: true,
   number: true,
   boolean: true,
-  bigint: true
+  bigint: true,
 };
 
 // const repr = (e) => JSON.stringify(e);
@@ -107,7 +108,7 @@ const baseOptionNames = [
   "verifyUrl",
   "postNames",
   "codeLifetime",
-  "tooltipVisible"
+  "tooltipVisible",
 ];
 
 class BaseField {
@@ -162,7 +163,7 @@ class BaseField {
     }
     const ret = {
       name: options.name,
-      type: options.type
+      type: options.type,
     };
     for (const name of this.optionNames) {
       if (options[name] !== undefined) {
@@ -207,7 +208,7 @@ class BaseField {
   }
   getAntdRule() {
     const rule = {
-      whitespace: true
+      whitespace: true,
     };
     rule.validator = async (_rule, value) => {
       try {
@@ -297,7 +298,7 @@ const stringOptionNames = [
   "pattern",
   "length",
   "minlength",
-  "maxlength"
+  "maxlength",
 ];
 const stringValidatorNames = ["pattern", "length", "minlength", "maxlength"];
 class StringField extends BaseField {
@@ -467,7 +468,7 @@ const floatOptionNames = [
   "min",
   "max",
   "step",
-  "precision"
+  "precision",
 ];
 class FloatField extends BaseField {
   type = "float";
@@ -499,7 +500,7 @@ class FloatField extends BaseField {
 
 const DEFAULT_BOOLEAN_CHOICES = [
   { label: "是", value: "true", text: "是" },
-  { label: "否", value: "false", text: "否" }
+  { label: "否", value: "false", text: "否" },
 ];
 const booleanOptionNames = [...baseOptionNames, "cn"];
 class BooleanField extends BaseField {
@@ -630,7 +631,7 @@ class ArrayField extends BaseArrayField {
       AliossImageField,
       AliossListField,
       AliossImageListField,
-      SfzhField
+      SfzhField,
     };
     const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1);
     const cls = maps[`${capitalize(this.arrayType || "string")}Field`];
@@ -667,7 +668,7 @@ class TableField extends BaseArrayField {
     if (!this.model.tableName) {
       this.model.materializeWithTableName({
         tableName: this.name,
-        label: this.label
+        label: this.label,
       });
     }
     return this;
@@ -722,7 +723,7 @@ const datetimeOptionNames = [
   "precision",
   "timezone",
   "valueFormat", // antdv
-  "timeFormat" // antdv
+  "timeFormat", // antdv
 ];
 class DatetimeField extends BaseField {
   type = "datetime";
@@ -810,7 +811,7 @@ const VALID_FOREIGN_KEY_TYPES = {
   float: Number,
   datetime: Validator.datetime,
   date: Validator.date,
-  time: Validator.time
+  time: Validator.time,
 };
 const foreignkeyOptionNames = [
   ...baseOptionNames,
@@ -825,7 +826,7 @@ const foreignkeyOptionNames = [
   "limitQueryName",
   "autocomplete",
   "choicesUrl",
-  "tableName"
+  "tableName",
 ];
 class ForeignkeyField extends BaseField {
   type = "foreignkey";
@@ -954,30 +955,6 @@ class ForeignkeyField extends BaseField {
   }
 }
 
-const sizeTable = {
-  k: 1024,
-  m: 1024 * 1024,
-  g: 1024 * 1024 * 1024,
-  kb: 1024,
-  mb: 1024 * 1024,
-  gb: 1024 * 1024 * 1024
-};
-function byteSizeParser(t) {
-  if (typeof t === "string") {
-    const unit = t.replaceAll(/^(\d+)([^\d]+)$/g, "$2").toLowerCase();
-    const ts = t.replaceAll(/^(\d+)([^\d]+)$/g, "$1").toLowerCase();
-    const bytes = sizeTable[unit];
-    assert(bytes, "invalid size unit: " + unit);
-    const num = Number(ts);
-    assert(num, "can't convert `" + (ts + "` to a number"));
-    return num * bytes;
-  } else if (typeof t === "number") {
-    return t;
-  } else {
-    throw new Error("invalid type:" + typeof t);
-  }
-}
-
 const ALIOSS_BUCKET = process.env.ALIOSS_BUCKET || "";
 const ALIOSS_REGION = process.env.ALIOSS_REGION || "";
 const ALIOSS_SIZE = process.env.ALIOSS_SIZE || "1MB";
@@ -1004,7 +981,7 @@ const aliossOptionNames = [
   "maxCount", // antdv
   "multiple", // antdv
   "accept", // antdv
-  "buttonText" // antdv
+  "buttonText", // antdv
 ];
 const mapToAntdFileValue = (url = "") => {
   const name = url.split("/").pop();
@@ -1015,7 +992,7 @@ const mapToAntdFileValue = (url = "") => {
         status: "done",
         url: url,
         extname: name.split(".")[1], // uni
-        ossUrl: url
+        ossUrl: url,
       };
 };
 class AliossField extends StringField {
@@ -1025,7 +1002,7 @@ class AliossField extends StringField {
     super({ maxlength: 255, ...options });
     const size = options.size || ALIOSS_SIZE;
     this.sizeArg = size;
-    this.size = byteSizeParser(size);
+    this.size = parseSize(size);
     this.lifetime = options.lifetime || ALIOSS_LIFETIME;
     this.uploadUrl = process.env.ALIOSS_URL;
     return this;
@@ -1037,7 +1014,7 @@ class AliossField extends StringField {
     const { data } = await Http.post(this.payloadUrl, {
       ...options,
       size: options.size || this.size,
-      lifetime: options.lifetime || this.lifetime
+      lifetime: options.lifetime || this.lifetime,
     });
     return data;
   }
@@ -1098,13 +1075,13 @@ class AliossListField extends AliossField {
       ...ArrayField.prototype.getOptions.call(this, options),
       ...AliossField.prototype.getOptions.call(this, options),
       type: "aliossList",
-      dbType: "jsonb"
+      dbType: "jsonb",
     };
   }
   json() {
     return {
       ...ArrayField.prototype.json.call(this),
-      ...AliossField.prototype.json.call(this)
+      ...AliossField.prototype.json.call(this),
     };
   }
   toFormValue(urls) {
@@ -1154,5 +1131,5 @@ export {
   AliossImageField,
   AliossListField,
   AliossImageListField,
-  SfzhField
+  SfzhField,
 };

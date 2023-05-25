@@ -4,7 +4,7 @@
       <uni-list-item
         v-for="(item, index) in FeeplanList"
         :key="index"
-        :to="`/pages/FeeplanDetail/FeeplanDetail?id=${item.id}`"
+        :to="`/pages/FeeplanDetail?id=${item.id}`"
         :showArrow="false"
         :title="item.title"
         :rightText="fromNow(item.ctime)"
@@ -38,7 +38,7 @@ export default {
     async fetchData(query) {
       const {
         data: { records, total }
-      } = await this.$http.get(
+      } = await $Http.get(
         `/feeplan?page=${query.page || this.current}&pagesize=${
           query.pagesize || this.pageSize
         }`

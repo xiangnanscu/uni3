@@ -95,17 +95,17 @@ export default {
   },
   methods: {
     async sendMessage() {
-      const { data } = await this.$http.post(`/message/create`, {
+      const { data } = await $Http.post(`/message/create`, {
         target: this.chatId,
         content: this.messageText
       });
-      this.gotoPage({ url: "/pages/tabbar/Message/Message" });
+      utils.gotoPage({ url: "/pages/tabbar/Message/Message" });
       uni.showToast({ icon: "none", title: "发送成功" });
     },
     async fetchData(chatId) {
       const {
         data: { records, total }
-      } = await this.$http.get(`/message/chat?id=${chatId}`);
+      } = await $Http.get(`/message/chat?id=${chatId}`);
       this.messages = records;
       this.total = total;
     }

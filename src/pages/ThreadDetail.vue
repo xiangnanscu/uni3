@@ -27,9 +27,9 @@ export default {
   },
   methods: {
     async fetchData(query) {
-      const { data: thread } = await this.$http.get(`/thread/${query.id}`);
+      const { data: thread } = await $Http.get(`/thread/${query.id}`);
       this.thread = thread;
-      const { data: posts } = await this.$http.get(
+      const { data: posts } = await $Http.get(
         `/post/thread/${this.thread.id}`
       );
       this.posts = posts;

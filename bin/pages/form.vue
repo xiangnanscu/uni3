@@ -30,13 +30,13 @@ export default {
   },
   methods: {
     async fetchData(params) {
-      const { data } = await this.$http.get(`/{{tableName}}/detail/${params.id}`);
+      const { data } = await $Http.get(`/{{tableName}}/detail/${params.id}`);
       this.{{modelName}}Data = data
     },
     async submit(ref) {
       await this.$refs[ref].validate();
-      await this.$http.post(`/{{tableName}}/update/${this.params.id}`);
-      await this.tryGotoPage();
+      await $Http.post(`/{{tableName}}/update/${this.params.id}`);
+      await utils.tryGotoPage();
     },
   },
 };

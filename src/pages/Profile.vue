@@ -24,7 +24,7 @@
       <uni-list-item
         v-for="(item, index) in currentProfileThreads"
         :key="index"
-        :to="`/pages/ThreadDetail/ThreadDetail?id=${item.id}`"
+        :to="`/pages/ThreadDetail?id=${item.id}`"
         :title="item.title"
         :rightText="fromNow(item.ctime)"
         :ellipsis="1"
@@ -85,7 +85,7 @@ export default {
   },
   methods: {
     async sendMessage() {
-      const { data } = await this.$http.post(`/message/create`, {
+      const { data } = await $Http.post(`/message/create`, {
         target: this.currentProfile.id,
         content: this.currentMessage
       });
@@ -93,10 +93,10 @@ export default {
       uni.showToast({ icon: "none", title: "发送成功" });
     },
     async fetchData(query) {
-      const { data: threads } = await this.$http.get(
+      const { data: threads } = await $Http.get(
         `/thread/other/${query.id}`
       );
-      const { data: profile } = await this.$http.get(
+      const { data: profile } = await $Http.get(
         `/usr/profile/${query.id}`
       );
       this.currentProfile = profile;

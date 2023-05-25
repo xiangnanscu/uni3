@@ -1,5 +1,6 @@
 {
   "globals": {
+    "$Http": true,
     "Alioss": true,
     "EffectScope": true,
     "Http": true,
@@ -8,7 +9,6 @@
     "acceptHMRUpdate": true,
     "asyncComputed": true,
     "autoResetRef": true,
-    "byteSizeParser2": true,
     "computed": true,
     "computedAsync": true,
     "computedEager": true,
@@ -33,6 +33,7 @@
     "eagerComputed": true,
     "effectScope": true,
     "extendRef": true,
+    "fromNow": true,
     "getActivePinia": true,
     "getCurrentInstance": true,
     "getCurrentScope": true,

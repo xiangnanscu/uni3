@@ -4,7 +4,7 @@
       <uni-list-item
         v-for="(item, index) in myThreadsList"
         :key="index"
-        :to="`/pages/ThreadDetail/ThreadDetail?id=${item.id}`"
+        :to="`/pages/ThreadDetail?id=${item.id}`"
         :title="item.title"
         :rightText="fromNow(item.ctime)"
         :ellipsis="1"
@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     async getThreads(query) {
-      const { data } = await this.$http.get("/thread/my");
+      const { data } = await $Http.get("/thread/my");
       return data;
     }
   }

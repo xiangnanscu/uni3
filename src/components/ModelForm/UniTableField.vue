@@ -1,6 +1,6 @@
 <route lang="yaml"></route>
 <script setup lang="jsx">
-import { computed, ref, createVNode } from "vue";
+import { computed, ref } from "vue";
 
 const emit = defineEmits(["update:modelValue", "update:error"]);
 const uniForm = inject("uniForm", null);

@@ -5,7 +5,7 @@
       <uni-list :border="false">
         <navigator
           v-for="(a, index) in messages"
-          :url="`/pages/MessageDetail/MessageDetail?id=${a.receiver.id}`"
+          :url="`/pages/MessageDetail?id=${a.receiver.id}`"
           :key="index"
         >
           <uni-list-item>
@@ -63,7 +63,7 @@ export default {
     async fetchData(query) {
       const {
         data: { records, total }
-      } = await this.$http.get(
+      } = await $Http.get(
         `/message/my?page=${query.page || this.current}&pagesize=${
           query.pagesize || this.pagesize
         }`

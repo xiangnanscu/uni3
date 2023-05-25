@@ -4,7 +4,7 @@
       <navigator
         v-for="(item, index) in NewsRecords"
         :key="index"
-        :url="`/pages/NewsDetail/NewsDetail?id=${item.id}`"
+        :url="`/pages/NewsDetail?id=${item.id}`"
       >
         <uni-list-item
           :title="item.title"
@@ -44,7 +44,7 @@ export default {
     async fetchData(query) {
       const {
         data: { records, total }
-      } = await this.$http.get(
+      } = await $Http.get(
         `/news?page=${query.page || this.current}&pagesize=${
           query.pagesize || this.pageSize
         }`

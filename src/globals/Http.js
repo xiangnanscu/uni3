@@ -34,13 +34,13 @@ uni.addInterceptor("request", {
       data,
       statusCode,
       header,
-      cookies
+      cookies,
     });
     if (statusCode < 600 && statusCode >= 500) {
       uni.showToast({
         icon: "none",
         title: `发生错误`,
-        duration: 5000
+        duration: 5000,
       });
     }
   },
@@ -60,7 +60,7 @@ uni.addInterceptor("request", {
         }
       }
     }
-  }
+  },
 });
 
 class Http {
@@ -68,7 +68,7 @@ class Http {
     return await uni.request({
       url,
       method: "get",
-      ...opts
+      ...opts,
     });
   }
 
@@ -77,9 +77,10 @@ class Http {
       url,
       data,
       method: "post",
-      ...opts
+      ...opts,
     });
   }
 }
 
 export { Http };
+export { Http as $Http };

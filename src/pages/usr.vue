@@ -66,13 +66,13 @@ export default {
   },
   methods: {
     async fetchData(params) {
-      const { data } = await this.$http.get(`/usr/${params.id}`);
+      const { data } = await $Http.get(`/usr/${params.id}`);
       this.usrData = data;
     },
     async submit(ref) {
       await this.$refs[ref].validate();
-      await this.$http.post(`/usr/update/${this.params.id}`);
-      await this.tryGotoPage();
+      await $Http.post(`/usr/update/${this.params.id}`);
+      await utils.tryGotoPage();
     }
   }
 };

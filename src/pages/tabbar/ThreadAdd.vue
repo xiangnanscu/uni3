@@ -9,7 +9,7 @@ export default {
   },
   onLoad() {},
   onShow() {
-    uni.redirectTo({ url: "/pages/ThreadAdd/ThreadAdd" });
+    uni.redirectTo({ url: "/pages/ThreadAdd" });
   },
   onHide() {
     this.active = false;

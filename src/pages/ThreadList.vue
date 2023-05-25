@@ -4,7 +4,7 @@
       <navigator
         v-for="(item, index) in threads"
         :key="index"
-        :url="`/pages/ThreadDetail/ThreadDetail?id=${item.id}`"
+        :url="`/pages/ThreadDetail?id=${item.id}`"
         hover-class="navigator-hover"
       >
         <uni-list-item>
@@ -78,7 +78,7 @@ export default {
     async fetchData(query) {
       const {
         data: { records, total }
-      } = await this.$http.get(
+      } = await $Http.get(
         `/thread?page=${query.page || this.current}&pagesize=${
           query.pagesize || this.pagesize
         }`

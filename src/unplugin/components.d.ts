@@ -7,6 +7,7 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    AliossPicker: typeof import('./../components/alioss-picker.vue')['default']
     Favicon: typeof import('./../components/favicon.vue')['default']
     InlineTest: typeof import('./../components/InlineTest.vue')['default']
     ModelFormUni: typeof import('./../components/ModelForm/Uni.vue')['default']
@@ -18,6 +19,11 @@ declare module '@vue/runtime-core' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     ScoreRadar: typeof import('./../components/ScoreRadar.vue')['default']
+    ThreadBody: typeof import('./../components/thread-body.vue')['default']
+    ThreadHead: typeof import('./../components/thread-head.vue')['default']
+    UploadFile: typeof import('./../components/upload-file.vue')['default']
+    UploadImage: typeof import('./../components/upload-image.vue')['default']
+    WPicker: typeof import('./../components/w-picker.vue')['default']
     WxLogin: typeof import('./../components/WxLogin.vue')['default']
   }
 }

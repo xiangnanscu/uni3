@@ -27,11 +27,11 @@ export default {
   },
   methods: {
     async fetchData(query) {
-      const { data: goddess } = await this.$http.get(
+      const { data: goddess } = await $Http.get(
         `/goddess/detail/${query.id}`
       );
       this.goddess = goddess;
-      const { data: goddessComments } = await this.$http.get(
+      const { data: goddessComments } = await $Http.get(
         `/goddess_comment/goddess/${this.goddess.id}`
       );
       console.log({ goddessComments });

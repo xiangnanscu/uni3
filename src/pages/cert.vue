@@ -114,7 +114,7 @@ export default {
     this.$refs.valiForm?.setRules(this.rules);
   },
   async mounted() {
-    const { data } = await this.$http.get("/usr/profile/my");
+    const { data } = await $Http.get("/usr/profile/my");
     this.profileData.xm = data.xm || "";
     this.profileData.phone = data.phone || "";
     this.profileData.username = data.username || "";
@@ -129,7 +129,7 @@ export default {
       // 用户拒绝: e.detail = {errMsg: "getPhoneNumber:fail user deny"}
       const { code } = e.detail;
       if (code) {
-        const { data } = await this.$http.post("/wx_phone", { code });
+        const { data } = await $Http.post("/wx_phone", { code });
         this.profileData.phone = data.purePhoneNumber;
       }
     },
@@ -141,9 +141,9 @@ export default {
           id,
           ...this.profileData
         };
-        await this.$http.post("/update_profile", user);
+        await $Http.post("/update_profile", user);
         // this.$store.commit("login", { ...this.user, ...user });
-        await this.tryGotoPage();
+        await utils.tryGotoPage();
       }
     }
   }

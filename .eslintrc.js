@@ -4,8 +4,12 @@ require("@rushstack/eslint-patch/modern-module-resolution");
 module.exports = {
   root: true,
   env: {
-    node: true,
-    amd: true
+    exec: "readonly",
+    getCurrentPages: "readonly",
+    uniCloud: "readonly",
+    uni: "readonly",
+    wx: "readonly",
+    getApp: "readonly"
   },
   globals: {
     uni: true,

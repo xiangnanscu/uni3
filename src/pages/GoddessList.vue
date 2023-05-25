@@ -37,7 +37,7 @@ export default {
     async fetchData(query) {
       const {
         data: { records, total }
-      } = await this.$http.get(
+      } = await $Http.get(
         `/goddess?page=${query.page || this.current}&pagesize=${
           query.pagesize || this.pageSize
         }`

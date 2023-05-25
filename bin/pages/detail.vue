@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     async fetchData(query) {
-      const { data: {{tableName}} } = await this.$http.get(
+      const { data: {{tableName}} } = await $Http.get(
         `/{{tableName}}/detail/${query.id}`
       );
       this.{{tableName}} = {{tableName}};

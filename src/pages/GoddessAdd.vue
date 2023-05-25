@@ -86,16 +86,16 @@ export default {
       console.log(this.GoddessAddData.pics);
     },
     async fetchData(params) {
-      const { data } = await this.$http.get(`/GoddessAdd/${params.id}`);
+      const { data } = await $Http.get(`/GoddessAdd/${params.id}`);
       this.GoddessAddData = data;
     },
     async submit(ref) {
       await this.$refs[ref].validate();
-      await this.$http.post(`/goddess/create`, {
+      await $Http.post(`/goddess/create`, {
         content: this.GoddessAddData.content,
         pics: this.GoddessAddData.pics.map((f) => f.url)
       });
-      await this.tryGotoPage();
+      await utils.tryGotoPage();
     }
   }
 };
