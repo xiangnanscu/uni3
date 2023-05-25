@@ -19,7 +19,7 @@ export default {
   data() {
     return {
       goddess: null,
-      goddessComments: [],
+      goddessComments: []
     };
   },
   async onLoad(query) {
@@ -36,8 +36,8 @@ export default {
       );
       console.log({ goddessComments });
       this.goddessComments = goddessComments;
-    },
-  },
+    }
+  }
 };
 </script>
 

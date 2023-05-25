@@ -37,17 +37,18 @@
     </div>
   </page-layout>
 </template>
+
 <script>
 export default {
   props: {
     pagesize: { type: Number, default: 10 },
-    page: { type: Number, default: 1 },
+    page: { type: Number, default: 1 }
   },
   data() {
     return {
       query: {},
       showUs: false,
-      messages: [],
+      messages: []
     };
   },
   async onLoad(query) {
@@ -61,7 +62,7 @@ export default {
   methods: {
     async fetchData(query) {
       const {
-        data: { records, total },
+        data: { records, total }
       } = await this.$http.get(
         `/message/my?page=${query.page || this.current}&pagesize=${
           query.pagesize || this.pagesize
@@ -78,10 +79,11 @@ export default {
       }
       this.messages = Object.values(messages);
       this.total = total;
-    },
-  },
+    }
+  }
 };
 </script>
+
 <style scoped>
 .popup-scrollable {
   overflow-y: scroll;
@@ -92,7 +94,6 @@ export default {
   flex-direction: row;
   align-items: center;
 }
-
 .slot-image {
   display: block;
   margin-right: 10px;
@@ -116,11 +117,9 @@ export default {
 .message-header {
   color: #666;
   font-size: 70%;
-  /* background-color: red; */
 }
 .message-footer {
   color: #666;
-  /* background-color: red; */
   font-size: 60%;
   padding-top: 3px;
 }

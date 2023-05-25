@@ -10,13 +10,13 @@
     >
       <uni-forms-item label="姓名" name="xm">
         <uni-easyinput
-          v-model="profileData.xm"
+          v-model:value="profileData.xm"
           placeholder="请输入身份证上的姓名"
         />
       </uni-forms-item>
       <uni-forms-item label="身份证号" name="username">
         <uni-easyinput
-          v-model="profileData.username"
+          v-model:value="profileData.username"
           placeholder=" "
           type="idcard"
         />
@@ -33,15 +33,15 @@
           </div>
         </div>
         <!-- <uni-grid :column="2" :showBorder="false" :square="false">
-          <uni-grid-item>
-            <text class="phone-text">{{ profileData.phone }}</text>
-          </uni-grid-item>
-          <uni-grid-item>
-            <button open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">
-              获取手机号
-            </button>
-          </uni-grid-item>
-        </uni-grid> -->
+            <uni-grid-item>
+              <text class="phone-text">{{ profileData.phone }}</text>
+            </uni-grid-item>
+            <uni-grid-item>
+              <button open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">
+                获取手机号
+              </button>
+            </uni-grid-item>
+          </uni-grid> -->
         <!-- <uni-easyinput v-model="profileData.phone" placeholder="请输入手机号" /> -->
       </uni-forms-item>
     </uni-forms>
@@ -56,26 +56,26 @@ export default {
       profileData: {
         xm: "",
         username: "",
-        phone: "",
+        phone: ""
       },
       rules: {
         xm: {
           rules: [
             {
               required: true,
-              errorMessage: "姓名不能为空",
-            },
-          ],
+              errorMessage: "姓名不能为空"
+            }
+          ]
         },
         phone: {
           rules: [
             {
               required: true,
-              errorMessage: "手机号不能为空",
+              errorMessage: "手机号不能为空"
             },
             {
               pattern: "^\\d{11}$",
-              errorMessage: "手机号必须为11位数字",
+              errorMessage: "手机号必须为11位数字"
             },
             {
               validateFunction: function (rule, value, data, callback) {
@@ -83,19 +83,19 @@ export default {
                   callback("请至少勾选两个兴趣爱好");
                 }
                 return true;
-              },
-            },
-          ],
+              }
+            }
+          ]
         },
         username: {
           rules: [
             {
               required: true,
-              errorMessage: "身份证号不能为空",
+              errorMessage: "身份证号不能为空"
             },
             {
               pattern: "^\\d{17}[\\dXx]$",
-              errorMessage: "身份号格式不正确",
+              errorMessage: "身份号格式不正确"
             },
             {
               validateFunction: function (rule, value, data, callback) {
@@ -103,11 +103,11 @@ export default {
                   callback("格式不正确");
                 }
                 return true;
-              },
-            },
-          ],
-        },
-      },
+              }
+            }
+          ]
+        }
+      }
     };
   },
   onReady() {
@@ -139,14 +139,14 @@ export default {
       if (id) {
         const user = {
           id,
-          ...this.profileData,
+          ...this.profileData
         };
         await this.$http.post("/update_profile", user);
         // this.$store.commit("login", { ...this.user, ...user });
         await this.tryGotoPage();
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -163,13 +163,11 @@ export default {
   flex: 1;
 }
 .flex-phone {
-  /* background-color: red; */
   display: flex;
   justify-content: center;
   flex-direction: column;
   font-size: 120%;
   padding-left: 6px;
-  /* font-weight: bold; */
   color: #666;
 }
 .content {

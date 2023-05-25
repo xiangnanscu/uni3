@@ -14,6 +14,7 @@
     <uni-pagination :total="total" @change="clickPage" :current="current" />
   </page-layout>
 </template>
+
 <script>
 export default {
   data() {
@@ -22,7 +23,7 @@ export default {
       total: 0,
       current: 1,
       query: {},
-      OrdersList: [],
+      OrdersList: []
     };
   },
   async onLoad(query) {
@@ -41,7 +42,7 @@ export default {
     },
     async fetchData(query) {
       const {
-        data: { records, total },
+        data: { records, total }
       } = await this.$http.get(
         `/orders/mylist?page=${query.page || this.current}&pagesize=${
           query.pagesize || this.pageSize
@@ -49,8 +50,7 @@ export default {
       );
       this.OrdersList = records;
       this.total = total;
-    },
-  },
+    }
+  }
 };
 </script>
-<style scoped></style>

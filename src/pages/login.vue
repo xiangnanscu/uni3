@@ -12,14 +12,14 @@
       >
         <uni-forms-item label="头像" name="avatar">
           <w-picker
-            v-model="profileData.avatar"
+            v-model:value="profileData.avatar"
             :value="profileData.avatar"
             @update:value="profileData.avatar = $event"
           />
         </uni-forms-item>
         <uni-forms-item label="昵称" name="nickname">
           <uni-easyinput
-            v-model="profileData.nickname"
+            v-model:value="profileData.nickname"
             placeholder="请输入昵称"
             type="nickname"
           />
@@ -45,13 +45,13 @@ export default {
         nickname: "",
         avatar: { url: "", errMsg: "" },
         permission: "",
-        openid: "",
-      },
+        openid: ""
+      }
     };
   },
   async onShow() {
     await uni.showLoading({
-      title: "登陆中",
+      title: "登陆中"
     });
     const user = await this.getWxUser();
     uni.hideLoading();
@@ -70,10 +70,10 @@ export default {
     userData() {
       const user = {
         ...this.profileData,
-        avatar: this.profileData.avatar.url,
+        avatar: this.profileData.avatar.url
       };
       return user;
-    },
+    }
   },
   methods: {
     async wxLogin() {
@@ -85,7 +85,7 @@ export default {
       console.log({ safeRedirect });
       await this.gotoPage({
         url: safeRedirect || process.env.UNI_HOME_PAGE,
-        redirect: true,
+        redirect: true
       });
     },
     async submitLoginData(ref) {
@@ -93,11 +93,11 @@ export default {
       await this.$http.post("/update_profile", {
         id: this.userData.id,
         nickname: this.userData.nickname,
-        avatar: this.userData.avatar,
+        avatar: this.userData.avatar
       });
       await this.wxLogin();
-    },
-  },
+    }
+  }
 };
 </script>
 

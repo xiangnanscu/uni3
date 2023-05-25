@@ -18,11 +18,9 @@ export default {
     goToPage(url) {
       if (!url) return;
       uni.navigateTo({
-        url,
+        url
       });
-    },
-  },
+    }
+  }
 };
 </script>
-
-<style lang="scss" scoped></style>

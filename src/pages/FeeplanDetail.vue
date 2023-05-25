@@ -22,13 +22,14 @@
     </button>
   </page-layout>
 </template>
+
 <script>
 export default {
   data() {
     return {
       disabled: false,
       params: {},
-      feeplan: { title: "", content: "" },
+      feeplan: { title: "", content: "" }
     };
   },
   onReady() {},
@@ -43,13 +44,13 @@ export default {
     },
     async payFee(planId) {
       const { data: payed } = await this.$http.post(`/orders/check`, {
-        feeplan_id: planId,
+        feeplan_id: planId
       });
       console.log({ payed });
       if (payed) {
         return uni.showToast({
           title: `您已缴费, 无需重复`,
-          icon: "none",
+          icon: "none"
         });
       }
       this.disabled = true;
@@ -59,13 +60,13 @@ export default {
       }
       const { data } = await this.$http.post(`/wx/jsapi_mini_preorder`, {
         code,
-        feeplan_id: planId,
+        feeplan_id: planId
       });
       const {
         signature: paySign,
         prepay_id,
         timestamp: timeStamp,
-        nonce_str: nonceStr,
+        nonce_str: nonceStr
       } = data;
       const self = this;
       const opts = {
@@ -83,20 +84,20 @@ export default {
         fail(res) {
           self.disabled = false;
           console.log("wx.requestPayment fail:", res);
-        },
+        }
       };
       wx.requestPayment(opts);
       // await this.tryGotoPage();
-    },
-  },
+    }
+  }
 };
 </script>
+
 <style scoped>
 .feeplan-title {
   font-weight: bold;
   font-size: 110%;
 }
-
 .feeplan-content {
   color: black;
   font-size: 100%;

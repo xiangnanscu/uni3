@@ -9,7 +9,7 @@
     >
       <uni-forms-item label="女神宣言1" name="content">
         <uni-easyinput
-          v-model="GoddessAddData.content"
+          v-model:value="GoddessAddData.content"
           type="textarea"
           autoHeight
         />
@@ -18,7 +18,7 @@
         <alioss-picker
           @fail="uploadFail"
           limit="9"
-          v-model="GoddessAddData.pics"
+          v-model:value="GoddessAddData.pics"
           oss-size="100k"
         ></alioss-picker>
       </uni-forms-item>
@@ -34,14 +34,14 @@ export default {
       params: {},
       GoddessAddData: {
         content: "",
-        pics: [],
+        pics: []
       },
       formRules: {
         content: {
           rules: [
             {
               required: true,
-              errorMessage: "女神宣言不能为空",
+              errorMessage: "女神宣言不能为空"
             },
             {
               validateFunction: function (rule, value, data, callback) {
@@ -49,9 +49,9 @@ export default {
                   callback("字数不能超过1000");
                 }
                 return true;
-              },
-            },
-          ],
+              }
+            }
+          ]
         },
         pics: {
           rules: [
@@ -61,11 +61,11 @@ export default {
                   callback("至少要上传一张图片");
                 }
                 return true;
-              },
-            },
-          ],
-        },
-      },
+              }
+            }
+          ]
+        }
+      }
     };
   },
   onReady() {
@@ -81,7 +81,7 @@ export default {
     uploadFail({ tempFiles, tempFilePaths }) {
       console.log({
         tempFiles,
-        tempFilePaths,
+        tempFilePaths
       });
       console.log(this.GoddessAddData.pics);
     },
@@ -93,11 +93,11 @@ export default {
       await this.$refs[ref].validate();
       await this.$http.post(`/goddess/create`, {
         content: this.GoddessAddData.content,
-        pics: this.GoddessAddData.pics.map((f) => f.url),
+        pics: this.GoddessAddData.pics.map((f) => f.url)
       });
       await this.tryGotoPage();
-    },
-  },
+    }
+  }
 };
 </script>
 

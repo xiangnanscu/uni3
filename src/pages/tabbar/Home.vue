@@ -3,7 +3,7 @@
     <view class="search-bar">
       <uni-easyinput
         suffixIcon="search"
-        v-model="value"
+        v-model:value="value"
         placeholder="请输入查找内容"
         @iconClick="onClick"
       ></uni-easyinput>
@@ -43,21 +43,21 @@
       <!-- <image slot="cover" style="width: 100%" :src="cover"></image> -->
       <text class="uni-body">{{ goddess.content }}</text>
       <!-- <template v-slot:actions>
-        <view class="card-actions">
-          <view class="card-actions-item" @click="actionsClick('分享')">
-            <uni-icons type="pengyouquan" size="18" color="#999"></uni-icons>
-            <text class="card-actions-item-text">分享</text>
+          <view class="card-actions">
+            <view class="card-actions-item" @click="actionsClick('分享')">
+              <uni-icons type="pengyouquan" size="18" color="#999"></uni-icons>
+              <text class="card-actions-item-text">分享</text>
+            </view>
+            <view class="card-actions-item" @click="actionsClick('点赞')">
+              <uni-icons type="heart" size="18" color="#999"></uni-icons>
+              <text class="card-actions-item-text">点赞</text>
+            </view>
+            <view class="card-actions-item" @click="actionsClick('评论')">
+              <uni-icons type="chatbubble" size="18" color="#999"></uni-icons>
+              <text class="card-actions-item-text">评论</text>
+            </view>
           </view>
-          <view class="card-actions-item" @click="actionsClick('点赞')">
-            <uni-icons type="heart" size="18" color="#999"></uni-icons>
-            <text class="card-actions-item-text">点赞</text>
-          </view>
-          <view class="card-actions-item" @click="actionsClick('评论')">
-            <uni-icons type="chatbubble" size="18" color="#999"></uni-icons>
-            <text class="card-actions-item-text">评论</text>
-          </view>
-        </view>
-      </template> -->
+        </template> -->
     </uni-card>
     <ThreadList :pagesize="3" :noPage="true" :records="threads"></ThreadList>
   </page-layout>
@@ -69,10 +69,10 @@ import ThreadList from "../../ThreadList/ThreadList.vue";
 // console.log({ ThreadList });
 export default {
   components: {
-    ThreadList,
+    ThreadList
   },
   watch: {
-    imageList(res) {},
+    imageList(res) {}
   },
   data() {
     return {
@@ -86,29 +86,29 @@ export default {
           text: "志愿者",
           badge: "",
           pagePath: "/pages/VolplanList/VolplanList",
-          type: "error",
+          type: "error"
         },
         {
           url: "../../../static/img/chat.png",
           text: "论坛",
           pagePath: "/pages/ThreadList/ThreadList",
           badge: "",
-          type: "error",
+          type: "error"
         },
         {
           url: "../../../static/img/files3.png",
           text: "资讯",
           pagePath: "/pages/NewsList/NewsList",
           badge: "",
-          type: "error",
+          type: "error"
         },
         {
           url: "../../../static/img/fee8.png",
           text: "团费",
           pagePath: "/pages/FeeplanList/FeeplanList",
           badge: "",
-          type: "error",
-        },
+          type: "error"
+        }
         // {
         //   url: "../../../static/img/fee8.png",
         //   text: "缴费",
@@ -124,7 +124,7 @@ export default {
       nickname: "",
       phone: "",
       authSetting: "",
-      profile: "",
+      profile: ""
       // user: {},
     };
   },
@@ -145,7 +145,7 @@ export default {
     async onGoddessClick() {
       this.gotoPage({
         url: "/pages/GoddessDetail/GoddessDetail",
-        query: { id: this.goddess.id },
+        query: { id: this.goddess.id }
       });
     },
     async getNoticeBar() {
@@ -154,15 +154,15 @@ export default {
     },
     async getCoverGoddess() {
       const {
-        data: [goddess],
+        data: [goddess]
       } = await this.$http.get("/goddess/cover");
       return goddess;
     },
     async getThreads() {
       const {
-        data: { records: threads },
+        data: { records: threads }
       } = await this.$http.get("/thread", {
-        pagesize: 3,
+        pagesize: 3
       });
       console.log({ threads });
       return threads;
@@ -183,7 +183,7 @@ export default {
           //   "scope.userInfo": true,
           //   "scope.userLocation": true
           // }
-        },
+        }
       });
     },
     // https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/getPhoneNumber.html
@@ -213,7 +213,7 @@ export default {
         success: (infoRes) => {
           console.log(infoRes, `用户昵称为2：${infoRes.userInfo.nickName}`);
           this.profile = JSON.stringify(infoRes);
-        },
+        }
       });
     },
     wxUserLogin() {
@@ -226,14 +226,14 @@ export default {
         },
         success: async (res) => {
           const { data } = await this.$http.post("/wx_login", {
-            code: res.code,
+            code: res.code
           });
           this.openid = data.openid;
           this.session_key = data.session_key;
-        },
+        }
       });
-    },
-  },
+    }
+  }
 };
 </script>
 

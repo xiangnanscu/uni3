@@ -8,15 +8,16 @@
       label-position="top"
     >
       <uni-forms-item label="姓名" name="xm">
-        <uni-easyinput v-model="usrData.xm" />
+        <uni-easyinput v-model:value="usrData.xm" />
       </uni-forms-item>
       <uni-forms-item label="密码" name="password">
-        <uni-easyinput v-model="usrData.password" />
+        <uni-easyinput v-model:value="usrData.password" />
       </uni-forms-item>
     </uni-forms>
     <button type="primary" @click="submit('valiForm')">提交</button>
   </page-layout>
 </template>
+
 <script>
 export default {
   data() {
@@ -28,7 +29,7 @@ export default {
           rules: [
             {
               required: true,
-              errorMessage: "姓名不能为空",
+              errorMessage: "姓名不能为空"
             },
             {
               validateFunction: function (rule, value, data, callback) {
@@ -36,15 +37,15 @@ export default {
                   callback("字数不能超过255");
                 }
                 return true;
-              },
-            },
-          ],
+              }
+            }
+          ]
         },
         password: {
           rules: [
             {
               required: true,
-              errorMessage: "密码不能为空",
+              errorMessage: "密码不能为空"
             },
             {
               validateFunction: function (rule, value, data, callback) {
@@ -52,11 +53,11 @@ export default {
                   callback("字数不能超过255");
                 }
                 return true;
-              },
-            },
-          ],
-        },
-      },
+              }
+            }
+          ]
+        }
+      }
     };
   },
   async onLoad(params) {
@@ -72,10 +73,11 @@ export default {
       await this.$refs[ref].validate();
       await this.$http.post(`/usr/update/${this.params.id}`);
       await this.tryGotoPage();
-    },
-  },
+    }
+  }
 };
 </script>
+
 <style scoped>
 .usr-main {
   padding: 15px;

@@ -21,7 +21,7 @@ export default {
   data() {
     return {
       query: {},
-      volplan: null,
+      volplan: null
     };
   },
   async onLoad(query) {
@@ -34,9 +34,7 @@ export default {
         `/volplan/detail/${query.id}`
       );
       this.volplan = volplan;
-    },
-  },
+    }
+  }
 };
 </script>
-
-<style scoped></style>

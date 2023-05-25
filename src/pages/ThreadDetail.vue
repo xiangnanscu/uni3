@@ -19,7 +19,7 @@ export default {
   data() {
     return {
       thread: {},
-      posts: [],
+      posts: []
     };
   },
   async onLoad(query) {
@@ -33,9 +33,7 @@ export default {
         `/post/thread/${this.thread.id}`
       );
       this.posts = posts;
-    },
-  },
+    }
+  }
 };
 </script>
-
-<style scoped></style>

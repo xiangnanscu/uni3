@@ -20,6 +20,7 @@
     />
   </page-layout>
 </template>
+
 <script>
 export default {
   data() {
@@ -28,7 +29,7 @@ export default {
       total: 0,
       current: 1,
       query: {},
-      NewsRecords: [],
+      NewsRecords: []
     };
   },
   async onLoad(query) {
@@ -42,7 +43,7 @@ export default {
     },
     async fetchData(query) {
       const {
-        data: { records, total },
+        data: { records, total }
       } = await this.$http.get(
         `/news?page=${query.page || this.current}&pagesize=${
           query.pagesize || this.pageSize
@@ -50,10 +51,11 @@ export default {
       );
       this.NewsRecords = records;
       this.total = total;
-    },
-  },
+    }
+  }
 };
 </script>
+
 <style scoped>
 .NewsList-main {
 }

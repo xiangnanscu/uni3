@@ -23,14 +23,25 @@ function readDir(dir, fileList) {
 
   return fileList;
 }
-const fileList = readDir("src/pages");
-for (const file of fileList) {
-  const url = file.replaceAll(/\\/g, "/").slice(4, -4);
+const fileList = readDir("src/pages").map((file) =>
+  file.replaceAll(/\\/g, "/").slice(4, -4)
+);
+for (const url of fileList) {
   const page = pages.pages.find((e) => e.path == url);
   if (!page) {
     pages.pages.push({ path: url, style: { navigationBarTitleText: "" } });
   }
 }
+const exitstedPages = [];
+for (const page of pages.pages) {
+  const findPage = fileList.find((url) => url == page.path);
+  if (findPage) {
+    exitstedPages.push(page);
+  } else {
+    console.log(`remove page ${page.path} from pages.json`);
+  }
+}
+pages.pages = exitstedPages;
 const pageJson = JSON.stringify(pages);
 const formatedJson = prettier.format(pageJson, { parser: "json" });
 

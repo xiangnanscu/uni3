@@ -29,7 +29,7 @@ export default {
       total: 0,
       current: 1,
       query: {},
-      VolplanRecords: [],
+      VolplanRecords: []
     };
   },
   async onLoad(query) {
@@ -44,7 +44,7 @@ export default {
     },
     async fetchData(query) {
       const {
-        data: { records, total },
+        data: { records, total }
       } = await this.$http.get(
         `/volplan?page=${query.page || this.current}&pagesize=${
           query.pagesize || this.pageSize
@@ -52,8 +52,8 @@ export default {
       );
       this.VolplanRecords = records;
       this.total = total;
-    },
-  },
+    }
+  }
 };
 </script>
 

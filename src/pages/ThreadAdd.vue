@@ -7,11 +7,11 @@
       label-position="top"
     >
       <uni-forms-item label="标题" name="title">
-        <uni-easyinput v-model="ThreadAddData.title" />
+        <uni-easyinput v-model:value="ThreadAddData.title" />
       </uni-forms-item>
       <uni-forms-item label="内容" name="content">
         <uni-easyinput
-          v-model="ThreadAddData.content"
+          v-model:value="ThreadAddData.content"
           type="textarea"
           :autoHeight="true"
         />
@@ -20,6 +20,7 @@
     <button type="primary" @click="submit('valiForm')">发帖</button>
   </page-layout>
 </template>
+
 <script>
 export default {
   data() {
@@ -31,7 +32,7 @@ export default {
           rules: [
             {
               required: true,
-              errorMessage: "内容不能为空",
+              errorMessage: "内容不能为空"
             },
             {
               validateFunction: function (rule, value, data, callback) {
@@ -39,11 +40,11 @@ export default {
                   callback("字数不能超过5000");
                 }
                 return true;
-              },
-            },
-          ],
-        },
-      },
+              }
+            }
+          ]
+        }
+      }
     };
   },
   onShow() {
@@ -66,10 +67,11 @@ export default {
       await this.$refs[ref].validate();
       await this.$http.post(`/thread/create`, this.ThreadAddData);
       await this.gotoPage({ url: "/pages/ThreadList/ThreadList" });
-    },
-  },
+    }
+  }
 };
 </script>
+
 <style scoped>
 .ThreadAdd-main {
   padding: 15px;

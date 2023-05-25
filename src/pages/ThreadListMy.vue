@@ -19,7 +19,7 @@ export default {
   data() {
     return {
       query: {},
-      myThreadsList: [],
+      myThreadsList: []
     };
   },
 
@@ -33,8 +33,8 @@ export default {
     async getThreads(query) {
       const { data } = await this.$http.get("/thread/my");
       return data;
-    },
-  },
+    }
+  }
 };
 </script>
 

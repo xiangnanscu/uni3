@@ -22,7 +22,7 @@ export default {
       total: 0,
       current: 1,
       query: {},
-      GoddessList: [],
+      GoddessList: []
     };
   },
   async onLoad(query) {
@@ -36,7 +36,7 @@ export default {
     },
     async fetchData(query) {
       const {
-        data: { records, total },
+        data: { records, total }
       } = await this.$http.get(
         `/goddess?page=${query.page || this.current}&pagesize=${
           query.pagesize || this.pageSize
@@ -44,8 +44,8 @@ export default {
       );
       this.GoddessList = records;
       this.total = total;
-    },
-  },
+    }
+  }
 };
 </script>
 

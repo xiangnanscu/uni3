@@ -41,16 +41,16 @@
       <view style="padding: 15px">
         <div style="margin-bottom: 15px">{{ currentProfile.nickname }}:</div>
         <!-- <u-textarea
-          v-model="currentMessage"
-          height="50"
-          :cursorSpacing="90"
-        ></u-textarea> -->
+            v-model="currentMessage"
+            height="50"
+            :cursorSpacing="90"
+          ></u-textarea> -->
         <!-- <uni-easyinput
-          type="textarea"
-          autoHeight
-          v-model="currentMessage"
-          placeholder="请输入内容"
-        ></uni-easyinput> -->
+            type="textarea"
+            autoHeight
+            v-model="currentMessage"
+            placeholder="请输入内容"
+          ></uni-easyinput> -->
         <textarea
           class="textarea"
           v-model="currentMessage"
@@ -69,13 +69,13 @@
 <script>
 export default {
   props: {
-    threadOtherPrefix: { type: String, default: `/thread/other` },
+    threadOtherPrefix: { type: String, default: `/thread/other` }
   },
   data() {
     return {
       currentProfile: null,
       currentProfileThreads: null,
-      currentMessage: "",
+      currentMessage: ""
     };
   },
   async onLoad(query) {
@@ -87,7 +87,7 @@ export default {
     async sendMessage() {
       const { data } = await this.$http.post(`/message/create`, {
         target: this.currentProfile.id,
-        content: this.currentMessage,
+        content: this.currentMessage
       });
       this.$refs.popupMessage.close();
       uni.showToast({ icon: "none", title: "发送成功" });
@@ -101,9 +101,7 @@ export default {
       );
       this.currentProfile = profile;
       this.currentProfileThreads = threads;
-    },
-  },
+    }
+  }
 };
 </script>
-
-<style scoped></style>

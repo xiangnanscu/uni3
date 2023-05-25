@@ -8,13 +8,14 @@
         label-position="top"
       >
         <uni-forms-item label="新密码" name="password">
-          <uni-easyinput v-model="PasswordSetData.password" />
+          <uni-easyinput v-model:value="PasswordSetData.password" />
         </uni-forms-item>
       </uni-forms>
       <button type="primary" @click="submit('valiForm')">提交</button>
     </view>
   </page-layout>
 </template>
+
 <script>
 export default {
   data() {
@@ -26,7 +27,7 @@ export default {
           rules: [
             {
               required: true,
-              errorMessage: "密码不能为空",
+              errorMessage: "密码不能为空"
             },
             {
               validateFunction: function (rule, value, data, callback) {
@@ -34,11 +35,11 @@ export default {
                   callback("密码不能超过255个字符");
                 }
                 return true;
-              },
-            },
-          ],
-        },
-      },
+              }
+            }
+          ]
+        }
+      }
     };
   },
   onReady() {
@@ -58,12 +59,13 @@ export default {
       uni.showToast({
         icon: "success",
         title: "修改成功",
-        duration: 2000,
+        duration: 2000
       });
-    },
-  },
+    }
+  }
 };
 </script>
+
 <style scoped>
 .PasswordSet-main {
   padding: 15px;

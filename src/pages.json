@@ -7,11 +7,53 @@
     }
   },
   "pages": [
-    { "path": "pages/index", "style": { "navigationBarTitleText": "青年E家" } },
-    { "path": "pages/Formtest", "style": { "navigationBarTitleText": "" } },
-    { "path": "pages/Hello", "style": { "navigationBarTitleText": "" } },
-    { "path": "pages/Ttest", "style": { "navigationBarTitleText": "" } },
-    { "path": "pages/Uform", "style": { "navigationBarTitleText": "" } }
+    { "path": "pages/tabbar/Home", "style": { "navigationBarTitleText": "" } },
+    { "path": "pages/Uform", "style": { "navigationBarTitleText": "" } },
+    { "path": "pages/cert", "style": { "navigationBarTitleText": "" } },
+    {
+      "path": "pages/FeeplanDetail",
+      "style": { "navigationBarTitleText": "" }
+    },
+    { "path": "pages/FeeplanList", "style": { "navigationBarTitleText": "" } },
+    { "path": "pages/GoddessAdd", "style": { "navigationBarTitleText": "" } },
+    {
+      "path": "pages/GoddessDetail",
+      "style": { "navigationBarTitleText": "" }
+    },
+    { "path": "pages/GoddessList", "style": { "navigationBarTitleText": "" } },
+    { "path": "pages/login", "style": { "navigationBarTitleText": "" } },
+    {
+      "path": "pages/MessageDetail",
+      "style": { "navigationBarTitleText": "" }
+    },
+    { "path": "pages/NewsDetail", "style": { "navigationBarTitleText": "" } },
+    { "path": "pages/NewsList", "style": { "navigationBarTitleText": "" } },
+    { "path": "pages/OrdersList", "style": { "navigationBarTitleText": "" } },
+    { "path": "pages/PasswordSet", "style": { "navigationBarTitleText": "" } },
+    { "path": "pages/Profile", "style": { "navigationBarTitleText": "" } },
+    { "path": "pages/ProfileForm", "style": { "navigationBarTitleText": "" } },
+    {
+      "path": "pages/tabbar/Message",
+      "style": { "navigationBarTitleText": "" }
+    },
+    {
+      "path": "pages/tabbar/ProfileMy",
+      "style": { "navigationBarTitleText": "" }
+    },
+    {
+      "path": "pages/tabbar/ThreadAdd",
+      "style": { "navigationBarTitleText": "" }
+    },
+    { "path": "pages/ThreadAdd", "style": { "navigationBarTitleText": "" } },
+    { "path": "pages/ThreadDetail", "style": { "navigationBarTitleText": "" } },
+    { "path": "pages/ThreadList", "style": { "navigationBarTitleText": "" } },
+    { "path": "pages/ThreadListMy", "style": { "navigationBarTitleText": "" } },
+    { "path": "pages/usr", "style": { "navigationBarTitleText": "" } },
+    {
+      "path": "pages/VolplanDetail",
+      "style": { "navigationBarTitleText": "" }
+    },
+    { "path": "pages/VolplanList", "style": { "navigationBarTitleText": "" } }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",

@@ -42,20 +42,21 @@
     />
   </page-layout>
 </template>
+
 <script>
 export default {
   props: {
     noPage: { type: Boolean, default: false },
     records: { type: Array, default: () => [] },
     pagesize: { type: Number, default: 10 },
-    page: { type: Number, default: 1 },
+    page: { type: Number, default: 1 }
   },
   data() {
     return {
       query: {},
       current: this.page,
       threads: [],
-      total: 0,
+      total: 0
     };
   },
   async onLoad(query) {
@@ -76,7 +77,7 @@ export default {
     },
     async fetchData(query) {
       const {
-        data: { records, total },
+        data: { records, total }
       } = await this.$http.get(
         `/thread?page=${query.page || this.current}&pagesize=${
           query.pagesize || this.pagesize
@@ -84,17 +85,17 @@ export default {
       );
       this.threads = records;
       this.total = total;
-    },
-  },
+    }
+  }
 };
 </script>
+
 <style scoped>
 .slot-box {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
-
 .slot-image {
   display: block;
   margin-right: 10px;
@@ -113,11 +114,9 @@ export default {
 .thread-header {
   color: #666;
   font-size: 70%;
-  /* background-color: red; */
 }
 .thread-footer {
   color: #666;
-  /* background-color: red; */
   font-size: 60%;
   padding-top: 3px;
 }

@@ -51,7 +51,7 @@
         <u-col span="10">
           <u-textarea
             autoHeight
-            v-model="messageText"
+            v-model:value="messageText"
             :cursorSpacing="10"
             placeholder="请输入内容"
           ></u-textarea>
@@ -63,17 +63,18 @@
     </view>
   </page-layout2>
 </template>
+
 <script>
 export default {
   props: {
     pagesize: { type: Number, default: 10 },
-    page: { type: Number, default: 1 },
+    page: { type: Number, default: 1 }
   },
   data() {
     return {
       messageText: "",
       chatId: 0,
-      messages: [],
+      messages: []
     };
   },
   async onLoad(query) {
@@ -90,27 +91,28 @@ export default {
       }
       const res = e.creator.id === this.chatId ? e.creator : e.target;
       return res;
-    },
+    }
   },
   methods: {
     async sendMessage() {
       const { data } = await this.$http.post(`/message/create`, {
         target: this.chatId,
-        content: this.messageText,
+        content: this.messageText
       });
       this.gotoPage({ url: "/pages/tabbar/Message/Message" });
       uni.showToast({ icon: "none", title: "发送成功" });
     },
     async fetchData(chatId) {
       const {
-        data: { records, total },
+        data: { records, total }
       } = await this.$http.get(`/message/chat?id=${chatId}`);
       this.messages = records;
       this.total = total;
-    },
-  },
+    }
+  }
 };
 </script>
+
 <style scoped>
 .chat {
   display: flex;
@@ -134,7 +136,6 @@ export default {
   flex-direction: row;
   align-items: center;
 }
-
 .slot-image {
   display: block;
   margin-right: 10px;
@@ -158,11 +159,9 @@ export default {
 .message-header {
   color: #666;
   font-size: 70%;
-  /* background-color: red; */
 }
 .message-footer {
   color: #666;
-  /* background-color: red; */
   font-size: 60%;
   padding-top: 3px;
 }

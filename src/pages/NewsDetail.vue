@@ -21,7 +21,7 @@ export default {
   data() {
     return {
       query: {},
-      news: null,
+      news: null
     };
   },
   async onLoad(query) {
@@ -32,9 +32,7 @@ export default {
     async fetchData(query) {
       const { data: news } = await this.$http.get(`/news/${query.id}`);
       this.news = news;
-    },
-  },
+    }
+  }
 };
 </script>
-
-<style scoped></style>

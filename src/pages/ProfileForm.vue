@@ -9,21 +9,21 @@
     >
       <uni-forms-item label="头像" name="avatar">
         <w-picker
-          v-model="profileData.avatar"
+          v-model:value="profileData.avatar"
           :value="profileData.avatar"
           @update:value="profileData.avatar = $event"
         />
       </uni-forms-item>
       <uni-forms-item label="昵称" name="nickname">
         <uni-easyinput
-          v-model="profileData.nickname"
+          v-model:value="profileData.nickname"
           placeholder="请输入昵称"
           type="nickname"
         />
       </uni-forms-item>
       <uni-forms-item label="简介" name="intro">
         <uni-easyinput
-          v-model="profileData.intro"
+          v-model:value="profileData.intro"
           placeholder="请输入简介"
           type="intro"
         />
@@ -46,9 +46,9 @@ export default {
         nickname: "",
         avatar: {
           url: "",
-          errMsg: "",
-        },
-      },
+          errMsg: ""
+        }
+      }
     };
   },
 
@@ -68,19 +68,19 @@ export default {
           id,
           intro: this.profileData.intro,
           nickname: this.profileData.nickname,
-          avatar: this.profileData.avatar.url,
+          avatar: this.profileData.avatar.url
         };
         await this.$http.post("/update_profile", user);
         this.$store.commit("login", {
           ...this.user,
-          ...user,
+          ...user
         });
         await this.gotoPage({
-          url: this.redirect || "/pages/tabbar/ProfileMy/ProfileMy",
+          url: this.redirect || "/pages/tabbar/ProfileMy/ProfileMy"
         });
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
