@@ -18,7 +18,7 @@
 export default {
   data() {
     return {
-      thread: {},
+      thread: null,
       posts: []
     };
   },
@@ -27,11 +27,9 @@ export default {
   },
   methods: {
     async fetchData(query) {
-      const { data: thread } = await $Http.get(`/thread/${query.id}`);
+      const { data: thread } = await Http.get(`/thread/${query.id}`);
       this.thread = thread;
-      const { data: posts } = await $Http.get(
-        `/post/thread/${this.thread.id}`
-      );
+      const { data: posts } = await Http.get(`/post/thread/${this.thread.id}`);
       this.posts = posts;
     }
   }

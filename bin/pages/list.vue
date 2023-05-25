@@ -1,6 +1,6 @@
 <template>
   <page-layout>
-   <uni-list :border="false">
+    <uni-list :border="false">
       <navigator
         v-for="(item, index) in {{modelName}}Records"
         :key="index"
@@ -12,7 +12,7 @@
           :rightText="fromNow(item.ctime)"
       /></navigator>
     </uni-list>
-   <uni-pagination :total="total" @change="clickPage" :current="current" />
+    <uni-pagination :total="total" @change="clickPage" :current="current" />
   </page-layout>
 </template>
 
@@ -39,7 +39,7 @@ export default {
     async fetchData(query) {
       const {
         data: { records, total },
-      } = await $Http.get(
+      } = await Http.get(
         `/{{tableName}}?page=${query.page || this.current}&pagesize=${
           query.pagesize || this.pageSize
         }`
@@ -51,6 +51,4 @@ export default {
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

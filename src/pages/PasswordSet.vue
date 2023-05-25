@@ -49,7 +49,7 @@ export default {
     async fetchData(params) {},
     async submit(ref) {
       await this.$refs[ref].validate();
-      const { data } = await $Http.post(
+      const { data } = await Http.post(
         `/usr/set_password`,
         this.PasswordSetData
       );

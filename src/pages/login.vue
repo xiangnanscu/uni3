@@ -1,7 +1,7 @@
 <template>
   <page-layout>
     <!-- {{ JSON.stringify(profileData) }} -->
-    <!-- <div v-if="needCompleteProfile === null">请稍候...</div> -->
+    <div v-if="needCompleteProfile === null">请稍候...</div>
     <div v-show="needCompleteProfile">
       <uni-notice-bar text="首次登陆，请完善头像和昵称" />
       <uni-forms
@@ -77,7 +77,8 @@ export default {
   },
   methods: {
     async wxLogin() {
-      this.$store.commit("login", this.userData);
+      const { login } = useSession();
+      login(this.userData);
       const safeRedirect =
         !this.redirect || this.redirect.includes(process.env.UNI_LOGIN_PAGE)
           ? process.env.UNI_HOME_PAGE
@@ -90,7 +91,7 @@ export default {
     },
     async submitLoginData(ref) {
       await this.$refs[ref].validate();
-      await $Http.post("/update_profile", {
+      await Http.post("/update_profile", {
         id: this.userData.id,
         nickname: this.userData.nickname,
         avatar: this.userData.avatar

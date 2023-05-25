@@ -45,7 +45,7 @@ export default {
     async fetchData(query) {
       const {
         data: { records, total }
-      } = await $Http.get(
+      } = await Http.get(
         `/volplan?page=${query.page || this.current}&pagesize=${
           query.pagesize || this.pageSize
         }`

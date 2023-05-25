@@ -1,4 +1,6 @@
 import { Buffer } from "buffer";
+import { Http } from "@/globals/Http";
+import pagesJson from "@/pages.json";
 
 export function isWeixin() {
   var ua = navigator.userAgent.toLowerCase();
@@ -35,7 +37,7 @@ export const decodeBase64 = (s) =>
   );
 export const repr = (s) => {
   const res = JSON.stringify(s);
-  console.log(res);
+  // console.log(res);
   return res;
 };
 export const fromNow = (value) => {
@@ -145,7 +147,7 @@ const sizeTable = {
   g: 1024 * 1024 * 1024,
   kb: 1024,
   mb: 1024 * 1024,
-  gb: 1024 * 1024 * 1024,
+  gb: 1024 * 1024 * 1024
 };
 export function parseSize(t) {
   if (typeof t === "string") {
@@ -181,55 +183,53 @@ export function getLastPageUrl() {
   // lastPage.$page.fullPath
   return lastPage ? "/" + lastPage.route : UNI_HOME_PAGE;
 }
+
+const tabbarPages = pagesJson.tabBar?.list;
+const tabbarPagesMap = tabbarPages.map((e) => [`/${e.pagePath}`, true]);
+console.log({ tabbarPages });
 export async function gotoPage(opts) {
-  let err, res;
+  let url = opts.url;
   if (opts.query) {
-    opts.url = opts.url + "?" + toURLSearchParams(opts.query);
+    url = url + "?" + toURLSearchParams(opts.query);
   }
-  [err, res] = opts.redirect
-    ? await uni.redirectTo(
-        appendAnimationParams({
-          url: opts.url,
-        })
-      )
-    : await uni.navigateTo(
-        appendAnimationParams({
-          url: opts.url,
-        })
-      );
-  // console.log("navigateTo:", { err, res });
-  if (err) {
-    [err, res] = await uni.switchTab(
-      appendAnimationParams({
-        url: opts.url,
-      })
-    );
-    // console.log("switchTab:", { err, res });
+  const navParams = appendAnimationParams({ url });
+  try {
+    if (tabbarPagesMap[opts.url]) {
+      await uni.switchTab(navParams);
+    } else if (opts.redirect) {
+      await uni.redirectTo(navParams);
+    } else {
+      await uni.navigateTo(navParams);
+    }
+    return true;
+  } catch (error) {
+    console.error("gotoPage error (now fallback to home):", error);
+    await uni.switchTab(tabbarPages[0]);
+    return false;
   }
-  return err ? false : true;
 }
 export async function tryGotoPage(opts) {
   if (!opts?.url) {
     if (opts.redirect) {
       return await gotoPage({
-        url: opts.redirect,
+        url: opts.redirect
       });
     }
     const lastUrl = getLastPageUrl();
     // console.log("tryGotoPage", getCurrentPages(), { lastUrl });
     return await gotoPage({
-      url: lastUrl,
+      url: lastUrl
     });
   }
   await gotoPage(opts);
 }
 export async function getWxUser() {
-  const res = await uni.login();
-  if (res[0]) {
-    throw new Error(res[0]);
+  const { code, errMsg } = await uni.login();
+  if (errMsg !== "login:ok") {
+    throw new Error(errMsg);
   }
-  const { data: user } = await $Http.post("/wx_login", {
-    code: res[1].code,
+  const { data: user } = await Http.post("/wx_login", {
+    code
   });
   return user;
 }

@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     async fetchData(query) {
-      const { data: {{tableName}} } = await $Http.get(
+      const { data: {{tableName}} } = await Http.get(
         `/{{tableName}}/detail/${query.id}`
       );
       this.{{tableName}} = {{tableName}};
@@ -39,6 +39,4 @@ export default {
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

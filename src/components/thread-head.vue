@@ -55,18 +55,18 @@ export default {
     posts: { type: Array },
     postCreateUrl: { type: String, default: `/post/create` },
     threadOtherPrefix: { type: String, default: `/thread/other` },
-    fkName: { type: String, default: `thread_id` },
+    fkName: { type: String, default: `thread_id` }
   },
   data() {
     return {
       currentPost: "",
-      showUs: false,
+      showUs: false
     };
   },
   computed: {
     picsUrls() {
       return this.thread?.pics?.map((e) => e) || [];
-    },
+    }
   },
   methods: {
     replyClick() {
@@ -74,9 +74,9 @@ export default {
       this.currentPost = "";
     },
     async replyThread() {
-      const { data: newPost } = await $Http.post(this.postCreateUrl, {
+      const { data: newPost } = await Http.post(this.postCreateUrl, {
         content: this.currentPost,
-        [this.fkName]: this.thread.id,
+        [this.fkName]: this.thread.id
       });
       this.showUs = false;
       this.$emit("appendPosts", {
@@ -85,11 +85,11 @@ export default {
         creator: {
           id: this.user.id,
           nickname: this.user.nickname,
-          avatar: this.user.avatar,
-        },
+          avatar: this.user.avatar
+        }
       });
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -1,6 +1,5 @@
 {
   "globals": {
-    "$Http": true,
     "Alioss": true,
     "EffectScope": true,
     "Http": true,

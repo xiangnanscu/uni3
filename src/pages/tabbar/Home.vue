@@ -76,7 +76,7 @@ export default {
   },
   data() {
     return {
-      searchValue:"",
+      searchValue: "",
       goddess: null,
       imageList: [],
       threads: [],
@@ -143,9 +143,7 @@ export default {
     this.goddess = await this.getCoverGoddess();
   },
   methods: {
-    onClick() {
-
-    },
+    onClick() {},
     async onGoddessClick() {
       utils.gotoPage({
         url: "/pages/GoddessDetail",
@@ -153,21 +151,23 @@ export default {
       });
     },
     async getNoticeBar() {
-      const { data } = await $Http.get("/settings?key=notice_bar");
+      const { data } = await Http.get("/settings?key=notice_bar");
       return data;
     },
     async getCoverGoddess() {
       const {
         data: [goddess]
-      } = await $Http.get("/goddess/cover");
+      } = await Http.get("/goddess/cover");
       return goddess;
     },
     async getThreads() {
       const {
         data: { records: threads }
-      } = await $Http.get("/thread", {data:{
-        pagesize: 3
-      }});
+      } = await Http.get("/thread", {
+        data: {
+          pagesize: 3
+        }
+      });
       console.log({ threads });
       return threads;
     },
@@ -196,7 +196,7 @@ export default {
       // 用户拒绝: e.detail = {errMsg: "getPhoneNumber:fail user deny"}
       const { code } = e.detail;
       if (code) {
-        const { data } = await $Http.post("/wx_phone", { code });
+        const { data } = await Http.post("/wx_phone", { code });
         this.phone = data.purePhoneNumber;
       }
     },
@@ -229,7 +229,7 @@ export default {
           this.log_err = JSON.stringify(res);
         },
         success: async (res) => {
-          const { data } = await $Http.post("/wx_login", {
+          const { data } = await Http.post("/wx_login", {
             code: res.code
           });
           this.openid = data.openid;

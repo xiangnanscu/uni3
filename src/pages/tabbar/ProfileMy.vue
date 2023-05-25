@@ -98,11 +98,14 @@ export default {
   },
   async onShow() {
     if (this.isLogin) {
-      const { data: profile } = await $Http.get("/usr/profile/my");
+      const { data: profile } = await Http.get("/usr/profile/my");
       this.profile = profile;
     }
   },
   computed: {
+    isLogin() {
+      return this.user.id;
+    },
     avatar() {
       return this.isLogin ? this.user.avatar : "";
     },
@@ -115,7 +118,8 @@ export default {
   },
   methods: {
     logoutToHomePage(event) {
-      this.$store.commit("logout");
+      const { logout } = useSession();
+      logout();
     },
     toCertPage(event) {
       console.log("toCertPage:", event);

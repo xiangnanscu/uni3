@@ -39,11 +39,11 @@ export default {
   },
   methods: {
     async fetchData(params) {
-      const { data } = await $Http.get(`/feeplan/${params.id}`);
+      const { data } = await Http.get(`/feeplan/${params.id}`);
       this.feeplan = data;
     },
     async payFee(planId) {
-      const { data: payed } = await $Http.post(`/orders/check`, {
+      const { data: payed } = await Http.post(`/orders/check`, {
         feeplan_id: planId
       });
       console.log({ payed });
@@ -58,7 +58,7 @@ export default {
       if (err) {
         throw new Error(err);
       }
-      const { data } = await $Http.post(`/wx/jsapi_mini_preorder`, {
+      const { data } = await Http.post(`/wx/jsapi_mini_preorder`, {
         code,
         feeplan_id: planId
       });

@@ -95,7 +95,7 @@ export default {
   },
   methods: {
     async sendMessage() {
-      const { data } = await $Http.post(`/message/create`, {
+      const { data } = await Http.post(`/message/create`, {
         target: this.chatId,
         content: this.messageText
       });
@@ -105,7 +105,7 @@ export default {
     async fetchData(chatId) {
       const {
         data: { records, total }
-      } = await $Http.get(`/message/chat?id=${chatId}`);
+      } = await Http.get(`/message/chat?id=${chatId}`);
       this.messages = records;
       this.total = total;
     }

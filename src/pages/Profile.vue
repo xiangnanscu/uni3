@@ -85,7 +85,7 @@ export default {
   },
   methods: {
     async sendMessage() {
-      const { data } = await $Http.post(`/message/create`, {
+      const { data } = await Http.post(`/message/create`, {
         target: this.currentProfile.id,
         content: this.currentMessage
       });
@@ -93,12 +93,8 @@ export default {
       uni.showToast({ icon: "none", title: "发送成功" });
     },
     async fetchData(query) {
-      const { data: threads } = await $Http.get(
-        `/thread/other/${query.id}`
-      );
-      const { data: profile } = await $Http.get(
-        `/usr/profile/${query.id}`
-      );
+      const { data: threads } = await Http.get(`/thread/other/${query.id}`);
+      const { data: profile } = await Http.get(`/usr/profile/${query.id}`);
       this.currentProfile = profile;
       this.currentProfileThreads = threads;
     }

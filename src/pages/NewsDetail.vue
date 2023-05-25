@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     async fetchData(query) {
-      const { data: news } = await $Http.get(`/news/${query.id}`);
+      const { data: news } = await Http.get(`/news/${query.id}`);
       this.news = news;
     }
   }

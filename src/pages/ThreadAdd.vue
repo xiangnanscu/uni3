@@ -60,12 +60,12 @@ export default {
   },
   methods: {
     async fetchData(params) {
-      const { data } = await $Http.get(`/ThreadAdd/${params.id}`);
+      const { data } = await Http.get(`/ThreadAdd/${params.id}`);
       this.ThreadAddData = data;
     },
     async submit(ref) {
       await this.$refs[ref].validate();
-      await $Http.post(`/thread/create`, this.ThreadAddData);
+      await Http.post(`/thread/create`, this.ThreadAddData);
       await utils.gotoPage({ url: "/pages/ThreadList" });
     }
   }

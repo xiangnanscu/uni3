@@ -30,25 +30,25 @@ uni.addInterceptor("request", {
     if (!/^https?|^\/\//.test(args.url)) args.url = baseURL + args.url;
   },
   success({ data, statusCode, header, cookies }) {
-    console.log("global uni.request success:", {
-      data,
-      statusCode,
-      header,
-      cookies,
-    });
+    // console.log("global uni.request success:", {
+    //   data,
+    //   statusCode,
+    //   header,
+    //   cookies
+    // });
     if (statusCode < 600 && statusCode >= 500) {
       uni.showToast({
         icon: "none",
         title: `发生错误`,
-        duration: 5000,
+        duration: 5000
       });
     }
   },
   fail(err) {
-    console.log("global uni.request fail:", err);
+    // console.log("global uni.request fail:", err);
   },
   complete(args) {
-    console.log("global uni.request complete:", args);
+    // console.log("global uni.request complete:", args);
     const store = useStore();
     store.loading = false;
     for (const cookieStr of args.cookies) {
@@ -60,7 +60,7 @@ uni.addInterceptor("request", {
         }
       }
     }
-  },
+  }
 });
 
 class Http {
@@ -68,7 +68,7 @@ class Http {
     return await uni.request({
       url,
       method: "get",
-      ...opts,
+      ...opts
     });
   }
 
@@ -77,10 +77,9 @@ class Http {
       url,
       data,
       method: "post",
-      ...opts,
+      ...opts
     });
   }
 }
 
 export { Http };
-export { Http as $Http };

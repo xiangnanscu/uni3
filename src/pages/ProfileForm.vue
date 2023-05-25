@@ -53,7 +53,7 @@ export default {
   },
 
   async mounted() {
-    const { data } = await $Http.get("/usr/profile/my");
+    const { data } = await Http.get("/usr/profile/my");
     this.profileData.intro = data.intro;
     this.profileData.avatar.url = data.avatar;
     this.profileData.nickname = data.nickname;
@@ -70,7 +70,7 @@ export default {
           nickname: this.profileData.nickname,
           avatar: this.profileData.avatar.url
         };
-        await $Http.post("/update_profile", user);
+        await Http.post("/update_profile", user);
         this.$store.commit("login", {
           ...this.user,
           ...user

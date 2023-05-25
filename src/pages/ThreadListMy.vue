@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     async getThreads(query) {
-      const { data } = await $Http.get("/thread/my");
+      const { data } = await Http.get("/thread/my");
       return data;
     }
   }

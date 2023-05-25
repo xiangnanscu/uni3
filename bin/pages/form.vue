@@ -6,7 +6,7 @@
       :model-value="{{modelName}}Data"
       label-position="top"
     >
-{{formItemToken}}
+      {{ formItemToken }}
     </uni-forms>
     <button type="primary" @click="submit('valiForm')">提交</button>
   </page-layout>
@@ -30,17 +30,16 @@ export default {
   },
   methods: {
     async fetchData(params) {
-      const { data } = await $Http.get(`/{{tableName}}/detail/${params.id}`);
+      const { data } = await Http.get(`/{{tableName}}/detail/${params.id}`);
       this.{{modelName}}Data = data
     },
     async submit(ref) {
       await this.$refs[ref].validate();
-      await $Http.post(`/{{tableName}}/update/${this.params.id}`);
+      await Http.post(`/{{tableName}}/update/${this.params.id}`);
       await utils.tryGotoPage();
     },
   },
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

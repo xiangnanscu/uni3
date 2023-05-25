@@ -78,7 +78,7 @@ export default {
     async fetchData(query) {
       const {
         data: { records, total }
-      } = await $Http.get(
+      } = await Http.get(
         `/thread?page=${query.page || this.current}&pagesize=${
           query.pagesize || this.pagesize
         }`

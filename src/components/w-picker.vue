@@ -49,7 +49,7 @@ export default {
   emits: ["uploadFiles", "choose", "delFile"],
   data() {
     return {
-      localValue: [],
+      localValue: []
     };
   },
   props: {
@@ -57,15 +57,15 @@ export default {
       type: Object,
       default() {
         return { url: "", errMsg: "" };
-      },
+      }
     },
     disabled: {
       type: Boolean,
-      default: false,
+      default: false
     },
     disablePreview: {
       type: Boolean,
-      default: false,
+      default: false
     },
     imageStyles: {
       type: Object,
@@ -73,18 +73,18 @@ export default {
         return {
           width: "auto",
           height: "auto",
-          border: {},
+          border: {}
         };
-      },
+      }
     },
     delIcon: {
       type: Boolean,
-      default: true,
+      default: true
     },
     readonly: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
   watch: {},
   computed: {
@@ -92,7 +92,7 @@ export default {
       const styles = {
         width: "auto",
         height: "auto",
-        border: {},
+        border: {}
       };
       return Object.assign(styles, this.imageStyles);
     },
@@ -143,7 +143,7 @@ export default {
           "border-width": width,
           "border-style": (border && border.style) || "solid",
           "border-color": (border && border.color) || "#eee",
-          "border-radius": radius,
+          "border-radius": radius
         };
       }
       let classles = "";
@@ -151,18 +151,18 @@ export default {
         classles += `${i}:${obj[i]};`;
       }
       return classles;
-    },
+    }
   },
   methods: {
     async choose(event) {
       const avatar = event.detail?.avatarUrl;
-      const key = `${process.env.APP_NAME}/wx/${this.uuid()}.${avatar
+      const key = `${process.env.VITE_APP_NAME}/wx/${utils.uuid()}.${avatar
         .split(".")
         .pop()}`;
-      const { data: payload } = await $Http.post("/alioss_payload", {
+      const { data: payload } = await Http.post("/alioss_payload", {
         size: "10m",
         key,
-        bucket: process.env.ALIOSS_BUCKET,
+        bucket: process.env.ALIOSS_BUCKET
       });
       // console.log({ payload });
       uni.uploadFile({
@@ -172,7 +172,7 @@ export default {
         formData: {
           key,
           success_action_status: 200,
-          ...payload,
+          ...payload
         },
         fail(res) {
           uni.showToast({ title: res.errMsg, duration: 3000 });
@@ -186,7 +186,7 @@ export default {
           } else {
             this.$emit("update:value", { errMsg: res.errMsg });
           }
-        },
+        }
       });
     },
     delFile(index) {
@@ -204,7 +204,7 @@ export default {
 
       uni.previewImage({
         urls: urls,
-        current: index,
+        current: index
       });
     },
     value2px(value) {
@@ -216,8 +216,8 @@ export default {
         }
       }
       return value;
-    },
-  },
+    }
+  }
 };
 </script>
 
