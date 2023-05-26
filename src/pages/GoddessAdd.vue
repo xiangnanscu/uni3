@@ -9,7 +9,7 @@
     >
       <uni-forms-item label="女神宣言1" name="content">
         <uni-easyinput
-          v-model:value="GoddessAddData.content"
+          v-model="GoddessAddData.content"
           type="textarea"
           autoHeight
         />
@@ -18,7 +18,7 @@
         <alioss-picker
           @fail="uploadFail"
           limit="9"
-          v-model:value="GoddessAddData.pics"
+          v-model="GoddessAddData.pics"
           oss-size="100k"
         ></alioss-picker>
       </uni-forms-item>

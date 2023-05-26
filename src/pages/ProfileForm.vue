@@ -8,22 +8,18 @@
       label-position="left"
     >
       <uni-forms-item label="头像" name="avatar">
-        <w-picker
-          v-model:value="profileData.avatar"
-          :value="profileData.avatar"
-          @update:value="profileData.avatar = $event"
-        />
+        <w-picker v-model="profileData.avatar" />
       </uni-forms-item>
       <uni-forms-item label="昵称" name="nickname">
         <uni-easyinput
-          v-model:value="profileData.nickname"
+          v-model="profileData.nickname"
           placeholder="请输入昵称"
           type="nickname"
         />
       </uni-forms-item>
       <uni-forms-item label="简介" name="intro">
         <uni-easyinput
-          v-model:value="profileData.intro"
+          v-model="profileData.intro"
           placeholder="请输入简介"
           type="intro"
         />

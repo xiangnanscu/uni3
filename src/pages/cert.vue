@@ -10,13 +10,13 @@
     >
       <uni-forms-item label="姓名" name="xm">
         <uni-easyinput
-          v-model:value="profileData.xm"
+          v-model="profileData.xm"
           placeholder="请输入身份证上的姓名"
         />
       </uni-forms-item>
       <uni-forms-item label="身份证号" name="username">
         <uni-easyinput
-          v-model:value="profileData.username"
+          v-model="profileData.username"
           placeholder=" "
           type="idcard"
         />

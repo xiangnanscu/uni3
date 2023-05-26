@@ -12,14 +12,14 @@
       >
         <uni-forms-item label="头像" name="avatar">
           <w-picker
-            v-model:value="profileData.avatar"
+            v-model="profileData.avatar"
             :value="profileData.avatar"
             @update:value="profileData.avatar = $event"
           />
         </uni-forms-item>
         <uni-forms-item label="昵称" name="nickname">
           <uni-easyinput
-            v-model:value="profileData.nickname"
+            v-model="profileData.nickname"
             placeholder="请输入昵称"
             type="nickname"
           />

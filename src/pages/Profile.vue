@@ -58,9 +58,9 @@
           :cursorSpacing="90"
           :adjust-position="true"
         ></textarea>
-        <u-button type="success" @click="sendMessage()" plain="true">
+        <button type="success" @click="sendMessage()" plain="true">
           发送
-        </u-button></view
+        </button></view
       >
     </uni-popup>
   </page-layout>

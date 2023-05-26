@@ -3,7 +3,7 @@
     <view class="search-bar">
       <uni-easyinput
         suffixIcon="search"
-        v-model:value="searchValue"
+        v-model="searchValue"
         placeholder="请输入查找内容"
         @iconClick="onClick"
       ></uni-easyinput>

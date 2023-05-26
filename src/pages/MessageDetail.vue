@@ -47,19 +47,19 @@
         </uni-list>
       </scroll-view>
 
-      <u-row class="chat-foot" justify="space-between">
-        <u-col span="10">
-          <u-textarea
+      <uni-row class="chat-foot" justify="space-between">
+        <uni-col span="10">
+          <textarea
             autoHeight
-            v-model:value="messageText"
+            v-model="messageText"
             :cursorSpacing="10"
             placeholder="请输入内容"
-          ></u-textarea>
-        </u-col>
-        <u-col span="2">
-          <u-button type="success" @click="sendMessage"> 发送 </u-button>
-        </u-col>
-      </u-row>
+          ></textarea>
+        </uni-col>
+        <uni-col span="2">
+          <button type="success" @click="sendMessage">发送</button>
+        </uni-col>
+      </uni-row>
     </view>
   </page-layout2>
 </template>

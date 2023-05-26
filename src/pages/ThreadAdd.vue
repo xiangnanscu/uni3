@@ -7,11 +7,11 @@
       label-position="top"
     >
       <uni-forms-item label="标题" name="title">
-        <uni-easyinput v-model:value="ThreadAddData.title" />
+        <uni-easyinput v-model="ThreadAddData.title" />
       </uni-forms-item>
       <uni-forms-item label="内容" name="content">
         <uni-easyinput
-          v-model:value="ThreadAddData.content"
+          v-model="ThreadAddData.content"
           type="textarea"
           :autoHeight="true"
         />

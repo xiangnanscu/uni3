@@ -8,10 +8,10 @@
       label-position="top"
     >
       <uni-forms-item label="姓名" name="xm">
-        <uni-easyinput v-model:value="usrData.xm" />
+        <uni-easyinput v-model="usrData.xm" />
       </uni-forms-item>
       <uni-forms-item label="密码" name="password">
-        <uni-easyinput v-model:value="usrData.password" />
+        <uni-easyinput v-model="usrData.password" />
       </uni-forms-item>
     </uni-forms>
     <button type="primary" @click="submit('valiForm')">提交</button>

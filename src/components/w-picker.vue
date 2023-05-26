@@ -46,14 +46,14 @@ const ossUrl = `https://${process.env.ALIOSS_HOST}/`;
 
 export default {
   name: "uploadImage",
-  emits: ["uploadFiles", "choose", "delFile"],
+  emits: ["uploadFiles", "choose", "delFile", "update:modelValue"],
   data() {
     return {
       localValue: []
     };
   },
   props: {
-    value: {
+    moelValue: {
       type: Object,
       default() {
         return { url: "", errMsg: "" };
@@ -176,21 +176,21 @@ export default {
         },
         fail(res) {
           uni.showToast({ title: res.errMsg, duration: 3000 });
-          this.$emit("update:value", { errMsg: res.errMsg });
+          this.$emit("update:modelValue", { errMsg: res.errMsg });
         },
         success: async (res) => {
           // console.log("uploadFile res:", res);
           // uni.showToast({ title: res.errMsg });
           if (res.errMsg == "uploadFile:ok") {
-            this.$emit("update:value", { url: `${ossUrl}${key}` });
+            this.$emit("update:modelValue", { url: `${ossUrl}${key}` });
           } else {
-            this.$emit("update:value", { errMsg: res.errMsg });
+            this.$emit("update:modelValue", { errMsg: res.errMsg });
           }
         }
       });
     },
     delFile(index) {
-      this.$emit("update:value", { url: "" });
+      this.$emit("update:modelValue", { url: "" });
     },
     prviewImage(img, index) {
       const urls = [];

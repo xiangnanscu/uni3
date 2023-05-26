@@ -8,7 +8,7 @@
         label-position="top"
       >
         <uni-forms-item label="新密码" name="password">
-          <uni-easyinput v-model:value="PasswordSetData.password" />
+          <uni-easyinput v-model="PasswordSetData.password" />
         </uni-forms-item>
       </uni-forms>
       <button type="primary" @click="submit('valiForm')">提交</button>
