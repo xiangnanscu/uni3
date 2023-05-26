@@ -23,6 +23,7 @@
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
     /* Others */
+    "noImplicitAny": false,
     "sourceMap": true,
     "types": [
       "@dcloudio/types",

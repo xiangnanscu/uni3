@@ -8,7 +8,7 @@
       label-position="left"
     >
       <uni-forms-item label="头像" name="avatar">
-        <w-picker v-model="profileData.avatar" />
+        <x-picker v-model="profileData.avatar" />
       </uni-forms-item>
       <uni-forms-item label="昵称" name="nickname">
         <uni-easyinput
@@ -31,7 +31,6 @@
 
 <script>
 import login from "@/lib/login.js";
-// import wxPicker from "../../components/w-picker/w-picker.vue";
 
 export default {
   mixins: [login],

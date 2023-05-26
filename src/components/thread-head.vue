@@ -26,25 +26,23 @@
           ><span class="thread-title">{{ thread.title }}</span></template
         >
         <text user-select class="thread-content">{{ thread.content }}</text>
-        <u-album v-if="picsUrls.length" :urls="picsUrls"></u-album>
+        <x-album v-if="picsUrls.length" :urls="picsUrls"></x-album>
       </uni-card>
 
       <button class="button" type="primary" @click="replyClick" plain="true">
         <text class="button-text">回帖</text>
       </button>
     </view>
-    <u-popup :show="showUs" @close="showUs = false">
+    <uni-popup ref="replyPopup" type="bottom" background-color="#fff">
       <div style="padding: 15px">
-        <u-textarea
+        <textarea
           height="50"
           :cursorSpacing="90"
           v-model="currentPost"
-        ></u-textarea>
-        <u-button type="success" @click="replyThread()" plain="true">
-          回复
-        </u-button>
+        ></textarea>
+        <button type="primary" @click="replyThread()" plain="true">回复</button>
       </div>
-    </u-popup>
+    </uni-popup>
   </page-layout>
 </template>
 
@@ -70,7 +68,7 @@ export default {
   },
   methods: {
     replyClick() {
-      this.showUs = true;
+      this.$refs.replyPopup.open();
       this.currentPost = "";
     },
     async replyThread() {

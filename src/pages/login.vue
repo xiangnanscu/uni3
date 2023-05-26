@@ -1,6 +1,5 @@
 <template>
   <page-layout>
-    <!-- {{ JSON.stringify(profileData) }} -->
     <div v-if="needCompleteProfile === null">请稍候...</div>
     <div v-show="needCompleteProfile">
       <uni-notice-bar text="首次登陆，请完善头像和昵称" />
@@ -11,11 +10,7 @@
         label-position="left"
       >
         <uni-forms-item label="头像" name="avatar">
-          <w-picker
-            v-model="profileData.avatar"
-            :value="profileData.avatar"
-            @update:value="profileData.avatar = $event"
-          />
+          <x-picker v-model="profileData.avatar" />
         </uni-forms-item>
         <uni-forms-item label="昵称" name="nickname">
           <uni-easyinput
@@ -50,6 +45,7 @@ export default {
     };
   },
   async onShow() {
+    console.log("login.vue onShow");
     await uni.showLoading({
       title: "登陆中"
     });

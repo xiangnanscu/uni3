@@ -1,6 +1,6 @@
 <template>
   <view class="uni-file-picker__container">
-    <view v-if="value.url" class="file-picker__box" :style="boxStyle">
+    <view v-if="moelValue.url" class="file-picker__box" :style="boxStyle">
       <view class="file-picker__box-content" :style="borderStyle">
         <image
           class="file-image"

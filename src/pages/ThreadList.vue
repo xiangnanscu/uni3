@@ -1,37 +1,32 @@
 <template>
   <page-layout>
     <uni-list :border="false">
-      <navigator
+      <uni-list-item
         v-for="(item, index) in threads"
         :key="index"
-        :url="`/pages/ThreadDetail?id=${item.id}`"
-        hover-class="navigator-hover"
+        :to="`/pages/ThreadDetail?id=${item.id}`"
       >
-        <uni-list-item>
-          <template v-slot:header>
-            <view class="slot-box">
-              <image
-                class="thread-avatar slot-image"
-                :src="item.creator.avatar"
-                mode="widthFix"
-              ></image>
-            </view>
-          </template>
-          <template v-slot:body
-            ><text class="thread-body slot-box slot-text">{{
-              item.title
-            }}</text>
-          </template>
-          <template v-slot:footer>
-            <view
-              ><view class="thread-header">{{ item.creator.nickname }}</view>
-              <view class="thread-footer"
-                ><text>{{ fromNow(item.ctime) }}</text></view
-              >
-            </view></template
-          >
-        </uni-list-item>
-      </navigator>
+        <template v-slot:header>
+          <view class="slot-box">
+            <image
+              class="thread-avatar slot-image"
+              :src="item.creator.avatar"
+              mode="widthFix"
+            ></image>
+          </view>
+        </template>
+        <template v-slot:body
+          ><text class="thread-body slot-box slot-text">{{ item.title }}</text>
+        </template>
+        <template v-slot:footer>
+          <view
+            ><view class="thread-header">{{ item.creator.nickname }}</view>
+            <view class="thread-footer"
+              ><text>{{ fromNow(item.ctime) }}</text></view
+            >
+          </view></template
+        >
+      </uni-list-item>
     </uni-list>
     <uni-pagination
       v-if="!noPage"
