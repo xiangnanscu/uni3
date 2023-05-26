@@ -1,7 +1,5 @@
 import { readFileSync } from "fs";
 import { defineConfig } from "vite";
-import vue from "@vitejs/plugin-vue";
-import vueJsx from "@vitejs/plugin-vue-jsx";
 import uni from "@dcloudio/vite-plugin-uni";
 import * as dotenv from "dotenv";
 import { expand } from "dotenv-expand";
@@ -63,8 +61,7 @@ const plugins = [
   uni({
     vueOptions: {},
     vueJsxOptions: {}
-  }),
-  vueJsx()
+  })
 ];
 const toLiteral = (s) => `"${s.replaceAll(/"/g, '\\"')}"`;
 const { parsed: exposedEnvs } = expand({

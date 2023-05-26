@@ -72,7 +72,7 @@ export default {
           ...user
         });
         await utils.gotoPage({
-          url: this.redirect || "/pages/tabbar/ProfileMy/ProfileMy"
+          url: this.redirect || "/pages/tabbar/ProfileMy"
         });
       }
     }

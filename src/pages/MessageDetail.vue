@@ -48,16 +48,16 @@
       </scroll-view>
 
       <uni-row class="chat-foot" justify="space-between">
-        <uni-col span="10">
+        <uni-col :span="20">
           <textarea
-            autoHeight
             v-model="messageText"
-            :cursorSpacing="10"
+            auto-height
+            :cursor-spacing="10"
             placeholder="请输入内容"
           ></textarea>
         </uni-col>
-        <uni-col span="2">
-          <button type="success" @click="sendMessage">发送</button>
+        <uni-col :span="4">
+          <button type="primary" size="mini" @click="sendMessage">发送</button>
         </uni-col>
       </uni-row>
     </view>
@@ -99,7 +99,7 @@ export default {
         target: this.chatId,
         content: this.messageText
       });
-      utils.gotoPage({ url: "/pages/tabbar/Message/Message" });
+      utils.gotoPage({ url: "/pages/tabbar/Message" });
       uni.showToast({ icon: "none", title: "发送成功" });
     },
     async fetchData(chatId) {
@@ -130,6 +130,7 @@ export default {
   overflow: scroll;
 }
 .chat-foot {
+  padding: 15px;
 }
 .slot-box {
   display: flex;
