@@ -1,5 +1,4 @@
 import { Buffer } from "buffer";
-import { Http } from "@/globals/Http";
 import pagesJson from "@/pages.json";
 
 export function isWeixin() {
@@ -223,13 +222,4 @@ export async function tryGotoPage(opts) {
   }
   await gotoPage(opts);
 }
-export async function getWxUser() {
-  const { code, errMsg } = await uni.login();
-  if (errMsg !== "login:ok") {
-    throw new Error(errMsg);
-  }
-  const { data: user } = await Http.post("/wx_login", {
-    code
-  });
-  return user;
-}
+

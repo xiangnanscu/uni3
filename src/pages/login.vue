@@ -45,11 +45,7 @@ export default {
     };
   },
   async onShow() {
-    console.log("login.vue onShow");
-    await uni.showLoading({
-      title: "登陆中"
-    });
-    const user = await utils.getWxUser();
+    const user = await this.getWxUser();
     uni.hideLoading();
     this.profileData.id = user.id;
     this.profileData.openid = user.id;
@@ -72,6 +68,16 @@ export default {
     }
   },
   methods: {
+     async  getWxUser() {
+  const { code, errMsg } = await uni.login();
+  if (errMsg !== "login:ok") {
+    throw new Error(errMsg);
+  }
+  const { data: user } = await Http.post("/wx_login", {
+    code
+  });
+  return user;
+},
     async wxLogin() {
       const { login } = useSession();
       login(this.userData);
@@ -79,7 +85,6 @@ export default {
         !this.redirect || this.redirect.includes(process.env.UNI_LOGIN_PAGE)
           ? process.env.UNI_HOME_PAGE
           : this.redirect;
-      console.log({ safeRedirect });
       await utils.gotoPage({
         url: safeRedirect || process.env.UNI_HOME_PAGE,
         redirect: true
