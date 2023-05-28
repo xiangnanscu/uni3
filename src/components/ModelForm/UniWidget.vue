@@ -23,6 +23,7 @@ const getUniMediatype = (field) =>
 const fileValues = ref({});
 const filePickerRef = ref(null);
 const autocompletePopupRef = ref(null);
+const autocompleteSearchText = ref("");
 // const uniFile = {
 //   cloudPath: "1684568038130_0.png",
 //   extname: "png",
@@ -101,22 +102,22 @@ const isArrayField = computed(() => field.type == "array");
     <uni-popup ref="autocompletePopupRef" type="bottom" background-color="#fff">
       <uni-section :title="field.label" padding>
         <input
-          @update:modelValue="sendValue"
-          :modelValue="props.modelValue"
-          :placeholder="field.hint"
+          v-model="autocompleteSearchText"
+          :placeholder="field.hint || '输入关键字'"
           focus
         />
         <scroll-view :scroll-y="true" style="height: 31em">
           <uni-list>
             <uni-list-item
-              v-for="(c, i) in props.modelValue
+              v-for="(c, i) in autocompleteSearchText
                 ? field.choices.filter((e) =>
-                    e.value.includes(props.modelValue)
+                    e.value.includes(autocompleteSearchText)
                   )
                 : []"
               clickable
               @click="
                 sendValue(c.value);
+                autocompleteSearchText = '';
                 autocompletePopupRef.close();
               "
               :key="i"
