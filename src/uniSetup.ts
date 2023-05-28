@@ -12,7 +12,7 @@ const cookieNames = ["session"];
 const setupRequest = () => {
   uni.addInterceptor("request", {
     invoke(args) {
-      console.log("global uni.request invoke:", args);
+      // console.log("global uni.request invoke:", args);
       const store = useStore();
       if (!store.disableLoading) {
         store.loading = true;
@@ -29,17 +29,12 @@ const setupRequest = () => {
           }
         }
       }
+      header["Uni-Request"] = "on";
       args.header = header;
       if (!/^https?|^\/\//.test(args.url)) args.url = baseURL + args.url;
     },
     success({ data, statusCode, header, cookies }) {
-      console.log("success", { statusCode });
-      // console.log("global uni.request success:", {
-      //   data,
-      //   statusCode,
-      //   header,
-      //   cookies
-      // });
+      // 微信小程序任何code都算成功
       if (statusCode < 600 && statusCode >= 500) {
         uni.showToast({
           icon: "none",
@@ -52,7 +47,7 @@ const setupRequest = () => {
       console.log("global uni.request fail:", err);
     },
     complete(args) {
-      console.log("global uni.request complete:", args);
+      // console.log("global uni.request complete:", args);
       const store = useStore();
       store.loading = false;
       uni.hideLoading();

@@ -13,7 +13,7 @@
     "build": "yarn uni:build",
     "buildw": "yarn uni:build -p mp-weixin",
     "rcw": "yarn buildw && bash wx-release.js",
-    "git": "python bin/git.py",
+    "git": "python3 bin/git.py",
     "b": "yarn p -bb -gg",
     "p": "yarn git -pp -gg",
     "g": "yarn git -gg",

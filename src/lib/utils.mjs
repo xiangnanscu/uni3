@@ -185,7 +185,6 @@ export function getLastPageUrl() {
 
 const tabbarPages = pagesJson.tabBar?.list;
 const tabbarPagesMap = tabbarPages.map((e) => [`/${e.pagePath}`, true]);
-console.log({ tabbarPages });
 export async function gotoPage(opts) {
   let url = opts.url;
   if (opts.query) {
@@ -222,4 +221,3 @@ export async function tryGotoPage(opts) {
   }
   await gotoPage(opts);
 }
-

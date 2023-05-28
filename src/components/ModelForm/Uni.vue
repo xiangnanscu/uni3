@@ -3,7 +3,7 @@ import { useStore } from "@/store";
 import { onReady } from "@dcloudio/uni-app";
 import { repr } from "@/lib/utils.mjs";
 
-const emit = defineEmits(["submit", "successPost", "validate"]);
+const emit = defineEmits(["sendData", "successPost", "validate"]);
 const props = defineProps({
   model: { type: [Object, Function], required: true },
   values: { type: Object, default: () => ({}) },
@@ -88,7 +88,6 @@ const submit = async () => {
   }
   const data = props.model.toPostValue(cleanedData, props.model.names);
   if (attrs.onSendData) {
-    console.log("onSendData defined", data);
     emit("sendData", data);
   }
   if (!props.actionUrl) {
@@ -96,29 +95,21 @@ const submit = async () => {
   }
   submiting.value = true;
   try {
-    // await Http.post(props.actionUrl, data);
-    const res = await uni.request({
-      url: props.actionUrl,
-      method: "post",
+    const { data: respnseData, statusCode } = await Http.post(
+      props.actionUrl,
       data
-    });
-    console.log({ res });
-  } catch (error) {
-    console.error("??", error);
-    if (error.name == "AxiosError") {
-      const { data, status } = error.response;
-      if (status == 422) {
-        errors[data.name] = data.message;
-      } else {
-        formError.value = typeof data == "object" ? JSON.stringify(data) : data;
-      }
-    } else {
-      uni.showToast({
-        title: error.errMsg || error.message,
-        content: "haha",
-        icon: "error"
-      });
+    );
+    if (respnseData.http_code == 422) {
+      errors[respnseData.name] = respnseData.message;
     }
+    emit("successPost", respnseData);
+  } catch (error) {
+    console.error(error);
+    uni.showToast({
+      title: error.errMsg || error.message,
+      content: "haha",
+      icon: "error"
+    });
   } finally {
     submiting.value = false;
   }
