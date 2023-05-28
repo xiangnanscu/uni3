@@ -1,7 +1,5 @@
 <script setup>
-import { useStore } from "@/store";
 import { onReady } from "@dcloudio/uni-app";
-import { repr } from "@/lib/utils.mjs";
 
 const emit = defineEmits(["sendData", "successPost", "validate"]);
 const props = defineProps({
@@ -10,23 +8,23 @@ const props = defineProps({
   errors: { type: Object, default: () => ({}) },
   syncValues: { type: Boolean, default: false },
   actionUrl: { type: String, required: false },
-  method: { type: String, default: "POST" },
-  hideSubmitButton: { type: Boolean, default: false },
-  buttonText: { type: String },
-  itemWidth: { type: String },
   successRoute: { type: [Object, String] },
-  layout: { type: String, default: "horizontal" }, // horizontal
+  method: { type: String, default: "POST" }, // get
+  hideSubmitButton: { type: Boolean, default: false },
+  submitButtonText: { type: String, default: "提交" },
+  errShowType: { type: String, default: "undertext" },
+  labelPosition: { type: String, default: "left" }, // top
+  labelWidth: { type: [String, Number], default: "5em" },
+  labelAlign: { type: String, default: "right" }, //center, right
   trigger: { type: String, default: "blur" },
   labelCol: { type: Number, default: 3 }
 });
-const attrs = useAttrs();
 const deepcopy = (o) => JSON.parse(JSON.stringify(o));
 const values = props.syncValues
   ? reactive(props.values)
   : reactive(deepcopy(props.values));
 Object.assign(values, props.model.toFormValue(values, props.model.names));
 const errors = reactive(props.errors);
-const { loading } = storeToRefs(useStore());
 const formRef = ref();
 const getFieldRules = (field) => [
   { required: field.required, errorMessage: `必须填写${field.label}` },
@@ -37,19 +35,20 @@ const getFieldRules = (field) => [
     }
   }
 ];
-
 const fieldsArray = computed(() =>
   props.model.names.map((name) => props.model.fields[name])
 );
 const formsItemRefs = {};
 const rules = {};
-for (const field of fieldsArray.value) {
-  const name = field.name;
-  if (field.type == "array") {
-    errors[name] = [];
+const resetErrors = () => {
+  for (const field of fieldsArray.value) {
+    errors[field.name] = field.type == "array" ? [] : "";
   }
-  formsItemRefs[name] = ref(null);
-  rules[name] = {
+};
+resetErrors();
+for (const field of fieldsArray.value) {
+  formsItemRefs[field.name] = ref(null);
+  rules[field.name] = {
     rules: getFieldRules(field)
   };
 }
@@ -60,7 +59,7 @@ onReady(() => {
   formRef.value.setRules(rules);
 });
 // #endif
-
+const vm = getCurrentInstance();
 // #ifdef H5
 onMounted(() => {
   console.log("onMounted modelform uni");
@@ -68,26 +67,14 @@ onMounted(() => {
 });
 // #endif
 
-const formError = ref("");
 const submiting = ref(false);
-const clearBackendErrors = () => {
-  formError.value = "";
-  for (const key in errors) {
-    errors[key] = "";
-  }
-};
+
 const submit = async () => {
+  resetErrors();
   formRef.value.clearValidate();
-  clearBackendErrors();
-  let cleanedData;
-  try {
-    cleanedData = await formRef.value.validate();
-  } catch (error) {
-    console.error(error);
-    return;
-  }
+  const cleanedData = await formRef.value.validate();
   const data = props.model.toPostValue(cleanedData, props.model.names);
-  if (attrs.onSendData) {
+  if (vm.vnode.props.onSendData) {
     emit("sendData", data);
   }
   if (!props.actionUrl) {
@@ -99,16 +86,24 @@ const submit = async () => {
       props.actionUrl,
       data
     );
-    if (respnseData.http_code == 422) {
+    if (respnseData?.http_code == 422) {
       errors[respnseData.name] = respnseData.message;
+      uni.showModal({
+        title: `“${respnseData.label}”错误`,
+        content: respnseData.message,
+        showCancel: false
+      });
     }
     emit("successPost", respnseData);
+    if (props.successRoute) {
+      utils.gotoPage({ url: props.successRoute });
+    }
   } catch (error) {
     console.error(error);
-    uni.showToast({
-      title: error.errMsg || error.message,
-      content: "haha",
-      icon: "error"
+    uni.showModal({
+      title: "提交错误",
+      content: error.errMsg || error.message,
+      showCancel: false
     });
   } finally {
     submiting.value = false;
@@ -119,12 +114,14 @@ const submit = async () => {
   <uni-forms
     ref="formRef"
     :model="values"
+    :err-show-type="props.errShowType"
+    :label-align="props.labelAlign"
+    :label-position="props.labelPosition"
+    :label-width="props.labelWidth"
     @validate="emit('validate', $event)"
-    label-width="5em"
-    label-align="right"
   >
     <template v-for="(field, index) in fieldsArray" :key="index">
-      <template v-if="field.type == 'array'">
+      <template v-if="field.type == 'array' && !field.choices">
         <template v-for="(value, index) in values[field.name]" :key="index">
           <uni-forms-item
             :ref="(el) => (formsItemRefs[field.name + index] = el)"
@@ -200,7 +197,11 @@ const submit = async () => {
         :label="field.label"
         :required="field.required"
         :name="field.name"
-        :error-message="errors[field.name]"
+        :error-message="
+          field.type == 'array'
+            ? errors[field.name].join('')
+            : errors[field.name]
+        "
       >
         <model-form-uni-widget
           :modelValue="values[field.name]"
@@ -211,7 +212,14 @@ const submit = async () => {
         />
       </uni-forms-item>
     </template>
-    <button type="primary" @click="submit" :disabled="loading">提交</button>
+    <button
+      v-if="!props.hideSubmitButton"
+      type="primary"
+      @click="submit"
+      :disabled="submiting"
+    >
+      {{ props.submitButtonText }}
+    </button>
   </uni-forms>
 </template>
 <style scoped>

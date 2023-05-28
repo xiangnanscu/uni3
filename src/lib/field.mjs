@@ -1,6 +1,6 @@
 import * as Validator from "./validator";
 import { Http } from "@/globals/Http";
-import {parseSize} from "@/lib/utils.mjs"
+import { parseSize } from "@/lib/utils.mjs";
 
 const TABLE_MAX_ROWS = 1;
 const CHOICES_ERROR_DISPLAY_COUNT = 30;
@@ -11,7 +11,7 @@ const PRIMITIVE_TYPES = {
   string: true,
   number: true,
   boolean: true,
-  bigint: true,
+  bigint: true
 };
 
 // const repr = (e) => JSON.stringify(e);
@@ -108,7 +108,7 @@ const baseOptionNames = [
   "verifyUrl",
   "postNames",
   "codeLifetime",
-  "tooltipVisible",
+  "tooltipVisible"
 ];
 
 class BaseField {
@@ -163,7 +163,7 @@ class BaseField {
     }
     const ret = {
       name: options.name,
-      type: options.type,
+      type: options.type
     };
     for (const name of this.optionNames) {
       if (options[name] !== undefined) {
@@ -189,7 +189,7 @@ class BaseField {
           }
           throw new Error("无效选项, 请通过点击下拉框的形式输入");
         });
-      } else if (Array.isArray(this.choices)) {
+      } else if (Array.isArray(this.choices) && this.type !== "array") {
         // static choices
         validators.push(
           getChoicesValidator(this.choices, this.errorMessages.choices)
@@ -208,7 +208,7 @@ class BaseField {
   }
   getAntdRule() {
     const rule = {
-      whitespace: true,
+      whitespace: true
     };
     rule.validator = async (_rule, value) => {
       try {
@@ -298,7 +298,7 @@ const stringOptionNames = [
   "pattern",
   "length",
   "minlength",
-  "maxlength",
+  "maxlength"
 ];
 const stringValidatorNames = ["pattern", "length", "minlength", "maxlength"];
 class StringField extends BaseField {
@@ -468,7 +468,7 @@ const floatOptionNames = [
   "min",
   "max",
   "step",
-  "precision",
+  "precision"
 ];
 class FloatField extends BaseField {
   type = "float";
@@ -500,7 +500,7 @@ class FloatField extends BaseField {
 
 const DEFAULT_BOOLEAN_CHOICES = [
   { label: "是", value: "true", text: "是" },
-  { label: "否", value: "false", text: "否" },
+  { label: "否", value: "false", text: "否" }
 ];
 const booleanOptionNames = [...baseOptionNames, "cn"];
 class BooleanField extends BaseField {
@@ -579,7 +579,7 @@ function nonEmptyArrayRequired(message) {
   }
   return arrayValidator;
 }
-const arrayOptionNames = [...baseOptionNames, "arrayType"];
+const arrayOptionNames = [...baseOptionNames, "arrayType", "min", "max"];
 class BaseArrayField extends JsonField {
   get optionNames() {
     return arrayOptionNames;
@@ -629,9 +629,9 @@ class ArrayField extends BaseArrayField {
       BooleanField,
       AliossField,
       AliossImageField,
-      AliossListField,
-      AliossImageListField,
-      SfzhField,
+      // AliossListField,
+      // AliossImageListField,
+      SfzhField
     };
     const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1);
     const cls = maps[`${capitalize(this.arrayType || "string")}Field`];
@@ -668,7 +668,7 @@ class TableField extends BaseArrayField {
     if (!this.model.tableName) {
       this.model.materializeWithTableName({
         tableName: this.name,
-        label: this.label,
+        label: this.label
       });
     }
     return this;
@@ -723,7 +723,7 @@ const datetimeOptionNames = [
   "precision",
   "timezone",
   "valueFormat", // antdv
-  "timeFormat", // antdv
+  "timeFormat" // antdv
 ];
 class DatetimeField extends BaseField {
   type = "datetime";
@@ -811,7 +811,7 @@ const VALID_FOREIGN_KEY_TYPES = {
   float: Number,
   datetime: Validator.datetime,
   date: Validator.date,
-  time: Validator.time,
+  time: Validator.time
 };
 const foreignkeyOptionNames = [
   ...baseOptionNames,
@@ -826,7 +826,7 @@ const foreignkeyOptionNames = [
   "limitQueryName",
   "autocomplete",
   "choicesUrl",
-  "tableName",
+  "tableName"
 ];
 class ForeignkeyField extends BaseField {
   type = "foreignkey";
@@ -981,7 +981,7 @@ const aliossOptionNames = [
   "maxCount", // antdv
   "multiple", // antdv
   "accept", // antdv
-  "buttonText", // antdv
+  "buttonText" // antdv
 ];
 const mapToAntdFileValue = (url = "") => {
   const name = url.split("/").pop();
@@ -992,7 +992,7 @@ const mapToAntdFileValue = (url = "") => {
         status: "done",
         url: url,
         extname: name.split(".")[1], // uni
-        ossUrl: url,
+        ossUrl: url
       };
 };
 class AliossField extends StringField {
@@ -1014,7 +1014,7 @@ class AliossField extends StringField {
     const { data } = await Http.post(this.payloadUrl, {
       ...options,
       size: options.size || this.size,
-      lifetime: options.lifetime || this.lifetime,
+      lifetime: options.lifetime || this.lifetime
     });
     return data;
   }
@@ -1065,23 +1065,23 @@ class AliossListField extends AliossField {
   type = "aliossList";
   dbType = "jsonb";
   getValidators(validators) {
-    return ArrayField.prototype.getValidators.call(this, validators);
+    return BaseArrayField.prototype.getValidators.call(this, validators);
   }
   getEmptyValueToUpdate() {
     return [];
   }
   getOptions(options) {
     return {
-      ...ArrayField.prototype.getOptions.call(this, options),
+      ...BaseArrayField.prototype.getOptions.call(this, options),
       ...AliossField.prototype.getOptions.call(this, options),
       type: "aliossList",
-      dbType: "jsonb",
+      dbType: "jsonb"
     };
   }
   json() {
     return {
-      ...ArrayField.prototype.json.call(this),
-      ...AliossField.prototype.json.call(this),
+      ...BaseArrayField.prototype.json.call(this),
+      ...AliossField.prototype.json.call(this)
     };
   }
   toFormValue(urls) {
@@ -1131,5 +1131,5 @@ export {
   AliossImageField,
   AliossListField,
   AliossImageListField,
-  SfzhField,
+  SfzhField
 };

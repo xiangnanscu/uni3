@@ -84,17 +84,9 @@ const sendValue = (value) => {
   emit("update:modelValue", value);
 };
 const blurValidate = () => {
-  // uniFormItem.onFieldChange(props.modelValue);
   emit("blur:validate", props.modelValue);
-  // if (props.error) emit("update:error", "");
-  // try {
-  //   sendValue(field.validate(props.modelValue));
-  //   if (props.error) emit("update:error", "");
-  // } catch (error) {
-  //   console.error(error);
-  //   emit("update:error", error.message);
-  // }
 };
+const isArrayField = computed(() => field.type == "array");
 </script>
 <template>
   <template v-if="field.autocomplete">
@@ -146,12 +138,15 @@ const blurValidate = () => {
   ></uni-easyinput>
   <template v-else-if="field.choices">
     <uni-data-checkbox
-      v-if="field.tag == 'radio'"
+      v-if="isArrayField || field.tag == 'radio'"
       @update:modelValue="sendValue"
       :modelValue="props.modelValue"
       :disabled="field.disabled"
       :localdata="field.choices"
-      mode="tag"
+      :multiple="isArrayField ? true : false"
+      :max="isArrayField ? field.max || Infinity : 1"
+      :min="field.min || 0"
+      :mode="isArrayField ? 'list' : 'tag'"
     ></uni-data-checkbox>
     <uni-data-select
       v-else

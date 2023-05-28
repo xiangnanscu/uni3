@@ -93,11 +93,7 @@ const setupNav = () => {
           return opts;
         }
         const loginUrl = `${loginPage}?redirect=${encodeURIComponent(url)}`;
-        console.log(
-          "路由拦截-需要登陆",
-          opts.url,
-          JSON.stringify({ session, sessionCookie })
-        );
+        console.log("路由拦截-需要登陆", opts.url);
         uni.redirectTo({ ...opts, url: loginUrl });
         return false;
       },

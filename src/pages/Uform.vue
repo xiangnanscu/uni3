@@ -2,8 +2,7 @@
   <page-layout>
     <!-- <inline-test></inline-test>
       <button @click="testHmr">当前热</button> -->
-    <model-form-uni :model="testModel" action-url="/h1" @send-data="submit">
-    </model-form-uni>
+    <model-form-uni :model="testModel" @sendData="submit"> </model-form-uni>
   </page-layout>
 </template>
 
@@ -16,10 +15,9 @@ const btn = ref();
 const submit = (data) => {
   console.log("submit", data);
 };
-const fire = (e) => {
-  console.log("validate", e);
-};
+const fire = (e) => {};
 onMounted(() => {
+  console.log("Uform");
   showButton.value = true;
 });
 const testModel = Model.createModel({
@@ -28,6 +26,23 @@ const testModel = Model.createModel({
       label: "头像",
       size: "1M",
       type: "aliossImage"
+    },
+    xm: {
+      label: "姓名",
+      disabled: false
+    },
+    sfzh: { label: "身份证号", type: "sfzh" },
+    dwmc: {
+      label: "单位名称",
+      choices: ["阳春镇人民政府", "江安镇便民中心"],
+      autocomplete: true
+    },
+    ah: {
+      label: "爱好",
+      type: "array",
+      max: 3,
+      min: 1,
+      choices: ["阅读", "吃", "游泳", "其他"]
     },
     grjl: {
       label: "个人简历",
@@ -65,13 +80,7 @@ const testModel = Model.createModel({
       size: "350M",
       type: "alioss"
     },
-    xm: {
-      label: "姓名",
-      disabled: false,
-      choices: ["李四", "张三"],
-      autocomplete: true
-    },
-    sfzh: { label: "身份证号", type: "sfzh" },
+
     age: { label: "年龄", type: "integer" },
     weight: { label: "体重", type: "float" },
     bj: {

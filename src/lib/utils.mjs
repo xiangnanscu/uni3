@@ -36,7 +36,7 @@ export const decodeBase64 = (s) =>
   );
 export const repr = (s) => {
   const res = JSON.stringify(s);
-  // console.log(res);
+  console.log(res);
   return res;
 };
 export const fromNow = (value) => {
@@ -201,8 +201,8 @@ export async function gotoPage(opts) {
     }
     return true;
   } catch (error) {
-    console.error("gotoPage error (now fallback to home):", error);
-    await uni.switchTab(tabbarPages[0]);
+    console.error("gotoPage error", error);
+    // await uni.switchTab(tabbarPages[0]);
     return false;
   }
 }
