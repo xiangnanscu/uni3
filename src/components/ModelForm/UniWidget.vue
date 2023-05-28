@@ -100,10 +100,13 @@ const isArrayField = computed(() => field.type == "array");
       suffixIcon="forward"
     />
     <uni-popup ref="autocompletePopupRef" type="bottom" background-color="#fff">
-      <uni-section :title="field.label" padding>
+      <div style="padding: 1em">
+        <div style="text-align: center; margin-bottom: 1em">
+          {{ field.label }}
+        </div>
         <input
           v-model="autocompleteSearchText"
-          :placeholder="field.hint || '输入关键字'"
+          :placeholder="field.hint || '输入关键字查找'"
           focus
         />
         <scroll-view :scroll-y="true" style="height: 31em">
@@ -117,7 +120,6 @@ const isArrayField = computed(() => field.type == "array");
               clickable
               @click="
                 sendValue(c.value);
-                autocompleteSearchText = '';
                 autocompletePopupRef.close();
               "
               :key="i"
@@ -126,7 +128,7 @@ const isArrayField = computed(() => field.type == "array");
             />
           </uni-list>
         </scroll-view>
-      </uni-section>
+      </div>
     </uni-popup>
   </template>
   <uni-easyinput
