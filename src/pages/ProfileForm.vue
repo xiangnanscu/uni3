@@ -66,7 +66,8 @@ export default {
           avatar: this.profileData.avatar.url
         };
         await Http.post("/update_profile", user);
-        this.$store.commit("login", {
+        const { login } = useSession();
+        login({
           ...this.user,
           ...user
         });

@@ -55,7 +55,6 @@ export default {
       );
       console.log({ data });
       await utils.tryGotoPage();
-      // this.$store.commit("setMessage", "修改成功");
       uni.showToast({
         icon: "success",
         title: "修改成功",

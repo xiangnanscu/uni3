@@ -33,6 +33,7 @@ const setupRequest = () => {
       if (!/^https?|^\/\//.test(args.url)) args.url = baseURL + args.url;
     },
     success({ data, statusCode, header, cookies }) {
+      console.log("success", { statusCode });
       // console.log("global uni.request success:", {
       //   data,
       //   statusCode,
@@ -48,10 +49,10 @@ const setupRequest = () => {
       }
     },
     fail(err) {
-      // console.log("global uni.request fail:", err);
+      console.log("global uni.request fail:", err);
     },
     complete(args) {
-      // console.log("global uni.request complete:", args);
+      console.log("global uni.request complete:", args);
       const store = useStore();
       store.loading = false;
       uni.hideLoading();

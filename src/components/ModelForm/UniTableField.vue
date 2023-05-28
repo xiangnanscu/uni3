@@ -89,7 +89,7 @@ const tagColorArray = [
   <uni-popup ref="createFormRef" type="bottom" background-color="#fff">
     <model-form-uni
       v-if="showCreateForm"
-      @submit="onSuccessCreate"
+      @sendData="onSuccessCreate"
       :model="adminModel"
       :values="adminModel.getDefaults()"
       style="padding: 1em 3px"
@@ -98,7 +98,7 @@ const tagColorArray = [
   <uni-popup ref="updateFormRef" type="bottom" background-color="#fff">
     <model-form-uni
       v-if="showUpdateForm"
-      @submit="onSuccessUpdate"
+      @sendData="onSuccessUpdate"
       :model="adminModel"
       :values="currentRow"
       style="padding: 1em 3px"

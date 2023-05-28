@@ -21,7 +21,6 @@
       "style": { "navigationBarTitleText": "" }
     },
     { "path": "pages/GoddessList", "style": { "navigationBarTitleText": "" } },
-    { "path": "pages/login", "style": { "navigationBarTitleText": "" } },
     {
       "path": "pages/MessageDetail",
       "style": { "navigationBarTitleText": "" }
@@ -53,7 +52,10 @@
       "path": "pages/VolplanDetail",
       "style": { "navigationBarTitleText": "" }
     },
-    { "path": "pages/VolplanList", "style": { "navigationBarTitleText": "" } }
+    { "path": "pages/VolplanList", "style": { "navigationBarTitleText": "" } },
+    { "path": "pages/Login", "style": { "navigationBarTitleText": "" } },
+    { "path": "pages/LoginH5", "style": { "navigationBarTitleText": "" } },
+    { "path": "pages/LoginWx", "style": { "navigationBarTitleText": "" } }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",

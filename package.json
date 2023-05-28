@@ -59,7 +59,7 @@
     "replace": "yarn find -exec  sed -i s/${old}/${new}/g {} \\;",
     "rename": "rename s/xodel/model/g src/*",
     "vpn": "sshuttle --dns -r root@rsks.ren 0.0.0.0/0 -x rsks.ren",
-    "npm:reset": "rm -rf node_modules && rm package-lock.json && npm install",
+    "npm:reset": "rm -rf node_modules && npm ci",
     "re": "yarn nginx:reload",
     "prisma": "prisma-include prisma/schema.include.prisma > prisma/schema.prisma && yarn env prisma",
     "busted": "yarn resty -I spec bin/busted.lua -o utfTerminal",

@@ -68,16 +68,16 @@ export default {
     }
   },
   methods: {
-     async  getWxUser() {
-  const { code, errMsg } = await uni.login();
-  if (errMsg !== "login:ok") {
-    throw new Error(errMsg);
-  }
-  const { data: user } = await Http.post("/wx_login", {
-    code
-  });
-  return user;
-},
+    async getWxUser() {
+      const { code, errMsg } = await uni.login();
+      if (errMsg !== "login:ok") {
+        throw new Error(errMsg);
+      }
+      const { data: user } = await Http.post("/wx_login", {
+        code
+      });
+      return user;
+    },
     async wxLogin() {
       const { login } = useSession();
       login(this.userData);
