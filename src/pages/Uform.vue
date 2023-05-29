@@ -1,24 +1,17 @@
 <template>
   <page-layout>
-    <!-- <inline-test></inline-test>
-      <button @click="testHmr">当前热</button> -->
     <modelform-uni :model="testModel" @sendData="submit"> </modelform-uni>
   </page-layout>
 </template>
 
 <script setup>
-const testHmr = () => {
-  uni.showToast({ title: "212" });
-};
-const showButton = ref(false);
-const btn = ref();
 const submit = (data) => {
   console.log("submit", data);
 };
-const fire = (e) => {};
-onMounted(() => {
-  console.log("Uform");
-  showButton.value = true;
+onMounted(async () => {
+  console.log("Uform onMounted");
+  const res = await Http.get("/h1");
+  console.log({ res });
 });
 const testModel = Model.createModel({
   fields: {

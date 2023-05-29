@@ -43,6 +43,7 @@ export default {
     };
   },
   async onShow() {
+    console.log("loginWx onShow");
     const user = await this.getWxUser();
     uni.hideLoading();
     this.profileData.id = user.id;
@@ -83,6 +84,7 @@ export default {
         !this.redirect || this.redirect.includes(process.env.UNI_LOGIN_PAGE)
           ? process.env.UNI_HOME_PAGE
           : this.redirect;
+      // console.log({safeRedirect})
       await utils.gotoPage({
         url: safeRedirect || process.env.UNI_HOME_PAGE,
         redirect: true

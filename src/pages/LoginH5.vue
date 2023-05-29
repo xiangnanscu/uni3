@@ -6,16 +6,15 @@
     label-align="left"
     :show-modal="true"
     @success-post="successPost"
-    :success-route="redirect"
+    :success-url="redirect"
   >
   </modelform-uni>
 </template>
 
 <script setup>
-const { redirect } = useRedirect();
+const { redirect } = useRedirect({ decode: true });
 const successPost = (user) => {
   const { login } = useSession();
-  console.log({ user });
   login(user);
 };
 const loginModel = Model.createModel({

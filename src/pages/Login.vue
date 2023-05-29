@@ -1,17 +1,20 @@
 <template>
   <page-layout>
-    <!-- #ifdef MP-WEIXIN -->
-    <LoginWx />
-    <!-- #endif -->
-    <!-- #ifdef H5 -->
-    <LoginH5 />
-    <!-- #endif -->
+    <div>请稍候...</div>
   </page-layout>
 </template>
 
 <script setup>
-import LoginH5 from "./LoginH5.vue";
-import LoginWx from "./LoginWx.vue";
-const store = useStore();
-store.message = "请先登陆";
+const { redirect } = useRedirect({ decode: false });
+onLoad((query) => {
+  console.log("Login.vue onLoad..");
+  // #ifdef MP-WEIXIN
+  console.log("Login.vue redirect.value", redirect.value);
+  uni.redirectTo({ url: `/pages/LoginWx?redirect=${redirect.value}` });
+  // #endif
+
+  // #ifdef H5
+  uni.redirectTo({ url: `/pages/LoginH5?redirect=${redirect.value}` });
+  // #endif
+});
 </script>

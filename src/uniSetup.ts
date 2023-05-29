@@ -35,6 +35,7 @@ const setupRequest = () => {
     },
     success({ data, statusCode, header, cookies }) {
       // 微信小程序任何code都算成功
+      console.log({ cookies });
       if (statusCode < 600 && statusCode >= 500) {
         uni.showToast({
           icon: "none",
@@ -69,6 +70,8 @@ const loginPage = process.env.UNI_LOGIN_PAGE;
 const whiteList = [
   process.env.UNI_HOME_PAGE,
   loginPage,
+  "/pages/LoginH5",
+  "/pages/LoginWx",
   "/pages/tabbar/ProfileMy"
 ];
 
@@ -92,7 +95,9 @@ const setupNav = () => {
         if (sessionCookie && session?.user?.id) {
           return opts;
         }
-        const loginUrl = `${loginPage}?redirect=${encodeURIComponent(url)}`;
+        const loginUrl = `${loginPage}?redirect=${encodeURIComponent(
+          opts.url
+        )}`;
         console.log("路由拦截-需要登陆", opts.url);
         uni.redirectTo({ ...opts, url: loginUrl });
         return false;

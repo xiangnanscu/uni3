@@ -8,7 +8,7 @@ const props = defineProps({
   errors: { type: Object, default: () => ({}) },
   syncValues: { type: Boolean, default: false },
   actionUrl: { type: String, required: false },
-  successRoute: { type: [Object, String] },
+  successUrl: { type: [Object, String] },
   method: { type: String, default: "POST" }, // get
   hideSubmitButton: { type: Boolean, default: false },
   submitButtonText: { type: String, default: "提交" },
@@ -113,8 +113,8 @@ const submit = async () => {
         });
       } else {
         emit("successPost", realData);
-        if (props.successRoute) {
-          utils.gotoPage({ url: props.successRoute });
+        if (props.successUrl) {
+          utils.gotoPage({ url: props.successUrl });
         }
       }
     } else if (response.data.type == "uni_error") {
@@ -125,8 +125,8 @@ const submit = async () => {
       });
     } else {
       emit("successPost", realData);
-      if (props.successRoute) {
-        utils.gotoPage({ url: props.successRoute });
+      if (props.successUrl) {
+        utils.gotoPage({ url: props.successUrl });
       }
     }
   } catch (error) {
