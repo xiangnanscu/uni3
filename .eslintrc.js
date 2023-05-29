@@ -38,6 +38,7 @@ module.exports = {
     // 这里必须以./开头,否则不会被识别为文件路径
     "./src/unplugin/.eslintrc-auto-import.json",
     "plugin:vue/vue3-essential",
+    // "plugin:vue/recommended",
     "eslint:recommended",
     "@vue/eslint-config-typescript",
     "@vue/eslint-config-prettier/skip-formatting"

@@ -13,6 +13,7 @@ const props = defineProps({
   hideSubmitButton: { type: Boolean, default: false },
   submitButtonText: { type: String, default: "提交" },
   errShowType: { type: String, default: "undertext" },
+  showModal: { type: Boolean, default: false },
   labelPosition: { type: String, default: "left" }, // top
   labelWidth: { type: [String, Number], default: "5em" },
   labelAlign: { type: String, default: "right" }, //center, right
@@ -68,35 +69,65 @@ onMounted(() => {
 // #endif
 
 const submiting = ref(false);
-
 const submit = async () => {
   resetErrors();
   formRef.value.clearValidate();
   const cleanedData = await formRef.value.validate();
-  const data = props.model.toPostValue(cleanedData, props.model.names);
+  const formdata = props.model.toPostValue(cleanedData, props.model.names);
   if (vm.vnode.props.onSendData) {
-    emit("sendData", data);
+    emit("sendData", formdata);
   }
   if (!props.actionUrl) {
     return;
   }
   submiting.value = true;
   try {
-    const { data: respnseData, statusCode } = await Http.post(
-      props.actionUrl,
-      data
-    );
-    if (respnseData?.http_code == 422) {
-      errors[respnseData.name] = respnseData.message;
+    const response = await Http.post(props.actionUrl, formdata);
+    const realData =
+      response.data.type == "uni_error" ? response.data.data : response.data;
+    if (typeof realData == "object") {
+      const dataType = realData.type;
+      if (dataType == "field_error") {
+        errors[realData.name] = realData.message;
+        if (props.showModal && props.errShowType !== "modal") {
+          uni.showModal({
+            title: `“${realData.label}”:${realData.message}`,
+            showCancel: false
+          });
+        }
+      } else if (dataType == "field_error_batch") {
+        errors[realData.name] = realData.message;
+        if (props.showModal && props.errShowType !== "modal") {
+          uni.showModal({
+            title: `“${realData.label}”第${realData.index}行错误`,
+            content: realData.message,
+            showCancel: false
+          });
+        }
+      } else if (dataType == "model_errors") {
+        Object.assign(errors, realData.errors);
+        uni.showModal({
+          title: `错误`,
+          content: "请根据红色提示信息修改",
+          showCancel: false
+        });
+      } else {
+        emit("successPost", realData);
+        if (props.successRoute) {
+          utils.gotoPage({ url: props.successRoute });
+        }
+      }
+    } else if (response.data.type == "uni_error") {
       uni.showModal({
-        title: `“${respnseData.label}”错误`,
-        content: respnseData.message,
+        title: realData,
+        editable: false,
         showCancel: false
       });
-    }
-    emit("successPost", respnseData);
-    if (props.successRoute) {
-      utils.gotoPage({ url: props.successRoute });
+    } else {
+      emit("successPost", realData);
+      if (props.successRoute) {
+        utils.gotoPage({ url: props.successRoute });
+      }
     }
   } catch (error) {
     console.error(error);
@@ -136,7 +167,7 @@ const submit = async () => {
               style="display: flex; flex-direction: row; align-items: center"
             >
               <div style="flex: auto; width: 80%">
-                <model-form-uni-widget
+                <modelform-uni-widget
                   v-model="values[field.name][index]"
                   v-model:error="errors[field.name][index]"
                   @blur:validate="
@@ -180,7 +211,7 @@ const submit = async () => {
           :name="field.name"
           :error-message="errors[field.name]"
         >
-          <model-form-uni-table-field
+          <modelform-uni-table-field
             :modelValue="values[field.name]"
             @update:modelValue="
               formsItemRefs[field.name].onFieldChange($event);
@@ -203,7 +234,7 @@ const submit = async () => {
             : errors[field.name]
         "
       >
-        <model-form-uni-widget
+        <modelform-uni-widget
           :modelValue="values[field.name]"
           @update:modelValue="values[field.name] = $event"
           @blur:validate="formsItemRefs[field.name].onFieldChange($event)"

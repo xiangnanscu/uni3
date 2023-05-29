@@ -87,22 +87,22 @@ const tagColorArray = [
 </script>
 <template>
   <uni-popup ref="createFormRef" type="bottom" background-color="#fff">
-    <model-form-uni
+    <modelform-uni
       v-if="showCreateForm"
       @sendData="onSuccessCreate"
       :model="adminModel"
       :values="adminModel.getDefaults()"
       style="padding: 1em 3px"
-    ></model-form-uni>
+    ></modelform-uni>
   </uni-popup>
   <uni-popup ref="updateFormRef" type="bottom" background-color="#fff">
-    <model-form-uni
+    <modelform-uni
       v-if="showUpdateForm"
       @sendData="onSuccessUpdate"
       :model="adminModel"
       :values="currentRow"
       style="padding: 1em 3px"
-    ></model-form-uni>
+    ></modelform-uni>
   </uni-popup>
   <button type="primary" size="mini" @click="openCreateForm">
     <uni-icons type="plusempty" style="color: #fff"></uni-icons>
@@ -169,18 +169,18 @@ const tagColorArray = [
       </uni-td>
       <uni-td class="compact-td">
         <span>
-          <model-form-uni-mini-button
+          <modelform-uni-mini-button
             style="margin-right: 2px"
             @click="onClickEdit(index)"
           >
             编辑
-          </model-form-uni-mini-button>
-          <model-form-uni-mini-button
+          </modelform-uni-mini-button>
+          <modelform-uni-mini-button
             style="color: red"
             @click.prevent="deleteRecord(index)"
           >
             删除
-          </model-form-uni-mini-button>
+          </modelform-uni-mini-button>
         </span>
       </uni-td>
     </uni-tr>

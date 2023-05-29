@@ -2,7 +2,7 @@
   <page-layout>
     <!-- <inline-test></inline-test>
       <button @click="testHmr">当前热</button> -->
-    <model-form-uni :model="testModel" @sendData="submit"> </model-form-uni>
+    <modelform-uni :model="testModel" @sendData="submit"> </modelform-uni>
   </page-layout>
 </template>
 

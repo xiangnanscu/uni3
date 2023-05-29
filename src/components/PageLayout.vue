@@ -34,7 +34,10 @@ const { message, error } = storeToRefs(useStore());
 }
 
 .global-error {
+  height: 2em;
+  line-height: 2em;
   padding: 5px;
+  margin-bottom: 5px;
   color: #b02a37;
   background-color: #f8d7da;
   text-align: center;
@@ -42,7 +45,10 @@ const { message, error } = storeToRefs(useStore());
 }
 
 .global-message {
+  height: 2em;
+  line-height: 2em;
   padding: 5px;
+  margin-bottom: 5px;
   color: #0a58ca;
   background-color: #cfe2ff;
   text-align: center;

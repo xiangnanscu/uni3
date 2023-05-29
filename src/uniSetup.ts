@@ -47,7 +47,7 @@ const setupRequest = () => {
       console.log("global uni.request fail:", err);
     },
     complete(args) {
-      // console.log("global uni.request complete:", args);
+      console.log("global uni.request complete:", args);
       const store = useStore();
       store.loading = false;
       uni.hideLoading();

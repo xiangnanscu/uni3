@@ -25,7 +25,12 @@ const plugins = [
       filepath: "./src/unplugin/.eslintrc-auto-import.json", // Default `./.eslintrc-auto-import.json`
       globalsPropValue: true // Default `true`, (true | false | 'readonly' | 'readable' | 'writable' | 'writeable')
     },
-    imports: ["vue", "pinia", "@vueuse/core"],
+    imports: [
+      "vue",
+      "pinia",
+      "@vueuse/core",
+      { "@dcloudio/uni-app": ["onReady", "onLoad"] }
+    ],
     dts: "./src/unplugin/auto-imports.d.ts",
     vueTemplate: true,
     include: [/\.[tj]sx?$/, /\.vue$/, /\.vue\?vue/],

@@ -33,7 +33,9 @@
     "source.fixAll.eslint": true,
     "source.fixAll.stylelint": true
   },
-  "eslint.validate": [
+  "eslint.probe": [
+    "html",
+    "vue",
     "javascript",
     "javascriptreact",
     "typescript"

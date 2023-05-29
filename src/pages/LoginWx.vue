@@ -1,30 +1,28 @@
 <template>
-  <page-layout>
-    <div v-if="needCompleteProfile === null">请稍候...</div>
-    <div v-show="needCompleteProfile">
-      <uni-notice-bar text="首次登陆，请完善头像和昵称" />
-      <uni-forms
-        ref="valiForm"
-        :rules="rules"
-        :model-value="profileData"
-        label-position="left"
-      >
-        <uni-forms-item label="头像" name="avatar">
-          <x-picker v-model="profileData.avatar" />
-        </uni-forms-item>
-        <uni-forms-item label="昵称" name="nickname">
-          <uni-easyinput
-            v-model="profileData.nickname"
-            placeholder="请输入昵称"
-            type="nickname"
-          />
-        </uni-forms-item>
-      </uni-forms>
-      <button type="primary" @click="submitLoginData('valiForm')">
-        微信登录
-      </button>
-    </div>
-  </page-layout>
+  <div v-if="needCompleteProfile === null">请稍候...</div>
+  <div v-show="needCompleteProfile">
+    <uni-notice-bar text="首次登陆，请完善头像和昵称" />
+    <uni-forms
+      ref="valiForm"
+      :rules="rules"
+      :model-value="profileData"
+      label-position="left"
+    >
+      <uni-forms-item label="头像" name="avatar">
+        <x-picker v-model="profileData.avatar" />
+      </uni-forms-item>
+      <uni-forms-item label="昵称" name="nickname">
+        <uni-easyinput
+          v-model="profileData.nickname"
+          placeholder="请输入昵称"
+          type="nickname"
+        />
+      </uni-forms-item>
+    </uni-forms>
+    <button type="primary" @click="submitLoginData('valiForm')">
+      微信登录
+    </button>
+  </div>
 </template>
 
 <script>
