@@ -3,6 +3,27 @@
 - wget https://raw.githubusercontent.com/xiangnanscu/wsl/master/pre-install.sh && chmod a+x pre-install.sh && ./pre-install.sh
 - wget https://raw.githubusercontent.com/xiangnanscu/wsl/master/install.sh && chmod a+x install.sh && ./install.sh
 
+```
+<template>
+  <page-layout>
+    <!-- #ifdef MP-WEIXIN -->
+    <LoginWx />
+    <!-- #endif -->
+    <!-- #ifdef H5 -->
+    <LoginH5 />
+    <!-- #endif -->
+  </page-layout>
+</template>
+
+<script setup>
+import LoginH5 from "./LoginH5.vue";
+import LoginWx from "./LoginWx.vue";
+const store = useStore();
+store.message = "请先登陆";
+</script>
+
+```
+
 # 日志解析
 
 # GIT
