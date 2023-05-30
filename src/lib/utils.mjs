@@ -215,7 +215,7 @@ export async function gotoPage(opts) {
 }
 export async function tryGotoPage(opts) {
   if (!opts?.url) {
-    if (opts.redirect) {
+    if (opts?.redirect) {
       return await gotoPage({
         url: opts.redirect
       });

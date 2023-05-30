@@ -1,51 +1,11 @@
 <template>
   <page-layout>
-    <uni-list :border="false">
-      <uni-list-item
-        v-for="(item, index) in threads"
-        :key="index"
-        :to="`/pages/ThreadDetail?id=${item.id}`"
-      >
-        <template v-slot:header>
-          <view class="slot-box">
-            <image
-              class="thread-avatar slot-image"
-              :src="item.creator.avatar"
-              mode="widthFix"
-            ></image>
-          </view>
-        </template>
-        <template v-slot:body
-          ><text class="thread-body slot-box slot-text">{{ item.title }}</text>
-        </template>
-        <template v-slot:footer>
-          <view
-            ><view class="thread-header">{{ item.creator.nickname }}</view>
-            <view class="thread-footer"
-              ><text>{{ fromNow(item.ctime) }}</text></view
-            >
-          </view></template
-        >
-      </uni-list-item>
-    </uni-list>
-    <uni-pagination
-      v-if="!noPage"
-      :total="total"
-      @change="clickPage"
-      :current="page"
-      :pageSize="pagesize"
-    />
+    <ThreadList :records="threads"></ThreadList>
   </page-layout>
 </template>
 
 <script>
 export default {
-  props: {
-    noPage: { type: Boolean, default: false },
-    records: { type: Array, default: () => [] },
-    pagesize: { type: Number, default: 10 },
-    page: { type: Number, default: 1 }
-  },
   data() {
     return {
       query: {},
@@ -55,29 +15,18 @@ export default {
     };
   },
   async onLoad(query) {
+    console.log("Thread.vue onLoad", query);
     this.query = query;
   },
-  async mounted() {
-    // console.log("mounted", this.records);
-    if (!this.records.length) {
-      await this.fetchData(this.query);
-    } else {
-      this.threads = this.records;
-    }
+  async onShow() {
+    console.log("Thread.vue onShow", this.records);
+    await this.fetchData(this.query);
   },
   methods: {
-    async clickPage(e) {
-      this.current = e.current;
-      await this.fetchData({ page: this.current, pagesize: this.pagesize });
-    },
     async fetchData(query) {
       const {
         data: { records, total }
-      } = await Http.get(
-        `/thread?page=${query.page || this.current}&pagesize=${
-          query.pagesize || this.pagesize
-        }`
-      );
+      } = await Http.get(`/thread?page=1&pagesize=${query.pagesize || 100}`);
       this.threads = records;
       this.total = total;
     }

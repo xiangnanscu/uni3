@@ -21,6 +21,7 @@ declare module '@vue/runtime-core' {
     ScoreRadar: typeof import('./../components/ScoreRadar.vue')['default']
     ThreadBody: typeof import('./../components/thread-body.vue')['default']
     ThreadHead: typeof import('./../components/thread-head.vue')['default']
+    ThreadList: typeof import('./../components/thread-list.vue')['default']
     UploadFile: typeof import('./../components/upload-file.vue')['default']
     UploadImage: typeof import('./../components/upload-image.vue')['default']
     WxLogin: typeof import('./../components/WxLogin.vue')['default']

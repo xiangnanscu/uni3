@@ -1,12 +1,12 @@
 <template>
   <view class="uni-file-picker__container">
-    <view v-if="moelValue.url" class="file-picker__box" :style="boxStyle">
+    <view v-if="modelValue.url" class="file-picker__box" :style="boxStyle">
       <view class="file-picker__box-content" :style="borderStyle">
         <image
           class="file-image"
-          :src="value.url"
+          :src="modelValue.url"
           mode="aspectFill"
-          @click.stop="prviewImage(value, 0)"
+          @click.stop="prviewImage(modelValue, 0)"
         ></image>
         <view
           v-if="delIcon && !readonly"
@@ -17,9 +17,9 @@
           <view class="icon-del rotate"></view>
         </view>
         <view
-          v-if="value.errMsg"
+          v-if="modelValue.errMsg"
           class="file-picker__mask"
-          @click.stop="uploadFiles(value, 0)"
+          @click.stop="uploadFiles(modelValue, 0)"
         >
           点击重试
         </view>
@@ -53,7 +53,7 @@ export default {
     };
   },
   props: {
-    moelValue: {
+    modelValue: {
       type: Object,
       default() {
         return { url: "", errMsg: "" };
@@ -198,9 +198,7 @@ export default {
         this.$emit("choose");
       }
       if (this.disablePreview) return;
-      this.filesList.forEach((i) => {
-        urls.push(i.url);
-      });
+      urls.push(this.modelValue.url);
 
       uni.previewImage({
         urls: urls,

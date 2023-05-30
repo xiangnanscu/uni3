@@ -59,18 +59,13 @@
           </view>
         </template> -->
     </uni-card>
-    <ThreadList :pagesize="3" :noPage="true" :records="threads"></ThreadList>
+    <ThreadList :records="threads"></ThreadList>
   </page-layout>
 </template>
 
 <script>
-import ThreadList from "../ThreadList.vue";
-
 // console.log({ ThreadList });
 export default {
-  components: {
-    ThreadList
-  },
   watch: {
     imageList(res) {}
   },
@@ -137,6 +132,7 @@ export default {
   },
   computed: {},
   async onShow() {
+    console.log("Home.vue onShow");
     this.threads = [];
     this.noticeText = await this.getNoticeBar();
     this.threads = await this.getThreads();

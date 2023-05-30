@@ -48,7 +48,7 @@
       </scroll-view>
 
       <uni-row class="chat-foot" justify="space-between">
-        <uni-col :span="20">
+        <uni-col :span="19">
           <textarea
             v-model="messageText"
             auto-height
@@ -56,7 +56,7 @@
             placeholder="请输入内容"
           ></textarea>
         </uni-col>
-        <uni-col :span="4">
+        <uni-col :span="5">
           <button type="primary" size="mini" @click="sendMessage">发送</button>
         </uni-col>
       </uni-row>
@@ -91,6 +91,14 @@ export default {
       }
       const res = e.creator.id === this.chatId ? e.creator : e.target;
       return res;
+    },
+    sender() {
+      const e = this.messages[0];
+      if (!e) {
+        return null;
+      }
+      const res = e.creator.id === this.chatId ? e.target : e.creator;
+      return res;
     }
   },
   methods: {
@@ -102,6 +110,9 @@ export default {
         target: this.chatId,
         content: this.messageText
       });
+      data.creator = this.sender;
+      data.target = this.receiver;
+      // console.log(this.messages.slice(-1), this.sender);
       this.messages.push(data);
       this.messageText = "";
       uni.showToast({ icon: "none", title: "发送成功" });
