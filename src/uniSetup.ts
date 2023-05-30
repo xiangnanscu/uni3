@@ -3,9 +3,13 @@ import { useStore } from "@/store";
 import { useSession } from "@/store/session";
 
 const viteEnv = import.meta.env;
+// console.log("uni.getSystemInfo", uni.getSystemInfoSync());
+const platform = uni.getSystemInfoSync().uniPlatform;
 const baseURL =
   process.env.NODE_ENV == "production"
     ? `${viteEnv.VITE_HTTPS == "on" ? "https" : "http"}://${viteEnv.VITE_HOST}`
+    : platform == "web" || platform == "h5"
+    ? `http://localhost:${viteEnv.VITE_APP_PORT}${viteEnv.VITE_PROXY_PREFIX}`
     : `http://localhost:${process.env.NGINX_listen}`;
 const cookieNames = ["session"];
 

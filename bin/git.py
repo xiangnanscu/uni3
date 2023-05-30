@@ -2,7 +2,7 @@ import re
 import os
 import sys
 import datetime
-
+import platform
 import argparse
 
 import subprocess
@@ -41,7 +41,13 @@ if args.production:
     migrate_token = "--push-option=migrate:commit"  if args.migrate else ""
     exec(f"git push p master {migrate_token};")
 
-if args.github:
+
+
+if platform.system().lower() == 'windows':
+    if args.github:
+       exec('git push origin master')
+elif platform.system().lower() == 'linux':
+  if args.github:
     exec('''while true
 do
   git push origin master
@@ -54,3 +60,7 @@ do
     sleep 1
   fi
 done''')
+
+
+
+

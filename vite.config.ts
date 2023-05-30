@@ -9,6 +9,7 @@ import { fileURLToPath, URL } from "node:url";
 import ViteRequireContext from "@originjs/vite-plugin-require-context";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 
+const env = process.env;
 const plugins = [
   Components({
     // https://github.com/antfu/unplugin-vue-components#configuration
@@ -82,6 +83,9 @@ const envKeys = Object.fromEntries(
     toLiteral(v)
   ])
 );
+const VITE_PROXY_PREFIX = process.env.VITE_PROXY_PREFIX || "/proxy";
+const VITE_PROXY_PREFIX_REGEX = new RegExp("^" + VITE_PROXY_PREFIX);
+const VITE_APP_NAME = process.env.VITE_APP_NAME;
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins,
@@ -103,5 +107,20 @@ export default defineConfig({
         javascriptEnabled: true
       }
     }
+  },
+  // #ifdef H5
+  server: {
+    // https://vitejs.dev/config/server-options.html#server-proxy
+    // https://github.com/http-party/node-http-proxy#options
+    port: Number(env.VITE_APP_PORT),
+    strictPort: true,
+    proxy: {
+      [VITE_PROXY_PREFIX]: {
+        target: `http://${env.NGINX_server_name}:${env.NGINX_listen}`,
+        changeOrigin: true,
+        rewrite: (path) => path.replace(VITE_PROXY_PREFIX_REGEX, "")
+      }
+    }
   }
+  // #endif
 });

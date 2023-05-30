@@ -42,10 +42,12 @@ module.exports = {
     "eslint:recommended",
     "@vue/eslint-config-typescript",
     "@vue/eslint-config-prettier/skip-formatting"
+    // "plugin:@typescript-eslint/recommended-requiring-type-checking"
     // "@vue/eslint-config-prettier",
   ],
   parserOptions: {
-    ecmaVersion: "latest"
-    // parserOptions: { tsconfigRootDir: __dirname }
+    ecmaVersion: "latest",
+    // project: true,
+    tsconfigRootDir: __dirname
   }
 };
