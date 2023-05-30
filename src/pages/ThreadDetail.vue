@@ -4,14 +4,26 @@
       <thread-head
         :thread="thread"
         :posts="posts"
-        postCreateUrl="/post/create"
         threadOtherPrefix="/thread/other"
         fkName="thread_id"
-        @appendPosts="posts.push($event)"
       ></thread-head>
       <thread-body :posts="posts"></thread-body>
     </view>
   </page-layout>
+  <div class="thread-reply">
+    <button plain @click="replyClick" type="primary">回复</button>
+  </div>
+  <uni-popup ref="replyPopup" type="bottom" background-color="#fff">
+    <div style="padding: 15px">
+      <textarea
+        focus
+        height="50"
+        :cursorSpacing="90"
+        v-model="currentPost"
+      ></textarea>
+      <button type="primary" @click="replyThread()" plain="true">回复</button>
+    </div>
+  </uni-popup>
 </template>
 
 <script>
@@ -19,6 +31,7 @@ export default {
   data() {
     return {
       thread: null,
+      currentPost: "",
       posts: []
     };
   },
@@ -31,7 +44,42 @@ export default {
       this.thread = thread;
       const { data: posts } = await Http.get(`/post/thread/${this.thread.id}`);
       this.posts = posts;
+    },
+    async replyThread() {
+      const { data: newPost } = await Http.post("/post/create", {
+        content: this.currentPost,
+        thread_id: this.thread.id
+      });
+      console.log("newPost.ctime", newPost.ctime);
+      this.posts.push({
+        id: newPost.id,
+        content: newPost.content,
+        creator: {
+          id: this.user.id,
+          nickname: this.user.nickname,
+          avatar: this.user.avatar
+        },
+        ctime: newPost.ctime
+      });
+      this.$refs.replyPopup.close();
+      uni.pageScrollTo({
+        scrollTop: 2000000, //滚动到页面的目标位置（单位px）
+        duration: 0 //滚动动画的时长，默认300ms，单位 ms
+      });
+    },
+    replyClick() {
+      this.$refs.replyPopup.open();
+      this.currentPost = "";
     }
   }
 };
 </script>
+<style scoped>
+.thread-reply {
+  position: fixed;
+  bottom: 0px;
+  background-color: aliceblue;
+  width: 100%;
+  text-align: center;
+}
+</style>

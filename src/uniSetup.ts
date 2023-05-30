@@ -5,10 +5,11 @@ import { useSession } from "@/store/session";
 const viteEnv = import.meta.env;
 // console.log("uni.getSystemInfo", uni.getSystemInfoSync());
 const platform = uni.getSystemInfoSync().uniPlatform;
+const isWeb = platform == "web" || platform == "h5";
 const baseURL =
   process.env.NODE_ENV == "production"
     ? `${viteEnv.VITE_HTTPS == "on" ? "https" : "http"}://${viteEnv.VITE_HOST}`
-    : platform == "web" || platform == "h5"
+    : isWeb
     ? `http://localhost:${viteEnv.VITE_APP_PORT}${viteEnv.VITE_PROXY_PREFIX}`
     : `http://localhost:${process.env.NGINX_listen}`;
 const cookieNames = ["session"];
@@ -23,23 +24,25 @@ const setupRequest = () => {
         uni.showLoading();
       }
       const header = args.header || {};
+      // #ifdef MP-WEIXIN
       for (const cookieName of cookieNames) {
         const cookieStr = uni.getStorageSync(`cookie_${cookieName}`);
         if (cookieStr) {
           if (header.cookie) {
             header.cookie = `${header.cookie};${cookieName}=${cookieStr}`;
           } else {
-            header.cookie = `session=${cookieStr}`;
+            header.cookie = `${cookieName}=${cookieStr}`;
           }
         }
       }
+      // #endif
       header["Uni-Request"] = "on";
       args.header = header;
       if (!/^https?|^\/\//.test(args.url)) args.url = baseURL + args.url;
     },
     success({ data, statusCode, header, cookies }) {
       // 微信小程序任何code都算成功
-      console.log({ cookies });
+      console.log({ cookies, header });
       if (statusCode < 600 && statusCode >= 500) {
         uni.showToast({
           icon: "none",
@@ -52,11 +55,17 @@ const setupRequest = () => {
       console.log("global uni.request fail:", err);
     },
     complete(args) {
-      console.log("global uni.request complete:", args);
+      // console.log("global uni.request complete:", args);
       const store = useStore();
       store.loading = false;
       uni.hideLoading();
-      for (const cookieStr of args.cookies || []) {
+      const cookies = args.cookies || [];
+      // #ifdef H5
+      if (cookies.length === 0 && args.header["set-cookie-patch"]) {
+        cookies.push(...args.header["set-cookie-patch"].split(", "));
+      }
+      // #endif
+      for (const cookieStr of cookies) {
         const c = cookie.parse(cookieStr);
         for (const cookieName of cookieNames) {
           if (c[cookieName]) {

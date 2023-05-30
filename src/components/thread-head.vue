@@ -28,21 +28,7 @@
         <text user-select class="thread-content">{{ thread.content }}</text>
         <x-album v-if="picsUrls.length" :urls="picsUrls"></x-album>
       </uni-card>
-
-      <button class="button" type="primary" @click="replyClick" plain="true">
-        <text class="button-text">回帖</text>
-      </button>
     </view>
-    <uni-popup ref="replyPopup" type="bottom" background-color="#fff">
-      <div style="padding: 15px">
-        <textarea
-          height="50"
-          :cursorSpacing="90"
-          v-model="currentPost"
-        ></textarea>
-        <button type="primary" @click="replyThread()" plain="true">回复</button>
-      </div>
-    </uni-popup>
   </page-layout>
 </template>
 
@@ -56,38 +42,14 @@ export default {
     fkName: { type: String, default: `thread_id` }
   },
   data() {
-    return {
-      currentPost: "",
-      showUs: false
-    };
+    return {};
   },
   computed: {
     picsUrls() {
       return this.thread?.pics?.map((e) => e) || [];
     }
   },
-  methods: {
-    replyClick() {
-      this.$refs.replyPopup.open();
-      this.currentPost = "";
-    },
-    async replyThread() {
-      const { data: newPost } = await Http.post(this.postCreateUrl, {
-        content: this.currentPost,
-        [this.fkName]: this.thread.id
-      });
-      this.showUs = false;
-      this.$emit("appendPosts", {
-        id: newPost.id,
-        content: newPost.content,
-        creator: {
-          id: this.user.id,
-          nickname: this.user.nickname,
-          avatar: this.user.avatar
-        }
-      });
-    }
-  }
+  methods: {}
 };
 </script>
 

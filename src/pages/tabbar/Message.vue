@@ -46,28 +46,19 @@ export default {
   },
   data() {
     return {
-      query: {},
-      showUs: false,
       messages: []
     };
   },
-  async onLoad(query) {
-    this.query = query;
-  },
   async onShow() {
-    this.showUs = false;
     this.messages = [];
-    await this.fetchData(this.query);
+    console.log("Message.vue onShow");
+    await this.fetchData();
   },
   methods: {
-    async fetchData(query) {
+    async fetchData() {
       const {
         data: { records, total }
-      } = await Http.get(
-        `/message/my?page=${query.page || this.current}&pagesize=${
-          query.pagesize || this.pagesize
-        }`
-      );
+      } = await Http.get(`/message/my`);
       const messages = {};
       for (const e of records) {
         const receiver = e.target.id === this.user.id ? e.creator : e.target;

@@ -1,11 +1,9 @@
 <template>
-  <div>
-    <view class="page-layout">
-      <div v-if="message" class="global-message">{{ message }}</div>
-      <div v-if="error" class="global-error">{{ error }}</div>
-      <slot />
-    </view>
-  </div>
+  <view class="page-layout">
+    <div v-if="message" class="global-message">{{ message }}</div>
+    <div v-if="error" class="global-error">{{ error }}</div>
+    <slot />
+  </view>
 </template>
 <script setup>
 const { message, error } = storeToRefs(useStore());

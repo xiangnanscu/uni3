@@ -10,8 +10,8 @@ const submit = (data) => {
 };
 onMounted(async () => {
   console.log("Uform onMounted");
-  const res = await Http.get("/h1");
-  console.log({ res });
+  const { header } = await uni.request({ url: "/h1" });
+  console.log({ header });
 });
 const testModel = Model.createModel({
   fields: {

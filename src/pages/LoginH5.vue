@@ -13,6 +13,8 @@
 
 <script setup>
 const { redirect } = useRedirect({ decode: true });
+const store = useStore();
+store.message = "请先登录";
 const successPost = (user) => {
   const { login } = useSession();
   login(user);

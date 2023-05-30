@@ -1,5 +1,5 @@
 <template>
-  <page-layout2>
+  <page-layout>
     <view v-if="receiver" class="chat">
       <div class="chat-head">
         {{ receiver.nickname }}
@@ -61,7 +61,7 @@
         </uni-col>
       </uni-row>
     </view>
-  </page-layout2>
+  </page-layout>
 </template>
 
 <script>
@@ -95,11 +95,15 @@ export default {
   },
   methods: {
     async sendMessage() {
+      if (!this.messageText) {
+        return "";
+      }
       const { data } = await Http.post(`/message/create`, {
         target: this.chatId,
         content: this.messageText
       });
-      utils.gotoPage({ url: "/pages/tabbar/Message" });
+      this.messages.push(data);
+      this.messageText = "";
       uni.showToast({ icon: "none", title: "发送成功" });
     },
     async fetchData(chatId) {
@@ -107,7 +111,6 @@ export default {
         data: { records, total }
       } = await Http.get(`/message/chat?id=${chatId}`);
       this.messages = records;
-      this.total = total;
     }
   }
 };

@@ -40,6 +40,9 @@ export const repr = (s) => {
   return res;
 };
 export const fromNow = (value) => {
+  if (!value) {
+    return "";
+  }
   // 拿到当前时间戳和发布时的时间戳
   var curTime = new Date();
   var postTime = new Date(value);
@@ -64,6 +67,8 @@ export const fromNow = (value) => {
     }
   } else if (exceedDay < 7) {
     return `${exceedDay}天前`;
+  } else if (curTime.getFullYear() == postTime.getFullYear()) {
+    return value.slice(5, 10);
   } else {
     return value.slice(0, 10);
   }

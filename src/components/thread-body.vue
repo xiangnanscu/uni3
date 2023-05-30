@@ -1,37 +1,38 @@
 <template>
-  <page-layout>
-    <uni-list>
-      <uni-list-item
-        v-for="(post, index) in posts"
-        :key="index"
-        style="margin-left: -10px"
-      >
-        <template v-slot:header>
-          <view class="slot-box avatar-container">
-            <navigator :url="`/pages/Profile?id=${post.creator.id}`">
-              <image
-                class="post-avatar"
-                :src="post.creator.avatar"
-                mode="widthFix"
-              ></image
-            ></navigator>
-          </view>
-        </template>
-        <template v-slot:body>
-          <view class="post-body"
-            ><view class="post-header">{{ post.creator.nickname }}</view>
-            <view class="post-content"
-              ><text>{{ post.content }}</text></view
-            >
-            <view class="post-footer"
-              ><text>第{{ index + 1 }}楼 {{ fromNow(post.ctime) }}</text></view
-            >
-          </view>
-        </template>
-        <template v-slot:footer> </template>
-      </uni-list-item>
-    </uni-list>
-  </page-layout>
+  <div>
+    <scroll-view :scroll-y="true" :scroll-top="99999">
+      <uni-list>
+        <uni-list-item v-for="(post, index) in posts" :key="index">
+          <template v-slot:header>
+            <view class="slot-box avatar-container">
+              <navigator :url="`/pages/Profile?id=${post.creator.id}`">
+                <image
+                  class="post-avatar"
+                  :src="post.creator.avatar"
+                  mode="widthFix"
+                ></image
+              ></navigator>
+            </view>
+          </template>
+          <template v-slot:body>
+            <view class="post-body"
+              ><view class="post-header">{{ post.creator.nickname }}</view>
+              <view class="post-content"
+                ><text>{{ post.content }}</text></view
+              >
+              <view class="post-footer"
+                ><text
+                  >第{{ index + 1 }}楼 {{ fromNow(post.ctime) }}</text
+                ></view
+              >
+            </view>
+          </template>
+          <template v-slot:footer> </template>
+        </uni-list-item>
+      </uni-list>
+      <div style="height: 3em"></div>
+    </scroll-view>
+  </div>
 </template>
 
 <script>
@@ -41,7 +42,7 @@ export default {
     posts: { type: Array },
     postCreateUrl: { type: String, default: `/post/create` },
     threadOtherPrefix: { type: String, default: `/thread/other` },
-    fkName: { type: String, default: `thread_id` },
+    fkName: { type: String, default: `thread_id` }
   },
   data() {
     return {};
@@ -51,8 +52,8 @@ export default {
     changeOthers() {
       console.log("changeOthers");
     },
-    change() {},
-  },
+    change() {}
+  }
 };
 </script>
 
