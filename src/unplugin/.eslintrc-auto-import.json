@@ -87,6 +87,7 @@
     "refDefault": true,
     "refThrottled": true,
     "refWithControl": true,
+    "regeneratorRuntime": true,
     "resolveComponent": true,
     "resolveDirective": true,
     "resolveRef": true,

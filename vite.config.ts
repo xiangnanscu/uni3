@@ -30,7 +30,10 @@ const plugins = [
       "vue",
       "pinia",
       "@vueuse/core",
-      { "@dcloudio/uni-app": ["onReady", "onLoad"] }
+      { "@dcloudio/uni-app": ["onReady", "onLoad"] ,
+       "regenerator-runtime": [
+        ["default", "regeneratorRuntime"],
+      ],}
     ],
     dts: "./src/unplugin/auto-imports.d.ts",
     vueTemplate: true,
