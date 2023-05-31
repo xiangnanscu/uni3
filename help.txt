@@ -81,3 +81,7 @@ Options:
   --subpackage [subpackage]      [string] specify subpackage to build
   --plugin                       [boolean] build plugin
   -h, --help                     Display this message
+
+  miniprogram-ci upload --pp ./dist/build/mp-weixin --pkp ./conf/private.wxcec88a7e2c1e81c7.key --appid wxcec88a7e2c1e81c7 -r 1  --uv 0.17.2
+
+  npx @dcloudio/uvm
