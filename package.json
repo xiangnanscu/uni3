@@ -1,6 +1,6 @@
 {
   "name": "uni-preset-vue",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "license": "ISC",
   "scripts": {
     "env": "dotenv -e .env -e .env.local --",
@@ -13,7 +13,7 @@
     "build": "yarn uni:build",
     "buildw": "yarn uni:build -p mp-weixin",
     "rcw": "yarn buildw && yarn commit",
-    "postrcw": "bash wx-release.js",
+    "postrcw": "bash bin/wx-release.js",
     "git": "python3 bin/git.py",
     "b": "yarn p -bb -gg",
     "p": "yarn git -pp -gg",
