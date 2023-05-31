@@ -12,7 +12,7 @@ var keypath = path
   .replaceAll("\\", "/");
 var description = process.argv[2] || "rc";
 var cmd =
-  `cli publish --platform mp-weixin --project uni3 --upload true --appid wxcec88a7e2c1e81c7 --privatekey ${keypath} --description "${description}" --version ${version}`;
+  `cli publish --platform mp-weixin --project uni3 --upload true --appid wxcec88a7e2c1e81c7 --privatekey ${keypath} --description "${description}" --version ${version} --robot 1`;
 console.log("路径:", cmd);
 
 // eslint-disable-next-line no-undef
