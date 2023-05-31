@@ -4,7 +4,7 @@
       <uni-easyinput
         suffixIcon="search"
         v-model="searchValue"
-        placeholder="请输入查找内容"
+        placeholder="请输入查找内容!"
         @iconClick="onClick"
       ></uni-easyinput>
     </view>
