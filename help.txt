@@ -1,0 +1,83 @@
+  --version                         Show version number                [boolean]
+  --help                            Show help                          [boolean]
+  --appid                           project appid            [string] [required]
+  --project-path, --pp, --pp        project path             [string] [required]
+  --private-key-path, --pkp, --pkp  private key path         [string] [required]
+  --locales                         set locales
+                                  [string] [choices: "en", "zh"] [default: "en"]
+  --verbose, -v                     run with verbose logging
+                                                       [boolean] [default: true]
+  --proxy                           proxy url             [string] [default: ""]
+  --project-type, --pt              project type
+              [string] [choices: "miniProgram", "miniGame", "miniProgramPlugin",
+                                      "miniGamePlugin"] [default: "miniProgram"]
+  --project-ignores, --pi           project ignores                      [array]
+  --upload-description, --ud        the uploaded code version description
+                                                                        [string]
+  --upload-version, --uv            the uploaded code version description
+                                                             [string] [required]
+  --threads                         the number indicates how many threads will
+                                    be created for compile the source files
+                                                [number] [required] [default: 0]
+  --use-cos                         enable uploading code-package through the
+                                    async way, which is more stable than the
+                                    direct way
+                                           [boolean] [required] [default: false]
+  --robot, -r                       the robot user who is uploading the project
+     [string] [choices: "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11",
+   "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24",
+                              "25", "26", "27", "28", "29", "30"] [default: "1"]
+  --enable-es6                      enable transform from es6 to es5
+                                                      [boolean] [default: false]
+  --enable-es7                      enable transform from es7 to es5
+                                                      [boolean] [default: false]
+  --enable-autoprefixwxss           enable autoprefixwxss
+                                                      [boolean] [default: false]
+  --enable-minify-wxss              enable minify wxss[boolean] [default: false]
+  --enable-minify-wxml              enable minify wxml[boolean] [default: false]
+  --enable-minify-js                enable minify js  [boolean] [default: false]
+  --enable-minify                   enable minify js/wxml/wxss
+                                                      [boolean] [default: false]
+  --enable-code-protect             enable code protect
+                                                      [boolean] [default: false]
+  --enable-qrcode                   enable generate weapp qrcode
+                                                      [boolean] [default: false]
+  --qrcode-format                   format of output qrcode
+         [string] [choices: "base64", "image", "terminal"] [default: "terminal"]
+  --qrcode-output-dest              destination of output qrcode        [string]
+  --preview-page-path               preview with page path              [string]
+  --preview-search-query            preview with query, Tips: "&" should be "\&"
+                                    in command line                     [string]
+  --scene                           preview with scene, about scene:
+                                    https://developers.weixin.qq.com/miniprogram
+                                    /dev/reference/scene-list.html      [string]
+
+Usage:
+  $ uni build
+
+Options:
+  --outDir <dir>                 [string] output directory (default: dist)
+  --assetsInlineLimit <number>   [number] static asset base64 inline threshold in bytes (default: 4096)
+  --sourcemap                    [boolean] output source maps for build (default: false)
+  --manifest                     [boolean] emit build manifest json
+  --ssrManifest                  [boolean] emit ssr manifest json
+  --emptyOutDir                  [boolean] force empty outDir when it's outside of root (default: true)
+  -w, --watch                    [boolean] rebuilds when modules have changed on disk
+  -c, --config <file>            [string] use specified config file
+  -p, --platform [platform]      [string] app | h5 | mp-alipay | mp-baidu | mp-qq | mp-lark | mp-toutiao | mp-weixin | quickapp-webview | quickapp-webview-huawei | quickapp-webview-union (default: h5)
+  --base <path>                  [string] public base path (default: /)
+  -ssr                           [boolean] server-side rendering (default: false)
+  -l, --logLevel <level>         [string] silent | error | warn | all
+  --clearScreen                  [boolean] allow/disable clear screen when logging
+  -d, --debug [feat]             [string | boolean] show debug logs
+  -f, --filter <filter>          [string] filter debug logs
+  -m, --mode <mode>              [string] set env mode
+  --minify [minifier]            [boolean | "terser" | "esbuild"] enable/disable minification, or specify minifier to use (default: terser)
+  --autoHost [autoHost]          [string] specify automator hostname
+  --autoPort [autoPort]          [number] specify automator port
+  --devtools                     [boolean] enable devtools
+  --devtoolsHost [devtoolsHost]  [string] specify devtools hostname
+  --devtoolsPort [devtoolsPort]  [number] specify devtools port
+  --subpackage [subpackage]      [string] specify subpackage to build
+  --plugin                       [boolean] build plugin
+  -h, --help                     Display this message
