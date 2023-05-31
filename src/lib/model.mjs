@@ -421,7 +421,7 @@ class Model {
       static mixins = opts.mixins;
       static extend = opts.extend;
       static abstract = opts.abstract;
-      static disableAutoPrimaryKey = opts.disableAutoPrimaryKey ?? true;
+      static disableAutoPrimaryKey = opts.disableAutoPrimaryKey == undefined ? true : false;
       cls = ConcreteModel;
     }
     let pkDefined = false;
