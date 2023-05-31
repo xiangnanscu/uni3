@@ -1,4 +1,3 @@
-import 'regenerator-runtime/runtime'
 import { readFileSync } from "fs";
 import { defineConfig } from "vite";
 import uni from "@dcloudio/vite-plugin-uni";

@@ -1,3 +1,4 @@
+import 'regenerator-runtime/runtime'
 import { createSSRApp } from "vue";
 import App from "./App.vue";
 import { createPinia } from "pinia";

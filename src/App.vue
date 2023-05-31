@@ -10,14 +10,6 @@ onHide(() => {
   console.log("App Hide");
 });
 </script>
-<script lang="ts">
-import regeneratorRuntime from "regenerator-runtime";
-export default {
-  globalData: {
-    regeneratorRuntime
-  },
-}
-</script>
 <style>
 page {
   /* 行为相关颜色 */
