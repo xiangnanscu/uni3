@@ -1,4 +1,3 @@
-import { nanoid } from "nanoid";
 import { Http } from "@/globals/Http";
 
 const ALIOSS_PAYLOAD_URL = process.env.ALIOSS_PAYLOAD_URL;
@@ -55,7 +54,7 @@ class Alioss {
     return data;
   };
   static getOssKey = (file, subprefix = "file") => {
-    return `${ALIOSS_UPLOAD_PREFIX}/${subprefix}/${nanoid()}.${
+    return `${ALIOSS_UPLOAD_PREFIX}/${subprefix}/${file.uuid}.${
       videoExtMap[file.type] || file.name.split(".").pop()
     }`;
   };
