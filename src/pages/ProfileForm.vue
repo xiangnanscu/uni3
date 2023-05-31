@@ -1,14 +1,29 @@
 <template>
   <page-layout>
-    <!-- {{ JSON.stringify(profileData) }} -->
     <uni-forms
       ref="valiForm"
       :rules="rules"
-      :model-value="profileData"
+      :model="profileData"
       label-position="left"
     >
-      <uni-forms-item label="头像" name="avatar">
+      <uni-forms-item label="头像" name="avatar" :error-message="errors.avatar">
+        <!-- #ifdef H5 -->
+        <uni-file-picker
+          ref="filePickerRef"
+          :model-value="profileData.avatar"
+          file-mediatype="image"
+          :limit="1"
+          :title="' '"
+          mode="grid"
+          :disable-preview="true"
+          return-type="object"
+          @select="filePickerSelectHanlder"
+        />
+        <!-- #endif -->
+
+        <!-- #ifdef MP-WEIXIN -->
         <x-picker v-model="profileData.avatar" />
+        <!-- #endif -->
       </uni-forms-item>
       <uni-forms-item label="昵称" name="nickname">
         <uni-easyinput
@@ -24,39 +39,105 @@
           type="intro"
         />
       </uni-forms-item>
-      <button type="primary" @click="submit('valiForm')">提交</button>
+      <button type="primary" @click="submit">提交</button>
     </uni-forms>
   </page-layout>
 </template>
 
 <script>
-import login from "@/lib/login.js";
+import { parseSize } from "@/lib/utils.mjs";
 
+const avatarSizeArg = "5M";
+const avatarSize = parseSize("5M");
+
+const getAvatarObject = (url) => {
+  const [_, name, extname] = url.match(/\/([^/]+)\.([^/]+)$/);
+  return {
+    name: name + "." + extname,
+    extname,
+    url
+  };
+};
 export default {
-  mixins: [login],
   data() {
     return {
+      errors: {},
       profileData: {
         intro: "",
         nickname: "",
         avatar: {
+          name: "",
+          extname: "",
           url: "",
           errMsg: ""
+        }
+      },
+      redirect: "",
+      rules: {
+        nickname: {
+          rules: [
+            {
+              required: true,
+              errorMessage: "姓名不能为空"
+            }
+          ]
+        },
+        avatar: {
+          rules: [
+            {
+              validateFunction: function (rule, value, data, callback) {
+                if (!value.url) {
+                  callback("必须上传头像");
+                }
+                return true;
+              }
+            }
+          ]
         }
       }
     };
   },
-
+  onReady() {
+    this.$refs.valiForm?.setRules(this.rules);
+  },
+  onLoad(query) {
+    this.redirect = query.redirect ? decodeURIComponent(query.redirect) : "";
+  },
   async mounted() {
     const { data } = await Http.get("/usr/profile/my");
     this.profileData.intro = data.intro;
-    this.profileData.avatar.url = data.avatar;
+    this.profileData.avatar = getAvatarObject(data.avatar);
     this.profileData.nickname = data.nickname;
   },
 
   methods: {
-    async submit(ref) {
-      await this.$refs[ref].validate();
+    async filePickerSelectHanlder({ tempFiles, tempFilePaths }) {
+      const files = this.$refs.filePickerRef.files;
+      for (const file of tempFiles) {
+        const uniFileIndex = files.findIndex((f) => f.uuid == file.uuid);
+        if (file.size > avatarSize) {
+          this.errors.avatar = `文件过大(当前${Math.round(
+            file.size / 1024 / 1024
+          )}MB,上限${avatarSizeArg})`;
+          files.splice(uniFileIndex, 1);
+          continue;
+        }
+        try {
+          const url = await Alioss.uploadUni({
+            file,
+            size: avatarSize,
+            prefix: "img"
+          });
+          this.profileData.avatar.url = url;
+        } catch (error) {
+          console.error(error);
+          this.errors.avatar = error.message || "上传出错";
+          files.splice(uniFileIndex, 1);
+        }
+      }
+    },
+    async submit() {
+      await this.$refs.valiForm.validate();
       const id = this.user.id;
       if (id) {
         const user = {

@@ -42,7 +42,7 @@ const setupRequest = () => {
     },
     success({ data, statusCode, header, cookies }) {
       // 微信小程序任何code都算成功
-      console.log({ cookies, header });
+      // console.log({ cookies, header });
       if (statusCode < 600 && statusCode >= 500) {
         uni.showToast({
           icon: "none",

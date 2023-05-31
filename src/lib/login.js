@@ -7,9 +7,9 @@ export default {
           rules: [
             {
               required: true,
-              errorMessage: "姓名不能为空",
-            },
-          ],
+              errorMessage: "姓名不能为空"
+            }
+          ]
         },
         avatar: {
           rules: [
@@ -19,11 +19,11 @@ export default {
                   callback("必须上传头像");
                 }
                 return true;
-              },
-            },
-          ],
-        },
-      },
+              }
+            }
+          ]
+        }
+      }
     };
   },
   onReady() {
@@ -32,5 +32,5 @@ export default {
   onLoad(query) {
     this.redirect = query.redirect ? decodeURIComponent(query.redirect) : "";
     // console.log("login.js onLoad query:", query);
-  },
+  }
 };

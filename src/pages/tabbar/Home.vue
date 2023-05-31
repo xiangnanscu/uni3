@@ -34,13 +34,11 @@
         </view>
       </uni-grid-item>
     </uni-grid>
-    <uni-card
-      v-if="goddess"
-      :cover="goddess.pics[0]"
-      @click="onGoddessClick"
-      :is-full="false"
-    >
-      <!-- <image slot="cover" style="width: 100%" :src="cover"></image> -->
+    <uni-card v-if="goddess" @click="onGoddessClick" :is-full="false">
+      <template v-slot:cover>
+        <image style="width: 100%" :src="goddess.pics[0]" />
+      </template>
+
       <text class="uni-body">{{ goddess.content }}</text>
       <!-- <template v-slot:actions>
           <view class="card-actions">

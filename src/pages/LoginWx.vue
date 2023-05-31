@@ -26,10 +26,7 @@
 </template>
 
 <script>
-import login from "@/lib/login.js";
-
 export default {
-  mixins: [login],
   data() {
     return {
       needCompleteProfile: null,
@@ -39,8 +36,37 @@ export default {
         avatar: { url: "", errMsg: "" },
         permission: "",
         openid: ""
+      },
+      redirect: "",
+      rules: {
+        nickname: {
+          rules: [
+            {
+              required: true,
+              errorMessage: "姓名不能为空"
+            }
+          ]
+        },
+        avatar: {
+          rules: [
+            {
+              validateFunction: function (rule, value, data, callback) {
+                if (!value.url) {
+                  callback("必须上传头像");
+                }
+                return true;
+              }
+            }
+          ]
+        }
       }
     };
+  },
+  onReady() {
+    this.$refs.valiForm?.setRules(this.rules);
+  },
+  onLoad(query) {
+    this.redirect = query.redirect ? decodeURIComponent(query.redirect) : "";
   },
   async onShow() {
     console.log("loginWx onShow");
