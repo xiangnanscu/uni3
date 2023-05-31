@@ -46,7 +46,6 @@
     },
     { "path": "pages/ThreadAdd", "style": { "navigationBarTitleText": "" } },
     { "path": "pages/ThreadDetail", "style": { "navigationBarTitleText": "" } },
-    { "path": "pages/ThreadList", "style": { "navigationBarTitleText": "" } },
     { "path": "pages/ThreadListMy", "style": { "navigationBarTitleText": "" } },
     { "path": "pages/usr", "style": { "navigationBarTitleText": "" } },
     {
@@ -55,7 +54,8 @@
     },
     { "path": "pages/VolplanList", "style": { "navigationBarTitleText": "" } },
     { "path": "pages/Login", "style": { "navigationBarTitleText": "" } },
-    { "path": "pages/LoginWx", "style": { "navigationBarTitleText": "" } }
+    { "path": "pages/LoginWx", "style": { "navigationBarTitleText": "" } },
+    { "path": "pages/ThreadListAll", "style": { "navigationBarTitleText": "" } }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",

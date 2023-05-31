@@ -4,6 +4,6 @@
 
 <script setup>
 const testHmr = () => {
-  uni.showToast({ title: "安1" });
+  uni.showToast({ title: "41" });
 };
 </script>

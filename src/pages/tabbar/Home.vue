@@ -87,7 +87,7 @@ export default {
         {
           url: "../../static/img/chat.png",
           text: "论坛",
-          pagePath: "/pages/ThreadList",
+          pagePath: "/pages/ThreadListAll",
           badge: "",
           type: "error"
         },

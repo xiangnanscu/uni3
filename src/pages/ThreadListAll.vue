@@ -1,6 +1,6 @@
 <template>
   <page-layout>
-    <ThreadList :records="threads"></ThreadList>
+    <thread-list :records="threads"></thread-list>
   </page-layout>
 </template>
 
