@@ -49,9 +49,11 @@
   /* 快应用特有相关 */
   "quickapp": {},
   /* 小程序特有相关 */
+  // https://uniapp.dcloud.net.cn/collocation/manifest.html#mp-weixin
   "mp-weixin": {
     "appid": "wxcec88a7e2c1e81c7",
     "setting": {
+      "minified": false,
       "es6": false,
       "urlCheck": false
     },
