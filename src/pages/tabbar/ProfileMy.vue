@@ -29,7 +29,7 @@
       <uni-list-item
         title="实名认证"
         link="navigateTo"
-        to="/pages/cert"
+        to="/pages/RealNameCert"
         :show-extra-icon="true"
         :extra-icon="{ color: '#666', size: '32', type: 'contact-filled' }"
       >
