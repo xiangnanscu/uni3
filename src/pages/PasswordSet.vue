@@ -5,7 +5,8 @@
         ref="valiForm"
         validateTrigger="blur"
         :model-value="PasswordSetData"
-        label-position="top"
+        label-position="left"
+        label-width="5em"
       >
         <uni-forms-item label="新密码" name="password">
           <uni-easyinput v-model="PasswordSetData.password" />
@@ -32,7 +33,7 @@ export default {
             {
               validateFunction: function (rule, value, data, callback) {
                 if (value.length > 50) {
-                  callback("密码不能超过255个字符");
+                  callback("密码不能超过50个字符");
                 }
                 return true;
               }
@@ -53,7 +54,6 @@ export default {
         `/usr/set_password`,
         this.PasswordSetData
       );
-      console.log({ data });
       await utils.tryGotoPage();
       uni.showToast({
         icon: "success",
@@ -64,9 +64,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.PasswordSet-main {
-  padding: 15px;
-}
-</style>

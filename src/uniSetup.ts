@@ -78,7 +78,7 @@ const setupRequest = () => {
   });
 };
 
-const navHandlerList = ["navigateTo", "redirectTo", "reLaunch", "switchTab"];
+const navHandlerList = ["navigateTo", "redirectTo"];
 const loginPage = process.env.UNI_LOGIN_PAGE;
 const whiteList = [
   process.env.UNI_HOME_PAGE,
@@ -112,7 +112,7 @@ const setupNav = () => {
           opts.url
         )}`;
         console.log("路由拦截-需要登陆", opts.url);
-        uni.redirectTo({ ...opts, url: loginUrl });
+        uni.navigateTo({ ...opts, url: loginUrl });
         return false;
       },
       complete(res) {

@@ -4,7 +4,7 @@
       <uni-easyinput
         suffixIcon="search"
         v-model="searchValue"
-        placeholder="请输入查找内容!"
+        placeholder="请输入查找内容~"
         @iconClick="onClick"
       ></uni-easyinput>
     </view>
@@ -36,7 +36,11 @@
     </uni-grid>
     <uni-card v-if="goddess" @click="onGoddessClick" :is-full="false">
       <template v-slot:cover>
-        <image style="width: 100%" :src="goddess.pics[0]" />
+        <image
+          @click="onGoddessClick"
+          style="width: 100%"
+          :src="goddess.pics[0]"
+        />
       </template>
 
       <text class="uni-body">{{ goddess.content }}</text>

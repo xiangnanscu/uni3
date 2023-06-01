@@ -46,18 +46,37 @@
           </view>
         </uni-list>
       </scroll-view>
-
-      <uni-row class="chat-foot" justify="space-between">
+      <!-- <div
+        style="
+          display: flex;
+          align-items: baseline;
+          justify-content: space-between;
+          flex-direction: row;
+        "
+      >
+        <textarea
+          v-model="messageText"
+          auto-height
+          :cursor-spacing="10"
+          placeholder="请输入内容"
+        ></textarea>
+        <button type="primary" @click="sendMessage" style="margin-right: 0">
+          发送
+        </button>
+      </div> -->
+      <uni-row class="chat-foot" style="display: flex; align-items: baseline">
         <uni-col :span="19">
           <textarea
             v-model="messageText"
             auto-height
-            :cursor-spacing="10"
+            :cursor-spacing="30"
             placeholder="请输入内容"
           ></textarea>
         </uni-col>
         <uni-col :span="5">
-          <button type="primary" size="mini" @click="sendMessage">发送</button>
+          <button type="primary" @click="sendMessage" style="margin-right: 0">
+            发送
+          </button>
         </uni-col>
       </uni-row>
     </view>
@@ -144,7 +163,7 @@ export default {
   overflow: scroll;
 }
 .chat-foot {
-  padding: 15px;
+  /* padding: 15px; */
 }
 .slot-box {
   display: flex;

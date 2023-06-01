@@ -36,7 +36,8 @@
         <uni-easyinput
           v-model="profileData.intro"
           placeholder="请输入简介"
-          type="intro"
+          autoHeight
+          type="textarea"
         />
       </uni-forms-item>
       <button type="primary" @click="submit">提交</button>
@@ -160,9 +161,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.content {
-  padding: 15px;
-}
-</style>

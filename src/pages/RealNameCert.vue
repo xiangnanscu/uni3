@@ -1,12 +1,12 @@
 <template>
   <page-layout>
-    <!-- {{ JSON.stringify(profileData) }} -->
     <uni-forms
       ref="valiForm"
       validateTrigger="blur"
       :rules="rules"
       :model-value="profileData"
-      label-position="top"
+      label-position="left"
+      label-width="6em"
     >
       <uni-forms-item label="姓名" name="xm">
         <uni-easyinput
@@ -22,27 +22,25 @@
         />
       </uni-forms-item>
       <uni-forms-item label="手机号码" name="phone">
+        <!-- #ifdef MP-WEIXIN -->
         <div class="flex-row">
           <div class="flex-item flex-phone">
             {{ profileData.phone || "" }}
           </div>
           <div class="flex-item">
-            <button open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">
+            <button
+              type="primary"
+              open-type="getPhoneNumber"
+              @getphonenumber="getPhoneNumber"
+            >
               获取手机号
             </button>
           </div>
         </div>
-        <!-- <uni-grid :column="2" :showBorder="false" :square="false">
-            <uni-grid-item>
-              <text class="phone-text">{{ profileData.phone }}</text>
-            </uni-grid-item>
-            <uni-grid-item>
-              <button open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">
-                获取手机号
-              </button>
-            </uni-grid-item>
-          </uni-grid> -->
-        <!-- <uni-easyinput v-model="profileData.phone" placeholder="请输入手机号" /> -->
+        <!-- #endif -->
+        <!-- #ifdef H5 -->
+        <uni-easyinput v-model="profileData.phone" placeholder="请输入手机号" />
+        <!-- #endif -->
       </uni-forms-item>
     </uni-forms>
     <button type="primary" @click="submit('valiForm')">提交</button>
