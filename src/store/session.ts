@@ -9,7 +9,14 @@ interface SessionUser {
 
 const getAnonymousSession = () =>
   reactive({
-    user: { nickname: "游客", id: null, permission: 0, openid: "", avatar: "" }
+    user: {
+      nickname: "游客",
+      username: "",
+      id: null,
+      permission: 0,
+      openid: "",
+      avatar: ""
+    }
   });
 
 const getSession = () => {
