@@ -69,7 +69,7 @@
           <textarea
             v-model="messageText"
             auto-height
-            :cursor-spacing="10"
+            :cursor-spacing="30"
             placeholder="请输入内容"
           ></textarea>
         </uni-col>
