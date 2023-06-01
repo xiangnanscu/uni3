@@ -12,7 +12,7 @@ var keypath = path
   .replaceAll("\\", "/");
 var description = process.argv[2] || "rc";
 var cmd;
-if (os.type() === "Windows_NT") {
+if (os.type() === "1Windows_NT") {
   cmd = `cli publish --platform mp-weixin --project uni3 --upload true --appid wxcec88a7e2c1e81c7 --privatekey ${keypath} --description "${description}" --version ${version} --robot 1`;
 } else {
   cmd = `miniprogram-ci upload --pp ./dist/build/mp-weixin --pkp ./conf/private.wxcec88a7e2c1e81c7.key --appid wxcec88a7e2c1e81c7 -r 1  --uv ${version}`;
