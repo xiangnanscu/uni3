@@ -26,7 +26,7 @@
           ><span class="thread-title">{{ thread.title }}</span></template
         >
         <text user-select class="thread-content">{{ thread.content }}</text>
-        <x-album v-if="picsUrls.length" :urls="picsUrls"></x-album>
+        <x-album v-if="picsUrls.length" :urls="picsUrls" :columns="1"></x-album>
       </uni-card>
     </view>
   </page-layout>

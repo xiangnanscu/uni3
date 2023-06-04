@@ -1,8 +1,13 @@
 <template>
-  <uni-grid :column="3" :show-border="false" :square="true" @change="change">
+  <uni-grid
+    :column="columns || 1"
+    :show-border="false"
+    :square="true"
+    @change="change"
+  >
     <uni-grid-item v-for="(url, index) in urls" :index="index" :key="index">
       <view class="grid-item-box">
-        <image class="image" :src="url" mode="aspectFill" />
+        <image class="image" :src="url" mode="aspectFit" />
       </view>
     </uni-grid-item>
   </uni-grid>
@@ -12,7 +17,7 @@
 export default {
   name: "XAlbum",
   emits: ["change"],
-  props: ["urls"],
+  props: ["urls", "columns"],
   data() {
     return {
       localValue: []
@@ -25,3 +30,10 @@ export default {
   }
 };
 </script>
+<style scoped>
+.image,
+.grid-item-box {
+  width: 100%;
+  height: 100%;
+}
+</style>

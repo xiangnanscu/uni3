@@ -58,7 +58,7 @@
           :cursorSpacing="90"
           :adjust-position="true"
         ></textarea>
-        <button type="success" @click="sendMessage()" plain="true">
+        <button type="primary" @click="sendMessage()" plain="true">
           发送
         </button></view
       >
