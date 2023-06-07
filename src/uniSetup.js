@@ -14,6 +14,14 @@ const baseURL =
     : `http://localhost:${process.env.NGINX_listen}`;
 const cookieNames = ["session"];
 
+class WxResquestError extends Error {
+  constructor({ type, status, data }) {
+    console.log({ type, status, data });
+    super(data);
+    this.type = type;
+    this.status = status;
+  }
+}
 const setupRequest = () => {
   uni.addInterceptor("request", {
     invoke(args) {
@@ -40,15 +48,14 @@ const setupRequest = () => {
       args.header = header;
       if (!/^https?|^\/\//.test(args.url)) args.url = baseURL + args.url;
     },
-    success({ data, statusCode, header, cookies }) {
-      // 微信小程序任何code都算成功
-      // console.log({ cookies, header });
-      if (statusCode < 600 && statusCode >= 500) {
-        uni.showToast({
-          icon: "none",
-          title: `发生错误`,
-          duration: 5000
-        });
+    success(args) {
+      // args.statusCode居然直接丢失了..
+      // console.log("success", args);
+      const data = args.data;
+      if (typeof data == "object" && data.type == "uni_error") {
+        if (data.status >= 400) {
+          throw new WxResquestError(data);
+        }
       }
     },
     fail(err) {
@@ -88,7 +95,7 @@ const whiteList = [
   "/pages/tabbar/ProfileMy"
 ];
 
-const navStack: number[] = [];
+const navStack = [];
 const setupNav = () => {
   navHandlerList.forEach((handler) => {
     uni.addInterceptor(handler, {

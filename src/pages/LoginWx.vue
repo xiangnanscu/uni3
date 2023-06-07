@@ -32,6 +32,8 @@ export default {
       needCompleteProfile: null,
       profileData: {
         id: "",
+        username: "",
+        xm: "",
         nickname: "",
         avatar: { url: "", errMsg: "" },
         permission: "",
@@ -75,6 +77,8 @@ export default {
     this.profileData.id = user.id;
     this.profileData.openid = user.id;
     this.profileData.permission = user.permission;
+    this.profileData.xm = user.xm;
+    this.profileData.username = user.username;
     if (!user.nickname || !user.avatar) {
       this.needCompleteProfile = true;
     } else {

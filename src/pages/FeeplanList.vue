@@ -1,5 +1,5 @@
 <template>
-  <uni-card :title="branch_name" :extra="member.xm">
+  <uni-card v-if="member" :title="branch_name" :extra="member.xm">
     <uni-list :border="false">
       <uni-list-item
         v-for="(item, index) in FeeplanList"
@@ -37,6 +37,7 @@ export default {
     };
   },
   async onLoad(query) {
+    console.log("this.user", useSession());
     await this.fetchData(query);
   },
   methods: {

@@ -2,6 +2,7 @@ interface SessionUser {
   id: number;
   username: string;
   nickname: string;
+  xm: string;
   permission: number;
   openid: string;
   avatar: string;
@@ -12,6 +13,7 @@ const getAnonymousSession = () =>
     user: {
       nickname: "游客",
       username: "",
+      xm: "",
       id: null,
       permission: 0,
       openid: "",
