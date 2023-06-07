@@ -22,11 +22,15 @@
         :key="index"
       >
         <view class="grid-item-box" style="text-align: center">
-          <navigator :url="item.pagePath" hover-class="navigator-hover">
+          <navigator
+            :url="item.pagePath"
+            hover-class="navigator-hover"
+            open-type="navigate"
+          >
             <image class="image logo" :src="item.url" mode="aspectFit" />
-            <view
-              ><text class="logo-text">{{ item.text }}</text></view
-            >
+            <view>
+              <text class="logo-text">{{ item.text }}</text>
+            </view>
             <view v-if="item.badge" class="grid-dot">
               <uni-badge :text="item.badge" :type="item.type" />
             </view>

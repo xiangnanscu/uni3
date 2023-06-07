@@ -18,14 +18,16 @@ export function createApp() {
     computed: {
       user() {
         const { session } = useSession();
-        console.log("computed user session", session);
         return session.user;
       }
     }
   });
-  app.config.errorHandler = (err, instance, info) => {
-    console.log("errorHandler captured...", err, instance, info);
-  };
+  setTimeout(() => {
+    app.config.errorHandler = (err, instance, info) => {
+      console.log("errorHandler captured...", err, instance, info);
+    };
+  });
+
   console.log("hahaha");
   return {
     app

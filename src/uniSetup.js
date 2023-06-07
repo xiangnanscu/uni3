@@ -16,7 +16,6 @@ const cookieNames = ["session"];
 
 class WxResquestError extends Error {
   constructor({ type, status, data }) {
-    console.log({ type, status, data });
     super(data);
     this.type = type;
     this.status = status;
@@ -53,7 +52,12 @@ const setupRequest = () => {
       // console.log("success", args);
       const data = args.data;
       if (typeof data == "object" && data.type == "uni_error") {
-        if (data.status >= 400) {
+        if (data.status === 403) {
+          utils.gotoPage({
+            url: process.env.UNI_LOGIN_PAGE,
+            query: { redirect: getCurrentPages().slice(-1)[0].$page?.fullPath }
+          });
+        } else {
           throw new WxResquestError(data);
         }
       }
@@ -119,7 +123,10 @@ const setupNav = () => {
           opts.url
         )}`;
         console.log("路由拦截-需要登陆", opts.url);
-        uni.navigateTo({ ...opts, url: loginUrl });
+        uni.navigateTo({
+          ...opts,
+          url: loginUrl
+        });
         return false;
       },
       complete(res) {

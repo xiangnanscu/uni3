@@ -1,35 +1,55 @@
 <template>
   <uni-card v-if="member" :title="branch_name" :extra="member.xm">
-    <uni-list :border="false">
+    <span v-if="FeeplanList.length === 0">暂无需要缴费的记录</span>
+    <uni-list v-else :border="false">
       <uni-list-item
-        v-for="(item, index) in FeeplanList"
+        v-for="(feeItem, index) in FeeplanList"
         :key="index"
         :showArrow="false"
-        :title="`${item.year}年${String(item.month).padStart(2, '0')}月团费${
-          item.amount
-        }元`"
+        :title="`${feeItem.year}年${String(feeItem.month).padStart(
+          2,
+          '0'
+        )}月团费${feeItem.amount}元`"
       >
         <template #footer>
           <button
-            v-if="item.status !== '已缴费'"
+            v-if="feeItem.status !== '已缴费'"
             :disabled="disabled"
-            @click="payFee(item)"
+            @click="payFee(feeItem)"
             type="primary"
             size="mini"
           >
             缴费
           </button>
-          <span v-else>{{ item.status }}</span>
+          <span v-else>{{ feeItem.status }}</span>
         </template>
       </uni-list-item>
     </uni-list>
   </uni-card>
+  <div v-else-if="ready" style="padding: 1em">
+    <fui-alert
+      type="warn"
+      spacing
+      title="你还不是团员, 无法缴费"
+      size="28rpx"
+      :marginTop="24"
+      :marginBottom="24"
+    >
+    </fui-alert>
+    <navigator
+      open-type="navigateBack"
+      style="display: flex; justify-content: space-around"
+    >
+      <button type="primary" size="mini">返回</button>
+    </navigator>
+  </div>
 </template>
 
 <script>
 export default {
   data() {
     return {
+      ready: false,
       disabled: false,
       member: null,
       branch_name: "",
@@ -37,24 +57,47 @@ export default {
     };
   },
   async onLoad(query) {
-    console.log("this.user", useSession());
-    await this.fetchData(query);
+    if (!this.user.id) {
+      await utils.gotoPage({
+        url: "/pages/Login",
+        query: { redirect: "/pages/FeeplanList" }
+      });
+    } else if (!this.user.username) {
+      await utils.gotoPage({
+        url: "/pages/RealNameCert",
+        query: {
+          redirect: "/pages/FeeplanList",
+          message: "缴纳团费请先实名认证"
+        }
+      });
+    } else {
+      await this.fetchData(query);
+    }
   },
   methods: {
     async fetchData(query) {
-      const { data: records } = await Http.post(`/youth_fee/self`);
-      const { data: member } = await Http.post(`/youth_member/get`, {
+      const { data: members } = await Http.post(`/youth_member/get`, {
         sfzh: this.user.username
       });
-      this.member = member;
-      this.branch_name = member.branch_name.replace("四川省宜宾市江安县", "");
-      this.FeeplanList = records;
+
+      if (members.length === 0) {
+        this.ready = true;
+      } else {
+        const { data: records } = await Http.post(`/youth_fee/self`);
+        this.ready = true;
+        this.member = members[0];
+        this.branch_name = this.member.branch_name.replace(
+          "四川省宜宾市江安县",
+          ""
+        );
+        this.FeeplanList = records;
+      }
     },
-    async payFee({ feeplan_id: planId }) {
+    async payFee(feeItem) {
+      const planId = feeItem.feeplan_id;
       const { data: payed } = await Http.post(`/orders/check`, {
         feeplan_id: planId
       });
-      console.log({ payed });
       if (payed) {
         return uni.showToast({
           title: `您已缴费, 无需重复`,
@@ -68,6 +111,7 @@ export default {
       }
       const { data } = await Http.post(`/wx/jsapi_mini_preorder`, {
         code,
+        youth_fee_id: feeItem.id,
         feeplan_id: planId
       });
       const {
@@ -86,6 +130,7 @@ export default {
         async success(res) {
           self.disabled = false;
           if (res.errMsg == "requestPayment:ok") {
+            feeItem.status = "已缴费";
             uni.showToast({ title: "缴费成功" });
           }
         },

@@ -1,5 +1,16 @@
 <template>
   <page-layout>
+    <fui-alert
+      v-if="query.message"
+      type="warn"
+      spacing
+      :title="query.message"
+      size="28rpx"
+      :marginTop="24"
+      :marginBottom="24"
+    >
+      <fui-icon name="warning" :size="48" color="#fff"></fui-icon>
+    </fui-alert>
     <uni-forms
       ref="valiForm"
       validateTrigger="blur"
@@ -51,6 +62,7 @@
 export default {
   data() {
     return {
+      query: {},
       profileData: {
         xm: "",
         username: "",
@@ -118,8 +130,10 @@ export default {
     this.profileData.username = data.username || "";
   },
   async onShow() {},
-  onLoad() {
-    console.log("profile onLoad");
+  onLoad(query) {
+    this.query = Object.fromEntries(
+      Object.entries(query).map(([k, v]) => [k, decodeURIComponent(v)])
+    );
   },
   methods: {
     async getPhoneNumber(e) {
@@ -139,8 +153,14 @@ export default {
           id,
           ...this.profileData
         };
-        await Http.post("/update_profile", user);
-        await utils.tryGotoPage();
+        await Http.post("/update_profile?update_session=1", user);
+        const { login } = useSession();
+        login(user);
+        const url = this.query.redirect || "/";
+        console.log("实名认证结束, 重定向:", url);
+        await utils.gotoPage({
+          url
+        });
       }
     }
   }

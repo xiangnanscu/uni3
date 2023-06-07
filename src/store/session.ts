@@ -41,6 +41,7 @@ const getSession = () => {
 export const useSession = defineStore("session", () => {
   const session = getSession();
   function login(user: SessionUser) {
+    // console.log("login user", JSON.stringify(user));
     Object.assign(session.user, user);
     uni.setStorageSync("session", JSON.stringify(session));
   }

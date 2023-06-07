@@ -171,7 +171,7 @@ export function parseSize(t) {
 const UNI_HOME_PAGE = process.env.UNI_HOME_PAGE;
 const toURLSearchParams = (obj) => {
   return Object.entries(obj)
-    .map(([k, v]) => `${k}=${v}`)
+    .map(([k, v]) => `${k}=${encodeURIComponent(v)}`)
     .join("&");
 };
 const appendAnimationParams = (opts) => {
