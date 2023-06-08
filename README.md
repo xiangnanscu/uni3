@@ -24,6 +24,12 @@ store.message = "请先登陆";
 
 ```
 
+# win10 配置 yarn script 使用 bash shell
+
+```
+yarn config set script-shell /usr/bin/bash
+```
+
 # 日志解析
 
 # GIT
