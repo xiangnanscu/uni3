@@ -7,8 +7,8 @@
     }
   },
   "pages": [
-    { "path": "pages/tabbar/Home", "style": { "navigationBarTitleText": "" } },
     { "path": "pages/Uform", "style": { "navigationBarTitleText": "" } },
+    { "path": "pages/tabbar/Home", "style": { "navigationBarTitleText": "" } },
     { "path": "pages/LoginH5", "style": { "navigationBarTitleText": "" } },
     {
       "path": "pages/FeeplanDetail",

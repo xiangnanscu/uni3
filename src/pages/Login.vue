@@ -7,9 +7,7 @@
 <script setup>
 const { redirect } = useRedirect({ decode: false });
 onLoad((query) => {
-  console.log("Login.vue onLoad..");
   // #ifdef MP-WEIXIN
-  console.log("Login.vue redirect.value", redirect.value);
   uni.redirectTo({ url: `/pages/LoginWx?redirect=${redirect.value}` });
   // #endif
 

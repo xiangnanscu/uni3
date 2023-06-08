@@ -119,7 +119,7 @@ const submit = async () => {
       }
     } else if (response.data.type == "uni_error") {
       uni.showModal({
-        title: realData,
+        title: realData || "发生错误",
         editable: false,
         showCancel: false
       });
@@ -132,7 +132,7 @@ const submit = async () => {
   } catch (error) {
     console.error(error);
     uni.showModal({
-      title: "提交错误",
+      title: "提交出现错误",
       content: error.errMsg || error.message,
       showCancel: false
     });

@@ -1,14 +1,16 @@
 <template>
-  <modelform-uni
-    :model="loginModel"
-    action-url="/login_h5"
-    label-position="left"
-    label-align="left"
-    :show-modal="true"
-    @success-post="successPost"
-    :success-url="redirect"
-  >
-  </modelform-uni>
+  <page-layout>
+    <modelform-uni
+      :model="loginModel"
+      action-url="/login_h5"
+      label-position="left"
+      label-align="left"
+      :show-modal="true"
+      @success-post="successPost"
+      :success-url="redirect"
+    >
+    </modelform-uni>
+  </page-layout>
 </template>
 
 <script setup>
