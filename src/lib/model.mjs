@@ -410,11 +410,9 @@ class Model {
   static setLabelNameDict() {
     this.labelToName = {};
     this.nameToLabel = {};
-    this.nameCache = {};
     for (const [name, field] of Object.entries(this.fields)) {
       this.labelToName[field.label] = name;
       this.nameToLabel[name] = field.label;
-      this.nameCache[name] = this.tableName + ("." + name);
     }
   }
   static setClassName(tableName) {
@@ -510,7 +508,9 @@ class Model {
       });
       this.fieldNames.unshift(pkName);
     }
+    this.nameCache = {};
     for (const [name, field] of Object.entries(this.fields)) {
+      this.nameCache[name] = this.tableName + ("." + name);
       if (field.reference) {
         field.tableName = tableName;
       }
