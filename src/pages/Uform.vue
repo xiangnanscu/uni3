@@ -1,6 +1,7 @@
 <template>
   <page-layout>
-    <modelform-uni :model="testModel" @sendData="submit"> </modelform-uni>
+    <modelform-uni :model="testModel" @sendData="submit" actionUrl="/test">
+    </modelform-uni>
   </page-layout>
 </template>
 

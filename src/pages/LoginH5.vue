@@ -8,6 +8,7 @@
       :show-modal="true"
       @success-post="successPost"
       :success-url="redirect"
+      :success-use-redirect="true"
     >
     </modelform-uni>
   </page-layout>

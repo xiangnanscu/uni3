@@ -27,8 +27,6 @@ export function createApp() {
       console.log("errorHandler captured...", err, instance, info);
     };
   });
-
-  console.log("hahaha");
   return {
     app
   };

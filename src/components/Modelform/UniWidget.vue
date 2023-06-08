@@ -6,8 +6,7 @@ const emit = defineEmits([
 ]);
 const props = defineProps({
   field: { type: Object, required: true },
-  modelValue: { required: true },
-  error: {}
+  modelValue: { required: true }
 });
 const uniFormItem = inject("uniFormItem", null);
 const field = props.field;
@@ -85,6 +84,7 @@ const sendValue = (value) => {
   emit("update:modelValue", value);
 };
 const blurValidate = () => {
+  emit("update:error", ""); // 先清除老错误
   emit("blur:validate", props.modelValue);
 };
 const isArrayField = computed(() => field.type == "array");

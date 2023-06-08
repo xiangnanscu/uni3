@@ -360,6 +360,7 @@ class Model {
   static DEFAULT = DEFAULT;
   static asToken = asToken;
   static asLiteral = asLiteral;
+  static httpModelCache = {};
   constructor(attrs) {
     Object.assign(this, attrs);
   }
@@ -370,7 +371,8 @@ class Model {
     return new this(self);
   }
   static async createModelAsync(options) {
-    for (const [name, field] of Object.entries(options.fields)) {
+    for (const name of options.fieldNames || Object.keys(options.fields)) {
+      const field = options.fields[name];
       if (field.choicesUrl) {
         const { data: choices } = await Http[field.choicesUrlMethod || "post"](
           field.choicesUrl
@@ -380,13 +382,26 @@ class Model {
           : choices;
       }
       if (typeof field.reference == "string") {
-        const { data } = await Http.get(
-          field.referenceUrl || `/admin/model/${field.reference}`
-        );
-        field.reference = await Model.createModelAsync(data);
+        const modelUrl = field.referenceUrl || field.reference;
+        field.reference = await this.getHttpModel(modelUrl);
+      }
+      if (field.type == "table" && !field.model?.__isModelClass__) {
+        field.model = await Model.createModelAsync(field.model);
       }
     }
     return Model.createModel(options);
+  }
+  static async getHttpModel(modelKey) {
+    if (!this.httpModelCache[modelKey]) {
+      const modelUrl = modelKey.match(/^https?:/)
+        ? modelKey
+        : `/admin/model/${modelKey}`;
+      const { data } = await Http.get(modelUrl);
+      this.httpModelCache[modelKey] = await Model.createModelAsync(data);
+    } else {
+      console.log("cached:" + modelKey);
+    }
+    return this.httpModelCache[modelKey];
   }
   static createModel(options) {
     const XodelClass = this.makeModelClass(this.normalize(options));
@@ -421,7 +436,10 @@ class Model {
       static mixins = opts.mixins;
       static extend = opts.extend;
       static abstract = opts.abstract;
-      static disableAutoPrimaryKey = opts.disableAutoPrimaryKey == undefined ? true : false;
+      static nameToLabel = opts.nameToLabel;
+      static labelToName = opts.labelToName;
+      static disableAutoPrimaryKey =
+        opts.disableAutoPrimaryKey == undefined ? true : false;
       cls = ConcreteModel;
     }
     let pkDefined = false;
@@ -459,13 +477,14 @@ class Model {
     }
     ConcreteModel.__isModelClass__ = true;
     if (ConcreteModel.tableName) {
-      return ConcreteModel.materializeWithTableName({
+      ConcreteModel.materializeWithTableName({
         tableName: ConcreteModel.tableName
       });
     } else {
       ConcreteModel.setClassName("Abstract");
-      return ConcreteModel;
     }
+    ConcreteModel.setLabelNameDict();
+    return ConcreteModel;
   }
 
   static materializeWithTableName({ tableName, label }) {
@@ -491,7 +510,6 @@ class Model {
       });
       this.fieldNames.unshift(pkName);
     }
-    this.setLabelNameDict();
     for (const [name, field] of Object.entries(this.fields)) {
       if (field.reference) {
         field.tableName = tableName;
@@ -601,7 +619,7 @@ class Model {
     model.abstract = abstract;
     model.__normalized__ = true;
     if (options.mixins) {
-      return this.mergeModels([model, ...options.mixins]);
+      return this.mergeModels([...options.mixins, model]);
     } else {
       return model;
     }

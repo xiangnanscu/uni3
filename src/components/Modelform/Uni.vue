@@ -9,6 +9,7 @@ const props = defineProps({
   syncValues: { type: Boolean, default: false },
   actionUrl: { type: String, required: false },
   successUrl: { type: [Object, String] },
+  successUseRedirect: { type: Boolean, default: false },
   method: { type: String, default: "POST" }, // get
   hideSubmitButton: { type: Boolean, default: false },
   submitButtonText: { type: String, default: "提交" },
@@ -106,15 +107,23 @@ const submit = async () => {
         }
       } else if (dataType == "model_errors") {
         Object.assign(errors, realData.errors);
+        const messages = Object.entries(realData.errors)
+          .map(
+            ([name, message]) => `${props.model.nameToLabel[name]}: ${message}`
+          )
+          .join("\n");
         uni.showModal({
-          title: `错误`,
-          content: "请根据红色提示信息修改",
+          title: `提交错误`,
+          content: messages,
           showCancel: false
         });
       } else {
         emit("successPost", realData);
         if (props.successUrl) {
-          utils.gotoPage({ url: props.successUrl });
+          utils.gotoPage({
+            url: props.successUrl,
+            redirect: props.successUseRedirect
+          });
         }
       }
     } else if (response.data.type == "uni_error") {
@@ -126,13 +135,16 @@ const submit = async () => {
     } else {
       emit("successPost", realData);
       if (props.successUrl) {
-        utils.gotoPage({ url: props.successUrl });
+        utils.gotoPage({
+          url: props.successUrl,
+          redirect: props.successUseRedirect
+        });
       }
     }
   } catch (error) {
-    console.error(error);
+    console.error("uni-form error:", error);
     uni.showModal({
-      title: "提交出现错误",
+      title: "提交错误",
       content: error.errMsg || error.message,
       showCancel: false
     });

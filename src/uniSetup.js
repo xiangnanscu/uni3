@@ -64,7 +64,8 @@ const setupRequest = () => {
             query: { redirect: getCurrentPages().slice(-1)[0].$page?.fullPath }
           });
         } else {
-          throw new WxResquestError(data);
+          // success里面抛异常会导致modelform的try-catch失效
+          // throw new WxResquestError(data);
         }
       }
     },
