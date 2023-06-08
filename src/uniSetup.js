@@ -3,15 +3,21 @@ import { useStore } from "@/store";
 import { useSession } from "@/store/session";
 
 const viteEnv = import.meta.env;
-// console.log("uni.getSystemInfo", uni.getSystemInfoSync());
-const platform = uni.getSystemInfoSync().uniPlatform;
-const isWeb = platform == "web" || platform == "h5";
-const baseURL =
-  process.env.NODE_ENV == "production"
-    ? `${viteEnv.VITE_HTTPS == "on" ? "https" : "http"}://${viteEnv.VITE_HOST}`
-    : isWeb
-    ? `http://localhost:${viteEnv.VITE_APP_PORT}${viteEnv.VITE_PROXY_PREFIX}`
-    : `http://localhost:${process.env.NGINX_listen}`;
+
+let baseURL;
+if (process.env.NODE_ENV == "production") {
+  baseURL = `${viteEnv.VITE_HTTPS == "on" ? "https" : "http"}://${
+    viteEnv.VITE_HOST
+  }`;
+} else {
+  // #ifdef H5
+  baseURL = `http://localhost:${viteEnv.VITE_APP_PORT}${viteEnv.VITE_PROXY_PREFIX}`;
+  // #endif
+  // #ifdef MP-WEIXIN
+  baseURL = `http://localhost:${process.env.NGINX_listen}`;
+  // #endif
+}
+
 const cookieNames = ["session"];
 
 class WxResquestError extends Error {
