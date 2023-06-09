@@ -46,8 +46,7 @@ export const useSession = defineStore("session", () => {
   }
   async function loginWithRedirect(user: SessionUser) {
     login(user);
-    const { tryRedirect } = useRedirect();
-    await tryRedirect();
+    await useRedirect(query).tryRedirect();
   }
   function logout() {
     Object.assign(session.user, getAnonymousSession().user);

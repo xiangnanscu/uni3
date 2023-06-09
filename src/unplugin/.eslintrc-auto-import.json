@@ -191,6 +191,7 @@
     "useKeyModifier": true,
     "useLastChanged": true,
     "useLocalStorage": true,
+    "useLogin": true,
     "useMagicKeys": true,
     "useManualRefHistory": true,
     "useMediaControls": true,

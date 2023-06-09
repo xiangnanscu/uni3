@@ -1,5 +1,9 @@
 export function usePage() {
-  const pages = getCurrentPages(); //页面列表
-  const page = pages[pages.length - 1].$page; //路由名称
+  const page = ref(null);
+  onLoad(() => {
+    console.log("usePage onLoad");
+    const pages = getCurrentPages();
+    page.value = pages[pages.length - 1];
+  });
   return page;
 }

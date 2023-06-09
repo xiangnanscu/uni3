@@ -42,12 +42,13 @@
 <script setup>
 const { loginWithRedirect } = useSession();
 const store = useStore();
+const query = useQuery();
 
-console.log(useQuery());
+const loginUser = async (user) => await loginWithRedirect(user, query.value);
 // #ifdef H5
 store.message = "请先登录";
 const successPost = async (user) => {
-  await loginWithRedirect(user);
+  await loginUser(user);
 };
 const loginModel = Model.createModel({
   fieldNames: ["username", "password"],
@@ -92,7 +93,7 @@ async function submitLoginData() {
     nickname: userData.value.nickname,
     avatar: userData.value.avatar
   });
-  await loginWithRedirect(userData.value);
+  await loginUser(userData.value);
 }
 const rules = {
   nickname: {
@@ -119,8 +120,8 @@ const rules = {
 onReady(() => {
   valiForm.value.setRules(rules);
 });
-onShow(async () => {
-  console.log("login onShow");
+onLoad(async (options) => {
+  console.log("login onLoad", options);
   const user = await getWxUser();
   profileData.value.id = user.id;
   profileData.value.openid = user.id;
@@ -132,8 +133,9 @@ onShow(async () => {
   } else {
     profileData.value.nickname = user.nickname;
     profileData.value.avatar.url = user.avatar;
-    await loginWithRedirect(userData.value);
+    await loginUser(userData.value);
   }
 });
+
 // #endif
 </script>
