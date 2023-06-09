@@ -27,7 +27,7 @@
             hover-class="navigator-hover"
             open-type="navigate"
           >
-            <image class="image logo" :src="item.url" mode="aspectFit" />
+            <image class="banner-image" :src="item.url" mode="widthFix" />
             <view>
               <text class="logo-text">{{ item.text }}</text>
             </view>
@@ -44,6 +44,7 @@
           @click="onGoddessClick"
           style="width: 100%"
           :src="goddess.pics[0]"
+          mode="widthFix"
         />
       </template>
 
@@ -243,12 +244,7 @@ export default {
 };
 </script>
 
-<style>
-.card-actions {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
+<style scoped>
 .grid-dot {
   position: absolute;
   top: 5px;
@@ -264,15 +260,8 @@ export default {
   font-size: 70%;
   text-align: center;
 }
-.thread-item {
-  font-size: 60%;
-}
-.image {
+.banner-image {
   width: 120upx;
   height: 120upx;
-}
-.content {
-  padding: 8px;
-  margin-top: 20upx;
 }
 </style>

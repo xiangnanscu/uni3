@@ -159,7 +159,6 @@
     "useDeviceOrientation": true,
     "useDevicePixelRatio": true,
     "useDevicesList": true,
-    "useDisableWeixinShare": true,
     "useDisplayMedia": true,
     "useDocumentVisibility": true,
     "useDraggable": true,

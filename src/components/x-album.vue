@@ -7,7 +7,7 @@
   >
     <uni-grid-item v-for="(url, index) in urls" :index="index" :key="index">
       <view class="grid-item-box">
-        <image class="image" :src="url" mode="aspectFit" />
+        <image class="grid-item-box" :src="url" mode="aspectFit" />
       </view>
     </uni-grid-item>
   </uni-grid>
@@ -31,7 +31,6 @@ export default {
 };
 </script>
 <style scoped>
-.image,
 .grid-item-box {
   width: 100%;
   height: 100%;
