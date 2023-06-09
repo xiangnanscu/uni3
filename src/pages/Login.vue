@@ -40,11 +40,14 @@
 </template>
 
 <script setup>
-const { loginWithRedirect } = useSession();
+const { login } = useSession();
 const store = useStore();
-const query = useQuery();
+const redirectUrl = useRedirect();
 
-const loginUser = async (user) => await loginWithRedirect(user, query.value);
+const loginUser = async (user) => {
+  login(user);
+  await utils.gotoPage({ url: redirectUrl.value, redirect: true });
+};
 // #ifdef H5
 store.message = "请先登录";
 const successPost = async (user) => {

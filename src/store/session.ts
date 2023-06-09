@@ -44,10 +44,6 @@ export const useSession = defineStore("session", () => {
     Object.assign(session.user, user);
     uni.setStorageSync("session", JSON.stringify(session));
   }
-  async function loginWithRedirect(user: SessionUser) {
-    login(user);
-    await useRedirect(query).tryRedirect();
-  }
   function logout() {
     Object.assign(session.user, getAnonymousSession().user);
     uni.removeStorageSync("session");
@@ -56,7 +52,6 @@ export const useSession = defineStore("session", () => {
   return {
     session,
     login,
-    loginWithRedirect,
     logout
   };
 });
