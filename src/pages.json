@@ -9,7 +9,6 @@
   "pages": [
     { "path": "pages/tabbar/Home", "style": { "navigationBarTitleText": "" } },
     { "path": "pages/Uform", "style": { "navigationBarTitleText": "" } },
-    { "path": "pages/LoginH5", "style": { "navigationBarTitleText": "" } },
     {
       "path": "pages/FeeplanDetail",
       "style": { "navigationBarTitleText": "" }
@@ -53,7 +52,6 @@
     },
     { "path": "pages/VolplanList", "style": { "navigationBarTitleText": "" } },
     { "path": "pages/Login", "style": { "navigationBarTitleText": "" } },
-    { "path": "pages/LoginWx", "style": { "navigationBarTitleText": "" } },
     {
       "path": "pages/ThreadListAll",
       "style": { "navigationBarTitleText": "" }

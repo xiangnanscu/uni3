@@ -32,6 +32,8 @@ const setupRequest = () => {
     invoke(args) {
       // console.log("global uni.request invoke:", args);
       const store = useStore();
+      store.message = "";
+      store.error = "";
       if (!store.disableLoading) {
         store.loading = true;
         uni.showLoading();
@@ -99,13 +101,11 @@ const setupRequest = () => {
   });
 };
 
-const navHandlerList = ["navigateTo", "redirectTo"];
+const navHandlerList = ["navigateTo", "redirectTo", "switchTab"];
 const loginPage = process.env.UNI_LOGIN_PAGE;
 const whiteList = [
   process.env.UNI_HOME_PAGE,
   loginPage,
-  "/pages/LoginH5",
-  "/pages/LoginWx",
   "/pages/tabbar/ProfileMy"
 ];
 
@@ -129,18 +129,14 @@ const setupNav = () => {
         if (sessionCookie && session?.user?.id) {
           return opts;
         }
-        const loginUrl = `${loginPage}?redirect=${encodeURIComponent(
-          opts.url
-        )}`;
-        console.log("路由拦截-需要登陆", opts.url);
-        uni.navigateTo({
-          ...opts,
-          url: loginUrl
+        utils.gotoPage({
+          url: loginPage,
+          query: { redirect: opts.url }
         });
         return false;
       },
       complete(res) {
-        console.log("路由拦截结束", res);
+        // console.log("路由拦截结束", res);
         navStack.pop();
       },
       fail(err) {

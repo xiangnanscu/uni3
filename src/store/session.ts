@@ -39,16 +39,14 @@ const getSession = () => {
 };
 
 export const useSession = defineStore("session", () => {
-  console.log("useSession called");
   const session = getSession();
-  const { tryRedirect } = useRedirect({ decode: true });
   function login(user: SessionUser) {
-    // console.log("login user", JSON.stringify(user));
     Object.assign(session.user, user);
     uni.setStorageSync("session", JSON.stringify(session));
   }
   async function loginWithRedirect(user: SessionUser) {
     login(user);
+    const { tryRedirect } = useRedirect();
     await tryRedirect();
   }
   function logout() {

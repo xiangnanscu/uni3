@@ -1,21 +1,12 @@
-export function useRedirect({ decode }) {
-  console.log("useRedirect called");
+export function useRedirect() {
   const redirect = ref("");
-  onLoad((query) => {
-    console.log("useRedirect onLoad:", query);
-    let url = query.redirect || process.env.UNI_HOME_PAGE;
-    if (url.startsWith(process.env.UNI_LOGIN_PAGE)) {
-      url = process.env.UNI_HOME_PAGE;
-    }
-    if (decode) {
-      redirect.value = decodeURIComponent(url);
-    } else {
-      redirect.value = url;
-    }
-    console.log("useRedirect onLoad end redirect:", redirect.value);
-  });
+  let redirectUrl = useQuery("redirect") || process.env.UNI_HOME_PAGE;
+  if (redirectUrl.startsWith(process.env.UNI_LOGIN_PAGE)) {
+    redirectUrl = process.env.UNI_HOME_PAGE;
+  }
+  // 因为utils.gotoPage使用encodeURIComponent来编码
+  redirect.value = decodeURIComponent(redirectUrl);
   const tryRedirect = async () => {
-    console.log("tryRedirect called redirect: ", redirect.value);
     await utils.gotoPage({
       url: redirect.value,
       redirect: true

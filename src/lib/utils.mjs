@@ -195,7 +195,7 @@ const tabbarPagesMap = Object.fromEntries(
 export async function gotoPage(opts) {
   let url = opts.url;
   if (opts.query) {
-    url = url + "?" + toURLSearchParams(opts.query);
+    url = url + "?" + toURLSearchParams(opts.query); // % &=/@;$:+?#
   }
   const navParams = appendAnimationParams({ url });
   try {
