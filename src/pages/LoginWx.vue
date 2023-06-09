@@ -26,6 +26,8 @@
 </template>
 
 <script>
+const { loginWithRedirect } = useSession();
+
 export default {
   data() {
     return {
@@ -73,7 +75,6 @@ export default {
   async onShow() {
     console.log("loginWx onShow");
     const user = await this.getWxUser();
-    uni.hideLoading();
     this.profileData.id = user.id;
     this.profileData.openid = user.id;
     this.profileData.permission = user.permission;
@@ -108,17 +109,7 @@ export default {
       return user;
     },
     async wxLogin() {
-      const { login } = useSession();
-      login(this.userData);
-      const safeRedirect =
-        !this.redirect || this.redirect.includes(process.env.UNI_LOGIN_PAGE)
-          ? process.env.UNI_HOME_PAGE
-          : this.redirect;
-      // console.log({safeRedirect})
-      await utils.gotoPage({
-        url: safeRedirect || process.env.UNI_HOME_PAGE,
-        redirect: true
-      });
+      await loginWithRedirect(this.userData);
     },
     async submitLoginData(ref) {
       await this.$refs[ref].validate();

@@ -76,7 +76,10 @@ const setupRequest = () => {
       // console.log("global uni.request complete:", args);
       const store = useStore();
       store.loading = false;
-      uni.hideLoading();
+      if (!store.disableLoading) {
+        store.loading = false;
+        uni.hideLoading();
+      }
       const cookies = args.cookies || [];
       // #ifdef H5
       if (cookies.length === 0 && args.header["set-cookie-patch"]) {
