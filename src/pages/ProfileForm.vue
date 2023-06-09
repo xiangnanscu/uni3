@@ -22,7 +22,11 @@
         <!-- #endif -->
 
         <!-- #ifdef MP-WEIXIN -->
-        <x-picker v-model="profileData.avatar" />
+        <x-picker
+          :size="avatarSizeArg"
+          v-model="profileData.avatar"
+          v-model:error="errors.avatar"
+        />
         <!-- #endif -->
       </uni-forms-item>
       <uni-forms-item label="昵称" name="nickname">
@@ -48,8 +52,8 @@
 <script>
 import { parseSize } from "@/lib/utils.mjs";
 
-const avatarSizeArg = "5M";
-const avatarSize = parseSize("5M");
+const avatarSizeArg = process.env.ALIOSS_AVATAR_SIZE || "2M";
+const avatarSize = parseSize(avatarSizeArg);
 
 const getAvatarObject = (url) => {
   const [_, name, extname] = url.match(/\/([^/]+)\.([^/]+)$/);
@@ -63,6 +67,7 @@ export default {
   data() {
     return {
       errors: {},
+      avatarSizeArg,
       profileData: {
         intro: "",
         nickname: "",

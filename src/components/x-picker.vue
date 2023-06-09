@@ -46,13 +46,21 @@ const ossUrl = `https://${process.env.ALIOSS_HOST}/`;
 
 export default {
   name: "uploadImage",
-  emits: ["uploadFiles", "choose", "delFile", "update:modelValue"],
+  emits: [
+    "uploadFiles",
+    "choose",
+    "delFile",
+    "update:modelValue",
+    "update:error"
+  ],
   data() {
     return {
       localValue: []
     };
   },
   props: {
+    size: { type: String, default: process.env.ALIOSS_AVATAR_SIZE || "2M" },
+    error: { type: String },
     modelValue: {
       type: Object,
       default() {
@@ -159,35 +167,53 @@ export default {
       const key = `${process.env.VITE_APP_NAME}/wx/${utils.uuid()}.${avatar
         .split(".")
         .pop()}`;
+      this.$emit("update:error", "");
       const { data: payload } = await Http.post("/alioss_payload", {
-        size: "10m",
         key,
+        size: this.size,
         bucket: process.env.ALIOSS_BUCKET
       });
-      // console.log({ payload });
-      uni.uploadFile({
-        url: ossUrl,
-        filePath: avatar,
-        name: "file",
-        formData: {
-          key,
-          success_action_status: 200,
-          ...payload
-        },
-        fail(res) {
-          uni.showToast({ title: res.errMsg, duration: 3000 });
-          this.$emit("update:modelValue", { errMsg: res.errMsg });
-        },
-        success: async (res) => {
-          // console.log("uploadFile res:", res);
-          // uni.showToast({ title: res.errMsg });
-          if (res.errMsg == "uploadFile:ok") {
-            this.$emit("update:modelValue", { url: `${ossUrl}${key}` });
-          } else {
-            this.$emit("update:modelValue", { errMsg: res.errMsg });
+      // console.log({ ossUrl, avatar, key });
+      try {
+        const res = await uni.uploadFile({
+          url: ossUrl,
+          filePath: avatar,
+          name: "file",
+          formData: {
+            key,
+            success_action_status: 200,
+            ...payload
           }
+        });
+        if (res.errMsg == "uploadFile:ok") {
+          if (res.statusCode >= 400) {
+            if (
+              res.data.includes(
+                `Your proposed upload exceeds the maximum allowed size`
+              )
+            ) {
+              this.$emit("update:error", `图片大小不能超过${this.size}`);
+            } else {
+              uni.showModal({
+                title: `上传出错`,
+                content: res.data,
+                showCancel: false
+              });
+            }
+          } else {
+            this.$emit("update:modelValue", { url: `${ossUrl}${key}` });
+          }
+        } else {
+          this.$emit("update:error", res.errMsg || "uni.uploadFile调用失败");
         }
-      });
+      } catch (res) {
+        console.error("uploadFile fail:", res);
+        uni.showModal({
+          title: `上传出错`,
+          content: res.data,
+          showCancel: false
+        });
+      }
     },
     delFile(index) {
       this.$emit("update:modelValue", { url: "" });

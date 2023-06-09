@@ -23,8 +23,16 @@
         :model-value="profileData"
         label-position="left"
       >
-        <uni-forms-item label="头像" name="avatar">
-          <x-picker v-model="profileData.avatar" />
+        <uni-forms-item
+          label="头像"
+          name="avatar"
+          :error-message="errors.avatar"
+        >
+          <x-picker
+            :size="avatarSize"
+            v-model="profileData.avatar"
+            v-model:error="errors.avatar"
+          />
         </uni-forms-item>
         <uni-forms-item label="昵称" name="nickname">
           <uni-easyinput
@@ -46,7 +54,8 @@
 const { login } = useSession();
 const store = useStore();
 const redirectUrl = useRedirect();
-
+const avatarSize = process.env.ALIOSS_AVATAR_SIZE || "2M";
+const errors = reactive({ avatar: "" });
 const loginUser = async (user) => {
   login(user);
   await utils.gotoPage({ url: redirectUrl.value, redirect: true });
