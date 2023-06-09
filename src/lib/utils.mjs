@@ -175,7 +175,7 @@ const toURLSearchParams = (obj) => {
     .join("&");
 };
 const appendAnimationParams = (opts) => {
-  return { animationType: "pop-out", animationDuration: 200, ...opts };
+  return { animationType: "zoom-out", animationDuration: 200, ...opts };
 };
 export function getPage(delta = 0) {
   const pages = getCurrentPages();

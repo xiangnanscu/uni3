@@ -104,6 +104,7 @@ const setupRequest = () => {
 const navHandlerList = ["navigateTo", "redirectTo", "switchTab"];
 const loginPage = process.env.UNI_LOGIN_PAGE;
 const whiteList = [
+  "/",
   process.env.UNI_HOME_PAGE,
   loginPage,
   "/pages/tabbar/ProfileMy"

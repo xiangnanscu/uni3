@@ -13,7 +13,10 @@
     <!-- #endif -->
     <!-- #ifdef MP-WEIXIN -->
     <div v-show="needCompleteProfile">
-      <uni-notice-bar text="首次登陆，请完善头像和昵称" />
+      <uni-notice-bar
+        text="首次登陆，请完善头像和昵称"
+        style="text-align: center"
+      />
       <uni-forms
         ref="valiForm"
         :rules="rules"
