@@ -6,7 +6,8 @@ const emit = defineEmits([
 ]);
 const props = defineProps({
   field: { type: Object, required: true },
-  modelValue: { required: true }
+  modelValue: { required: true },
+  error: { type: String, default: "" }
 });
 const uniFormItem = inject("uniFormItem", null);
 const field = props.field;
@@ -88,6 +89,25 @@ const blurValidate = () => {
   emit("blur:validate", props.modelValue);
 };
 const isArrayField = computed(() => field.type == "array");
+const easyInputTypeMap = {
+  integer: "number",
+  float: "digit",
+  password: "password",
+  nickname: "nickname",
+  text: "textarea"
+};
+const easyType = computed(
+  () => easyInputTypeMap[field.type] || easyInputTypeMap[field.inputType]
+);
+const getPhoneNumber = async (event) => {
+  // 用户允许: e.detail = {errMsg: "getPhoneNumber:ok", code: "??", encryptedData: "??", iv: "??"}
+  // 用户拒绝: e.detail = {errMsg: "getPhoneNumber:fail user deny"}
+  const { code } = event.detail;
+  if (code) {
+    const { data } = await Http.post("/wx_phone", { code });
+    sendValue(data.purePhoneNumber);
+  }
+};
 </script>
 <template>
   <template v-if="field.autocomplete">
@@ -131,14 +151,6 @@ const isArrayField = computed(() => field.type == "array");
       </div>
     </uni-popup>
   </template>
-  <uni-easyinput
-    v-else-if="fieldType == 'password'"
-    type="password"
-    @update:modelValue="sendValue"
-    :modelValue="props.modelValue"
-    :disabled="field.disabled"
-    :placeholder="field.hint"
-  ></uni-easyinput>
   <template v-else-if="field.choices">
     <uni-data-checkbox
       v-if="isArrayField || field.tag == 'radio'"
@@ -216,60 +228,59 @@ const isArrayField = computed(() => field.type == "array");
       suffixIcon="forward"
     />
   </picker>
-  <uni-file-picker
-    v-else-if="fieldType.startsWith('alioss')"
-    ref="filePickerRef"
-    v-model="fileValues[name]"
-    :file-mediatype="getUniMediatype(field)"
-    :limit="fieldType.endsWith('List') ? field.limit || 9 : 1"
-    :disabled="field.disabled"
-    :title="' '"
-    mode="grid"
-    :disable-preview="true"
-    return-type="array"
-    @select="filePickerSelectHanlder"
-    @success="filePickerSuccess"
-    @progress="filePickerProgress"
-    @fail="filePickerFail"
-  />
-  <uni-easyinput
-    v-else-if="fieldType == 'integer'"
-    @blur="blurValidate"
-    @update:modelValue="sendValue"
-    :modelValue="props.modelValue"
-    :disabled="field.disabled"
-    :placeholder="field.hint"
-    type="number"
-  />
-  <uni-easyinput
-    v-else-if="fieldType == 'float'"
-    @blur="blurValidate"
-    @update:modelValue="sendValue"
-    :modelValue="props.modelValue"
-    :disabled="field.disabled"
-    :placeholder="field.hint"
-    type="digit"
-  />
+  <template v-else-if="fieldType.startsWith('alioss')">
+    <wx-avatar
+      v-if="field.wxAvatar"
+      @update:modelValue="sendValue"
+      @update:error="emit('update:error', $event)"
+      :modelValue="{ url: props.modelValue, errMsg: props.error }"
+      :size="field.sizeArg"
+    ></wx-avatar>
+    <uni-file-picker
+      v-else
+      ref="filePickerRef"
+      v-model="fileValues[name]"
+      :file-mediatype="getUniMediatype(field)"
+      :limit="fieldType.endsWith('List') ? field.limit || 9 : 1"
+      :disabled="field.disabled"
+      :title="' '"
+      mode="grid"
+      :disable-preview="true"
+      return-type="array"
+      @select="filePickerSelectHanlder"
+      @success="filePickerSuccess"
+      @progress="filePickerProgress"
+      @fail="filePickerFail"
+    />
+  </template>
+  <template v-else-if="field.wxPhone">
+    <uni-easyinput
+      @blur="blurValidate"
+      @update:modelValue="sendValue"
+      :error-message="props.error"
+      disable-color="black"
+      :modelValue="props.modelValue"
+      :disabled="true"
+      :placeholder="field.hint"
+    />
+    <button
+      type="primary"
+      size="mini"
+      open-type="getPhoneNumber"
+      @getphonenumber="getPhoneNumber"
+    >
+      获取手机号
+    </button>
+  </template>
   <uni-easyinput
     v-else
     @blur="blurValidate"
     @update:modelValue="sendValue"
+    :error-message="props.error"
     :modelValue="props.modelValue"
     :disabled="field.disabled"
     :placeholder="field.hint"
+    :type="easyType || 'text'"
   />
 </template>
-<style scoped>
-.dynamic-delete-button {
-  cursor: pointer;
-  position: relative;
-  top: 4px;
-  font-size: 24px;
-  color: #999;
-  transition: all 0.3s;
-}
-
-.dynamic-delete-button:hover {
-  color: red;
-}
-</style>
+<style scoped></style>

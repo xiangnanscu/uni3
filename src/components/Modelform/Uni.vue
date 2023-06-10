@@ -83,9 +83,21 @@ const submit = async () => {
   }
   submiting.value = true;
   try {
-    const response = await Http.post(props.actionUrl, formdata);
+    const response = await Http.post(props.actionUrl, {
+      ...values,
+      ...formdata
+    });
     const realData =
       response.data.type == "uni_error" ? response.data.data : response.data;
+    const successStuff = () => {
+      emit("successPost", realData);
+      if (props.successUrl) {
+        utils.gotoPage({
+          url: props.successUrl,
+          redirect: props.successUseRedirect
+        });
+      }
+    };
     if (typeof realData == "object") {
       const dataType = realData.type;
       if (dataType == "field_error") {
@@ -118,28 +130,16 @@ const submit = async () => {
           showCancel: false
         });
       } else {
-        emit("successPost", realData);
-        if (props.successUrl) {
-          utils.gotoPage({
-            url: props.successUrl,
-            redirect: props.successUseRedirect
-          });
-        }
+        successStuff();
       }
     } else if (response.data.type == "uni_error") {
       uni.showModal({
-        title: realData || "发生错误",
-        editable: false,
+        title: "发生错误",
+        content: realData,
         showCancel: false
       });
     } else {
-      emit("successPost", realData);
-      if (props.successUrl) {
-        utils.gotoPage({
-          url: props.successUrl,
-          redirect: props.successUseRedirect
-        });
-      }
+      successStuff();
     }
   } catch (error) {
     console.error("uni-form error:", error);

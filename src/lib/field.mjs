@@ -298,7 +298,9 @@ const stringOptionNames = [
   "pattern",
   "length",
   "minlength",
-  "maxlength"
+  "maxlength",
+  "inputType",
+  "wxPhone" // uniapp
 ];
 const stringValidatorNames = ["pattern", "length", "minlength", "maxlength"];
 class StringField extends BaseField {
@@ -976,7 +978,8 @@ const aliossOptionNames = [
   "width",
   "prefix",
   "hash",
-  "limit", // uni
+  "limit", // uniapp
+  "wxAvatar", // uniapp
   "listType", // antdv
   "maxCount", // antdv
   "multiple", // antdv
@@ -1033,6 +1036,9 @@ class AliossField extends StringField {
   }
   toFormValue(url) {
     // console.log("call AliossField.toFormValue", JSON.stringify(url));
+    if (this.wxAvatar) {
+      return url || "";
+    }
     if (typeof url == "string") {
       return url ? [mapToAntdFileValue(url)] : [];
     } else if (Array.isArray(url)) {
@@ -1042,7 +1048,9 @@ class AliossField extends StringField {
     }
   }
   toPostValue(fileList) {
-    if (!Array.isArray(fileList) || !fileList[0]) {
+    if (this.wxAvatar) {
+      return fileList;
+    } else if (!Array.isArray(fileList) || !fileList[0]) {
       return "";
     } else {
       return fileList[0].ossUrl || "";

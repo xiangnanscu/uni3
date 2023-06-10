@@ -1,0 +1,23 @@
+diff --git a/node_modules/@dcloudio/uni-ui/lib/uni-easyinput/uni-easyinput.vue b/node_modules/@dcloudio/uni-ui/lib/uni-easyinput/uni-easyinput.vue
+index 2c7993a..002f6b1 100644
+--- a/node_modules/@dcloudio/uni-ui/lib/uni-easyinput/uni-easyinput.vue
++++ b/node_modules/@dcloudio/uni-ui/lib/uni-easyinput/uni-easyinput.vue
+@@ -238,6 +238,10 @@ export default {
+ 				};
+ 			}
+ 		},
++    disableColor: {
++			type: String,
++			default: '#000'
++		},
+ 		errorMessage: {
+ 			type: [String, Boolean],
+ 			default: ''
+@@ -307,6 +311,7 @@ export default {
+ 		inputStyle() {
+ 			const paddingRight = this.type === 'password' || this.clearable || this.prefixIcon ? '' : '10px';
+ 			return obj2strStyle({
++        ...(this.disabled ? {color: this.disableColor }:{}),
+ 				'padding-right': paddingRight,
+ 				'padding-left': this.prefixIcon ? '' : '10px'
+ 			});

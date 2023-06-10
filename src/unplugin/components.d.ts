@@ -24,6 +24,7 @@ declare module '@vue/runtime-core' {
     ThreadList: typeof import('./../components/thread-list.vue')['default']
     UploadFile: typeof import('./../components/upload-file.vue')['default']
     UploadImage: typeof import('./../components/upload-image.vue')['default']
+    WxAvatar: typeof import('./../components/wx-avatar.vue')['default']
     WxLogin: typeof import('./../components/WxLogin.vue')['default']
     XAlbum: typeof import('./../components/x-album.vue')['default']
     XPicker: typeof import('./../components/x-picker.vue')['default']
