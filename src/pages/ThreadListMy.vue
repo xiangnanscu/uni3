@@ -1,6 +1,6 @@
 <template>
   <page-layout class="ThreadListMy-main">
-    <uni-list :border="false">
+    <uni-list :border="false" v-if="myThreadsList.length">
       <uni-list-item
         v-for="(item, index) in myThreadsList"
         :key="index"
@@ -11,6 +11,7 @@
         :showArrow="false"
       />
     </uni-list>
+    <x-alert v-else title="没有记录"> </x-alert>
   </page-layout>
 </template>
 

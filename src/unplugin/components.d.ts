@@ -8,6 +8,7 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     AliossPicker: typeof import('./../components/alioss-picker.vue')['default']
+    copy: typeof import('./../components/x-alert copy.vue')['default']
     Favicon: typeof import('./../components/favicon.vue')['default']
     InlineTest: typeof import('./../components/InlineTest.vue')['default']
     ModelformUni: typeof import('./../components/Modelform/Uni.vue')['default']
@@ -27,6 +28,8 @@ declare module '@vue/runtime-core' {
     WxAvatar: typeof import('./../components/wx-avatar.vue')['default']
     WxLogin: typeof import('./../components/WxLogin.vue')['default']
     XAlbum: typeof import('./../components/x-album.vue')['default']
+    XAlert: typeof import('./../components/x-alert.vue')['default']
+    XButton: typeof import('./../components/x-button.vue')['default']
     XPicker: typeof import('./../components/x-picker.vue')['default']
   }
 }

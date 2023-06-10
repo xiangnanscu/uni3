@@ -17,7 +17,7 @@
         />
       </uni-forms-item>
     </uni-forms>
-    <button type="primary" @click="submit('valiForm')">发帖</button>
+    <x-button @click="submit('valiForm')">发帖</x-button>
   </page-layout>
 </template>
 

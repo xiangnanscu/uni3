@@ -27,15 +27,7 @@
     </uni-list>
   </uni-card>
   <div v-else-if="ready" style="padding: 1em">
-    <fui-alert
-      type="warn"
-      spacing
-      title="你还不是团员, 无法缴费"
-      size="28rpx"
-      :marginTop="24"
-      :marginBottom="24"
-    >
-    </fui-alert>
+    <x-alert title="你还不是团员, 无法缴费"> </x-alert>
     <navigator
       open-type="navigateBack"
       style="display: flex; justify-content: space-around"

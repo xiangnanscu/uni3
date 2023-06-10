@@ -1,15 +1,6 @@
 <template>
   <page-layout>
-    <fui-alert
-      v-if="query.message"
-      type="warn"
-      spacing
-      :title="query.message"
-      size="28rpx"
-      :marginTop="24"
-      :marginBottom="24"
-    >
-    </fui-alert>
+    <x-alert v-if="query.message" :title="query.message"> </x-alert>
     <modelform-uni
       :model="profileModel"
       :values="userData"
