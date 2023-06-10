@@ -34,7 +34,7 @@
       @choose="choose"
       @delFile="delFile"
     >
-      <slot><button type="primary" size="mini">选择文件</button></slot>
+      <slot><x-button size="mini">选择文件</x-button></slot>
     </upload-file>
   </view>
 </template>

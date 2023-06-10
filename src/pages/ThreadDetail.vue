@@ -11,7 +11,7 @@
     </view>
   </page-layout>
   <div class="thread-reply">
-    <button plain @click="replyClick" type="primary">回复</button>
+    <x-button @click="replyClick">回复</x-button>
   </div>
   <uni-popup ref="replyPopup" type="bottom" background-color="#fff">
     <div style="padding: 15px">
@@ -21,7 +21,7 @@
         :cursorSpacing="90"
         v-model="currentPost"
       ></textarea>
-      <button type="primary" @click="replyThread()" plain="true">回复</button>
+      <x-button @click="replyThread()">回复</x-button>
     </div>
   </uni-popup>
 </template>

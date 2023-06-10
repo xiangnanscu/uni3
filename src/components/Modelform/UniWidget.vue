@@ -263,14 +263,13 @@ const getPhoneNumber = async (event) => {
       :disabled="true"
       :placeholder="field.hint"
     />
-    <button
-      type="primary"
+    <x-button
       size="mini"
       open-type="getPhoneNumber"
       @getphonenumber="getPhoneNumber"
     >
       获取手机号
-    </button>
+    </x-button>
   </template>
   <uni-easyinput
     v-else

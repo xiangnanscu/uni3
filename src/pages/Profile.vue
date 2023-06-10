@@ -9,15 +9,13 @@
       ></uni-list-chat>
     </uni-list>
     <div style="text-align: center">
-      <button
+      <x-button
         v-if="currentProfile.id !== user.id"
-        plain="true"
-        type="primary"
         size="mini"
         @click="$refs.popupMessage.open()"
       >
         私信
-      </button>
+      </x-button>
     </div>
 
     <uni-list :border="false">
@@ -58,10 +56,8 @@
           :cursorSpacing="90"
           :adjust-position="true"
         ></textarea>
-        <button type="primary" @click="sendMessage()" plain="true">
-          发送
-        </button></view
-      >
+        <x-button @click="sendMessage()"> 发送 </x-button>
+      </view>
     </uni-popup>
   </page-layout>
 </template>

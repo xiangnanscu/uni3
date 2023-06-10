@@ -12,15 +12,14 @@
         )}月团费${feeItem.amount}元`"
       >
         <template #footer>
-          <button
+          <x-button
             v-if="feeItem.status !== '已缴费'"
             :disabled="disabled"
-            @click="payFee(feeItem)"
-            type="primary"
             size="mini"
+            @click="payFee(feeItem)"
           >
             缴费
-          </button>
+          </x-button>
           <span v-else>{{ feeItem.status }}</span>
         </template>
       </uni-list-item>
@@ -32,7 +31,7 @@
       open-type="navigateBack"
       style="display: flex; justify-content: space-around"
     >
-      <button type="primary" size="mini">返回</button>
+      <x-button size="mini">返回</x-button>
     </navigator>
   </div>
 </template>

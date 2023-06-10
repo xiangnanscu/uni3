@@ -8,7 +8,7 @@
     >
       {{ formItemToken }}
     </uni-forms>
-    <button type="primary" @click="submit('valiForm')">提交</button>
+    <x-button @click="submit('valiForm')">提交</x-button>
   </page-layout>
 </template>
 

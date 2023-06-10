@@ -12,14 +12,7 @@
       >
       <text user-select class="feeplan-content">{{ feeplan.content }}</text>
     </uni-card>
-    <button
-      type="primary"
-      @click="payFee(params.id)"
-      plain="true"
-      :disabled="disabled"
-    >
-      缴费
-    </button>
+    <x-button @click="payFee(params.id)" :disabled="disabled"> 缴费 </x-button>
   </page-layout>
 </template>
 

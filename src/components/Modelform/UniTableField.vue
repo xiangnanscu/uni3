@@ -104,10 +104,10 @@ const tagColorArray = [
       style="padding: 1em 3px"
     ></modelform-uni>
   </uni-popup>
-  <button type="primary" size="mini" @click="openCreateForm">
+  <x-button size="mini" @click="openCreateForm">
     <uni-icons type="plusempty" style="color: #fff"></uni-icons>
     添加{{ field.label }}
-  </button>
+  </x-button>
   <uni-table
     v-if="props.modelValue.length"
     class="uni-table"

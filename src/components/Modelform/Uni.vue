@@ -205,14 +205,13 @@ const submit = async () => {
         <uni-forms-item
           :label="values[field.name]?.length > 0 ? '' : field.label"
         >
-          <button
-            type="primary"
+          <x-button
             size="mini"
             @click="values[field.name].push(field.getDefault())"
           >
             <uni-icons type="plusempty" style="color: #fff"></uni-icons>
             添加{{ field.label }}
-          </button>
+          </x-button>
         </uni-forms-item>
       </template>
       <template v-else-if="field.type == 'table'">
@@ -255,14 +254,13 @@ const submit = async () => {
         />
       </uni-forms-item>
     </template>
-    <button
+    <x-button
       v-if="!props.hideSubmitButton"
-      type="primary"
-      @click="submit"
       :disabled="submiting"
+      @click="submit"
     >
       {{ props.submitButtonText }}
-    </button>
+    </x-button>
   </uni-forms>
 </template>
 <style scoped>

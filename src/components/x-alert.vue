@@ -5,7 +5,7 @@
     size="28rpx"
     :marginTop="24"
     :marginBottom="24"
-    v-bind="$attrs"
+    :title="props.title"
   >
     <slot />
     <slot name="content" />
@@ -13,4 +13,8 @@
   </fui-alert>
 </template>
 
-<script setup></script>
+<script setup>
+const props = defineProps({
+  title: { type: String, default: "" }
+});
+</script>

@@ -14,7 +14,7 @@
         <uni-easyinput v-model="usrData.password" />
       </uni-forms-item>
     </uni-forms>
-    <button type="primary" @click="submit('valiForm')">提交</button>
+    <x-button type="primary" @click="submit('valiForm')">提交</x-button>
   </page-layout>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-  <button @click="testHmr">组件热</button>
+  <x-button @click="testHmr">组件热</x-button>
 </template>
 
 <script setup>

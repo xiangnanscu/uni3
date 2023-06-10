@@ -1,6 +1,6 @@
 <template>
   <page-layout>
-    <uni-list :border="false">
+    <uni-list :border="false" v-if="records.length">
       <uni-list-item
         v-for="(item, index) in records"
         :key="index"
@@ -28,6 +28,7 @@
         >
       </uni-list-item>
     </uni-list>
+    <x-alert v-else title="还没有帖子, 快来首发吧!"> </x-alert>
   </page-layout>
 </template>
 

@@ -1,23 +1,26 @@
 <template>
   <page-layout>
-    <uni-list :border="false">
-      <navigator
-        v-for="(item, index) in NewsRecords"
-        :key="index"
-        :url="`/pages/NewsDetail?id=${item.id}`"
-      >
-        <uni-list-item
-          :title="item.title"
-          :showArrow="false"
-          :rightText="fromNow(item.ctime)"
-      /></navigator>
-    </uni-list>
-    <uni-pagination
-      :total="total"
-      @change="clickPage"
-      :current="current"
-      :pageSize="pageSize"
-    />
+    <div v-if="NewsRecords.length">
+      <uni-list :border="false">
+        <navigator
+          v-for="(item, index) in NewsRecords"
+          :key="index"
+          :url="`/pages/NewsDetail?id=${item.id}`"
+        >
+          <uni-list-item
+            :title="item.title"
+            :showArrow="false"
+            :rightText="fromNow(item.ctime)"
+        /></navigator>
+      </uni-list>
+      <uni-pagination
+        :total="total"
+        @change="clickPage"
+        :current="current"
+        :pageSize="pageSize"
+      />
+    </div>
+    <x-alert v-else title="没有记录"> </x-alert>
   </page-layout>
 </template>
 
