@@ -64,7 +64,7 @@ const setupRequest = () => {
           utils.gotoPage({
             url: process.env.UNI_LOGIN_PAGE,
             query: { redirect: getCurrentPages().slice(-1)[0].$page?.fullPath },
-            redirect: true
+            redirect: false
           });
         } else {
           // success里面抛异常会导致modelform的try-catch失效
@@ -134,7 +134,7 @@ const setupNav = () => {
         utils.gotoPage({
           url: loginPage,
           query: { redirect: opts.url },
-          redirect: true
+          redirect: false
         });
         return false;
       },
