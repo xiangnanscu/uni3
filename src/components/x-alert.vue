@@ -5,6 +5,10 @@
     size="28rpx"
     :marginTop="24"
     :marginBottom="24"
+    :iconColor="props.mainColor"
+    :style="{ border: `1px solid ${props.mainColor}` }"
+    background="#fff"
+    :color="props.mainColor"
     :title="props.title"
   >
     <slot />
@@ -15,6 +19,24 @@
 
 <script setup>
 const props = defineProps({
+  mainColor: { type: String, default: "#ffb703" },
   title: { type: String, default: "" }
 });
 </script>
+<style scoped>
+.fui-alert__waiting {
+  background-color: var(--fui-color-primary, #465cff) !important;
+}
+
+.fui-alert__success {
+  background-color: var(--fui-color-success, #09be4f) !important;
+}
+
+.fui-alert__warn {
+  background-color: var(--fui-color-warning, #ffb703) !important;
+}
+
+.fui-alert__clear {
+  background-color: var(--fui-color-danger, #ff2b2b) !important;
+}
+</style>
