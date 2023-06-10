@@ -68,7 +68,8 @@ export default {
         query: {
           redirect: "/pages/FeeplanList",
           message: "缴纳团费请先实名认证"
-        }
+        },
+        redirect: false
       });
     } else {
       await this.fetchData(query);

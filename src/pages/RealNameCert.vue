@@ -1,5 +1,15 @@
 <template>
   <page-layout>
+    <fui-alert
+      v-if="query.message"
+      type="warn"
+      spacing
+      :title="query.message"
+      size="28rpx"
+      :marginTop="24"
+      :marginBottom="24"
+    >
+    </fui-alert>
     <modelform-uni
       :model="profileModel"
       :values="userData"
@@ -12,6 +22,7 @@
 </template>
 <script setup>
 const { session } = useSession();
+const query = useQuery()
 let wxPhone = true;
 // #ifdef H5
 wxPhone = false;

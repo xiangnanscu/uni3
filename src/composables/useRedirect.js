@@ -7,8 +7,7 @@ export function useRedirect() {
       if (redirectUrl.startsWith(process.env.UNI_LOGIN_PAGE)) {
         redirectUrl = process.env.UNI_HOME_PAGE;
       }
-      // 因为utils.gotoPage使用encodeURIComponent来编码
-      return decodeURIComponent(redirectUrl);
+      return redirectUrl;
     } else {
       return process.env.UNI_HOME_PAGE;
     }
