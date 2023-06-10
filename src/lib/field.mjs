@@ -411,19 +411,6 @@ class YearMonthField extends StringField {
   }
 }
 
-class YearField extends StringField {
-  type = "year";
-  dbType = "varchar";
-  constructor(options) {
-    super({ length: 4, ...options });
-    return this;
-  }
-  getValidators(validators) {
-    validators.unshift(Validator.year);
-    return super.getValidators(validators);
-  }
-}
-
 const integerOptionNames = [...baseOptionNames, "min", "max", "step", "serial"];
 const intergerValidatorNames = ["min", "max"];
 class IntegerField extends BaseField {
@@ -459,6 +446,24 @@ class IntegerField extends BaseField {
     }
   }
 }
+
+class YearField extends IntegerField {
+  type = "year";
+  dbType = "integer";
+  constructor(options) {
+    super({ min: 1000, max: 9999, ...options });
+    return this;
+  }
+}
+class MonthField extends IntegerField {
+  type = "month";
+  dbType = "integer";
+  constructor(options) {
+    super({ min: 1, max: 12, ...options });
+    return this;
+  }
+}
+
 class TextField extends BaseField {
   type = "text";
   dbType = "text";
@@ -618,6 +623,7 @@ class ArrayField extends BaseArrayField {
       PasswordField,
       YearMonthField,
       YearField,
+      MonthField,
       TextField,
       IntegerField,
       FloatField,
@@ -1082,7 +1088,7 @@ class AliossListField extends AliossField {
     return {
       ...BaseArrayField.prototype.getOptions.call(this, options),
       ...AliossField.prototype.getOptions.call(this, options),
-      type: "aliossList",
+      type: this.type,
       dbType: "jsonb"
     };
   }
@@ -1116,6 +1122,12 @@ class AliossImageListField extends AliossListField {
     super(options);
     this.image = true;
   }
+  getOptions(options) {
+    return {
+      ...super.getOptions(options),
+      type: "aliossImageList"
+    };
+  }
 }
 export {
   BaseField,
@@ -1124,6 +1136,7 @@ export {
   PasswordField,
   YearMonthField,
   YearField,
+  MonthField,
   TextField,
   IntegerField,
   FloatField,

@@ -2,7 +2,7 @@ import { Buffer } from "buffer";
 import pagesJson from "@/pages.json";
 
 export function isWeixin() {
-  var ua = navigator.userAgent.toLowerCase();
+  const ua = navigator.userAgent.toLowerCase();
   if (ua.match(/MicroMessenger/i) == "micromessenger") {
     return true;
   } else {
@@ -44,18 +44,18 @@ export const fromNow = (value) => {
     return "";
   }
   // 拿到当前时间戳和发布时的时间戳
-  var curTime = new Date();
-  var postTime = new Date(value);
+  const curTime = new Date();
+  const postTime = new Date(value);
   //计算差值
-  var timeDiff = curTime.getTime() - postTime.getTime();
+  const timeDiff = curTime.getTime() - postTime.getTime();
   // 单位换算
-  var min = 60 * 1000;
-  var hour = min * 60;
-  var day = hour * 24;
+  const min = 60 * 1000;
+  const hour = min * 60;
+  const day = hour * 24;
   // 计算发布时间距离当前时间的 天、时、分
-  var exceedDay = Math.floor(timeDiff / day);
-  var exceedHour = Math.floor(timeDiff / hour);
-  var exceedMin = Math.floor(timeDiff / min);
+  const exceedDay = Math.floor(timeDiff / day);
+  const exceedHour = Math.floor(timeDiff / hour);
+  const exceedMin = Math.floor(timeDiff / min);
   // 最后判断时间差
   if (exceedDay < 1) {
     if (exceedHour < 24 && exceedHour > 0) {
@@ -94,12 +94,12 @@ export function uuid() {
 }
 const FIRST_DUP_ADDED = {};
 export const findDups = (arr, callback) => {
-  var already = {};
-  var res = [];
-  for (var i = 1; i <= arr.length; i++) {
-    var e = arr[i - 1];
-    var k = callback(e, i, arr);
-    var a = already[k];
+  const already = {};
+  const res = [];
+  for (let i = 1; i <= arr.length; i++) {
+    const e = arr[i - 1];
+    const k = callback(e, i, arr);
+    const a = already[k];
     if (a !== undefined) {
       if (a != FIRST_DUP_ADDED) {
         res.push(a);
