@@ -12,6 +12,7 @@
 
 <script setup>
 const { session } = useSession();
+const loginUser = useLogin();
 let wxAvatar = true;
 // #ifdef H5
 wxAvatar = false;
@@ -33,7 +34,7 @@ const profileModel = Model.createModel({
 });
 
 const successPostWX = async (user) => {
-  await useLogin(userData.value);
+  await loginUser(userData.value);
 };
 onMounted(async () => {
   const { data } = await Http.get("/usr/profile/my");

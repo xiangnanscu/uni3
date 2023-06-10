@@ -22,7 +22,8 @@
 </template>
 <script setup>
 const { session } = useSession();
-const query = useQuery()
+const loginUser = useLogin();
+const query = useQuery();
 let wxPhone = true;
 // #ifdef H5
 wxPhone = false;
@@ -38,7 +39,7 @@ const profileModel = Model.createModel({
 });
 
 const successPost = async (user) => {
-  await useLogin(userData.value);
+  await loginUser(userData.value);
 };
 onMounted(async () => {
   const { data } = await Http.get("/usr/profile/my");

@@ -34,10 +34,10 @@
 const store = useStore();
 store.message = "请先登录";
 const avatarSize = process.env.ALIOSS_AVATAR_SIZE || "2M";
-
+const loginUser = useLogin();
 // #ifdef H5
 const successPostH5 = async (user) => {
-  await useLogin(user);
+  await loginUser(user);
 };
 
 const loginModel = Model.createModel({
@@ -74,7 +74,7 @@ const userData = ref({
   openid: ""
 });
 const successPostWX = async (user) => {
-  await useLogin(userData.value);
+  await loginUser(userData.value);
 };
 async function getWxUser() {
   const { code, errMsg } = await uni.login();
@@ -100,7 +100,7 @@ onLoad(async (options) => {
   } else {
     userData.value.nickname = user.nickname;
     userData.value.avatar = user.avatar;
-    await useLogin(userData.value);
+    await loginUser(userData.value);
   }
 });
 

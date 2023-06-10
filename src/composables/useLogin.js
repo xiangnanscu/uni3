@@ -1,7 +1,9 @@
-export async function useLogin(user) {
+export function useLogin() {
   console.log("useLogin called");
   const { login } = useSession();
   const redirectUrl = useRedirect();
-  login(user);
-  await utils.gotoPage({ url: redirectUrl.value, redirect: true });
+  return async (user) => {
+    login(user);
+    await utils.gotoPage({ url: redirectUrl.value, redirect: true });
+  };
 }
