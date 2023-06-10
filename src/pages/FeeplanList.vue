@@ -60,7 +60,8 @@ export default {
     if (!this.user.id) {
       await utils.gotoPage({
         url: "/pages/Login",
-        query: { redirect: "/pages/FeeplanList" }
+        query: { redirect: "/pages/FeeplanList" },
+        redirect: true
       });
     } else if (!this.user.username) {
       await utils.gotoPage({
@@ -69,7 +70,7 @@ export default {
           redirect: "/pages/FeeplanList",
           message: "缴纳团费请先实名认证"
         },
-        redirect: false
+        redirect: true
       });
     } else {
       await this.fetchData(query);
