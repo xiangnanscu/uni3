@@ -89,7 +89,7 @@ export default {
     async payFee(feeItem) {
       const planId = feeItem.feeplan_id;
       const { data: payed } = await Http.post(`/orders/check`, {
-        feeplan_id: planId
+        youth_fee_id: feeItem.id
       });
       if (payed) {
         return uni.showToast({
@@ -104,6 +104,7 @@ export default {
       }
       const { data } = await Http.post(`/wx/jsapi_mini_preorder`, {
         code,
+        timestamp: String(new Date().getTime()),
         youth_fee_id: feeItem.id,
         feeplan_id: planId
       });
