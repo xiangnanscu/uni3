@@ -1,5 +1,5 @@
 <template>
-  <fui-alert
+  <!-- <fui-alert
     type="warn"
     spacing
     size="28rpx"
@@ -14,7 +14,13 @@
     <slot />
     <slot name="content" />
     <slot name="right" />
-  </fui-alert>
+  </fui-alert> -->
+  <uni-notice-bar
+    class="notice-bar"
+    :text="props.title"
+    icon-type="info"
+    show-icon
+  />
 </template>
 
 <script setup>

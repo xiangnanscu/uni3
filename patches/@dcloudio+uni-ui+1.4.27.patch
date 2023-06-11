@@ -33,3 +33,27 @@ index 370441d..b861c29 100644
  					tempFile: this.files[index],
  					tempFilePath: this.files[index].url
  				})
+diff --git a/node_modules/@dcloudio/uni-ui/lib/uni-notice-bar/uni-notice-bar.vue b/node_modules/@dcloudio/uni-ui/lib/uni-notice-bar/uni-notice-bar.vue
+index 98d4720..3517d4b 100644
+--- a/node_modules/@dcloudio/uni-ui/lib/uni-notice-bar/uni-notice-bar.vue
++++ b/node_modules/@dcloudio/uni-ui/lib/uni-notice-bar/uni-notice-bar.vue
+@@ -1,6 +1,6 @@
+ <template>
+ 	<view v-if="show" class="uni-noticebar" :style="{ backgroundColor }" @click="onClick">
+-		<uni-icons v-if="showIcon === true || showIcon === 'true'" class="uni-noticebar-icon" type="sound"
++		<uni-icons v-if="showIcon === true || showIcon === 'true'" class="uni-noticebar-icon" :type="iconType"
+ 			:color="color" :size="fontSize * 1.5" />
+ 		<view ref="textBox" class="uni-noticebar__content-wrapper"
+ 			:class="{
+@@ -129,6 +129,11 @@
+ 				// 是否显示左侧关闭按钮
+ 				type: [Boolean, String],
+ 				default: false
++			},
++			iconType: {
++				// 左侧ICON图标类型
++				type: String,
++				default: "sound"
+ 			}
+ 		},
+ 		data() {
