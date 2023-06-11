@@ -371,33 +371,54 @@ class Model {
     return new this(self);
   }
   static async createModelAsync(options) {
+    // 目前主要是异步获取referenceUrl和choicesUrl资源
     for (const name of options.fieldNames || Object.keys(options.fields)) {
       const field = options.fields[name];
       if (field.choicesUrl) {
+        const choicesUrl = options.isAdminMode
+          ? field.choicesUrlAdmin
+          : field.choicesUrl;
         const { data: choices } = await Http[field.choicesUrlMethod || "post"](
-          field.choicesUrl
+          choicesUrl
         );
         field.choices = options.choicesCallback
           ? options.choicesCallback(choices, field)
           : choices;
       }
       if (typeof field.reference == "string") {
-        const modelUrl = field.referenceUrl || field.reference;
-        field.reference = await this.getHttpModel(modelUrl);
+        const modelUrl = options.isAdminMode
+          ? field.referenceUrlAdmin
+          : field.referenceUrl || field.reference;
+        field.reference = await this.getHttpModel(
+          modelUrl,
+          options.isAdminMode
+        );
       }
       if (field.type == "table" && !field.model?.__isModelClass__) {
-        field.model = await Model.createModelAsync(field.model);
+        const modelKey = field.model.tableName;
+        if (!this.httpModelCache[modelKey]) {
+          this.httpModelCache[modelKey] = await Model.createModelAsync({
+            ...field.model,
+            isAdminMode: options.isAdminMode
+          });
+        }
+        field.model = this.httpModelCache[modelKey];
       }
     }
     return Model.createModel(options);
   }
-  static async getHttpModel(modelKey) {
+  static async getHttpModel(modelKey, isAdminMode) {
     if (!this.httpModelCache[modelKey]) {
-      const modelUrl = modelKey.match(/^https?:/)
-        ? modelKey
-        : `/admin/model/${modelKey}`;
+      const modelUrl =
+        modelKey.match(/^https?:/) || modelKey.match(/^\//)
+          ? modelKey
+          : `/admin/model/${modelKey}`;
       const { data } = await Http.get(modelUrl);
-      this.httpModelCache[modelKey] = await Model.createModelAsync(data);
+      // isAdminMode具有传染性
+      this.httpModelCache[modelKey] = await Model.createModelAsync({
+        ...data,
+        isAdminMode
+      });
     } else {
       console.log("cached:" + modelKey);
     }

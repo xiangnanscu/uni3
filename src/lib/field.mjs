@@ -92,6 +92,7 @@ const baseOptionNames = [
   "style",
   "choices",
   "choicesUrl",
+  "choicesUrlAdmin",
   "choicesUrlMethod",
   // "choicesCallback", // antdv
   "autocomplete",
@@ -827,13 +828,13 @@ const foreignkeyOptionNames = [
   "referenceColumn",
   "referenceLabelColumn",
   "referenceUrl",
+  "referenceUrlAdmin",
   "realtime",
   "adminUrlName",
   "modelUrlName",
   "keywordQueryName",
   "limitQueryName",
   "autocomplete",
-  "choicesUrl",
   "tableName"
 ];
 class ForeignkeyField extends BaseField {
