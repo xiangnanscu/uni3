@@ -70,7 +70,12 @@ const filePickerSelectHanlder = async ({ tempFiles, tempFilePaths }) => {
     }
   }
 };
-
+const filePickerDelete = ({ index }) => {
+  sendValue([
+    ...props.modelValue.slice(0, index),
+    ...props.modelValue.slice(index + 1)
+  ]);
+};
 // 以下三个都是uniCloud专用的
 const filePickerFail = ({ tempFiles, tempFilePaths }) => {};
 const filePickerSuccess = ({ tempFiles, tempFilePaths }) => {};
@@ -94,6 +99,7 @@ const easyInputTypeMap = {
   float: "digit",
   password: "password",
   nickname: "nickname",
+  textarea: "textarea",
   text: "textarea"
 };
 const easyType = computed(
@@ -251,6 +257,7 @@ const getPhoneNumber = async (event) => {
       @success="filePickerSuccess"
       @progress="filePickerProgress"
       @fail="filePickerFail"
+      @delete="filePickerDelete"
     />
   </template>
   <template v-else-if="field.wxPhone">

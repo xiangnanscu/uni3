@@ -1,79 +1,32 @@
 <template>
-  <page-layout class="ThreadAdd-main">
-    <uni-forms
-      ref="valiForm"
-      validateTrigger="blur"
-      :model-value="ThreadAddData"
-      label-position="top"
-    >
-      <uni-forms-item label="标题" name="title">
-        <uni-easyinput v-model="ThreadAddData.title" />
-      </uni-forms-item>
-      <uni-forms-item label="内容" name="content">
-        <uni-easyinput
-          v-model="ThreadAddData.content"
-          type="textarea"
-          :autoHeight="true"
-        />
-      </uni-forms-item>
-    </uni-forms>
-    <x-button @click="submit('valiForm')">发帖</x-button>
+  <page-layout>
+    <modelform-uni
+      :model="threadModel"
+      :values="ThreadAddData"
+      :sync-values="true"
+      @success-post="successPost"
+      action-url="/thread/create"
+    ></modelform-uni>
   </page-layout>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      params: {},
-      ThreadAddData: { title: "", content: "" },
-      formRules: {
-        content: {
-          rules: [
-            {
-              required: true,
-              errorMessage: "内容不能为空"
-            },
-            {
-              validateFunction: function (rule, value, data, callback) {
-                if (value.length > 5000) {
-                  callback("字数不能超过5000");
-                }
-                return true;
-              }
-            }
-          ]
-        }
-      }
-    };
-  },
-  onShow() {
-    this.ThreadAddData = { title: "", content: "" };
-  },
-  onReady() {
-    // 需要在onReady中设置规则
-    this.$refs.valiForm.setRules(this.formRules);
-  },
-  async onLoad(params) {
-    this.params = params;
-    // await this.fetchData(params);
-  },
-  methods: {
-    async fetchData(params) {
-      const { data } = await Http.get(`/ThreadAdd/${params.id}`);
-      this.ThreadAddData = data;
+<script setup>
+const threadModel = Model.createModel({
+  fieldNames: ["title", "content", "pics"],
+  fields: {
+    pics: {
+      label: "图片",
+      type: "aliossImageList",
+      required: false,
+      size: process.env.ALIOSS_AVATAR_SIZE || "2M"
     },
-    async submit(ref) {
-      await this.$refs[ref].validate();
-      await Http.post(`/thread/create`, this.ThreadAddData);
-      await utils.gotoPage({ url: "/pages/ThreadList" });
-    }
+    title: { label: "标题", required: true },
+    content: { label: "内容", required: true, inputType: "textarea" }
   }
+});
+const ThreadAddData = ref({ title: "", content: "", pics: [] });
+const successPost = async (data) => {
+  console.log(data);
+  await utils.gotoPage({ url: "/pages/ThreadListAll" });
 };
 </script>
-
-<style scoped>
-.ThreadAdd-main {
-  padding: 15px;
-}
-</style>

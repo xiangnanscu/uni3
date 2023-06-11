@@ -77,6 +77,7 @@
     "stat": "bin/goaccess-stat.sh",
     "update": "bin/update-mini.sh",
     "postinstall": "patch-package",
+    "pu": "npx patch-package @dcloudio/uni-ui",
     "type-check": "vue-tsc --noEmit"
   },
   "dependencies": {

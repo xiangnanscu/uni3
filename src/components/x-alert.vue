@@ -6,7 +6,7 @@
     :marginTop="24"
     :marginBottom="24"
     :iconColor="props.mainColor"
-    :style="{ border: `1px solid ${props.mainColor}` }"
+    :style="alertStyle"
     background="#fff"
     :color="props.mainColor"
     :title="props.title"
@@ -22,9 +22,10 @@ const props = defineProps({
   mainColor: { type: String, default: "#ffb703" },
   title: { type: String, default: "" }
 });
+const alertStyle = computed(() => ({ border: `1px solid ${props.mainColor}` }));
 </script>
 <style scoped>
-.fui-alert__waiting {
+/* .fui-alert__waiting {
   background-color: var(--fui-color-primary, #465cff) !important;
 }
 
@@ -38,5 +39,5 @@ const props = defineProps({
 
 .fui-alert__clear {
   background-color: var(--fui-color-danger, #ff2b2b) !important;
-}
+} */
 </style>
