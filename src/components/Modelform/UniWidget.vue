@@ -267,7 +267,7 @@ const getPhoneNumber = async (event) => {
       :error-message="props.error"
       disable-color="black"
       :modelValue="props.modelValue"
-      :disabled="field.disabled ?? true"
+      :disabled="field.disabled === undefined ? true : field.disabled"
       :placeholder="field.hint"
     />
     <x-button
