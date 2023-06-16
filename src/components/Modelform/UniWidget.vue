@@ -267,7 +267,7 @@ const getPhoneNumber = async (event) => {
       :error-message="props.error"
       disable-color="black"
       :modelValue="props.modelValue"
-      :disabled="true"
+      :disabled="field.disabled ?? true"
       :placeholder="field.hint"
     />
     <x-button
@@ -275,7 +275,7 @@ const getPhoneNumber = async (event) => {
       open-type="getPhoneNumber"
       @getphonenumber="getPhoneNumber"
     >
-      获取手机号
+      获取微信手机号
     </x-button>
   </template>
   <uni-easyinput
