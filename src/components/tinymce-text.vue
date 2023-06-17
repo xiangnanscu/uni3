@@ -5,7 +5,18 @@
 </template>
 
 <script>
-const classTagNames = ["img", "p", "span", "h1", "h2", "h3", "h4", "h5", "h6"];
+const classTagNames = [
+  "img",
+  "p",
+  "span",
+  "a",
+  "h1",
+  "h2",
+  "h3",
+  "h4",
+  "h5",
+  "h6"
+];
 export default {
   props: {
     html: { type: String }
@@ -22,7 +33,7 @@ export default {
           `<${tag} class="tinymce-${tag}"`
         );
       }
-      console.log({ res });
+      // console.log(res);
       return res;
     }
   },
@@ -39,7 +50,11 @@ export default {
 :deep(.tinymce-p) {
   color: black;
   margin-bottom: 1em;
+  font-family: FangSong_GB2312;
+  font-size: 14pt;
+  line-height: 20pt;
 }
+
 :deep(.tinymce-h1),
 :deep(.tinymce-h2),
 :deep(.tinymce-h3),
