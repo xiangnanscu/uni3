@@ -50,9 +50,8 @@ export default {
 :deep(.tinymce-p) {
   color: black;
   margin-bottom: 1em;
-  font-family: FangSong_GB2312;
-  font-size: 14pt;
-  line-height: 20pt;
+  font-size: 12pt;
+  line-height: 1.3;
 }
 
 :deep(.tinymce-h1),
