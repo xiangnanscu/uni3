@@ -13,53 +13,25 @@
             :rightText="fromNow(item.ctime)"
         /></navigator>
       </uni-list>
-      <uni-pagination
-        :total="total"
-        @change="clickPage"
-        :current="current"
-        :pageSize="pageSize"
-      />
     </div>
     <x-alert v-else title="没有记录"> </x-alert>
   </page-layout>
 </template>
 
 <script>
-export default {
+import { usePost } from "@/composables/usePost";
+
+export default defineComponent({
   data() {
     return {
-      pageSize: 10,
-      total: 0,
-      current: 1,
-      query: {},
       NewsRecords: []
     };
   },
-  async onLoad(query) {
-    this.query = query;
-    await this.fetchData(query);
-  },
-  methods: {
-    async clickPage(e) {
-      this.current = e.current;
-      await this.fetchData({ page: this.current, pagesize: this.pageSize });
-    },
-    async fetchData(query) {
-      const {
-        data: { records, total }
-      } = await Http.get(
-        `/news?page=${query.page || this.current}&pagesize=${
-          query.pagesize || this.pageSize
-        }`
-      );
-      this.NewsRecords = records;
-      this.total = total;
-    }
+  async onLoad() {
+    const { data: NewsRecords } = await usePost(`/news/records`, {});
+    this.NewsRecords = NewsRecords;
   }
-};
+});
 </script>
 
-<style scoped>
-.NewsList-main {
-}
-</style>
+<style scoped></style>

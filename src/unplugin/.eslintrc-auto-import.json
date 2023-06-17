@@ -216,6 +216,7 @@
     "usePointer": true,
     "usePointerLock": true,
     "usePointerSwipe": true,
+    "usePost": true,
     "usePreferredColorScheme": true,
     "usePreferredContrast": true,
     "usePreferredDark": true,
