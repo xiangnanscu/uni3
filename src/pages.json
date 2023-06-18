@@ -7,56 +7,162 @@
     }
   },
   "pages": [
-    { "path": "pages/tabbar/Home", "style": { "navigationBarTitleText": "" } },
-    { "path": "pages/Uform", "style": { "navigationBarTitleText": "" } },
+    {
+      "path": "pages/tabbar/Home",
+      "style": {
+        "navigationBarTitleText": ""
+      }
+    },
+    {
+      "path": "pages/Uform",
+      "style": {
+        "navigationBarTitleText": ""
+      }
+    },
     {
       "path": "pages/FeeplanDetail",
-      "style": { "navigationBarTitleText": "" }
+      "style": {
+        "navigationBarTitleText": ""
+      }
     },
-    { "path": "pages/FeeplanList", "style": { "navigationBarTitleText": "" } },
-    { "path": "pages/GoddessAdd", "style": { "navigationBarTitleText": "" } },
+    {
+      "path": "pages/FeeplanList",
+      "style": {
+        "navigationBarTitleText": ""
+      }
+    },
+    {
+      "path": "pages/GoddessAdd",
+      "style": {
+        "navigationBarTitleText": ""
+      }
+    },
     {
       "path": "pages/GoddessDetail",
-      "style": { "navigationBarTitleText": "" }
+      "style": {
+        "navigationBarTitleText": ""
+      }
     },
-    { "path": "pages/GoddessList", "style": { "navigationBarTitleText": "" } },
+    {
+      "path": "pages/GoddessList",
+      "style": {
+        "navigationBarTitleText": ""
+      }
+    },
     {
       "path": "pages/MessageDetail",
-      "style": { "navigationBarTitleText": "" }
+      "style": {
+        "navigationBarTitleText": ""
+      }
     },
-    { "path": "pages/NewsDetail", "style": { "navigationBarTitleText": "" } },
-    { "path": "pages/NewsList", "style": { "navigationBarTitleText": "" } },
-    { "path": "pages/OrdersList", "style": { "navigationBarTitleText": "" } },
-    { "path": "pages/PasswordSet", "style": { "navigationBarTitleText": "" } },
-    { "path": "pages/Profile", "style": { "navigationBarTitleText": "" } },
-    { "path": "pages/ProfileForm", "style": { "navigationBarTitleText": "" } },
+    {
+      "path": "pages/NewsDetail",
+      "style": {
+        "navigationBarTitleText": ""
+      }
+    },
+    {
+      "path": "pages/NewsList",
+      "style": {
+        "navigationBarTitleText": ""
+      }
+    },
+    {
+      "path": "pages/OrdersList",
+      "style": {
+        "navigationBarTitleText": ""
+      }
+    },
+    {
+      "path": "pages/PasswordSet",
+      "style": {
+        "navigationBarTitleText": ""
+      }
+    },
+    {
+      "path": "pages/Profile",
+      "style": {
+        "navigationBarTitleText": ""
+      }
+    },
+    {
+      "path": "pages/ProfileForm",
+      "style": {
+        "navigationBarTitleText": ""
+      }
+    },
     {
       "path": "pages/tabbar/Message",
-      "style": { "navigationBarTitleText": "" }
+      "style": {
+        "navigationBarTitleText": ""
+      }
     },
     {
       "path": "pages/tabbar/ProfileMy",
-      "style": { "navigationBarTitleText": "" }
+      "style": {
+        "navigationBarTitleText": ""
+      }
     },
     {
       "path": "pages/tabbar/ThreadAdd",
-      "style": { "navigationBarTitleText": "" }
+      "style": {
+        "navigationBarTitleText": ""
+      }
     },
-    { "path": "pages/ThreadAdd", "style": { "navigationBarTitleText": "" } },
-    { "path": "pages/ThreadDetail", "style": { "navigationBarTitleText": "" } },
-    { "path": "pages/ThreadListMy", "style": { "navigationBarTitleText": "" } },
-    { "path": "pages/usr", "style": { "navigationBarTitleText": "" } },
+    {
+      "path": "pages/ThreadAdd",
+      "style": {
+        "navigationBarTitleText": ""
+      }
+    },
+    {
+      "path": "pages/ThreadDetail",
+      "style": {
+        "navigationBarTitleText": ""
+      }
+    },
+    {
+      "path": "pages/ThreadListMy",
+      "style": {
+        "navigationBarTitleText": ""
+      }
+    },
+    {
+      "path": "pages/usr",
+      "style": {
+        "navigationBarTitleText": ""
+      }
+    },
     {
       "path": "pages/VolplanDetail",
-      "style": { "navigationBarTitleText": "" }
+      "style": {
+        "navigationBarTitleText": ""
+      }
     },
-    { "path": "pages/VolplanList", "style": { "navigationBarTitleText": "" } },
-    { "path": "pages/Login", "style": { "navigationBarTitleText": "" } },
+    {
+      "path": "pages/VolplanList",
+      "style": {
+        "navigationBarTitleText": ""
+      }
+    },
+    {
+      "path": "pages/Login",
+      "style": {
+        "navigationBarTitleText": ""
+      }
+    },
     {
       "path": "pages/ThreadListAll",
-      "style": { "navigationBarTitleText": "" }
+      "style": {
+        "navigationBarTitleText": ""
+      }
     },
-    { "path": "pages/RealNameCert", "style": { "navigationBarTitleText": "" } }
+    {
+      "path": "pages/RealNameCert",
+      "style": {
+        "navigationBarTitleText": ""
+      }
+    }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
@@ -69,6 +175,14 @@
     "backgroundColor": "#fff",
     "color": "#8F8F94",
     "selectedColor": "#f33e54",
+    "midButton2": {
+      "width": "120px",
+      "height": "60px",
+      "text": "文字",
+      "iconWidth": "36px",
+      "iconPath": "static/img/tabbar/add.png",
+      "selectedIconPath": "static/img/tabbar/addactive.png"
+    },
     "list": [
       {
         "pagePath": "pages/tabbar/Home",
@@ -77,16 +191,16 @@
         "text": "首页"
       },
       {
-        "pagePath": "pages/tabbar/ThreadAdd",
-        "iconPath": "static/img/tabbar/add.png",
-        "selectedIconPath": "static/img/tabbar/addactive.png",
-        "text": "发帖"
-      },
-      {
         "pagePath": "pages/tabbar/Message",
         "iconPath": "static/img/tabbar/news.png",
         "selectedIconPath": "static/img/tabbar/newsactive.png",
         "text": "消息"
+      },
+      {
+        "pagePath": "pages/tabbar/ThreadAdd",
+        "iconPath": "static/img/tabbar/add.png",
+        "selectedIconPath": "static/img/tabbar/addactive.png",
+        "text": "发布"
       },
       {
         "pagePath": "pages/tabbar/ProfileMy",
