@@ -85,7 +85,7 @@ export default {
       noticeText: "",
       mainKist: [
         {
-          url: "../../static/img/volunteer.png",
+          url: "../../static/img/vol.png",
           text: "志愿者",
           badge: "",
           pagePath: "/views/VolplanList",
