@@ -1,9 +1,9 @@
 <template>
   <page-layout>
     <modelform-uni
+      v-if="ready"
       :model="profileModel"
       :values="userData"
-      :sync-values="true"
       @success-post="successPostWX"
       action-url="/update_profile"
     ></modelform-uni>
@@ -34,12 +34,14 @@ const profileModel = Model.createModel({
 });
 
 const successPostWX = async (user) => {
-  await loginUser(userData.value);
+  await loginUser(user);
 };
+const ready = ref(false);
 onMounted(async () => {
   const { data } = await Http.get("/usr/profile/my");
   userData.value.intro = data.intro;
   userData.value.avatar = data.avatar;
   userData.value.nickname = data.nickname;
+  ready.value = true;
 });
 </script>

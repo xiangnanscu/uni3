@@ -9,18 +9,16 @@ const props = defineProps({
   modelValue: { required: true },
   error: { type: String, default: "" }
 });
-const uniFormItem = inject("uniFormItem", null);
+// const uniFormItem = inject("uniFormItem", null);
 const field = props.field;
-const name = props.field.name;
 const fieldType =
   props.field.type == "array" ? field.arrayType || "string" : props.field.type;
-const getUniMediatype = (field) =>
+const mediaType =
   field.mediaType == "video"
     ? "video"
     : fieldType.includes("Image")
     ? "image"
     : "all";
-const fileValues = ref({});
 const filePickerRef = ref(null);
 const autocompletePopupRef = ref(null);
 const autocompleteSearchText = ref("");
@@ -41,6 +39,10 @@ const autocompleteSearchText = ref("");
 //   url: "blob:http://localhost:5173/04cacb45-6257-4bbb-aa8a-3776cf839ef1",
 //   uuid: 1684568038130
 // };
+const sendValue = (value) => {
+  emit("update:modelValue", value);
+};
+const fileLimit = fieldType.endsWith("List") ? field.limit || 9 : 1;
 const filePickerSelectHanlder = async ({ tempFiles, tempFilePaths }) => {
   emit("update:error", "");
   const files = filePickerRef.value.files;
@@ -62,7 +64,12 @@ const filePickerSelectHanlder = async ({ tempFiles, tempFilePaths }) => {
         size: field.size,
         prefix: "img"
       });
-      sendValue([...(props.modelValue || []), { ossUrl: url }]);
+      const fileObj = { ...file, ossUrl: url, url };
+      if (fileLimit === 1) {
+        sendValue([fileObj]);
+      } else {
+        sendValue([...(props.modelValue || []), fileObj]);
+      }
     } catch (error) {
       console.error(error);
       emit("update:error", error.message || "上传出错");
@@ -86,9 +93,6 @@ const filePickerProgress = ({
   tempFiles,
   tempFilePaths
 }) => {};
-const sendValue = (value) => {
-  emit("update:modelValue", value);
-};
 const blurValidate = () => {
   emit("update:error", ""); // 先清除老错误
   emit("blur:validate", props.modelValue);
@@ -245,9 +249,10 @@ const getPhoneNumber = async (event) => {
     <uni-file-picker
       v-else
       ref="filePickerRef"
-      v-model="fileValues[name]"
-      :file-mediatype="getUniMediatype(field)"
-      :limit="fieldType.endsWith('List') ? field.limit || 9 : 1"
+      :modelValue="props.modelValue"
+      @update:modelValue="sendValue"
+      :file-mediatype="mediaType"
+      :limit="fileLimit"
       :disabled="field.disabled"
       :title="' '"
       mode="grid"
