@@ -27,33 +27,43 @@
         >
         <text user-select class="thread-content">{{ thread.content }}</text>
         <x-album v-if="picsUrls.length" :urls="picsUrls" :columns="1"></x-album>
+        <div class="actions-container">
+          <image
+            src="../static/img/tabbar/share-tpp.png"
+            class="actions"
+          ></image>
+          <image src="../static/img/tabbar/fav.png" class="actions"></image>
+          <image
+            src="../static/img/tabbar/appreciate.png"
+            class="actions"
+          ></image>
+        </div>
       </uni-card>
     </view>
   </page-layout>
 </template>
 
-<script>
-export default {
-  props: {
-    thread: { type: Object },
-    posts: { type: Array },
-    postCreateUrl: { type: String, default: `/post/create` },
-    threadOtherPrefix: { type: String, default: `/thread/other` },
-    fkName: { type: String, default: `thread_id` }
-  },
-  data() {
-    return {};
-  },
-  computed: {
-    picsUrls() {
-      return this.thread?.pics?.map((e) => e) || [];
-    }
-  },
-  methods: {}
-};
+<script setup>
+const props = defineProps({
+  thread: { type: Object },
+  posts: { type: Array },
+  postCreateUrl: { type: String, default: `/post/create` },
+  threadOtherPrefix: { type: String, default: `/thread/other` },
+  fkName: { type: String, default: `thread_id` }
+});
+const picsUrls = computed(() => props.thread?.pics || []);
+const favMap = {};
 </script>
 
 <style scoped>
+.actions {
+  width: 25px;
+  height: 25px;
+}
+.actions-container {
+  display: flex;
+  justify-content: space-around;
+}
 .textarea {
   /* width: 100%; */
   border: #eee 0px solid;

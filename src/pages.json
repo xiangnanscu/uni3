@@ -58,7 +58,9 @@
     },
     { "path": "views/RealNameCert", "style": { "navigationBarTitleText": "" } },
     { "path": "views/tabbar/Heart", "style": { "navigationBarTitleText": "" } },
-    { "path": "views/VolAdd", "style": { "navigationBarTitleText": "" } }
+    { "path": "views/VolAdd", "style": { "navigationBarTitleText": "" } },
+    { "path": "views/ForumCreate", "style": { "navigationBarTitleText": "" } },
+    { "path": "views/ActionsListMy", "style": { "navigationBarTitleText": "" } }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",

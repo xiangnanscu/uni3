@@ -15,7 +15,31 @@
         link="navigateTo"
         to="/views/ThreadListMy"
         :show-extra-icon="true"
-        :extra-icon="{ color: '#666', size: '32', type: 'chatboxes' }"
+        :extra-icon="{ color: '#666', size: '32', type: 'chatboxes-filled' }"
+      >
+      </uni-list-item>
+      <uni-list-item
+        title="最近浏览"
+        link="navigateTo"
+        to="/views/ActionsListMy?current=0"
+        :show-extra-icon="true"
+        :extra-icon="{ color: '#666', size: '32', type: 'eye-filled' }"
+      >
+      </uni-list-item>
+      <uni-list-item
+        title="我的收藏"
+        link="navigateTo"
+        to="/views/ActionsListMy?current=1"
+        :show-extra-icon="true"
+        :extra-icon="{ color: '#666', size: '32', type: 'star-filled' }"
+      >
+      </uni-list-item>
+      <uni-list-item
+        title="我的点赞"
+        link="navigateTo"
+        to="/views/ActionsListMy?current=2"
+        :show-extra-icon="true"
+        :extra-icon="{ color: '#666', size: '32', type: 'hand-up-filled' }"
       >
       </uni-list-item>
       <uni-list-item
@@ -39,7 +63,7 @@
         link="navigateTo"
         to="/views/PasswordSet"
         :show-extra-icon="true"
-        :extra-icon="{ color: '#666', size: '32', type: 'locked' }"
+        :extra-icon="{ color: '#666', size: '32', type: 'locked-filled' }"
       >
       </uni-list-item>
       <uni-list-item

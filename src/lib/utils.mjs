@@ -198,6 +198,9 @@ for (const page of pagesJson.pages) {
   pagesMap[name] = "/" + page.path;
 }
 export async function gotoPage(params) {
+  if (typeof params == "string") {
+    params = params[0] == "/" ? { url: params } : { name: params };
+  }
   const opts = { ...params };
   let url = opts.url;
   if (!url && opts.name) {
