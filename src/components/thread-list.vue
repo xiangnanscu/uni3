@@ -4,7 +4,7 @@
       <uni-list-item
         v-for="(item, index) in records"
         :key="index"
-        :to="`/pages/ThreadDetail?id=${item.id}`"
+        :to="`/views/ThreadDetail?id=${item.id}`"
       >
         <template v-slot:header>
           <view class="slot-box">

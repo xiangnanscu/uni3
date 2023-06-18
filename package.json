@@ -5,7 +5,7 @@
   "scripts": {
     "env": "dotenv -e .env -e .env.local --",
     "cli": "C:/Users/Admin/Documents/HBuilderX/cli.exe",
-    "preuni": "node bin/pages-checker.js",
+    "preuni": "node bin/views-checker.js",
     "uni": "yarn env uni",
     "uni:build": "vue-tsc --noEmit && npm --no-git-tag-version version minor && yarn uni build",
     "dev": "yarn uni",
@@ -50,7 +50,7 @@
     "mrs": "yarn migrate -commit && yarn ms",
     "mrr": "yarn migrate -clear && yarn mrc",
     "make-conf": "yarn env ./bin/make-conf.sh",
-    "pages": "node --trace-uncaught bin/pages.js",
+    "views": "node --trace-uncaught bin/views.js",
     "nginx": "yarn make-conf && yarn nginx:stop; yarn nginx:start",
     "nginx:start": "openresty -p $PWD/ -c conf/nginx.conf",
     "nginx:stop": "yarn nginx:start -s stop",

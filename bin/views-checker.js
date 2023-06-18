@@ -2,7 +2,7 @@
 const prettier = require("prettier");
 const fs = require("fs");
 const path = require("path");
-const pages = require("../src/pages.json");
+const views = require("../src/views.json");
 
 function readDir(dir, fileList) {
   const files = fs.readdirSync(dir);
@@ -23,26 +23,26 @@ function readDir(dir, fileList) {
 
   return fileList;
 }
-const fileList = readDir("src/pages").map((file) =>
+const fileList = readDir("src/views").map((file) =>
   file.replaceAll(/\\/g, "/").slice(4, -4)
 );
 for (const url of fileList) {
-  const page = pages.pages.find((e) => e.path == url);
+  const page = views.views.find((e) => e.path == url);
   if (!page) {
-    pages.pages.push({ path: url, style: { navigationBarTitleText: "" } });
+    views.views.push({ path: url, style: { navigationBarTitleText: "" } });
   }
 }
 const exitstedPages = [];
-for (const page of pages.pages) {
+for (const page of views.views) {
   const findPage = fileList.find((url) => url == page.path);
   if (findPage) {
     exitstedPages.push(page);
   } else {
-    console.log(`remove page ${page.path} from pages.json`);
+    console.log(`remove page ${page.path} from views.json`);
   }
 }
-pages.pages = exitstedPages;
-const pageJson = JSON.stringify(pages);
+views.views = exitstedPages;
+const pageJson = JSON.stringify(views);
 const formatedJson = prettier.format(pageJson, { parser: "json" });
 
-fs.writeFileSync("src/pages.json", formatedJson);
+fs.writeFileSync("src/views.json", formatedJson);

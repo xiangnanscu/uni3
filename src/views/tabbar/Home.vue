@@ -88,34 +88,34 @@ export default {
           url: "../../static/img/volunteer.png",
           text: "志愿者",
           badge: "",
-          pagePath: "/pages/VolplanList",
+          pagePath: "/views/VolplanList",
           type: "error"
         },
         {
           url: "../../static/img/chat.png",
           text: "论坛",
-          pagePath: "/pages/ThreadListAll",
+          pagePath: "/views/ThreadListAll",
           badge: "",
           type: "error"
         },
         {
           url: "../../static/img/files3.png",
           text: "资讯",
-          pagePath: "/pages/NewsList",
+          pagePath: "/views/NewsList",
           badge: "",
           type: "error"
         },
         {
           url: "../../static/img/fee8.png",
           text: "团费",
-          pagePath: "/pages/FeeplanList",
+          pagePath: "/views/FeeplanList",
           badge: "",
           type: "error"
         }
         // {
         //   url: "../../static/img/fee8.png",
         //   text: "缴费",
-        //   pagePath: "/pages/fee",
+        //   pagePath: "/views/fee",
         //   badge: "",
         //   type: "error",
         // },
@@ -149,7 +149,7 @@ export default {
     onClick() {},
     async onGoddessClick() {
       utils.gotoPage({
-        url: "/pages/GoddessDetail",
+        url: "/views/GoddessDetail",
         query: { id: this.goddess.id }
       });
     },

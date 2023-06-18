@@ -5,7 +5,7 @@
         <navigator
           v-for="(item, index) in NewsRecords"
           :key="index"
-          :url="`/pages/NewsDetail?id=${item.id}`"
+          :url="`/views/NewsDetail?id=${item.id}`"
         >
           <uni-list-item
             :title="item.title"

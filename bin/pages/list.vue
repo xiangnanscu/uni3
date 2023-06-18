@@ -4,7 +4,7 @@
       <navigator
         v-for="(item, index) in {{modelName}}Records"
         :key="index"
-        :url="`/pages/{{modelName}}Detail/{{modelName}}Detail?id=${item.id}`"
+        :url="`/views/{{modelName}}Detail/{{modelName}}Detail?id=${item.id}`"
       >
         <uni-list-item
           :title="item.title"

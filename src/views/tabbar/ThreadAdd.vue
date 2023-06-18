@@ -9,7 +9,7 @@ export default {
   },
   onLoad() {},
   onShow() {
-    uni.navigateTo({ url: "/pages/ThreadAdd" });
+    uni.navigateTo({ url: "/views/ThreadAdd" });
   },
   onHide() {
     this.active = false;

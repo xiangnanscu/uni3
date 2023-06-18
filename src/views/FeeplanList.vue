@@ -50,15 +50,15 @@ export default {
   async onLoad(query) {
     if (!this.user.id) {
       await utils.gotoPage({
-        url: "/pages/Login",
-        query: { redirect: "/pages/FeeplanList" },
+        url: "/views/Login",
+        query: { redirect: "/views/FeeplanList" },
         redirect: true
       });
     } else if (!this.user.username) {
       await utils.gotoPage({
-        url: "/pages/RealNameCert",
+        url: "/views/RealNameCert",
         query: {
-          redirect: "/pages/FeeplanList",
+          redirect: "/views/FeeplanList",
           message: "缴纳团费请先实名认证"
         },
         redirect: true

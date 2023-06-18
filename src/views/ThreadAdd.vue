@@ -27,6 +27,6 @@ const threadModel = Model.createModel({
 const ThreadAddData = ref({ title: "", content: "", pics: [] });
 const successPost = async (data) => {
   console.log(data);
-  await utils.gotoPage({ url: "/pages/ThreadListAll" });
+  await utils.gotoPage({ url: "/views/ThreadListAll" });
 };
 </script>

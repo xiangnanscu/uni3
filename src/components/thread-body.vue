@@ -5,7 +5,7 @@
         <uni-list-item v-for="(post, index) in posts" :key="index">
           <template v-slot:header>
             <view class="slot-box avatar-container">
-              <navigator :url="`/pages/Profile?id=${post.creator.id}`">
+              <navigator :url="`/views/Profile?id=${post.creator.id}`">
                 <image
                   class="post-avatar"
                   :src="post.creator.avatar"

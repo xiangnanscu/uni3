@@ -13,7 +13,7 @@
       <uni-list-item
         title="我的帖子"
         link="navigateTo"
-        to="/pages/ThreadListMy"
+        to="/views/ThreadListMy"
         :show-extra-icon="true"
         :extra-icon="{ color: '#666', size: '32', type: 'chatboxes' }"
       >
@@ -21,7 +21,7 @@
       <uni-list-item
         title="个人信息"
         link="navigateTo"
-        to="/pages/ProfileForm"
+        to="/views/ProfileForm"
         :show-extra-icon="true"
         :extra-icon="{ color: '#666', size: '32', type: 'auth-filled' }"
       >
@@ -29,7 +29,7 @@
       <uni-list-item
         title="实名认证"
         link="navigateTo"
-        to="/pages/RealNameCert"
+        to="/views/RealNameCert"
         :show-extra-icon="true"
         :extra-icon="{ color: '#666', size: '32', type: 'contact-filled' }"
       >
@@ -37,7 +37,7 @@
       <uni-list-item
         title="设置密码"
         link="navigateTo"
-        to="/pages/PasswordSet"
+        to="/views/PasswordSet"
         :show-extra-icon="true"
         :extra-icon="{ color: '#666', size: '32', type: 'locked' }"
       >
@@ -45,7 +45,7 @@
       <uni-list-item
         title="缴费记录"
         link="navigateTo"
-        to="/pages/OrdersList"
+        to="/views/OrdersList"
         :show-extra-icon="true"
         :extra-icon="{ color: '#666', size: '32', type: 'list' }"
       >

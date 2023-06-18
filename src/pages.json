@@ -8,157 +8,157 @@
   },
   "pages": [
     {
-      "path": "pages/tabbar/Home",
+      "path": "views/tabbar/Home",
       "style": {
         "navigationBarTitleText": ""
       }
     },
     {
-      "path": "pages/Uform",
+      "path": "views/Uform",
       "style": {
         "navigationBarTitleText": ""
       }
     },
     {
-      "path": "pages/FeeplanDetail",
+      "path": "views/FeeplanDetail",
       "style": {
         "navigationBarTitleText": ""
       }
     },
     {
-      "path": "pages/FeeplanList",
+      "path": "views/FeeplanList",
       "style": {
         "navigationBarTitleText": ""
       }
     },
     {
-      "path": "pages/GoddessAdd",
+      "path": "views/GoddessAdd",
       "style": {
         "navigationBarTitleText": ""
       }
     },
     {
-      "path": "pages/GoddessDetail",
+      "path": "views/GoddessDetail",
       "style": {
         "navigationBarTitleText": ""
       }
     },
     {
-      "path": "pages/GoddessList",
+      "path": "views/GoddessList",
       "style": {
         "navigationBarTitleText": ""
       }
     },
     {
-      "path": "pages/MessageDetail",
+      "path": "views/MessageDetail",
       "style": {
         "navigationBarTitleText": ""
       }
     },
     {
-      "path": "pages/NewsDetail",
+      "path": "views/NewsDetail",
       "style": {
         "navigationBarTitleText": ""
       }
     },
     {
-      "path": "pages/NewsList",
+      "path": "views/NewsList",
       "style": {
         "navigationBarTitleText": ""
       }
     },
     {
-      "path": "pages/OrdersList",
+      "path": "views/OrdersList",
       "style": {
         "navigationBarTitleText": ""
       }
     },
     {
-      "path": "pages/PasswordSet",
+      "path": "views/PasswordSet",
       "style": {
         "navigationBarTitleText": ""
       }
     },
     {
-      "path": "pages/Profile",
+      "path": "views/Profile",
       "style": {
         "navigationBarTitleText": ""
       }
     },
     {
-      "path": "pages/ProfileForm",
+      "path": "views/ProfileForm",
       "style": {
         "navigationBarTitleText": ""
       }
     },
     {
-      "path": "pages/tabbar/Message",
+      "path": "views/tabbar/Message",
       "style": {
         "navigationBarTitleText": ""
       }
     },
     {
-      "path": "pages/tabbar/ProfileMy",
+      "path": "views/tabbar/ProfileMy",
       "style": {
         "navigationBarTitleText": ""
       }
     },
     {
-      "path": "pages/tabbar/ThreadAdd",
+      "path": "views/tabbar/ThreadAdd",
       "style": {
         "navigationBarTitleText": ""
       }
     },
     {
-      "path": "pages/ThreadAdd",
+      "path": "views/ThreadAdd",
       "style": {
         "navigationBarTitleText": ""
       }
     },
     {
-      "path": "pages/ThreadDetail",
+      "path": "views/ThreadDetail",
       "style": {
         "navigationBarTitleText": ""
       }
     },
     {
-      "path": "pages/ThreadListMy",
+      "path": "views/ThreadListMy",
       "style": {
         "navigationBarTitleText": ""
       }
     },
     {
-      "path": "pages/usr",
+      "path": "views/usr",
       "style": {
         "navigationBarTitleText": ""
       }
     },
     {
-      "path": "pages/VolplanDetail",
+      "path": "views/VolplanDetail",
       "style": {
         "navigationBarTitleText": ""
       }
     },
     {
-      "path": "pages/VolplanList",
+      "path": "views/VolplanList",
       "style": {
         "navigationBarTitleText": ""
       }
     },
     {
-      "path": "pages/Login",
+      "path": "views/Login",
       "style": {
         "navigationBarTitleText": ""
       }
     },
     {
-      "path": "pages/ThreadListAll",
+      "path": "views/ThreadListAll",
       "style": {
         "navigationBarTitleText": ""
       }
     },
     {
-      "path": "pages/RealNameCert",
+      "path": "views/RealNameCert",
       "style": {
         "navigationBarTitleText": ""
       }
@@ -185,25 +185,25 @@
     },
     "list": [
       {
-        "pagePath": "pages/tabbar/Home",
+        "pagePath": "views/tabbar/Home",
         "iconPath": "static/img/tabbar/home.png",
         "selectedIconPath": "static/img/tabbar/homeactive.png",
         "text": "首页"
       },
       {
-        "pagePath": "pages/tabbar/Message",
+        "pagePath": "views/tabbar/Message",
         "iconPath": "static/img/tabbar/news.png",
         "selectedIconPath": "static/img/tabbar/newsactive.png",
         "text": "消息"
       },
       {
-        "pagePath": "pages/tabbar/ThreadAdd",
+        "pagePath": "views/tabbar/ThreadAdd",
         "iconPath": "static/img/tabbar/add.png",
         "selectedIconPath": "static/img/tabbar/addactive.png",
         "text": "发布"
       },
       {
-        "pagePath": "pages/tabbar/ProfileMy",
+        "pagePath": "views/tabbar/ProfileMy",
         "iconPath": "static/img/tabbar/me.png",
         "selectedIconPath": "static/img/tabbar/meactive.png",
         "text": "我的"

@@ -22,7 +22,7 @@
       <uni-list-item
         v-for="(item, index) in currentProfileThreads"
         :key="index"
-        :to="`/pages/ThreadDetail?id=${item.id}`"
+        :to="`/views/ThreadDetail?id=${item.id}`"
         :title="item.title"
         :rightText="fromNow(item.ctime)"
         :ellipsis="1"

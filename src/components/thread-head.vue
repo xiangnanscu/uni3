@@ -3,7 +3,7 @@
     <view>
       <view class="thread-main">
         <div class="slot-box avatar-container">
-          <navigator :url="`/pages/Profile?id=${thread.creator.id}`">
+          <navigator :url="`/views/Profile?id=${thread.creator.id}`">
             <image
               class="post-avatar"
               :src="thread.creator.avatar"

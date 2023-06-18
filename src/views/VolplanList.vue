@@ -5,7 +5,7 @@
         <navigator
           v-for="(item, index) in VolplanRecords"
           :key="index"
-          :url="`/pages/VolplanDetail?id=${item.id}`"
+          :url="`/views/VolplanDetail?id=${item.id}`"
         >
           <uni-list-item
             :title="item.title"

@@ -5,7 +5,7 @@
       <uni-list :border="false">
         <navigator
           v-for="(a, index) in messages"
-          :url="`/pages/MessageDetail?id=${a.receiver.id}`"
+          :url="`/views/MessageDetail?id=${a.receiver.id}`"
           :key="index"
         >
           <uni-list-item>

@@ -28,7 +28,7 @@ const pageName =
     : `${modelName}`;
 
 console.log({ modelName, tableName, pageName });
-var pages = require("../src/pages.json");
+var views = require("../src/views.json");
 
 const renderTemplate = ({ src, dest, context, srcString }) => {
   srcString = srcString || fs.readFileSync(src, { flag: "r" }).toString();
@@ -42,8 +42,8 @@ const renderTemplate = ({ src, dest, context, srcString }) => {
     .filter((line) => line)
     .join("\n");
   if (dest) {
-    console.log({ dest, pdest: `src/pages/${pageName}` });
-    fs.mkdirSync(`src/pages/${pageName}`, { recursive: true });
+    console.log({ dest, pdest: `src/views/${pageName}` });
+    fs.mkdirSync(`src/views/${pageName}`, { recursive: true });
     fs.writeFileSync(dest, srcString);
   }
   return srcString;
@@ -103,20 +103,20 @@ if (type == "list") {
   context.rulesToken = `{${rulesToken.join("\n")}}`;
 }
 renderTemplate({
-  src: `bin/pages/${type || "detail"}.vue`,
-  dest: `src/pages/${pageName}.vue`,
+  src: `bin/views/${type || "detail"}.vue`,
+  dest: `src/views/${pageName}.vue`,
   context
 });
 
-const pagePath = `pages/${pageName}`;
-pages.pages = [
-  ...pages.pages.filter((p) => p.path !== pagePath),
+const pagePath = `views/${pageName}`;
+views.views = [
+  ...views.views.filter((p) => p.path !== pagePath),
   {
     path: pagePath,
     style: { navigationBarTitleText: label || "..." }
   }
 ];
-const pageJson = JSON.stringify(pages);
+const pageJson = JSON.stringify(views);
 const formatedJson = prettier.format(pageJson, { parser: "json" });
 
-fs.writeFileSync("src/pages.json", formatedJson);
+fs.writeFileSync("src/views.json", formatedJson);
