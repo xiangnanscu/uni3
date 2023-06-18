@@ -192,8 +192,21 @@ const tabbarPages = pagesJson.tabBar?.list;
 const tabbarPagesMap = Object.fromEntries(
   tabbarPages.map((e) => [`/${e.pagePath}`, true])
 );
-export async function gotoPage(opts) {
+const pagesMap = {};
+for (const page of pagesJson.pages) {
+  const name = page.path.split("/").pop();
+  pagesMap[name] = "/" + page.path;
+}
+export async function gotoPage(params) {
+  const opts = { ...params };
   let url = opts.url;
+  if (!url && opts.name) {
+    url = pagesMap[opts.name];
+  }
+  if (!url) {
+    throw new Error(`无效的页面参数:` + JSON.stringify(opts));
+  }
+  opts.url = url;
   if (opts.query) {
     url = url + "?" + toURLSearchParams(opts.query); // % &=/@;$:+?#
   }
