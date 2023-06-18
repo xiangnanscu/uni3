@@ -29,7 +29,7 @@ const profileModel = Model.createModel({
       size: process.env.ALIOSS_AVATAR_SIZE || "2M"
     },
     nickname: { label: "昵称", required: true, inputType: "nickname" },
-    intro: { label: "简介", required: true, inputType: "textarea" }
+    intro: { label: "简介", inputType: "textarea" }
   }
 });
 

@@ -46,11 +46,13 @@ export default {
       this.posts = posts;
     },
     async replyThread() {
+      if (!this.currentPost.trim()) {
+        return uni.showToast({ title: "必须输入内容", icon: "error" });
+      }
       const { data: newPost } = await Http.post("/post/create", {
         content: this.currentPost,
         thread_id: this.thread.id
       });
-      console.log("newPost.ctime", newPost.ctime);
       this.posts.push({
         id: newPost.id,
         content: newPost.content,
