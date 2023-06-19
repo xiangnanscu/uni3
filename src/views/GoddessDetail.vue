@@ -1,16 +1,21 @@
 <template>
-  <page-layout class="goddess-main">
-    <view v-if="goddess">
-      <thread-head
-        :thread="goddess"
-        :posts="goddessComments"
-        postCreateUrl="/goddess_comment/create"
-        threadOtherPrefix="/thread/other"
-        fkName="goddess_id"
-        @appendPosts="goddessComments.push($event)"
-      ></thread-head>
-      <thread-body :posts="goddessComments"></thread-body>
-    </view>
+  <page-layout v-if="goddess">
+    <uni-card :isFull="true" :is-shadow="false" :border="false">
+      <p class="goddess-title">{{ goddess.title }}</p>
+      <x-subtitle style="padding: 0.5em 0.5em">
+        <div>{{ utils.fromNow(goddess.ctime) }}</div>
+      </x-subtitle>
+      <tinymce-text :html="goddess.content"></tinymce-text>
+      <template #actions> </template>
+    </uni-card>
+    <div style="height: 3em"></div>
+    <x-bottom>
+      <generic-actions
+        :target-id="goddess.id"
+        target-model="goddess"
+        style="width: 100%"
+      />
+    </x-bottom>
   </page-layout>
 </template>
 
@@ -18,29 +23,46 @@
 export default {
   data() {
     return {
-      goddess: null,
-      goddessComments: []
+      page: getCurrentPages().slice(-1)[0],
+      goddess: null
     };
   },
   async onLoad(query) {
+    this.query = query;
     await this.fetchData(query);
   },
+  onShareTimeline(options) {
+    return {
+      title: this.goddess?.title,
+      path: this.page.$page.fullPath,
+      imageUrl: ""
+    };
+  },
+  onShareAppMessage(options) {
+    return {
+      title: this.goddess?.title,
+      path: this.page.$page.fullPath,
+      imageUrl: ""
+    };
+  },
   methods: {
+    onTap(event) {
+      console.log(event);
+    },
     async fetchData(query) {
       const { data: goddess } = await Http.get(`/goddess/detail/${query.id}`);
       this.goddess = goddess;
-      const { data: goddessComments } = await Http.get(
-        `/goddess_comment/goddess/${this.goddess.id}`
-      );
-      console.log({ goddessComments });
-      this.goddessComments = goddessComments;
     }
   }
 };
 </script>
 
 <style scoped>
-.goddess-main {
-  padding: 15px;
+.goddess-title {
+  color: black;
+  text-align: center;
+  font-size: 150%;
+  font-weight: bold;
+  margin-bottom: 1em;
 }
 </style>

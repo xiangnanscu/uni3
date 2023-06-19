@@ -38,46 +38,82 @@
         </view>
       </uni-grid-item>
     </uni-grid>
-    <uni-card v-if="goddess" @click="onGoddessClick" :is-full="false">
-      <template v-slot:cover>
-        <image
-          @click="onGoddessClick"
-          style="width: 100%"
-          :src="goddess.pics[0]"
-          mode="widthFix"
-        />
-      </template>
-
-      <text class="uni-body">{{ goddess.content }}</text>
-      <!-- <template v-slot:actions>
-          <view class="card-actions">
-            <view class="card-actions-item" @click="actionsClick('分享')">
-              <uni-icons type="pengyouquan" size="18" color="#999"></uni-icons>
-              <text class="card-actions-item-text">分享</text>
-            </view>
-            <view class="card-actions-item" @click="actionsClick('点赞')">
-              <uni-icons type="heart" size="18" color="#999"></uni-icons>
-              <text class="card-actions-item-text">点赞</text>
-            </view>
-            <view class="card-actions-item" @click="actionsClick('评论')">
-              <uni-icons type="chatbubble" size="18" color="#999"></uni-icons>
-              <text class="card-actions-item-text">评论</text>
-            </view>
-          </view>
-        </template> -->
-    </uni-card>
-    <ThreadList :records="threads"></ThreadList>
+    <fui-panel
+      v-if="panelData3.list.length > 0"
+      @click="newsClick"
+      :panelData="panelData3"
+      :width="150"
+      :height="120"
+      :marginTop="24"
+      :size="25"
+      :descSize="26"
+    >
+      <fui-list-cell
+        arrow
+        :bottomBorder="false"
+        topBorder
+        topLeft="32"
+        @click="gotoNewsPage"
+      >
+        <text class="fui-text__link">查看更多</text>
+      </fui-list-cell>
+    </fui-panel>
+    <fui-panel
+      v-if="goddess"
+      :panelData="panelData4"
+      :width="150"
+      :height="120"
+      :marginTop="24"
+      :size="25"
+      :descSize="26"
+    >
+      <fui-card @click="onGoddessClick">
+        <view class="fui-list__item">
+          <image
+            @click="onGoddessClick"
+            style="width: 100%"
+            :src="goddess.pics[0]"
+            mode="widthFix"
+          />
+        </view>
+      </fui-card>
+      <fui-list-cell
+        arrow
+        :bottomBorder="false"
+        topBorder
+        topLeft="32"
+        @click="
+          utils.gotoPage({ name: 'GoddessDetail', query: { id: goddess.id } })
+        "
+      >
+        <text class="fui-text__link"> {{ goddess.title }}</text>
+      </fui-list-cell>
+    </fui-panel>
+    <!-- <ThreadList :records="threads"></ThreadList> -->
   </page-layout>
 </template>
 
 <script>
-// console.log({ ThreadList });
+// panelData3: {
+// 	head: 'First UI介绍',
+// 	list: [{
+// 		src: '/static/images/common/logo.png',
+// 		title: 'First UI组件库',
+// 		desc: 'First UI 是一套基于uni-app开发的组件化、可复用、易扩展、低耦合的跨平台移动端UI 组件库。'
+// 	}, {
+// 		src: '/static/images/common/logo.png',
+// 		title: 'First UI跨平台UI组件库',
+// 		desc: 'First UI组件库，是基于uni-app开发的一款轻量、全面可靠的跨平台移动端组件库。'
+// 	}]
+// },
 export default {
   watch: {
     imageList(res) {}
   },
   data() {
     return {
+      panelData3: { head: "青年新闻", list: [] },
+      panelData4: { head: "封面女神", list: [] },
       searchValue: "",
       goddess: null,
       imageList: [],
@@ -142,11 +178,17 @@ export default {
     console.log("Home.vue onShow");
     this.threads = [];
     this.noticeText = await this.getNoticeBar();
-    this.threads = await this.getThreads();
+    // this.threads = await this.getThreads();
     this.goddess = await this.getCoverGoddess();
+    this.panelData3.list = await this.getNews();
   },
   methods: {
-    onClick() {},
+    newsClick(e) {
+      utils.gotoPage({ name: "NewsDetail", query: { id: e.id } });
+    },
+    gotoNewsPage() {
+      utils.gotoPage("NewsList");
+    },
     async onGoddessClick() {
       utils.gotoPage({
         url: "/views/GoddessDetail",
@@ -160,19 +202,21 @@ export default {
     async getCoverGoddess() {
       const {
         data: [goddess]
-      } = await Http.get("/goddess/cover");
+      } = await Http.post("/goddess/cover");
+      console.log({ goddess });
       return goddess;
     },
-    async getThreads() {
+    async getNews() {
       const {
-        data: { records: threads }
-      } = await Http.get("/thread", {
-        data: {
-          pagesize: 3
-        }
-      });
-      console.log({ threads });
-      return threads;
+        data: { records: news }
+      } = await Http.post("/news?pagesize=2", {});
+      console.log({ news });
+      return news.map((e) => ({
+        id: e.id,
+        title: e.title,
+        src: e.pics[0],
+        desc1: e.content.slice(0, 50)
+      }));
     },
     change(event) {
       console.log({ event });
@@ -245,6 +289,24 @@ export default {
 </script>
 
 <style scoped>
+.fui-section__title {
+  margin-left: 32rpx;
+}
+.fui-list__item {
+  width: 100%;
+  height: 385rpx;
+  position: relative;
+  background: #eee;
+}
+
+.fui-cover {
+  width: 100%;
+  display: block;
+}
+.fui-text__link {
+  color: #666;
+  font-size: 25rpx;
+}
 .grid-dot {
   position: absolute;
   top: 5px;
