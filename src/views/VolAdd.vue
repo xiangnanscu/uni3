@@ -1,18 +1,18 @@
 <template>
   <page-layout>
     <modelform-uni
-      :model="threadModel"
-      :values="ThreadAddData"
-      :sync-values="true"
+      :model="volplanModel"
+      :values="formData"
+      label-width="6em"
       @success-post="successPost"
-      action-url="/thread/create"
+      action-url="/vol/create"
     ></modelform-uni>
   </page-layout>
 </template>
 
 <script setup>
-const threadModel = Model.createModel({
-  fieldNames: ["title", "content", "pics"],
+const volplanModel = Model.createModel({
+  fieldNames: ["title", "content", "pics", "amount"],
   fields: {
     pics: {
       label: "图片",
@@ -20,13 +20,13 @@ const threadModel = Model.createModel({
       required: false,
       size: process.env.ALIOSS_AVATAR_SIZE || "2M"
     },
-    title: { label: "标题", required: true },
-    content: { label: "内容", required: true, inputType: "textarea" }
+    title: { label: "志愿主题", required: true },
+    content: { label: "内容", required: true, inputType: "textarea" },
+    amount: { label: "召集人数", required: true, type: "integer" }
   }
 });
-const ThreadAddData = ref({ title: "", content: "", pics: [] });
+const formData = ref({ title: "", content: "", pics: [], amount: 1 });
 const successPost = async (data) => {
-  console.log(data);
-  await utils.gotoPage({ url: "/views/ThreadListAll" });
+  await utils.gotoPage("Home");
 };
 </script>

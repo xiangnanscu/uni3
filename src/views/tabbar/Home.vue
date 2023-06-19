@@ -59,6 +59,31 @@
       </fui-list-cell>
     </fui-panel>
     <fui-panel
+      v-if="volplan"
+      @click="onVolplanClick"
+      :panelData="panelData5"
+      :width="150"
+      :height="120"
+      :marginTop="24"
+      :size="25"
+      :descSize="26"
+    >
+      <fui-card>
+        <view class="fui-list__item">
+          <image style="width: 100%" :src="volplan.pics[0]" mode="widthFix" />
+        </view>
+      </fui-card>
+      <fui-list-cell
+        arrow
+        :bottomBorder="false"
+        topBorder
+        topLeft="32"
+        @click="onVolplanClick"
+      >
+        <text class="fui-text__link"> {{ volplan.title }}</text>
+      </fui-list-cell>
+    </fui-panel>
+    <fui-panel
       v-if="goddess"
       @click="onGoddessClick"
       :panelData="panelData4"
@@ -107,9 +132,11 @@ export default {
   data() {
     return {
       panelData3: { head: "青年新闻", list: [] },
+      panelData5: { head: "志愿服务", list: [] },
       panelData4: { head: "封面女神", list: [] },
       searchValue: "",
       goddess: null,
+      volplan: null,
       imageList: [],
       threads: [],
       noticeText: "",
@@ -174,6 +201,7 @@ export default {
     this.noticeText = await this.getNoticeBar();
     // this.threads = await this.getThreads();
     this.goddess = await this.getCoverGoddess();
+    this.volplan = await this.getCoverVolplan();
     this.panelData3.list = await this.getNews();
   },
   methods: {
@@ -182,6 +210,12 @@ export default {
     },
     gotoNewsPage() {
       utils.gotoPage("NewsList");
+    },
+    async onVolplanClick() {
+      utils.gotoPage({
+        url: "/views/VolplanDetail",
+        query: { id: this.volplan.id }
+      });
     },
     async onGoddessClick() {
       utils.gotoPage({
@@ -192,6 +226,10 @@ export default {
     async getNoticeBar() {
       const { data } = await Http.get("/settings?key=notice_bar");
       return data;
+    },
+    async getCoverVolplan() {
+      const { data } = await Http.post("/volplan/cover");
+      return data[0];
     },
     async getCoverGoddess() {
       const { data } = await Http.post("/goddess/cover");
