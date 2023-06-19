@@ -10,11 +10,7 @@
       </scroll-view> -->
       <uni-list :border="false" class="chat-body">
         <template v-for="(chat, i) in messages" :key="chat.id">
-          <uni-list-item
-            v-if="chat.target.id === user.id"
-            :border="false"
-            :class="{ lastchat: i === messages.length - 1 }"
-          >
+          <uni-list-item v-if="chat.target.id === user.id" :border="false">
             <template v-slot:header>
               <view class="slot-box">
                 <image
@@ -32,11 +28,7 @@
               >
             </template>
           </uni-list-item>
-          <uni-list-item
-            v-else
-            :border="false"
-            :class="{ lastchat: i === messages.length - 1 }"
-          >
+          <uni-list-item v-else :border="false">
             <template v-slot:body
               ><text
                 class="message-body slot-box slot-text"
@@ -59,6 +51,7 @@
       <x-chatbar v-model:modelValue="messageText" @sendMessage="sendMessage" />
     </view>
   </page-layout>
+  <view class="bottom"></view>
 </template>
 
 <script>
@@ -77,21 +70,17 @@ export default {
   mounted() {
     console.log("mounted");
     this.$nextTick(() => {
-      const view = uni.createSelectorQuery().in(this).select(".lastchat");
-      console.log({ view });
-      uni.pageScrollTo({
-        duration: 0,
-        scrollTop: 9999
-      });
-      view
-        .boundingClientRect((res) => {
-          console.log("节点:", res);
-          uni.pageScrollTo({
-            duration: 0,
-            scrollTop: res?.top
-          });
-        })
-        .exec();
+      setTimeout(() => {
+        const view = uni.createSelectorQuery().in(this).select(".bottom");
+        view
+          .boundingClientRect((res) => {
+            uni.pageScrollTo({
+              duration: 0,
+              scrollTop: res?.top
+            });
+          })
+          .exec();
+      }, 300);
     });
   },
   async onLoad(query) {
@@ -156,6 +145,7 @@ export default {
   text-align: center;
   font-weight: bold;
   border-bottom: #eee solid 1px;
+  background-color: #fff;
 }
 .chat-body {
   margin-bottom: 10em;

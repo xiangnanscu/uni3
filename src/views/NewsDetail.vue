@@ -15,7 +15,11 @@
       <template #actions> </template>
     </uni-card>
     <x-bottom>
-      <generic-actions :target-id="news.id" target-model="news" />
+      <generic-actions
+        :target-id="news.id"
+        target-model="news"
+        style="width: 100%"
+      />
     </x-bottom>
   </page-layout>
 </template>
