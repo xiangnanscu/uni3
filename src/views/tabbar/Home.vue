@@ -5,7 +5,7 @@
         suffixIcon="search"
         v-model="searchValue"
         placeholder="请输入查找内容~"
-        @iconClick="onClick"
+        iconClick="onClick"
       ></uni-easyinput>
     </view>
     <uni-notice-bar
@@ -69,12 +69,7 @@
     >
       <fui-card @click="onGoddessClick">
         <view class="fui-list__item">
-          <image
-            @click="onGoddessClick"
-            style="width: 100%"
-            :src="goddess.pics[0]"
-            mode="widthFix"
-          />
+          <image style="width: 100%" :src="goddess.pics[0]" mode="widthFix" />
         </view>
       </fui-card>
       <fui-list-cell
@@ -82,9 +77,7 @@
         :bottomBorder="false"
         topBorder
         topLeft="32"
-        @click="
-          utils.gotoPage({ name: 'GoddessDetail', query: { id: goddess.id } })
-        "
+        @click="onGoddessClick"
       >
         <text class="fui-text__link"> {{ goddess.title }}</text>
       </fui-list-cell>
@@ -200,11 +193,9 @@ export default {
       return data;
     },
     async getCoverGoddess() {
-      const {
-        data: [goddess]
-      } = await Http.post("/goddess/cover");
-      console.log({ goddess });
-      return goddess;
+      const { data } = await Http.post("/goddess/cover");
+      console.log({ data });
+      return data[0];
     },
     async getNews() {
       const {
