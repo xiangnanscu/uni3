@@ -1,13 +1,13 @@
 <template>
   <page-layout>
-    <view v-if="receiver" class="chat">
+    <view v-if="receiver">
       <div class="chat-head">
         {{ receiver.nickname }}
       </div>
       <!-- <scroll-view :scroll-y="true" :scroll-top="99999" class="chat-body">
 
       </scroll-view> -->
-      <uni-list :border="false">
+      <uni-list :border="false" class="chat-body">
         <template v-for="(chat, i) in messages" :key="chat.id">
           <uni-list-item
             v-if="chat.target.id === user.id"
@@ -73,7 +73,7 @@ export default {
       messages: []
     };
   },
-  mounted2() {
+  mounted() {
     console.log("mounted");
     this.$nextTick(() => {
       const view = uni.createSelectorQuery().in(this).select(".lastchat");
@@ -84,13 +84,13 @@ export default {
       });
       view
         .boundingClientRect((res) => {
+          console.log("节点:", res);
           uni.pageScrollTo({
             duration: 0,
-            scrollTop: 9999
+            scrollTop: res?.top
           });
         })
         .exec();
-      console.log("????");
     });
   },
   async onLoad(query) {
@@ -157,9 +157,8 @@ export default {
   border-bottom: #eee solid 1px;
 }
 .chat-body {
-  flex-grow: 1;
   overflow: scroll;
-  margin-bottom: 5em;
+  margin-bottom: 6em;
 }
 .slot-box {
   display: flex;
