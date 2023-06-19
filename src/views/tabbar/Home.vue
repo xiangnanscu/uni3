@@ -60,7 +60,7 @@
     </fui-panel>
     <fui-panel
       v-if="goddess"
-      @click2="onGoddessClick"
+      @click="onGoddessClick"
       :panelData="panelData4"
       :width="150"
       :height="120"
