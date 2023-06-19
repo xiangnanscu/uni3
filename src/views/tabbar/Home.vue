@@ -60,6 +60,7 @@
     </fui-panel>
     <fui-panel
       v-if="goddess"
+      @click2="onGoddessClick"
       :panelData="panelData4"
       :width="150"
       :height="120"
@@ -67,7 +68,7 @@
       :size="25"
       :descSize="26"
     >
-      <fui-card @click="onGoddessClick">
+      <fui-card>
         <view class="fui-list__item">
           <image style="width: 100%" :src="goddess.pics[0]" mode="widthFix" />
         </view>
