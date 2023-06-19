@@ -57,6 +57,7 @@
   </page-layout>
   <fui-fab
     v-show="showFloatPlus"
+    :distance="10"
     position="right"
     :isDrag="true"
     @click="toggleButton"
@@ -80,7 +81,7 @@ export default {
     };
   },
   mounted() {
-    this.scrollTo(".bottom");
+    this.scrollTo();
   },
   async onLoad(query) {
     this.chatId = Number(query.id);
@@ -110,20 +111,16 @@ export default {
     scrollTo(selector) {
       this.$nextTick(() => {
         setTimeout(() => {
-          // const view = uni.createSelectorQuery().in(this).select(selector);
-          // view
-          //   .boundingClientRect((res) => {
-          //     console.log("res?.top", res?.top);
-          //     uni.pageScrollTo({
-          //       duration: 0,
-          //       scrollTop: Infinity
-          //     });
-          //   })
-          //   .exec();
-          uni.pageScrollTo({
-            duration: 0,
-            scrollTop: Infinity
-          });
+          const view = uni.createSelectorQuery().in(this).select(".chat-body");
+          view
+            .boundingClientRect((res) => {
+              console.log("res?.height", res?.height);
+              uni.pageScrollTo({
+                duration: 200,
+                scrollTop: res?.height || Infinity
+              });
+            })
+            .exec();
         }, 100);
       });
     },
