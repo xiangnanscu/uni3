@@ -1,11 +1,6 @@
 <template>
   <page-layout v-if="news">
-    <uni-card
-      :isFull="true"
-      :is-shadow="false"
-      :border="false"
-      style="margin-bottom: 2em"
-    >
+    <uni-card :isFull="true" :is-shadow="false" :border="false">
       <p class="news-title">{{ news.title }}</p>
       <x-subtitle style="padding: 0.5em 0.5em">
         <div>来源：{{ news.creator.name }}</div>
@@ -14,6 +9,7 @@
       <tinymce-text :html="news.content"></tinymce-text>
       <template #actions> </template>
     </uni-card>
+    <div style="height: 3em"></div>
     <x-bottom>
       <generic-actions
         :target-id="news.id"
