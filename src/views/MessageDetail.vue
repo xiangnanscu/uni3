@@ -49,14 +49,14 @@
         </template>
       </uni-list>
       <x-chatbar
-        v-show="showChatBar"
+        v-if="showChatBar"
         v-model:modelValue="messageText"
         @sendMessage="sendMessage"
       />
     </view>
   </page-layout>
   <fui-fab
-    v-show="showFloatPlus"
+    v-if="showFloatPlus"
     :distance="10"
     position="right"
     :isDrag="true"

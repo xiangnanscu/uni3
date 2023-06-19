@@ -11,6 +11,7 @@
           :enableNative="false"
           auto-height
           :show-count="false"
+          :focus="focus"
           fixed
           disable-default-padding
           :cursor-spacing="spacing"
@@ -40,6 +41,7 @@
 
 <script setup>
 const props = defineProps({
+  focus: { type: Boolean, default: true },
   modelValue: { type: String, default: "" }
 });
 const emit = defineEmits(["update:modelValue", "sendMessage"]);
