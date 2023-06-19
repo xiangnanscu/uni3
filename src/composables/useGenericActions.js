@@ -11,7 +11,7 @@ export function useGenericActions({ target_model, target_id }) {
   };
   onMounted(async () => {
     console.log("useGenericActions onMounted");
-    const { data: actions } = await Http.post(`/actions/my`, {
+    const { data: actions } = await Http.post(`/actions/stat`, {
       target_model,
       target_id
     });

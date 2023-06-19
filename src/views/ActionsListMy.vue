@@ -3,17 +3,22 @@
     <fui-tabs
       :tabs="tabs"
       center
-      @change="change"
+      @change="changeActionType"
       :current="current"
     ></fui-tabs>
-    <fui-list v-if="ready">
-      <fui-list-cell v-for="e in records" :key="e.id" arrow>
-        <view class="fui-list__item">
-          <text>{{ e.title }}</text>
-          <text class="fui-text__explain">{{ fromNow(e.ctime) }}</text>
-        </view>
-      </fui-list-cell>
-    </fui-list>
+    <uni-list v-if="ready">
+      <uni-list-item
+        v-for="e in records"
+        :key="e.id"
+        :title="e.title"
+        :to="`/views/${utils.toModelName(e.target_model)}Detail?id=${
+          e.target_id
+        }`"
+        :rightText="utils.fromNow(e.ctime)"
+        link="navigateTo"
+      >
+      </uni-list-item>
+    </uni-list>
   </page-layout>
 </template>
 
@@ -24,9 +29,18 @@ const tabs = ["浏览", "收藏", "点赞"];
 const type = computed(() => tabs[current.value]);
 const ready = ref(false);
 const records = ref([]);
-onLoad(async () => {
-  const { data } = await Http.post("/actions/my", { type: type.value });
+
+const setRecordsByType = async (newType) => {
+  const { data } = await Http.post("/actions/my", { type: newType });
   records.value = data;
+};
+const changeActionType = async ({ index, name }) => {
+  await setRecordsByType(name);
+};
+watch(type, setRecordsByType);
+
+onLoad(async () => {
+  await setRecordsByType(type.value);
   ready.value = true;
 });
 </script>

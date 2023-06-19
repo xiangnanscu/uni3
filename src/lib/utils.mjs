@@ -244,3 +244,12 @@ export async function tryGotoPage(opts) {
   }
   await gotoPage(opts);
 }
+export const snakeToCamel = (s) => {
+  return s.replace(/(_[a-zA-Z])/g, (c) => {
+    return c[1].toUpperCase();
+  });
+};
+
+export const toModelName = (s) => {
+  return capitalize(snakeToCamel(s));
+};

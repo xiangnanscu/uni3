@@ -1,10 +1,22 @@
 <template>
-  <page-layout>
-    <uni-card v-if="news" :isFull="true" :is-shadow="false" :border="false">
+  <page-layout v-if="news">
+    <uni-card
+      :isFull="true"
+      :is-shadow="false"
+      :border="false"
+      style="margin-bottom: 2em"
+    >
       <p class="news-title">{{ news.title }}</p>
+      <x-subtitle style="padding: 0.5em 0.5em">
+        <div>来源：{{ news.creator.name }}</div>
+        <div>{{ utils.fromNow(news.ctime) }}</div>
+      </x-subtitle>
       <tinymce-text :html="news.content"></tinymce-text>
       <template #actions> </template>
     </uni-card>
+    <x-bottom>
+      <generic-actions :target-id="news.id" target-model="news" />
+    </x-bottom>
   </page-layout>
 </template>
 

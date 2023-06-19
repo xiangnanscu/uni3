@@ -30,8 +30,11 @@ declare module '@vue/runtime-core' {
     WxLogin: typeof import('./../components/WxLogin.vue')['default']
     XAlbum: typeof import('./../components/x-album.vue')['default']
     XAlert: typeof import('./../components/x-alert.vue')['default']
+    XBottom: typeof import('./../components/x-bottom.vue')['default']
     XButton: typeof import('./../components/x-button.vue')['default']
+    XChatbar: typeof import('./../components/x-chatbar.vue')['default']
     XPicker: typeof import('./../components/x-picker.vue')['default']
+    XSubtitle: typeof import('./../components/x-subtitle.vue')['default']
     XTest: typeof import('./../components/x-test.vue')['default']
   }
 }

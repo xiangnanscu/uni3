@@ -44,6 +44,8 @@ const {
   height: 25px;
 }
 .actions-container {
+  width: 100%;
+  margin-top: 0.5em;
   display: flex;
   justify-content: space-around;
 }

@@ -4,63 +4,58 @@
       <div class="chat-head">
         {{ receiver.nickname }}
       </div>
-      <scroll-view :scroll-y="true" :scroll-top="99999" class="chat-body">
-        <uni-list :border="false">
-          <view v-for="(chat, i) in messages" :key="i">
-            <uni-list-item v-if="chat.target.id === user.id" :border="false">
-              <template v-slot:header>
-                <view class="slot-box">
-                  <image
-                    class="message-avatar slot-image"
-                    :src="chat.creator.avatar"
-                    mode="widthFix"
-                  ></image>
-                </view>
-              </template>
-              <template v-slot:body
-                ><text
-                  class="message-body slot-box slot-text"
-                  style="display: block; text-align: left"
-                  >{{ chat.content }}</text
-                >
-              </template>
-            </uni-list-item>
-            <uni-list-item v-else :border="false">
-              <template v-slot:body
-                ><text
-                  class="message-body slot-box slot-text"
-                  style="display: block; text-align: right"
-                  >{{ chat.content }}</text
-                >
-              </template>
-              <template v-slot:footer>
-                <view class="slot-box">
-                  <image
-                    class="message-avatar slot-image-right"
-                    :src="chat.creator.avatar"
-                    mode="widthFix"
-                  ></image>
-                </view>
-              </template>
-            </uni-list-item>
-          </view>
-        </uni-list>
-      </scroll-view>
-      <uni-row class="chat-foot" style="display: flex; align-items: baseline">
-        <uni-col :span="19">
-          <textarea
-            v-model="messageText"
-            auto-height
-            :cursor-spacing="30"
-            placeholder="请输入内容"
-          ></textarea>
-        </uni-col>
-        <uni-col :span="5">
-          <x-button @click="sendMessage" style="margin-right: 0">
-            发送
-          </x-button>
-        </uni-col>
-      </uni-row>
+      <!-- <scroll-view :scroll-y="true" :scroll-top="99999" class="chat-body">
+
+      </scroll-view> -->
+      <uni-list :border="false">
+        <template v-for="(chat, i) in messages" :key="chat.id">
+          <uni-list-item
+            v-if="chat.target.id === user.id"
+            :border="false"
+            :class="{ lastchat: i === messages.length - 1 }"
+          >
+            <template v-slot:header>
+              <view class="slot-box">
+                <image
+                  class="message-avatar slot-image"
+                  :src="chat.creator.avatar"
+                  mode="widthFix"
+                ></image>
+              </view>
+            </template>
+            <template v-slot:body
+              ><text
+                class="message-body slot-box slot-text"
+                style="display: block; text-align: left"
+                >{{ chat.content }}</text
+              >
+            </template>
+          </uni-list-item>
+          <uni-list-item
+            v-else
+            :border="false"
+            :class="{ lastchat: i === messages.length - 1 }"
+          >
+            <template v-slot:body
+              ><text
+                class="message-body slot-box slot-text"
+                style="display: block; text-align: right"
+                >{{ chat.content }}</text
+              >
+            </template>
+            <template v-slot:footer>
+              <view class="slot-box">
+                <image
+                  class="message-avatar slot-image-right"
+                  :src="chat.creator.avatar"
+                  mode="widthFix"
+                ></image>
+              </view>
+            </template>
+          </uni-list-item>
+        </template>
+      </uni-list>
+      <x-chatbar v-model="messageText" @sendMessage="sendMessage" />
     </view>
   </page-layout>
 </template>
@@ -77,6 +72,26 @@ export default {
       chatId: 0,
       messages: []
     };
+  },
+  mounted2() {
+    console.log("mounted");
+    this.$nextTick(() => {
+      const view = uni.createSelectorQuery().in(this).select(".lastchat");
+      console.log({ view });
+      uni.pageScrollTo({
+        duration: 0,
+        scrollTop: 9999
+      });
+      view
+        .boundingClientRect((res) => {
+          uni.pageScrollTo({
+            duration: 0,
+            scrollTop: 9999
+          });
+        })
+        .exec();
+      console.log("????");
+    });
   },
   async onLoad(query) {
     this.chatId = Number(query.id);
@@ -103,13 +118,14 @@ export default {
     }
   },
   methods: {
-    async sendMessage() {
-      if (!this.messageText) {
-        return "";
+    async sendMessage(content) {
+      if (!content) {
+        uni.showToast({ title: "请输入内容", icon: "error" });
+        return;
       }
       const { data } = await Http.post(`/message/create`, {
         target: this.chatId,
-        content: this.messageText
+        content
       });
       data.creator = this.sender;
       data.target = this.receiver;
@@ -143,9 +159,7 @@ export default {
 .chat-body {
   flex-grow: 1;
   overflow: scroll;
-}
-.chat-foot {
-  /* padding: 15px; */
+  margin-bottom: 5em;
 }
 .slot-box {
   display: flex;
@@ -171,15 +185,6 @@ export default {
   flex: 1;
   margin-right: 10px;
   font-size: 90%;
-}
-.message-header {
-  color: #666;
-  font-size: 70%;
-}
-.message-footer {
-  color: #666;
-  font-size: 60%;
-  padding-top: 3px;
 }
 .message-body {
   padding: 2px;
