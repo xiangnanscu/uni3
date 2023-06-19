@@ -55,6 +55,7 @@ declare global {
   const markRaw: typeof import('vue')['markRaw']
   const nextTick: typeof import('vue')['nextTick']
   const onActivated: typeof import('vue')['onActivated']
+  const onAddToFavorites: typeof import('@dcloudio/uni-app')['onAddToFavorites']
   const onBeforeMount: typeof import('vue')['onBeforeMount']
   const onBeforeUnmount: typeof import('vue')['onBeforeUnmount']
   const onBeforeUpdate: typeof import('vue')['onBeforeUpdate']
@@ -71,6 +72,8 @@ declare global {
   const onRenderTriggered: typeof import('vue')['onRenderTriggered']
   const onScopeDispose: typeof import('vue')['onScopeDispose']
   const onServerPrefetch: typeof import('vue')['onServerPrefetch']
+  const onShareAppMessage: typeof import('@dcloudio/uni-app')['onShareAppMessage']
+  const onShareTimeline: typeof import('@dcloudio/uni-app')['onShareTimeline']
   const onShow: typeof import('@dcloudio/uni-app')['onShow']
   const onStartTyping: typeof import('@vueuse/core')['onStartTyping']
   const onUnload: typeof import('@dcloudio/uni-app')['onUnload']
@@ -280,6 +283,7 @@ declare global {
   const useWindowFocus: typeof import('@vueuse/core')['useWindowFocus']
   const useWindowScroll: typeof import('@vueuse/core')['useWindowScroll']
   const useWindowSize: typeof import('@vueuse/core')['useWindowSize']
+  const useWxShare: typeof import('../composables/useWxShare.js')['useWxShare']
   const utils: typeof import('../globals/index.mjs')['utils']
   const validator: typeof import('../globals/index.mjs')['validator']
   const watch: typeof import('vue')['watch']
@@ -355,6 +359,7 @@ declare module 'vue' {
     readonly markRaw: UnwrapRef<typeof import('vue')['markRaw']>
     readonly nextTick: UnwrapRef<typeof import('vue')['nextTick']>
     readonly onActivated: UnwrapRef<typeof import('vue')['onActivated']>
+    readonly onAddToFavorites: UnwrapRef<typeof import('@dcloudio/uni-app')['onAddToFavorites']>
     readonly onBeforeMount: UnwrapRef<typeof import('vue')['onBeforeMount']>
     readonly onBeforeUnmount: UnwrapRef<typeof import('vue')['onBeforeUnmount']>
     readonly onBeforeUpdate: UnwrapRef<typeof import('vue')['onBeforeUpdate']>
@@ -371,6 +376,8 @@ declare module 'vue' {
     readonly onRenderTriggered: UnwrapRef<typeof import('vue')['onRenderTriggered']>
     readonly onScopeDispose: UnwrapRef<typeof import('vue')['onScopeDispose']>
     readonly onServerPrefetch: UnwrapRef<typeof import('vue')['onServerPrefetch']>
+    readonly onShareAppMessage: UnwrapRef<typeof import('@dcloudio/uni-app')['onShareAppMessage']>
+    readonly onShareTimeline: UnwrapRef<typeof import('@dcloudio/uni-app')['onShareTimeline']>
     readonly onShow: UnwrapRef<typeof import('@dcloudio/uni-app')['onShow']>
     readonly onStartTyping: UnwrapRef<typeof import('@vueuse/core')['onStartTyping']>
     readonly onUnload: UnwrapRef<typeof import('@dcloudio/uni-app')['onUnload']>
@@ -580,6 +587,7 @@ declare module 'vue' {
     readonly useWindowFocus: UnwrapRef<typeof import('@vueuse/core')['useWindowFocus']>
     readonly useWindowScroll: UnwrapRef<typeof import('@vueuse/core')['useWindowScroll']>
     readonly useWindowSize: UnwrapRef<typeof import('@vueuse/core')['useWindowSize']>
+    readonly useWxShare: UnwrapRef<typeof import('../composables/useWxShare.js')['useWxShare']>
     readonly utils: UnwrapRef<typeof import('../globals/index.mjs')['utils']>
     readonly validator: UnwrapRef<typeof import('../globals/index.mjs')['validator']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>

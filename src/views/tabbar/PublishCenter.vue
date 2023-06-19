@@ -8,7 +8,7 @@
     ></image>
     <view class="tabbar-box-wrap">
       <view class="tabbar-box">
-        <view class="tabbar-box-item" @click="gotoPage('ForumCreate')">
+        <view class="tabbar-box-item" @click="gotoPage('ForumAdd')">
           <image
             class="box-image"
             src="../../static/img/create-forum.png"
@@ -16,7 +16,7 @@
           ></image>
           <text class="explain">创建吧</text>
         </view>
-        <view class="tabbar-box-item" @click="gotoPage('ThreadAdd')">
+        <view class="tabbar-box-item" @click="gotoPage('VolAdd')">
           <image
             class="box-image"
             src="../../static/img/vol.png"
@@ -24,7 +24,7 @@
           ></image>
           <text class="explain">发布志愿</text>
         </view>
-        <view class="tabbar-box-item" @click="gotoPage('VolAdd')">
+        <view class="tabbar-box-item" @click="gotoPage('ThreadAdd')">
           <image
             class="box-image"
             src="../../static/img/forum-blue.png"

@@ -26,17 +26,39 @@
   </uni-popup>
 </template>
 
+<script setup>
+// https://github.com/dcloudio/uni-app/issues/3097
+// onShareTimeline
+// onShareAppMessage
+// useWxShare({ title: "帖子哈哈" });
+</script>
+
 <script>
 export default {
   data() {
     return {
       thread: null,
       currentPost: "",
+      page: getCurrentPages().slice(-1)[0],
       posts: []
     };
   },
   async onLoad(query) {
     await this.fetchData(query);
+  },
+  onShareTimeline(options) {
+    return {
+      title: this.thread?.title,
+      path: this.page.$page.fullPath,
+      imageUrl: ""
+    };
+  },
+  onShareAppMessage(options) {
+    return {
+      title: this.thread?.title,
+      path: this.page.$page.fullPath,
+      imageUrl: ""
+    };
   },
   methods: {
     async fetchData(query) {

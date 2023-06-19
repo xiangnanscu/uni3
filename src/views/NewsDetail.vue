@@ -28,6 +28,7 @@
 export default {
   data() {
     return {
+      page: getCurrentPages().slice(-1)[0],
       news: null
     };
   },
@@ -36,22 +37,16 @@ export default {
     await this.fetchData(query);
   },
   onShareTimeline(options) {
-    console.log(options);
-    const page = getCurrentPages().slice(-1)[0];
-    console.log({ page });
     return {
-      title: this.news.title,
-      path: page.$page.fullPath,
+      title: this.news?.title,
+      path: this.page.$page.fullPath,
       imageUrl: ""
     };
   },
   onShareAppMessage(options) {
-    console.log(options);
-    const page = getCurrentPages().slice(-1)[0];
-    console.log({ page });
     return {
-      title: this.news.title,
-      path: page.$page.fullPath,
+      title: this.news?.title,
+      path: this.page.$page.fullPath,
       imageUrl: ""
     };
   },

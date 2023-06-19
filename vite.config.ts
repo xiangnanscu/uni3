@@ -36,7 +36,10 @@ const plugins = [
           "onShow",
           "onReady",
           "onHide",
-          "onUnload"
+          "onUnload",
+          "onShareTimeline",
+          "onAddToFavorites",
+          "onShareAppMessage"
         ],
         "regenerator-runtime": [["default", "regeneratorRuntime"]]
       }

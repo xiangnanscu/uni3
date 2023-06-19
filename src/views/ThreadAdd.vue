@@ -11,6 +11,9 @@
 </template>
 
 <script setup>
+// useWxShare({ title: "发帖" });
+// useQuery();
+// console.log("useQuery");
 const threadModel = Model.createModel({
   fieldNames: ["title", "content", "pics"],
   fields: {

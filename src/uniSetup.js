@@ -108,7 +108,11 @@ const whiteList = [
   "/",
   process.env.UNI_HOME_PAGE,
   loginPage,
-  "/views/tabbar/ProfileMy"
+  "/views/tabbar/ProfileMy",
+  "/views/NewsDetail",
+  "/views/ThreadDetail",
+  "/views/GoddessDetail",
+  "/views/VolplanDetail"
 ];
 
 const navStack = [];
