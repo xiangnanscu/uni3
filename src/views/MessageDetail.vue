@@ -1,11 +1,12 @@
 <template>
+  <fui-sticky v-if="receiver">
+    <div class="chat-head">
+      {{ receiver.nickname }}
+    </div>
+  </fui-sticky>
   <page-layout>
-    <view v-if="receiver">
-      <div class="chat-head">
-        {{ receiver.nickname }}
-      </div>
+    <view>
       <!-- <scroll-view :scroll-y="true" :scroll-top="99999" class="chat-body">
-
       </scroll-view> -->
       <uni-list :border="false" class="chat-body">
         <template v-for="(chat, i) in messages" :key="chat.id">
@@ -157,7 +158,7 @@ export default {
   border-bottom: #eee solid 1px;
 }
 .chat-body {
-  margin-bottom: 20em;
+  margin-bottom: 10em;
 }
 .slot-box {
   display: flex;
