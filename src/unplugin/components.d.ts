@@ -8,7 +8,6 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     AliossPicker: typeof import('./../components/alioss-picker.vue')['default']
-    copy: typeof import('./../components/x-test copy.vue')['default']
     Favicon: typeof import('./../components/favicon.vue')['default']
     GenericActions: typeof import('./../components/generic-actions.vue')['default']
     InlineTest: typeof import('./../components/InlineTest.vue')['default']

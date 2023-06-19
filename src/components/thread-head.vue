@@ -46,7 +46,7 @@
             class="actions"
           ></image>
         </div>
-        <generic-actions :target-id="thread.id" target-model="thread" />
+        <!-- <generic-actions :target-id="thread.id" target-model="thread" /> -->
       </uni-card>
     </view>
   </page-layout>
