@@ -9,7 +9,8 @@ export function useGenericActions({ target_model, target_id }) {
     收藏: favStatus,
     点赞: likeStatus
   };
-  onLoad(async () => {
+  onMounted(async () => {
+    console.log("useGenericActions onMounted");
     const { data: actions } = await Http.post(`/actions/my`, {
       target_model,
       target_id
@@ -21,7 +22,6 @@ export function useGenericActions({ target_model, target_id }) {
       }
     }
     actionsReady.value = true;
-    console.log("loaded...", likeStatus.value);
   });
   const postAction = async ({
     target_model,

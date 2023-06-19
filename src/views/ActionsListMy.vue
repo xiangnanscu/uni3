@@ -27,6 +27,7 @@ const records = ref([]);
 onLoad(async () => {
   const { data } = await Http.post("/actions/my", { type: type.value });
   records.value = data;
+  ready.value = true;
 });
 </script>
 
