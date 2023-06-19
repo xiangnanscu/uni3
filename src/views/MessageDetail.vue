@@ -48,9 +48,19 @@
           </uni-list-item>
         </template>
       </uni-list>
-      <x-chatbar v-model:modelValue="messageText" @sendMessage="sendMessage" />
+      <x-chatbar
+        v-show="showChatBar"
+        v-model:modelValue="messageText"
+        @sendMessage="sendMessage"
+      />
     </view>
   </page-layout>
+  <fui-fab
+    v-show="showFloatPlus"
+    position="right"
+    :isDrag="true"
+    @click="toggleButton"
+  ></fui-fab>
   <view class="bottom"></view>
 </template>
 
@@ -62,26 +72,15 @@ export default {
   },
   data() {
     return {
+      showChatBar: false,
+      showFloatPlus: true,
       messageText: "",
       chatId: 0,
       messages: []
     };
   },
   mounted() {
-    console.log("mounted");
-    this.$nextTick(() => {
-      setTimeout(() => {
-        const view = uni.createSelectorQuery().in(this).select(".bottom");
-        view
-          .boundingClientRect((res) => {
-            uni.pageScrollTo({
-              duration: 0,
-              scrollTop: res?.top
-            });
-          })
-          .exec();
-      }, 300);
-    });
+    this.scrollTo(".bottom");
   },
   async onLoad(query) {
     this.chatId = Number(query.id);
@@ -108,6 +107,30 @@ export default {
     }
   },
   methods: {
+    scrollTo(selector) {
+      this.$nextTick(() => {
+        setTimeout(() => {
+          // const view = uni.createSelectorQuery().in(this).select(selector);
+          // view
+          //   .boundingClientRect((res) => {
+          //     console.log("res?.top", res?.top);
+          //     uni.pageScrollTo({
+          //       duration: 0,
+          //       scrollTop: Infinity
+          //     });
+          //   })
+          //   .exec();
+          uni.pageScrollTo({
+            duration: 0,
+            scrollTop: Infinity
+          });
+        }, 100);
+      });
+    },
+    toggleButton() {
+      this.showChatBar = this.showFloatPlus;
+      this.showFloatPlus = !this.showChatBar;
+    },
     async sendMessage(content) {
       if (!content) {
         uni.showToast({ title: "请输入内容", icon: "error" });
@@ -122,6 +145,8 @@ export default {
       // console.log(this.messages.slice(-1), this.sender);
       this.messages.push(data);
       this.messageText = "";
+      this.scrollTo(".bottom");
+      this.toggleButton();
       uni.showToast({ icon: "none", title: "发送成功" });
     },
     async fetchData(chatId) {
@@ -148,7 +173,7 @@ export default {
   background-color: #fff;
 }
 .chat-body {
-  margin-bottom: 10em;
+  margin-bottom: 1em;
 }
 .slot-box {
   display: flex;

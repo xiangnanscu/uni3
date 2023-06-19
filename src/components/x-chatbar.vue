@@ -24,7 +24,9 @@
         </view>
       </view>
       <view class="fui-chatbar__icon-box fui-chatbar__send-box">
-        <text class="fui-chatbar__send" @click="sendMessage">发送</text>
+        <text class="fui-chatbar__send" @click="emit('sendMessage', modelValue)"
+          >发送</text
+        >
       </view>
     </view>
     <!-- #ifdef APP-NVUE -->
@@ -42,11 +44,7 @@ const props = defineProps({
 });
 const emit = defineEmits(["update:modelValue", "sendMessage"]);
 const onTextInput = ($event) => {
-  emit("update:modelValue", $event.target.value);
-};
-const sendMessage = () => {
-  console.log("sendMessage", props.modelValue);
-  emit("sendMessage", props.modelValue);
+  emit("update:modelValue", $event.detail.value);
 };
 </script>
 
