@@ -27,17 +27,26 @@
         >
         <text user-select class="thread-content">{{ thread.content }}</text>
         <x-album v-if="picsUrls.length" :urls="picsUrls" :columns="1"></x-album>
-        <div class="actions-container">
+        <div v-if="actionsReady" class="actions-container">
           <image
+            @click="onShare"
             src="../static/img/tabbar/share-tpp.png"
             class="actions"
           ></image>
-          <image src="../static/img/tabbar/fav.png" class="actions"></image>
           <image
-            src="../static/img/tabbar/appreciate.png"
+            @click="onFav"
+            :src="`../static/img/tabbar/fav${favStatus ? '_fill' : ''}.png`"
+            class="actions"
+          ></image>
+          <image
+            @click="onLike"
+            :src="`../static/img/tabbar/appreciate${
+              likeStatus ? '_fill' : ''
+            }.png`"
             class="actions"
           ></image>
         </div>
+        <generic-actions :target-id="thread.id" target-model="thread" />
       </uni-card>
     </view>
   </page-layout>
@@ -51,8 +60,17 @@ const props = defineProps({
   threadOtherPrefix: { type: String, default: `/thread/other` },
   fkName: { type: String, default: `thread_id` }
 });
+const {
+  actionsReady,
+  actionsMap,
+  favStatus,
+  shareStatus,
+  likeStatus,
+  onLike,
+  onFav,
+  onShare
+} = useGenericActions({ target_model: "thread", target_id: props.thread.id });
 const picsUrls = computed(() => props.thread?.pics || []);
-const favMap = {};
 </script>
 
 <style scoped>

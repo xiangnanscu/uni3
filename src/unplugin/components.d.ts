@@ -8,7 +8,9 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     AliossPicker: typeof import('./../components/alioss-picker.vue')['default']
+    copy: typeof import('./../components/x-test copy.vue')['default']
     Favicon: typeof import('./../components/favicon.vue')['default']
+    GenericActions: typeof import('./../components/generic-actions.vue')['default']
     InlineTest: typeof import('./../components/InlineTest.vue')['default']
     ModelformUni: typeof import('./../components/Modelform/Uni.vue')['default']
     ModelformUniBatchButton: typeof import('./../components/Modelform/UniBatchButton.vue')['default']
@@ -31,5 +33,6 @@ declare module '@vue/runtime-core' {
     XAlert: typeof import('./../components/x-alert.vue')['default']
     XButton: typeof import('./../components/x-button.vue')['default']
     XPicker: typeof import('./../components/x-picker.vue')['default']
+    XTest: typeof import('./../components/x-test.vue')['default']
   }
 }

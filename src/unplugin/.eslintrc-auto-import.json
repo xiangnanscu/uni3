@@ -181,6 +181,7 @@
     "useFps": true,
     "useFullscreen": true,
     "useGamepad": true,
+    "useGenericActions": true,
     "useGeolocation": true,
     "useIdle": true,
     "useImage": true,
