@@ -55,7 +55,7 @@
           </uni-list-item>
         </template>
       </uni-list>
-      <x-chatbar v-model="messageText" @sendMessage="sendMessage" />
+      <x-chatbar v-model:modelValue="messageText" @sendMessage="sendMessage" />
     </view>
   </page-layout>
 </template>
@@ -157,8 +157,7 @@ export default {
   border-bottom: #eee solid 1px;
 }
 .chat-body {
-  overflow: scroll;
-  margin-bottom: 6em;
+  margin-bottom: 20em;
 }
 .slot-box {
   display: flex;
