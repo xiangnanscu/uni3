@@ -16,7 +16,7 @@ const forumModel = Model.createModel({
   fields: {
     xm: { label: "创建人", required: true },
     sfzh: { label: "身份证号", required: true, type: "sfzh" },
-    phone: { label: "手机号", required: true },
+    phone: { label: "手机号", required: true, wxPhone: true },
     name: { label: "吧名", required: true },
     pic: {
       label: "吧头像",
