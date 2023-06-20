@@ -43,6 +43,14 @@
       >
       </uni-list-item>
       <uni-list-item
+        title="志愿服务"
+        link="navigateTo"
+        to="/views/ActionsListMy?current=2"
+        :show-extra-icon="true"
+        :extra-icon="{ color: '#666', size: '32', type: 'heart-filled' }"
+      >
+      </uni-list-item>
+      <uni-list-item
         title="个人信息"
         link="navigateTo"
         to="/views/ProfileForm"

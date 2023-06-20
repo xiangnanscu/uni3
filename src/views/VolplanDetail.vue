@@ -5,7 +5,9 @@
       <x-subtitle style="padding: 0.5em 0.5em">
         <div>{{ utils.fromNow(volplan.ctime) }}</div>
       </x-subtitle>
-      <x-button>我要参加</x-button>
+      <x-button @click="joinVol" :disabled="disableJoinButton">{{
+        disableJoinButton ? "已登记" : "我要参加"
+      }}</x-button>
       <tinymce-text :html="volplan.content"></tinymce-text>
       <template #actions> </template>
     </uni-card>
@@ -24,6 +26,7 @@
 export default {
   data() {
     return {
+      disableJoinButton: false,
       page: getCurrentPages().slice(-1)[0],
       volplan: null
     };
@@ -47,6 +50,10 @@ export default {
     };
   },
   methods: {
+    async joinVol() {
+      uni.showToast({ title: "成功登记" });
+      this.disableJoinButton = true;
+    },
     onTap(event) {
       console.log(event);
     },
