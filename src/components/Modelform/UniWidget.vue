@@ -118,6 +118,12 @@ const getPhoneNumber = async (event) => {
     sendValue(data.purePhoneNumber);
   }
 };
+let wxPhoneDisabled = field.disabled === undefined ? true : field.disabled;
+// #ifdef H5
+wxPhoneDisabled = false;
+field.wxPhone = false;
+field.wxAvatar = false;
+// #endif
 </script>
 <template>
   <template v-if="field.autocomplete">
@@ -272,7 +278,7 @@ const getPhoneNumber = async (event) => {
       :error-message="props.error"
       disable-color="black"
       :modelValue="props.modelValue"
-      :disabled="field.disabled === undefined ? true : field.disabled"
+      :disabled="wxPhoneDisabled"
       :placeholder="field.hint"
     />
     <x-button
