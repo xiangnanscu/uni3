@@ -15,7 +15,7 @@
           fixed
           disable-default-padding
           :cursor-spacing="spacing"
-          confirm-type="send"
+          confirm-type2="send"
           class="fui-chatbar__input"
           @focus="focusChange"
           @blur="blurChange"
@@ -53,7 +53,7 @@ const onTextInput = ($event) => {
 <script>
 export default {
   data() {
-    const spacing = 12;
+    const spacing = 22;
     return {
       spacing,
       //keyboard
