@@ -60,7 +60,6 @@
     </fui-panel>
     <fui-panel
       v-if="volplan"
-      @click="onVolplanClick"
       :panelData="panelData5"
       :width="150"
       :height="120"
@@ -70,7 +69,12 @@
     >
       <fui-card>
         <view class="fui-list__item">
-          <image style="width: 100%" :src="volplan.pics[0]" mode="widthFix" />
+          <image
+            @click="onVolplanClick"
+            style="width: 100%"
+            :src="volplan.pics[0]"
+            mode="widthFix"
+          />
         </view>
       </fui-card>
       <fui-list-cell
@@ -85,7 +89,6 @@
     </fui-panel>
     <fui-panel
       v-if="goddess"
-      @click="onGoddessClick"
       :panelData="panelData4"
       :width="150"
       :height="120"
@@ -95,7 +98,12 @@
     >
       <fui-card>
         <view class="fui-list__item">
-          <image style="width: 100%" :src="goddess.pics[0]" mode="widthFix" />
+          <image
+            @click="onGoddessClick"
+            style="width: 100%"
+            :src="goddess.pics[0]"
+            mode="widthFix"
+          />
         </view>
       </fui-card>
       <fui-list-cell
