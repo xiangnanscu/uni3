@@ -49,16 +49,28 @@ export default {
   onShareTimeline(options) {
     return {
       title: this.thread?.title,
+      desc: this.thread?.content.slice(0, 20) + "...",
       path: this.page.$page.fullPath,
-      imageUrl: ""
+      imageUrl: this.imageUrl
     };
   },
   onShareAppMessage(options) {
     return {
       title: this.thread?.title,
+      desc: this.thread?.content.slice(0, 20) + "...",
       path: this.page.$page.fullPath,
-      imageUrl: ""
+      imageUrl: this.imageUrl
     };
+  },
+  computed: {
+    imageUrl() {
+      const img = this.thread?.pics[0];
+      return img
+        ? img.startsWith("http")
+          ? img
+          : "https:" + this.news?.pics[0]
+        : "";
+    }
   },
   methods: {
     async fetchData(query) {

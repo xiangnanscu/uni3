@@ -36,15 +36,25 @@ export default {
     return {
       title: this.news?.title,
       path: this.page.$page.fullPath,
-      imageUrl: ""
+      imageUrl: this.imageUrl
     };
   },
   onShareAppMessage(options) {
     return {
       title: this.news?.title,
       path: this.page.$page.fullPath,
-      imageUrl: ""
+      imageUrl: this.imageUrl
     };
+  },
+  computed: {
+    imageUrl() {
+      const img = this.news?.pics[0];
+      return img
+        ? img.startsWith("http")
+          ? img
+          : "https:" + this.news?.pics[0]
+        : "";
+    }
   },
   methods: {
     onTap(event) {

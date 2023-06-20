@@ -31,18 +31,23 @@ export default {
     this.query = query;
     await this.fetchData(query);
   },
+  computed: {
+    imageUrl() {
+      return "https:" + this.goddess?.pics[0];
+    }
+  },
   onShareTimeline(options) {
     return {
       title: this.goddess?.title,
       path: this.page.$page.fullPath,
-      imageUrl: ""
+      imageUrl: this.imageUrl
     };
   },
   onShareAppMessage(options) {
     return {
       title: this.goddess?.title,
       path: this.page.$page.fullPath,
-      imageUrl: ""
+      imageUrl: this.imageUrl
     };
   },
   methods: {

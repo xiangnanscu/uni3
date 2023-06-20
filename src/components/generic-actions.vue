@@ -1,10 +1,24 @@
 <template>
   <div v-if="actionsReady" class="actions-container">
-    <image
-      @click="onShare"
-      src="../static/img/tabbar/share-tpp.png"
+    <button
+      open-type="share"
+      size="mini"
       class="actions"
-    ></image>
+      style="
+        display: inline-block;
+        margin: 0;
+        padding: 0;
+        background-color: transparent;
+        border: 0;
+      "
+    >
+      <image
+        @click="onShare"
+        src="../static/img/tabbar/share-tpp.png"
+        class="actions"
+      ></image>
+    </button>
+
     <image
       @click="onFav"
       :src="`../static/img/tabbar/fav${favStatus ? '_fill' : ''}.png`"
@@ -38,7 +52,7 @@ const {
 });
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .actions {
   width: 25px;
   height: 25px;
@@ -48,5 +62,8 @@ const {
   margin-top: 0.5em;
   display: flex;
   justify-content: space-around;
+}
+button::after {
+  border: 0;
 }
 </style>
