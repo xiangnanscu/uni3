@@ -24,7 +24,12 @@ const profileModel = Model.createModel({
   fieldNames: ["xm", "username", "phone"],
   fields: {
     xm: { label: "姓名", required: true },
-    username: { label: "身份证号", type: "sfzh", required: true },
+    username: {
+      label: "身份证号",
+      type: "sfzh",
+      required: true,
+      hint: "缴费团员的身份证号"
+    },
     phone: { label: "手机号", required: true, wxPhone, disabled: false }
   }
 });

@@ -118,12 +118,13 @@ const getPhoneNumber = async (event) => {
     sendValue(data.purePhoneNumber);
   }
 };
-let wxPhoneDisabled = field.disabled === undefined ? true : field.disabled;
+let wxPhoneDisabled = field.disabled === undefined ? false : field.disabled;
 // #ifdef H5
 wxPhoneDisabled = false;
 field.wxPhone = false;
 field.wxAvatar = false;
 // #endif
+const placeholder = field.attrs?.placeholder || field.hint;
 </script>
 <template>
   <template v-if="field.autocomplete">
@@ -131,7 +132,7 @@ field.wxAvatar = false;
       @update:modelValue="sendValue"
       :modelValue="props.modelValue"
       :disabled="field.disabled"
-      :placeholder="field.hint"
+      :placeholder="placeholder"
       @focus="autocompletePopupRef.open()"
       suffixIcon="forward"
     />
@@ -203,7 +204,7 @@ field.wxAvatar = false;
     @update:modelValue="sendValue"
     :modelValue="props.modelValue"
     :disabled="field.disabled"
-    :placeholder="field.hint"
+    :placeholder="placeholder"
   />
   <uni-datetime-picker
     v-else-if="fieldType == 'datetime'"
@@ -212,7 +213,7 @@ field.wxAvatar = false;
     @update:modelValue="sendValue"
     :modelValue="props.modelValue"
     :disabled="field.disabled"
-    :placeholder="field.hint"
+    :placeholder="placeholder"
   />
   <picker
     v-else-if="fieldType == 'yearMonth'"
@@ -225,7 +226,7 @@ field.wxAvatar = false;
       @update:modelValue="sendValue"
       :modelValue="props.modelValue"
       :disabled="field.disabled"
-      :placeholder="field.hint"
+      :placeholder="placeholder"
       suffixIcon="forward"
     />
   </picker>
@@ -240,7 +241,7 @@ field.wxAvatar = false;
       @update:modelValue="sendValue"
       :modelValue="props.modelValue"
       :disabled="field.disabled"
-      :placeholder="field.hint"
+      :placeholder="placeholder"
       suffixIcon="forward"
     />
   </picker>
@@ -279,15 +280,17 @@ field.wxAvatar = false;
       disable-color="black"
       :modelValue="props.modelValue"
       :disabled="wxPhoneDisabled"
-      :placeholder="field.hint"
+      :placeholder="placeholder"
     />
-    <x-button
+    <button
+      type="primary"
+      :plain="true"
       size="mini"
       open-type="getPhoneNumber"
       @getphonenumber="getPhoneNumber"
     >
       获取微信手机号
-    </x-button>
+    </button>
   </template>
   <uni-easyinput
     v-else
@@ -296,7 +299,7 @@ field.wxAvatar = false;
     :error-message="props.error"
     :modelValue="props.modelValue"
     :disabled="field.disabled"
-    :placeholder="field.hint"
+    :placeholder="placeholder"
     :type="easyType || 'text'"
   />
 </template>

@@ -7,14 +7,14 @@
     :open-type="props.openType"
     @click="emit('click', $event)"
     @chooseavatar="emit('chooseavatar', $event)"
-    @getPhoneNumber="emit('getPhoneNumber', $event)"
+    @getphonenumber="emit('getphonenumber', $event)"
   >
     <slot />
   </button>
 </template>
 
 <script setup>
-const emit = defineEmits(["click", "getPhoneNumber", "chooseavatar"]);
+const emit = defineEmits(["click", "getphonenumber", "chooseavatar"]);
 const props = defineProps({
   type: { type: String, default: "primary" },
   size: { type: String, default: "default" },
