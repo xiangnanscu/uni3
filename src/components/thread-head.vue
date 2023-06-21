@@ -3,16 +3,16 @@
     <view>
       <view class="thread-main">
         <div class="slot-box avatar-container">
-          <navigator :url="`/views/Profile?id=${thread.creator.id}`">
+          <navigator :url="`/views/Profile?id=${thread.creator}`">
             <image
               class="post-avatar"
-              :src="thread.creator.avatar"
+              :src="thread.creator__avatar"
               mode="widthFix"
             ></image
           ></navigator>
         </div>
         <div style="padding: 2px">
-          <div class="thread-nickname">{{ thread.creator.nickname }}</div>
+          <div class="thread-nickname">{{ thread.creator__nickname }}</div>
           <div class="thread-restinfo">{{ fromNow(thread.ctime) }}</div>
         </div>
       </view>

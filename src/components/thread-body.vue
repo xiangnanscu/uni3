@@ -5,10 +5,10 @@
         <uni-list-item v-for="(post, index) in posts" :key="index">
           <template v-slot:header>
             <view class="slot-box avatar-container">
-              <navigator :url="`/views/Profile?id=${post.creator.id}`">
+              <navigator :url="`/views/Profile?id=${post.creator}`">
                 <image
                   class="post-avatar"
-                  :src="post.creator.avatar"
+                  :src="post.creator__avatar"
                   mode="widthFix"
                 ></image
               ></navigator>
@@ -16,7 +16,7 @@
           </template>
           <template v-slot:body>
             <view class="post-body"
-              ><view class="post-header">{{ post.creator.nickname }}</view>
+              ><view class="post-header">{{ post.creator__nickname }}</view>
               <view class="post-content"
                 ><text>{{ post.content }}</text></view
               >

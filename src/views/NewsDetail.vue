@@ -3,8 +3,9 @@
     <uni-card :isFull="true" :is-shadow="false" :border="false">
       <p class="news-title">{{ news.title }}</p>
       <x-subtitle style="padding: 0.5em 0.5em">
-        <div>来源：{{ news.creator.name }}</div>
-        <div>{{ utils.fromNow(news.ctime) }}</div>
+        <div>来源：{{ news.creator__name }}</div>
+        <div>浏览：{{ news.views }}</div>
+        <div>发布于：{{ utils.fromNow(news.ctime) }}</div>
       </x-subtitle>
       <tinymce-text :html="news.content"></tinymce-text>
       <template #actions> </template>

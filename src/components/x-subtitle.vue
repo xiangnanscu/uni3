@@ -13,5 +13,6 @@
   justify-content: space-between;
   flex-direction: row;
   color: #666;
+  font-size: 80%;
 }
 </style>

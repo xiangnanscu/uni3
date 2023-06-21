@@ -74,7 +74,7 @@ export default {
   },
   methods: {
     async fetchData(query) {
-      const { data: thread } = await Http.get(`/thread/${query.id}`);
+      const { data: thread } = await Http.get(`/thread/detail/${query.id}`);
       this.thread = thread;
       const { data: posts } = await Http.get(`/post/thread/${this.thread.id}`);
       this.posts = posts;
@@ -90,11 +90,9 @@ export default {
       this.posts.push({
         id: newPost.id,
         content: newPost.content,
-        creator: {
-          id: this.user.id,
-          nickname: this.user.nickname,
-          avatar: this.user.avatar
-        },
+        creator: this.user.id,
+        creator__nickname: this.user.nickname,
+        creator__avatar: this.user.avatar,
         ctime: newPost.ctime
       });
       this.$refs.replyPopup.close();
