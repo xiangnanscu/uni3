@@ -48,13 +48,7 @@ export default {
     };
   },
   async onLoad(query) {
-    if (!this.user.id) {
-      await utils.gotoPage({
-        url: "/views/Login",
-        query: { redirect: "/views/FeeplanList" },
-        redirect: true
-      });
-    } else if (!this.user.username) {
+    if (!this.user.username) {
       await utils.gotoPage({
         url: "/views/RealNameCert",
         query: {

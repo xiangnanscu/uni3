@@ -3,6 +3,7 @@
     <modelform-uni
       :model="volplanModel"
       :values="formData"
+      :sync-values="true"
       label-width="8em"
       @success-post="successPost"
       action-url="/volplan/create"
@@ -11,10 +12,13 @@
 </template>
 
 <script setup>
+const formData = ref({ title: "", content: "", pics: [] });
+
 const volplanModel = Model.createModel({
   fieldNames: [
     "title",
     "xm",
+    "sfzh",
     "lxdh",
     "call_endtime",
     "plan_starttime",
@@ -25,8 +29,14 @@ const volplanModel = Model.createModel({
   ],
   fields: {
     title: { label: "志愿主题", required: true },
-    xm: { label: "召集人姓名", required: true },
-    lxdh: { label: "联系电话", required: true, wxPhone: true },
+    xm: { label: "召集人姓名", required: true, disabled: true },
+    sfzh: {
+      label: "召集人身份证",
+      type: "sfzh",
+      required: true,
+      disabled: true
+    },
+    lxdh: { label: "联系电话", required: true, wxPhone: true, disabled: true },
     call_endtime: { label: "召集截止时间", type: "datetime", required: true },
     plan_starttime: { label: "志愿开始时间", type: "datetime", required: true },
     plan_endtime: { label: "志愿结束时间", type: "datetime", required: true },
@@ -41,7 +51,26 @@ const volplanModel = Model.createModel({
     content: { label: "正文", required: true, inputType: "textarea" }
   }
 });
-const formData = ref({ title: "", content: "", pics: [] });
+
+onLoad(async (query) => {
+  const user = useUser();
+  if (!user.username) {
+    await utils.gotoPage({
+      url: "/views/RealNameCert",
+      query: {
+        redirect: "/views/VolAdd",
+        message: "发起志愿请先实名认证"
+      },
+      redirect: true
+    });
+  } else {
+    console.log(user);
+    formData.value.xm = user.xm;
+    formData.value.lxdh = user.phone;
+    formData.value.sfzh = user.username;
+  }
+});
+
 const successPost = async (data) => {
   await utils.gotoPage("Home");
 };

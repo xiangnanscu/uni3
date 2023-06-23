@@ -236,19 +236,15 @@ export default {
       return data;
     },
     async getCoverVolplan() {
-      const { data } = await Http.post("/volplan/cover");
+      const data = await usePost("/volplan/cover", { status: "通过" });
       return data[0];
     },
     async getCoverGoddess() {
-      const { data } = await Http.post("/goddess/cover");
-      console.log({ data });
+      const data = await usePost("/goddess/cover", { status: "通过" });
       return data[0];
     },
     async getNews() {
-      const {
-        data: { records: news }
-      } = await Http.post("/news?pagesize=2", {});
-      console.log({ news });
+      const news = await usePost("/news/records?limit=2", { status: "通过" });
       return news.map((e) => ({
         id: e.id,
         title: e.title,

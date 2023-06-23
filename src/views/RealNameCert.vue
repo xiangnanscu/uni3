@@ -27,8 +27,7 @@ const profileModel = Model.createModel({
     username: {
       label: "身份证号",
       type: "sfzh",
-      required: true,
-      hint: "缴费团员的身份证号"
+      required: true
     },
     phone: { label: "手机号", required: true, wxPhone, disabled: false }
   }

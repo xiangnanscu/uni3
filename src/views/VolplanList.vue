@@ -13,12 +13,6 @@
             :rightText="fromNow(item.ctime)"
         /></navigator>
       </uni-list>
-      <uni-pagination
-        :total="total"
-        @change="clickPage"
-        :current="current"
-        :pageSize="pageSize"
-      />
     </div>
     <x-alert v-else title="没有记录"> </x-alert>
   </page-layout>
@@ -28,33 +22,18 @@
 export default {
   data() {
     return {
-      pageSize: 10,
-      total: 0,
-      current: 1,
       query: {},
       VolplanRecords: []
     };
   },
   async onLoad(query) {
     this.query = query;
-    console.log({ query });
     await this.fetchData(query);
   },
   methods: {
-    async clickPage(e) {
-      this.current = e.current;
-      await this.fetchData({ page: this.current, pagesize: this.pageSize });
-    },
     async fetchData(query) {
-      const {
-        data: { records, total }
-      } = await Http.get(
-        `/volplan?page=${query.page || this.current}&pagesize=${
-          query.pagesize || this.pageSize
-        }`
-      );
+      const records = await usePost(`/volplan/records`, { status: "通过" });
       this.VolplanRecords = records;
-      this.total = total;
     }
   }
 };

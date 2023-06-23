@@ -35,7 +35,7 @@ class Http {
   static async post(url, data, opts) {
     const response = await uni.request({
       url,
-      data,
+      data: data || {},
       method: "post",
       ...opts
     });
