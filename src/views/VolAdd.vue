@@ -5,7 +5,7 @@
       :values="formData"
       label-width="8em"
       @success-post="successPost"
-      action-url="/vol/create"
+      action-url="/volplan/create"
     ></modelform-uni>
   </page-layout>
 </template>

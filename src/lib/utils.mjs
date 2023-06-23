@@ -182,6 +182,10 @@ export function getPage(delta = 0) {
   const page = pages[pages.length - delta - 1];
   return page;
 }
+export function getFullPath(delta = 0) {
+  const page = getPage(delta);
+  return page.$page?.fullPath;
+}
 export function getLastPageUrl() {
   const lastPage = getPage(1);
   // lastPage.$page.fullPath

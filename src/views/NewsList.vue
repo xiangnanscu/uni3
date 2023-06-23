@@ -19,8 +19,6 @@
 </template>
 
 <script>
-import { usePost } from "@/composables/usePost";
-
 export default defineComponent({
   data() {
     return {
@@ -28,8 +26,7 @@ export default defineComponent({
     };
   },
   async onLoad() {
-    const { data: NewsRecords } = await usePost(`/news/records`, {});
-    this.NewsRecords = NewsRecords;
+    this.NewsRecords = await usePost(`/news/records`, {});
   }
 });
 </script>

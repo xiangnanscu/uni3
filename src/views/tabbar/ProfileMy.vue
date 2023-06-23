@@ -45,7 +45,7 @@
       <uni-list-item
         title="志愿服务"
         link="navigateTo"
-        to="/views/ActionsListMy?current=2"
+        to="/views/VolplanListMy?current=0"
         :show-extra-icon="true"
         :extra-icon="{ color: '#666', size: '32', type: 'heart-filled' }"
       >

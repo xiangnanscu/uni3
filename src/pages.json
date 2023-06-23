@@ -60,7 +60,11 @@
     { "path": "views/tabbar/Heart", "style": { "navigationBarTitleText": "" } },
     { "path": "views/VolAdd", "style": { "navigationBarTitleText": "" } },
     { "path": "views/ForumAdd", "style": { "navigationBarTitleText": "" } },
-    { "path": "views/ActionsListMy", "style": { "navigationBarTitleText": "" } }
+    {
+      "path": "views/ActionsListMy",
+      "style": { "navigationBarTitleText": "" }
+    },
+    { "path": "views/VolplanListMy", "style": { "navigationBarTitleText": "" } }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",

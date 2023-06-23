@@ -24,7 +24,15 @@ export function createApp() {
   });
   setTimeout(() => {
     app.config.errorHandler = (err, instance, info) => {
-      console.log("errorHandler captured...", err, instance, info);
+      console.error("errorHandler captured...", err);
+      console.log(instance, info);
+      if (err.type == "uni_error") {
+        uni.showModal({
+          title: `错误`,
+          content: err.message,
+          showCancel: false
+        });
+      }
     };
   });
   return {

@@ -1,19 +1,19 @@
 <template>
-  <page-layout v-if="news">
+  <page-layout v-if="record">
     <uni-card :isFull="true" :is-shadow="false" :border="false">
-      <p class="news-title">{{ news.title }}</p>
+      <p class="news-title">{{ record.title }}</p>
       <x-subtitle style="padding: 0.5em 0.5em">
-        <div>来源：{{ news.creator__name }}</div>
-        <div>浏览：{{ news.views }}</div>
-        <div>发布于：{{ utils.fromNow(news.ctime) }}</div>
+        <div>来源：{{ record.creator__name }}</div>
+        <div>浏览：{{ record.views }}</div>
+        <div>发布于：{{ utils.fromNow(record.ctime) }}</div>
       </x-subtitle>
-      <tinymce-text :html="news.content"></tinymce-text>
+      <tinymce-text :html="record.content"></tinymce-text>
       <template #actions> </template>
     </uni-card>
     <div style="height: 3em"></div>
     <x-bottom>
       <generic-actions
-        :target-id="news.id"
+        :target-id="record.id"
         target-model="news"
         style="width: 100%"
       />
@@ -22,40 +22,14 @@
 </template>
 
 <script>
+import MixinShare from "./MixinShare";
+
 export default {
+  mixins: [MixinShare],
   data() {
     return {
-      page: getCurrentPages().slice(-1)[0],
-      news: null
+      record: null
     };
-  },
-  async onLoad(query) {
-    this.query = query;
-    await this.fetchData(query);
-  },
-  onShareTimeline(options) {
-    return {
-      title: this.news?.title,
-      path: this.page.$page.fullPath,
-      imageUrl: this.imageUrl
-    };
-  },
-  onShareAppMessage(options) {
-    return {
-      title: this.news?.title,
-      path: this.page.$page.fullPath,
-      imageUrl: this.imageUrl
-    };
-  },
-  computed: {
-    imageUrl() {
-      const img = this.news?.pics[0];
-      return img
-        ? img.startsWith("http")
-          ? img
-          : "https:" + this.news?.pics[0]
-        : "";
-    }
   },
   methods: {
     onTap(event) {
@@ -63,7 +37,7 @@ export default {
     },
     async fetchData(query) {
       const { data: news } = await Http.get(`/news/detail/${query.id}`);
-      this.news = news;
+      this.record = news;
     }
   }
 };

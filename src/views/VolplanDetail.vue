@@ -1,20 +1,21 @@
 <template>
-  <page-layout v-if="volplan">
+  <page-layout v-if="record">
     <uni-card :isFull="true" :is-shadow="false" :border="false">
-      <p class="volplan-title">{{ volplan.title }}</p>
+      <p class="volplan-title">{{ record.title }}</p>
       <x-subtitle style="padding: 0.5em 0.5em">
-        <div>{{ utils.fromNow(volplan.ctime) }}</div>
+        <div>{{ utils.fromNow(record.ctime) }}</div>
       </x-subtitle>
-      <x-button @click="joinVol" :disabled="disableJoinButton">{{
-        disableJoinButton ? "已登记" : "我要参加"
+      <x-button @click="joinVol" :disabled="record.joined">{{
+        record.joined ? "已登记" : "我要参加"
       }}</x-button>
-      <tinymce-text :html="volplan.content"></tinymce-text>
+      <fui-preview :previewData="previewData"></fui-preview>
+      <tinymce-text :html="record.content"></tinymce-text>
       <template #actions> </template>
     </uni-card>
     <div style="height: 3em"></div>
     <x-bottom>
       <generic-actions
-        :target-id="volplan.id"
+        :target-id="record.id"
         target-model="volplan"
         style="width: 100%"
       />
@@ -23,43 +24,87 @@
 </template>
 
 <script>
+import { repr } from "@/lib/utils.mjs";
+import MixinShare from "./MixinShare";
+
 export default {
+  mixins: [MixinShare],
   data() {
     return {
       disableJoinButton: false,
-      page: getCurrentPages().slice(-1)[0],
-      volplan: null
+      record: null
     };
   },
-  async onLoad(query) {
-    this.query = query;
-    await this.fetchData(query);
-  },
-  onShareTimeline(options) {
-    return {
-      title: this.volplan?.title,
-      path: this.page.$page.fullPath,
-      imageUrl: ""
-    };
-  },
-  onShareAppMessage(options) {
-    return {
-      title: this.volplan?.title,
-      path: this.page.$page.fullPath,
-      imageUrl: ""
-    };
+  computed: {
+    previewData() {
+      return {
+        list: [
+          {
+            label: "召集人",
+            value: this.record.xm
+          },
+          {
+            label: "联系方式",
+            value: this.record.lxdh
+          },
+          {
+            label: "召集人数",
+            value: this.record.amount
+          },
+          {
+            label: "报名结束时间",
+            value: this.record.call_endtime?.slice(0, 16)
+          },
+          {
+            label: "志愿活动开始时间",
+            value: this.record.plan_starttime?.slice(0, 16)
+          },
+          {
+            label: "志愿活动结束时间",
+            value: this.record.plan_endtime?.slice(0, 16)
+          }
+        ]
+      };
+    }
   },
   methods: {
-    async joinVol() {
-      uni.showToast({ title: "成功登记" });
-      this.disableJoinButton = true;
-    },
-    onTap(event) {
-      console.log(event);
-    },
     async fetchData(query) {
       const { data: volplan } = await Http.get(`/volplan/detail/${query.id}`);
-      this.volplan = volplan;
+      this.record = volplan;
+      if (this.user.id) {
+        const [joinLog] = await usePost(`/volreg/records`, {
+          usr_id: this.user.id,
+          volplan_id: volplan.id
+        });
+        this.record.joined = joinLog ? joinLog.enabled : false;
+      }
+    },
+    async joinVol() {
+      if (!this.user.id) {
+        await utils.gotoPage({
+          url: "/views/Login",
+          query: {
+            redirect: `/views/VolplanDetail?id=${this.query.id}`,
+            message: "参加志愿活动需要先登录"
+          },
+          redirect: true
+        });
+      } else if (!this.user.username) {
+        await utils.gotoPage({
+          url: "/views/RealNameCert",
+          query: {
+            redirect: `/views/VolplanDetail?id=${this.query.id}`,
+            message: "参加志愿活动需要进行实名认证"
+          },
+          redirect: true
+        });
+      } else {
+        await usePost(`/volreg/get_or_create`, {
+          volplan_id: this.record.id
+        });
+        uni.showToast({ title: "成功登记" });
+        this.record.joined = true;
+      }
     }
   }
 };

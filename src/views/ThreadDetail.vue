@@ -1,8 +1,8 @@
 <template>
   <page-layout>
-    <view v-if="thread">
+    <view v-if="record">
       <thread-head
-        :thread="thread"
+        :thread="record"
         :posts="posts"
         threadOtherPrefix="/thread/other"
         fkName="thread_id"
@@ -34,49 +34,21 @@
 </script>
 
 <script>
+import MixinShare from "./MixinShare";
+
 export default {
+  mixins: [MixinShare],
   data() {
     return {
-      thread: null,
       currentPost: "",
-      page: getCurrentPages().slice(-1)[0],
       posts: []
     };
-  },
-  async onLoad(query) {
-    await this.fetchData(query);
-  },
-  onShareTimeline(options) {
-    return {
-      title: this.thread?.title,
-      desc: this.thread?.content.slice(0, 20) + "...",
-      path: this.page.$page.fullPath,
-      imageUrl: this.imageUrl
-    };
-  },
-  onShareAppMessage(options) {
-    return {
-      title: this.thread?.title,
-      desc: this.thread?.content.slice(0, 20) + "...",
-      path: this.page.$page.fullPath,
-      imageUrl: this.imageUrl
-    };
-  },
-  computed: {
-    imageUrl() {
-      const img = this.thread?.pics[0];
-      return img
-        ? img.startsWith("http")
-          ? img
-          : "https:" + this.news?.pics[0]
-        : "";
-    }
   },
   methods: {
     async fetchData(query) {
       const { data: thread } = await Http.get(`/thread/detail/${query.id}`);
-      this.thread = thread;
-      const { data: posts } = await Http.get(`/post/thread/${this.thread.id}`);
+      this.record = thread;
+      const { data: posts } = await Http.get(`/post/thread/${this.record.id}`);
       this.posts = posts;
     },
     async replyThread() {
@@ -85,7 +57,7 @@ export default {
       }
       const { data: newPost } = await Http.post("/post/create", {
         content: this.currentPost,
-        thread_id: this.thread.id
+        thread_id: this.record.id
       });
       this.posts.push({
         id: newPost.id,

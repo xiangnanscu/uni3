@@ -1,17 +1,17 @@
 <template>
-  <page-layout v-if="goddess">
+  <page-layout v-if="record">
     <uni-card :isFull="true" :is-shadow="false" :border="false">
-      <p class="goddess-title">{{ goddess.title }}</p>
+      <p class="goddess-title">{{ record.title }}</p>
       <x-subtitle style="padding: 0.5em 0.5em">
-        <div>{{ utils.fromNow(goddess.ctime) }}</div>
+        <div>{{ utils.fromNow(record.ctime) }}</div>
       </x-subtitle>
-      <tinymce-text :html="goddess.content"></tinymce-text>
+      <tinymce-text :html="record.content"></tinymce-text>
       <template #actions> </template>
     </uni-card>
     <div style="height: 3em"></div>
     <x-bottom>
       <generic-actions
-        :target-id="goddess.id"
+        :target-id="record.id"
         target-model="goddess"
         style="width: 100%"
       />
@@ -20,43 +20,19 @@
 </template>
 
 <script>
+import MixinShare from "./MixinShare";
+
 export default {
+  mixins: [MixinShare],
   data() {
     return {
-      page: getCurrentPages().slice(-1)[0],
-      goddess: null
-    };
-  },
-  async onLoad(query) {
-    this.query = query;
-    await this.fetchData(query);
-  },
-  computed: {
-    imageUrl() {
-      return "https:" + this.goddess?.pics[0];
-    }
-  },
-  onShareTimeline(options) {
-    return {
-      title: this.goddess?.title,
-      path: this.page.$page.fullPath,
-      imageUrl: this.imageUrl
-    };
-  },
-  onShareAppMessage(options) {
-    return {
-      title: this.goddess?.title,
-      path: this.page.$page.fullPath,
-      imageUrl: this.imageUrl
+      record: null
     };
   },
   methods: {
-    onTap(event) {
-      console.log(event);
-    },
     async fetchData(query) {
       const { data: goddess } = await Http.get(`/goddess/detail/${query.id}`);
-      this.goddess = goddess;
+      this.record = goddess;
     }
   }
 };
