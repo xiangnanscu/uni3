@@ -50,6 +50,10 @@ const loginModel = Model.createModel({
 // #endif
 
 // #ifdef MP-WEIXIN
+const successPostWX = async (user) => {
+  await loginUser(user);
+};
+
 const profileModel = Model.createModel({
   fieldNames: ["avatar", "nickname"],
   fields: {
@@ -71,17 +75,16 @@ const userData = ref({
   nickname: "",
   avatar: "",
   permission: "",
+  phone: "",
   openid: ""
 });
-const successPostWX = async (user) => {
-  await loginUser(userData.value);
-};
+
 async function getWxUser() {
   const { code, errMsg } = await uni.login();
   if (errMsg !== "login:ok") {
     throw new Error(errMsg);
   }
-  const { data: user } = await Http.post("/wx_login", {
+  const user = await usePost("/wx_login", {
     code
   });
   return user;
@@ -95,6 +98,7 @@ onLoad(async (options) => {
   userData.value.permission = user.permission;
   userData.value.xm = user.xm;
   userData.value.username = user.username;
+  userData.value.phone = user.phone;
   if (!user.nickname || !user.avatar) {
     needCompleteProfile.value = true;
   } else {

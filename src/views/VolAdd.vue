@@ -29,14 +29,14 @@ const volplanModel = Model.createModel({
   ],
   fields: {
     title: { label: "志愿主题", required: true },
-    xm: { label: "召集人姓名", required: true, disabled: true },
+    xm: { label: "召集人姓名", required: true, disabled: false },
     sfzh: {
       label: "召集人身份证",
       type: "sfzh",
       required: true,
-      disabled: true
+      disabled: false
     },
-    lxdh: { label: "联系电话", required: true, wxPhone: true, disabled: true },
+    lxdh: { label: "联系电话", required: true, wxPhone: true, disabled: false },
     call_endtime: { label: "召集截止时间", type: "datetime", required: true },
     plan_starttime: { label: "志愿开始时间", type: "datetime", required: true },
     plan_endtime: { label: "志愿结束时间", type: "datetime", required: true },

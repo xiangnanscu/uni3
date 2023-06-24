@@ -1,6 +1,7 @@
 <template>
   <page-layout>
     <modelform-uni
+      v-if="ready"
       :model="forumModel"
       :values="formData"
       label-width="6em"
@@ -11,6 +12,8 @@
 </template>
 
 <script setup>
+const formData = ref({});
+const ready = ref(false);
 const forumModel = Model.createModel({
   fieldNames: ["xm", "sfzh", "lxdh", "name", "avatar"],
   fields: {
@@ -43,10 +46,10 @@ onLoad(async (query) => {
     formData.value.lxdh = user.phone;
     formData.value.sfzh = user.username;
   }
+  ready.value = true;
 });
-const formData = ref({});
+
 const successPost = async (data) => {
-  console.log("add forum ok:", data);
   await utils.gotoPage("Home");
   uni.showToast({ title: "成功创建, 等待审核" });
 };

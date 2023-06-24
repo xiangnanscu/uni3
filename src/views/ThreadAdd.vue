@@ -1,7 +1,7 @@
 <template>
   <page-layout>
     <modelform-uni
-      v-if="threadModel"
+      v-if="ready"
       :model="threadModel"
       :values="ThreadAddData"
       :sync-values="true"
@@ -14,11 +14,11 @@
 <script setup>
 const ThreadAddData = ref({ title: "", content: "", pics: [] });
 const successPost = async (data) => {
-  console.log(data);
   await utils.gotoPage({ url: "/views/ThreadListAll" });
 };
 
-const threadModel = ref();
+const threadModel = ref(null);
+const ready = ref(false);
 onLoad(async () => {
   threadModel.value = await Model.createModelAsync({
     fieldNames: ["type", "title", "content", "pics"],
@@ -34,5 +34,6 @@ onLoad(async () => {
       content: { label: "内容", required: true, inputType: "textarea" }
     }
   });
+  ready.value = true;
 });
 </script>
