@@ -1,5 +1,14 @@
 <template>
   <page-layout>
+    <fui-tag
+      v-for="(type, i) in types"
+      :text="type"
+      :key="type"
+      :index="i"
+      @click="enterForum"
+      :theme="query.type == type ? 'dark' : 'plain'"
+      :padding="['5px', '8px', '5px', '8px']"
+    ></fui-tag>
     <thread-list :records="threads"></thread-list>
   </page-layout>
 </template>
@@ -11,6 +20,7 @@ export default {
       query: {},
       current: this.page,
       threads: [],
+      types: [],
       total: 0
     };
   },
@@ -23,8 +33,18 @@ export default {
     await this.fetchData(this.query);
   },
   methods: {
+    async enterForum({ index }) {
+      console.log({ index });
+      utils.gotoPage({
+        name: "ThreadListAll",
+        query: { type: this.types[index] }
+      });
+    },
     async fetchData(query) {
+      this.types = await usePost(`/forum/types`);
+
       const records = await usePost(`/thread/records`, {
+        type: query.type,
         status: "通过",
         hide: false
       });
