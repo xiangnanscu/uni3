@@ -24,11 +24,11 @@ export default {
   },
   methods: {
     async fetchData(query) {
-      const {
-        data: { records, total }
-      } = await Http.get(`/thread?page=1&pagesize=${query.pagesize || 100}`);
+      const records = await usePost(`/thread/records`, {
+        status: "通过",
+        hide: false
+      });
       this.threads = records;
-      this.total = total;
     }
   }
 };
