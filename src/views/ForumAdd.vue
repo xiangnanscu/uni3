@@ -26,6 +26,24 @@ const forumModel = Model.createModel({
     }
   }
 });
+onLoad(async (query) => {
+  const user = useUser();
+  if (!user.username) {
+    await utils.gotoPage({
+      url: "/views/RealNameCert",
+      query: {
+        redirect: "/views/ForumAdd",
+        message: "创建贴吧先实名认证"
+      },
+      redirect: true
+    });
+  } else {
+    console.log(user);
+    formData.value.xm = user.xm;
+    formData.value.lxdh = user.phone;
+    formData.value.sfzh = user.username;
+  }
+});
 const formData = ref({});
 const successPost = async (data) => {
   console.log("add forum ok:", data);
