@@ -21,12 +21,14 @@
 
     <image
       @click="onFav"
-      :src="`../static/img/tabbar/fav${favStatus ? '_fill' : ''}.png`"
+      :src="`../static/img/tabbar/fav${favStatus ? '_fill_yellow' : ''}.png`"
       class="actions"
     ></image>
     <image
       @click="onLike"
-      :src="`../static/img/tabbar/appreciate${likeStatus ? '_fill' : ''}.png`"
+      :src="`../static/img/tabbar/appreciate${
+        likeStatus ? '_fill_yellow' : ''
+      }.png`"
       class="actions"
     ></image>
   </div>

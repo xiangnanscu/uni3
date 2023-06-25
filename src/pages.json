@@ -112,8 +112,8 @@
       },
       {
         "pagePath": "views/tabbar/ProfileMy",
-        "iconPath": "static/img/tabbar/me1.png",
-        "selectedIconPath": "static/img/tabbar/me-active1.png",
+        "iconPath": "static/img/tabbar/me-ant.png",
+        "selectedIconPath": "static/img/tabbar/me-ant-active.png",
         "text": "我的"
       }
     ]
