@@ -1,10 +1,9 @@
 diff --git a/node_modules/nanoid/index.browser.js b/node_modules/nanoid/index.browser.js
-index f5bd92d..e58f706 100644
+index f5bd92d..292a3ba 100644
 --- a/node_modules/nanoid/index.browser.js
 +++ b/node_modules/nanoid/index.browser.js
-@@ -1,4 +1,15 @@
+@@ -1,4 +1,14 @@
  export { urlAlphabet } from './url-alphabet/index.js'
-+let crypto = crypto;
 +if (!crypto) {
 +  crypto = {
 +    getRandomValues(array) {
