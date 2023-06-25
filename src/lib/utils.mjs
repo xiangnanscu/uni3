@@ -259,5 +259,5 @@ export const toModelName = (s) => {
 };
 
 export const abstractText = (s, n = 10) => {
-  return s.length <= n ? s : s.slice(0, n) + "...";
+  return s.length <= n ? s : s.slice(0, n) + "···";
 };
