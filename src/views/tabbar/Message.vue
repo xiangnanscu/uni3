@@ -20,7 +20,7 @@
             </template>
             <template v-slot:body
               ><text class="message-body slot-box slot-text">{{
-                a.chatList[0].content
+                utils.abstractText(a.chatList[0].content, 10)
               }}</text>
             </template>
             <template v-slot:footer>
