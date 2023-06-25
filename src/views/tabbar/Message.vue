@@ -56,9 +56,7 @@ export default {
   },
   methods: {
     async fetchData() {
-      const {
-        data: { records, total }
-      } = await Http.get(`/message/my`);
+      const records = await useGet(`/message/chat_panel`);
       const messages = {};
       for (const e of records) {
         const receiver = e.target.id === this.user.id ? e.creator : e.target;
@@ -69,7 +67,6 @@ export default {
         messages[key].chatList.push(e);
       }
       this.messages = Object.values(messages);
-      this.total = total;
     }
   }
 };
