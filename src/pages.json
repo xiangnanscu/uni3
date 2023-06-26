@@ -67,7 +67,8 @@
       "path": "views/VolplanListMy",
       "style": { "navigationBarTitleText": "" }
     },
-    { "path": "views/MyQrCode", "style": { "navigationBarTitleText": "" } }
+    { "path": "views/MyQrCode", "style": { "navigationBarTitleText": "" } },
+    { "path": "views/AddMeFirend", "style": { "navigationBarTitleText": "" } }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",

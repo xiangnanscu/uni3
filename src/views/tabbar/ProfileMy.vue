@@ -9,7 +9,7 @@
         :note="intro"
       >
         <navigator
-          url="/views/MyQrCode"
+          url="/views/AddMeFirend"
           open-type="navigate"
           hover-class="navigator-hover"
         >
