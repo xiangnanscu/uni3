@@ -45,7 +45,6 @@
     { "path": "views/ThreadAdd", "style": { "navigationBarTitleText": "" } },
     { "path": "views/ThreadDetail", "style": { "navigationBarTitleText": "" } },
     { "path": "views/ThreadListMy", "style": { "navigationBarTitleText": "" } },
-    { "path": "views/usr", "style": { "navigationBarTitleText": "" } },
     {
       "path": "views/VolplanDetail",
       "style": { "navigationBarTitleText": "" }
@@ -64,7 +63,11 @@
       "path": "views/ActionsListMy",
       "style": { "navigationBarTitleText": "" }
     },
-    { "path": "views/VolplanListMy", "style": { "navigationBarTitleText": "" } }
+    {
+      "path": "views/VolplanListMy",
+      "style": { "navigationBarTitleText": "" }
+    },
+    { "path": "views/MyQrCode", "style": { "navigationBarTitleText": "" } }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
@@ -94,9 +97,9 @@
       },
       {
         "pagePath": "views/tabbar/Heart",
-        "iconPath": "static/img/tabbar/heart.png",
-        "selectedIconPath": "static/img/tabbar/heart-active.png",
-        "text": "关注"
+        "iconPath": "static/img/tabbar/friends.png",
+        "selectedIconPath": "static/img/tabbar/friends-active.png",
+        "text": "朋友"
       },
       {
         "pagePath": "views/tabbar/PublishCenter",
@@ -112,8 +115,8 @@
       },
       {
         "pagePath": "views/tabbar/ProfileMy",
-        "iconPath": "static/img/tabbar/me-ant.png",
-        "selectedIconPath": "static/img/tabbar/me-ant-active.png",
+        "iconPath": "static/img/tabbar/me-tmall.png",
+        "selectedIconPath": "static/img/tabbar/me-tmall-active.png",
         "text": "我的"
       }
     ]

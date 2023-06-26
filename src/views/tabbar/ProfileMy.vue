@@ -7,7 +7,19 @@
         :title="nickname"
         :avatar="avatar"
         :note="intro"
-      ></uni-list-chat>
+      >
+        <navigator
+          url="/views/MyQrCode"
+          open-type="navigate"
+          hover-class="navigator-hover"
+        >
+          <image
+            style="width: 24px; height: 24px"
+            src="../../static/img/qrcode.png"
+            mode="scaleToFill"
+          />
+        </navigator>
+      </uni-list-chat>
     </uni-list>
     <uni-list>
       <uni-list-item
