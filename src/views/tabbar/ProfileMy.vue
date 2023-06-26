@@ -39,6 +39,14 @@
       >
       </uni-list-item>
       <uni-list-item
+        title="测试"
+        link="navigateTo"
+        to="/views/MyQrCode?current=0"
+        :show-extra-icon="true"
+        :extra-icon="{ color: '#666', size: '32', type: 'eye-filled' }"
+      >
+      </uni-list-item>
+      <uni-list-item
         title="我的收藏"
         link="navigateTo"
         to="/views/ActionsListMy?current=1"
