@@ -40,7 +40,7 @@ onReady(async () => {
   // );
   var qr = new UQRCode();
   // 设置二维码内容
-  qr.data = `https://jaqn.jahykj.cn/friends/test/${user.id}`;
+  qr.data = `https://jaqn.jahykj.cn/test/${user.id}`;
   // 设置二维码大小，必须与canvas设置的宽高一致
   qr.size = 200;
   // 调用制作二维码方法
