@@ -1,6 +1,7 @@
 <template>
   <page-layout>
-    <div>
+    <div v-if="ready">
+      <h1>已向{{ approver.nickname }}申请添加好友:</h1>
       <uni-list :border="false">
         <uni-list-chat
           :avatar-circle="true"
