@@ -1,6 +1,6 @@
 {
   "name": "uni-preset-vue",
-  "version": "1.82.0",
+  "version": "1.83.0",
   "license": "ISC",
   "scripts": {
     "env": "dotenv -e .env -e .env.local --",
@@ -107,6 +107,7 @@
     "qrcode": "^1.5.1",
     "regenerator-runtime": "^0.13.11",
     "stream-browserify": "^3.0.0",
+    "uqrcodejs": "^4.0.7",
     "util": "^0.12.5",
     "vm-browserify": "^1.1.2",
     "vue": "3.2.47",

@@ -8,8 +8,20 @@
           :avatar="user.avatar"
           :note="user.intro"
         ></uni-list-chat>
-        <div style="text-align: center; margin-top: 3em">
-          <img v-if="assessQRCode" :src="assessQRCode" />
+        <div
+          style="
+            text-align: center;
+            margin-top: 5em;
+            width: 200px;
+            height: 200px;
+            margin: auto;
+          "
+        >
+          <canvas
+            id="qrcode"
+            canvas-id="qrcode"
+            style="width: 200px; height: 200px; margin: auto"
+          ></canvas>
           <div>扫码加我为好友</div>
         </div>
       </uni-list>
@@ -18,14 +30,27 @@
 </template>
 
 <script setup>
-import QRCode from "qrcode";
+import UQRCode from "uqrcodejs";
 
 const user = useUser();
 const assessQRCode = ref("");
-onLoad(async () => {
-  assessQRCode.value = await QRCode.toDataURL(
-    `https://jaqn.jahykj.cn/friends/apply/${user.id}`
-  );
+onReady(async () => {
+  // assessQRCode.value = await QRCode.toDataURL(
+  //   `https://jaqn.jahykj.cn/friends/apply/${user.id}`
+  // );
+  var qr = new UQRCode();
+  // 设置二维码内容
+  qr.data = `https://jaqn.jahykj.cn/friends/apply/${user.id}`;
+  // 设置二维码大小，必须与canvas设置的宽高一致
+  qr.size = 200;
+  // 调用制作二维码方法
+  qr.make();
+  // 获取canvas上下文
+  var canvasContext = uni.createCanvasContext("qrcode", getCurrentInstance()); // 如果是组件，this必须传入
+  // 设置uQRCode实例的canvas上下文
+  qr.canvasContext = canvasContext;
+  // 调用绘制方法将二维码图案绘制到canvas上
+  qr.drawCanvas();
 });
 </script>
 
