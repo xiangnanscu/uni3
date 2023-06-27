@@ -67,16 +67,14 @@
 
 <script>
 export default {
-  props: {
-    pagesize: { type: Number, default: 10 },
-    page: { type: Number, default: 1 }
-  },
+  props: {},
   data() {
     return {
       showChatBar: false,
       showFloatPlus: true,
       messageText: "",
-      chatId: 0,
+      receiverId: 0,
+      receiver: null,
       messages: []
     };
   },
@@ -84,31 +82,32 @@ export default {
     this.scrollTo();
   },
   async onLoad(query) {
-    this.chatId = Number(query.id);
+    this.receiverId = Number(query.id);
   },
   async onShow() {
-    await this.fetchData(this.chatId);
+    await this.fetchData(this.receiverId);
   },
   computed: {
-    receiver() {
-      const e = this.messages[0];
-      if (!e) {
-        return null;
-      }
-      const res = e.creator.id === this.chatId ? e.creator : e.target;
-      return res;
-    },
     sender() {
-      const e = this.messages[0];
-      if (!e) {
-        return null;
-      }
-      const res = e.creator.id === this.chatId ? e.target : e.creator;
-      return res;
+      return {
+        id: this.user.id,
+        nickname: this.user.nickname,
+        avatar: this.user.avatar
+      };
     }
   },
   methods: {
-    scrollTo(selector) {
+    async fetchData(receiverId) {
+      this.messages = await usePost(
+        `/message/chat_records?id=${receiverId}`,
+        {}
+      );
+      this.receiver = await usePost(`/usr/query`, {
+        get: { id: receiverId },
+        select: ["id", "nickname", "avatar"]
+      });
+    },
+    scrollTo() {
       this.$nextTick(() => {
         setTimeout(() => {
           const view = uni.createSelectorQuery().in(this).select(".chat-body");
@@ -134,7 +133,7 @@ export default {
         return;
       }
       const { data } = await Http.post(`/message/create`, {
-        target: this.chatId,
+        target: this.receiverId,
         content
       });
       data.creator = this.sender;
@@ -142,15 +141,9 @@ export default {
       // console.log(this.messages.slice(-1), this.sender);
       this.messages.push(data);
       this.messageText = "";
-      this.scrollTo(".bottom");
+      this.scrollTo();
       this.toggleButton();
       uni.showToast({ icon: "none", title: "发送成功" });
-    },
-    async fetchData(chatId) {
-      const {
-        data: { records, total }
-      } = await Http.get(`/message/chat?id=${chatId}`);
-      this.messages = records;
     }
   }
 };

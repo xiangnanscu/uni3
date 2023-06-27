@@ -23,9 +23,10 @@ const throwOnUniError = (response) => {
 };
 
 class Http {
-  static async get(url, opts) {
+  static async get(url, data, opts) {
     const response = await uni.request({
       url,
+      data: data || {},
       method: "get",
       ...opts
     });
