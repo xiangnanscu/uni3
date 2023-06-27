@@ -75,6 +75,7 @@ export default {
       messageText: "",
       receiverId: 0,
       receiver: null,
+      timerId: null,
       messages: []
     };
   },
@@ -83,11 +84,20 @@ export default {
   },
   async onLoad(query) {
     this.receiverId = Number(query.id);
+    this.timerId = setInterval(async () => {
+      await this.fetchNewChatRecords(this.latestId);
+    }, 1000);
+  },
+  onUnload() {
+    clearInterval(this.timerId);
   },
   async onShow() {
     await this.fetchData(this.receiverId);
   },
   computed: {
+    latestId() {
+      return this.messages[this.messages.length - 1]?.id;
+    },
     sender() {
       return {
         id: this.user.id,
@@ -97,6 +107,18 @@ export default {
     }
   },
   methods: {
+    async fetchNewChatRecords(latestId) {
+      const records = await usePost(
+        `/message/chat_records?id=${this.receiverId}`,
+        {
+          id__gt: latestId
+        },
+        { disableShowLoading: true }
+      );
+      if (records.length) {
+        this.messages.push(...records);
+      }
+    },
     async fetchData(receiverId) {
       this.messages = await usePost(
         `/message/chat_records?id=${receiverId}`,

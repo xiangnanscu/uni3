@@ -24,23 +24,43 @@ const throwOnUniError = (response) => {
 
 class Http {
   static async get(url, data, opts) {
-    const response = await uni.request({
-      url,
-      data: data || {},
-      method: "get",
-      ...opts
-    });
-    return throwOnUniError(response);
+    const showLoading = !opts?.disableShowLoading;
+    try {
+      if (showLoading) {
+        uni.showLoading();
+      }
+      const response = await uni.request({
+        url,
+        data: data || {},
+        method: "get",
+        ...opts
+      });
+      return throwOnUniError(response);
+    } finally {
+      if (showLoading) {
+        uni.hideLoading();
+      }
+    }
   }
 
   static async post(url, data, opts) {
-    const response = await uni.request({
-      url,
-      data: data || {},
-      method: "post",
-      ...opts
-    });
-    return throwOnUniError(response);
+    const showLoading = !opts?.disableShowLoading;
+    try {
+      if (showLoading) {
+        uni.showLoading();
+      }
+      const response = await uni.request({
+        url,
+        data: data || {},
+        method: "post",
+        ...opts
+      });
+      return throwOnUniError(response);
+    } finally {
+      if (showLoading) {
+        uni.hideLoading();
+      }
+    }
   }
 }
 

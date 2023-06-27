@@ -6,33 +6,40 @@
       @change="changeActionType"
       :current="current"
     ></fui-tabs>
-    <fui-panel
-      v-if="ready && current === 0"
-      @click="clickFriend"
-      :panelData="friendsData"
-      radius="16"
-      :marginTop="24"
-      width="60"
-      height="60"
-      :size="32"
-    ></fui-panel>
-    <div v-if="ready && current === 1">
-      <uni-list-item title="自定义右侧插槽" note="列表描述信息">
+    <uni-list v-if="ready && current === 0">
+      <uni-list-item
+        v-for="e in friendsData"
+        :key="e.id"
+        :title="e.title"
+        showArrow
+        link="navigateTo"
+        :to="`/views/MessageDetail?id=${e.id}`"
+        thumb-size="lg"
+        :thumb="e.avatar"
+      >
+      </uni-list-item>
+    </uni-list>
+    <uni-list v-if="ready && current === 1">
+      <uni-list-item
+        v-for="e in friendsData"
+        :key="e.id"
+        :title="e.title"
+        note2="列表描述信息"
+        thumb-size="lg"
+        :thumb="e.avatar"
+      >
         <template v-slot:footer>
-          <button>同意</button>
+          <template v-if="e.status == '待添加'">
+            <template v-if="e.approvable">
+              <x-tag theme="plain" @click="approve(e, '通过')">同意</x-tag>
+              <x-tag theme="plain" @click="approve(e, '拒绝')">拒绝</x-tag>
+            </template>
+            <span v-else class="slot-box"> 等待对方操作 </span>
+          </template>
+          <span v-else> 已{{ e.status }} </span>
         </template>
       </uni-list-item>
-      <fui-list>
-        <fui-list-cell>标题文字</fui-list-cell>
-        <fui-list-cell>
-          <text>标题文字</text>
-          <text class="fui-text__explain">说明文字</text>
-        </fui-list-cell>
-        <fui-list-cell arrow>
-          <text>标题文字</text>
-        </fui-list-cell>
-      </fui-list>
-    </div>
+    </uni-list>
   </page-layout>
 </template>
 
@@ -48,19 +55,20 @@ const friendsData = ref([]);
 const clickFriend = async (e) => {
   await utils.gotoPage(`/views/MessageDetail?id=${e.id}`);
 };
+const approve = async (e, status) => {
+  await usePost(`/friends/approve/${e.id}`, { status });
+  e.status = status;
+};
 const setRecordsByType = async (newType) => {
   const data = await usePost("/friends/tabbar", { type: newType });
-  friendsData.value = {
-    // head: "★",
-    list: data.map((e) => {
-      const other = e.apply.id !== user.id ? e.apply : e.approve;
-      return {
-        id: other.id,
-        title: other.nickname,
-        src: other.avatar
-      };
-    })
-  };
+  friendsData.value = data
+    .map((e) => ({
+      ...(e.apply.id !== user.id ? e.apply : e.approve),
+      approvable: e.apply.id !== user.id,
+      status: e.status
+    }))
+    .map((e) => ({ ...e, title: e.nickname }));
+  console.log(friendsData, data);
 };
 const changeActionType = async ({ index, name }) => {
   // await setRecordsByType(name);
@@ -87,5 +95,14 @@ onLoad(async () => {
   font-size: 28rpx;
   color: #7f7f7f;
   flex-shrink: 0;
+}
+.slot-box {
+  /* #ifndef APP-NVUE */
+  display: flex;
+  /* #endif */
+  flex-direction: row;
+  align-items: center;
+  font-size: 90%;
+  color: #7f7f7f;
 }
 </style>

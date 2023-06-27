@@ -27,10 +27,6 @@ const setupRequest = () => {
       const store = useStore();
       store.message = "";
       store.error = "";
-      if (!store.disableLoading) {
-        store.loading = true;
-        uni.showLoading();
-      }
       const header = args.header || {};
       // #ifdef MP-WEIXIN
       for (const cookieName of cookieNames) {
@@ -57,12 +53,6 @@ const setupRequest = () => {
     },
     complete(args) {
       // console.log("global uni.request complete:", args);
-      const store = useStore();
-      store.loading = false;
-      if (!store.disableLoading) {
-        store.loading = false;
-        uni.hideLoading();
-      }
       const cookies = args.cookies || [];
       // #ifdef H5
       if (cookies.length === 0 && args.header["set-cookie-patch"]) {

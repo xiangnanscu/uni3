@@ -35,6 +35,7 @@ declare module '@vue/runtime-core' {
     XChatbar: typeof import('./../components/x-chatbar.vue')['default']
     XPicker: typeof import('./../components/x-picker.vue')['default']
     XSubtitle: typeof import('./../components/x-subtitle.vue')['default']
+    XTag: typeof import('./../components/x-tag.vue')['default']
     XTest: typeof import('./../components/x-test.vue')['default']
   }
 }
