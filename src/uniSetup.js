@@ -25,6 +25,7 @@ const setupRequest = () => {
     invoke(args) {
       // console.log("global uni.request invoke:", args);
       const store = useStore();
+      store.loading = true;
       store.message = "";
       store.error = "";
       const header = args.header || {};
@@ -53,6 +54,8 @@ const setupRequest = () => {
     },
     complete(args) {
       // console.log("global uni.request complete:", args);
+      const store = useStore();
+      store.loading = false;
       const cookies = args.cookies || [];
       // #ifdef H5
       if (cookies.length === 0 && args.header["set-cookie-patch"]) {
@@ -92,7 +95,7 @@ const setupNav = () => {
       invoke(opts) {
         console.log("路由拦截", handler, opts.url);
         navStack.push(new Date().getTime());
-        const { message, error, loading } = storeToRefs(useStore());
+        const { message, error } = storeToRefs(useStore());
         message.value = "";
         error.value = "";
         const [url, qs] = opts.url.split("?");

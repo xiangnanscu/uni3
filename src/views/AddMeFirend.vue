@@ -1,30 +1,22 @@
 <template>
   <page-layout>
-    <div>
-      <uni-list :border="false">
-        <uni-list-chat
-          :avatar-circle="true"
-          :title="user.nickname"
-          :avatar="user.avatar"
-          :note="user.intro"
-        ></uni-list-chat>
-        <div
-          style="
-            text-align: center;
-            margin-top: 5em;
-            width: 200px;
-            height: 200px;
-            margin: auto;
-          "
-        >
-          <canvas
-            id="qrcode"
-            canvas-id="qrcode"
-            style="width: 200px; height: 200px; margin: auto"
-          ></canvas>
-          <div>扫码加我为好友</div>
-        </div>
-      </uni-list>
+    <div style="text-align: center; margin-top: 4em">
+      <image
+        :src="user.avatar"
+        mode="scaleToFill"
+        style="width: 50px; height: 50px; border-radius: 25px"
+      />
+      <div style="margin-bottom: 2em">{{ user.nickname }}</div>
+      <div
+        style="text-align: center; width: 200px; height: 200px; margin: auto"
+      >
+        <canvas
+          id="qrcode"
+          canvas-id="qrcode"
+          style="width: 200px; height: 200px"
+        ></canvas>
+      </div>
+      <div style="margin-top: 2em; color: #666">扫码加我为好友</div>
     </div>
   </page-layout>
 </template>
