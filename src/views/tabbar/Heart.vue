@@ -80,6 +80,7 @@ const setRecordsByType = async (newType) => {
     .map((e) => ({
       ...(e.apply.id !== user.id ? e.apply : e.approve),
       approvable: e.apply.id !== user.id,
+      hello_message: e.hello_message,
       status: e.status
     }))
     .map((e) => ({ ...e, title: e.nickname }));
