@@ -6,8 +6,6 @@
   </fui-sticky>
   <page-layout>
     <view>
-      <!-- <scroll-view :scroll-y="true" :scroll-top="99999" class="chat-body">
-      </scroll-view> -->
       <uni-list :border="false" class="chat-body">
         <template v-for="(chat, i) in messages" :key="chat.id">
           <uni-list-item v-if="chat.target.id === user.id" :border="false">

@@ -7,23 +7,22 @@
         threadOtherPrefix="/thread/other"
         fkName="thread_id"
       ></thread-head>
-      <thread-body :posts="posts"></thread-body>
+      <thread-body class="chat-body" :posts="posts"></thread-body>
+      <x-chatbar
+        v-if="showChatBar"
+        v-model:modelValue="messageText"
+        @sendMessage="sendMessage"
+      />
     </view>
   </page-layout>
-  <div class="thread-reply">
-    <x-button @click="replyClick">回复</x-button>
-  </div>
-  <uni-popup ref="replyPopup" type="bottom" background-color="#fff">
-    <div style="padding: 15px">
-      <textarea
-        focus
-        height="50"
-        :cursorSpacing="90"
-        v-model="currentPost"
-      ></textarea>
-      <x-button @click="replyThread()">回复</x-button>
-    </div>
-  </uni-popup>
+  <fui-fab
+    v-if="showFloatPlus"
+    :distance="10"
+    position="right"
+    :isDrag="true"
+    @click="toggleButton"
+  ></fui-fab>
+  <view class="bottom"></view>
 </template>
 
 <script setup>
@@ -40,23 +39,29 @@ export default {
   mixins: [MixinShare],
   data() {
     return {
-      currentPost: "",
+      showChatBar: false,
+      showFloatPlus: true,
+      messageText: "",
       posts: []
     };
   },
   methods: {
+    toggleButton() {
+      this.showChatBar = this.showFloatPlus;
+      this.showFloatPlus = !this.showChatBar;
+    },
     async fetchData(query) {
       const { data: thread } = await Http.get(`/thread/detail/${query.id}`);
       this.record = thread;
       const { data: posts } = await Http.get(`/post/thread/${this.record.id}`);
       this.posts = posts;
     },
-    async replyThread() {
-      if (!this.currentPost.trim()) {
+    async sendMessage(content) {
+      if (!content.trim()) {
         return uni.showToast({ title: "必须输入内容", icon: "error" });
       }
       const { data: newPost } = await Http.post("/post/create", {
-        content: this.currentPost,
+        content,
         thread_id: this.record.id
       });
       this.posts.push({
@@ -67,15 +72,26 @@ export default {
         creator__avatar: this.user.avatar,
         ctime: newPost.ctime
       });
-      this.$refs.replyPopup.close();
-      uni.pageScrollTo({
-        scrollTop: 2000000, //滚动到页面的目标位置（单位px）
-        duration: 0 //滚动动画的时长，默认300ms，单位 ms
-      });
+      this.messageText = "";
+      this.scrollTo();
+      this.toggleButton();
+      uni.showToast({ icon: "none", title: "发送成功" });
     },
-    replyClick() {
-      this.$refs.replyPopup.open();
-      this.currentPost = "";
+    scrollTo() {
+      this.$nextTick(() => {
+        setTimeout(() => {
+          const view = uni.createSelectorQuery().in(this).select(".chat-body");
+          view
+            .boundingClientRect((res) => {
+              console.log("res?.height", res?.height);
+              uni.pageScrollTo({
+                duration: 200,
+                scrollTop: res?.height || Infinity
+              });
+            })
+            .exec();
+        }, 100);
+      });
     }
   }
 };
