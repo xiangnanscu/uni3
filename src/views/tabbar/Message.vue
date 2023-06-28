@@ -50,6 +50,9 @@ export default {
     this.messages = [];
     await this.fetchData();
   },
+  onHide() {
+    this.ready = false;
+  },
   methods: {
     async fetchData() {
       const records = await useGet(`/message/chat_panel`);
