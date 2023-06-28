@@ -1,7 +1,6 @@
 <template>
-  <page-layout>
-    <uni-notice-bar v-if="!messages.length" single text="没有收到任何信息" />
-    <div v-else>
+  <page-layout v-if="ready">
+    <div v-if="messages.length">
       <uni-list :border="false">
         <navigator
           v-for="(a, index) in messages"
@@ -20,14 +19,14 @@
             </template>
             <template v-slot:body
               ><text class="message-body slot-box slot-text">{{
-                utils.abstractText(a.chatList[0].content, 10)
+                utils.abstractText(a.content, 10)
               }}</text>
             </template>
             <template v-slot:footer>
               <view
                 ><view class="message-header">{{ a.receiver.nickname }}</view>
                 <view class="message-footer"
-                  ><text>{{ fromNow(a.chatList[0].ctime) }}</text></view
+                  ><text>{{ fromNow(a.ctime) }}</text></view
                 >
               </view></template
             >
@@ -35,38 +34,30 @@
         </navigator>
       </uni-list>
     </div>
+    <uni-notice-bar v-else single text="没有收到任何信息" />
   </page-layout>
 </template>
 
 <script>
 export default {
-  props: {
-    pagesize: { type: Number, default: 10 },
-    page: { type: Number, default: 1 }
-  },
   data() {
     return {
+      ready: false,
       messages: []
     };
   },
   async onShow() {
     this.messages = [];
-    console.log("Message.vue onShow");
     await this.fetchData();
   },
   methods: {
     async fetchData() {
       const records = await useGet(`/message/chat_panel`);
-      const messages = {};
-      for (const e of records) {
-        const receiver = e.target.id === this.user.id ? e.creator : e.target;
-        const key = receiver.id;
-        if (!messages[key]) {
-          messages[key] = { receiver, chatList: [] };
-        }
-        messages[key].chatList.push(e);
-      }
-      this.messages = Object.values(messages);
+      this.messages = records.map((e) => ({
+        ...e,
+        receiver: e.target.id === this.user.id ? e.creator : e.target
+      }));
+      this.ready = true;
     }
   }
 };
