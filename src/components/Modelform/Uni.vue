@@ -125,7 +125,7 @@ const submit = async () => {
           )
           .join("\n");
         uni.showModal({
-          title: `提交错误`,
+          title: `错误`,
           content: messages,
           showCancel: false
         });
@@ -144,7 +144,7 @@ const submit = async () => {
   } catch (error) {
     console.error("uni-form error:", error);
     uni.showModal({
-      title: "提交错误",
+      title: "错误",
       content: error.errMsg || error.message,
       showCancel: false
     });
