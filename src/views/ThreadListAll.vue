@@ -1,15 +1,23 @@
 <template>
   <page-layout>
-    <x-tagbutton
-      v-for="(type, i) in types"
-      :text="type"
-      :key="type"
-      :index="i"
-      @click="enterForum({ index: i })"
-      type="primary"
-      :inverted="currentType !== type"
-      style="margin-right: 5px; margin-top: 5px; display: inline-block"
-    ></x-tagbutton>
+    <button type="primary" @click="showDrawer('showLeft')">
+      <text class="word-btn-white">查看所有贴吧</text>
+    </button>
+    <uni-drawer ref="showLeft" mode="left" :width="320">
+      <uni-list>
+        <uni-list-item
+          v-for="(e, i) in forums"
+          @click="enterForum({ type: e.name })"
+          :clickable="true"
+          :key="e.name"
+          :title="e.name"
+          thumb-size="lg"
+          :thumb="e.avatar"
+          :link="currentType == e.name ? false : true"
+        >
+        </uni-list-item>
+      </uni-list>
+    </uni-drawer>
     <thread-list :records="threads"></thread-list>
   </page-layout>
 </template>
@@ -21,7 +29,7 @@ export default {
       query: {},
       current: this.page,
       threads: [],
-      types: [],
+      forums: [],
       currentType: "",
       total: 0
     };
@@ -32,10 +40,16 @@ export default {
     await this.fetchData(this.query);
   },
   methods: {
-    async enterForum({ index }) {
-      const type = this.types[index];
+    showDrawer() {
+      this.$refs.showLeft.open();
+    },
+    closeDrawer() {
+      this.$refs.showLeft.close();
+    },
+    async enterForum({ type }) {
       this.currentType = type;
       await this.fetchThreads({ type });
+      this.$refs.showLeft.close();
     },
     async fetchThreads(query) {
       const records = await usePost(`/thread/records`, {
@@ -46,7 +60,7 @@ export default {
       this.threads = records;
     },
     async fetchData(query) {
-      this.types = await usePost(`/forum/types`);
+      this.forums = await usePost(`/forum/menu`);
       await this.fetchThreads(query);
     }
   }
