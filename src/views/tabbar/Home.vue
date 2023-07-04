@@ -353,7 +353,7 @@ export default {
   margin-bottom: 10px;
 }
 .logo-text {
-  font-size: 70%;
+  font-size: 90%;
   text-align: center;
 }
 .banner-image {

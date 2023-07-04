@@ -1,14 +1,15 @@
 <template>
   <page-layout>
-    <fui-tag
+    <x-tagbutton
       v-for="(type, i) in types"
       :text="type"
       :key="type"
       :index="i"
-      @click="enterForum"
-      :theme="query.type == type ? 'dark' : 'plain'"
-      :padding="['5px', '8px', '5px', '8px']"
-    ></fui-tag>
+      @click="enterForum({ index: i })"
+      type="primary"
+      :inverted="currentType !== type"
+      style="margin-right: 5px; margin-top: 5px; display: inline-block"
+    ></x-tagbutton>
     <thread-list :records="threads"></thread-list>
   </page-layout>
 </template>
@@ -21,34 +22,32 @@ export default {
       current: this.page,
       threads: [],
       types: [],
+      currentType: "",
       total: 0
     };
   },
   async onLoad(query) {
     console.log("Thread.vue onLoad", query);
     this.query = query;
-  },
-  async onShow() {
-    console.log("Thread.vue onShow", this.records);
     await this.fetchData(this.query);
   },
   methods: {
     async enterForum({ index }) {
-      console.log({ index });
-      utils.gotoPage({
-        name: "ThreadListAll",
-        query: { type: this.types[index] }
-      });
+      const type = this.types[index];
+      this.currentType = type;
+      await this.fetchThreads({ type });
     },
-    async fetchData(query) {
-      this.types = await usePost(`/forum/types`);
-
+    async fetchThreads(query) {
       const records = await usePost(`/thread/records`, {
         type: query.type,
         status: "通过",
         hide: false
       });
       this.threads = records;
+    },
+    async fetchData(query) {
+      this.types = await usePost(`/forum/types`);
+      await this.fetchThreads(query);
     }
   }
 };
