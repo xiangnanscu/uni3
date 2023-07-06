@@ -12,6 +12,9 @@ onHide(() => {
 </script>
 <style>
 /* uni.showModal 格式覆盖 */
+.uni-input-input:disabled {
+  color: #333333;
+}
 :deep(.uni-modal__hd) {
   color: black;
 }
