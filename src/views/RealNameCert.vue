@@ -1,6 +1,12 @@
 <template>
   <page-layout>
     <x-alert v-if="query.message" :title="query.message"> </x-alert>
+    <uni-card title="温馨提示">
+      <p>
+        此处填写需要缴纳团费的团员姓名和身份证号，请确保正确，提交之后将不可修改。
+      </p>
+      <p>如果实名认证信息有误，需要联系团县委管理员核实修改。</p>
+    </uni-card>
     <modelform-uni
       :model="profileModel"
       :values="userData"
@@ -24,11 +30,7 @@ const profileModel = Model.createModel({
   fieldNames: ["xm", "username", "phone"],
   fields: {
     xm: { label: "姓名", required: true },
-    username: {
-      label: "身份证号",
-      type: "sfzh",
-      required: true
-    },
+    username: { label: "身份证号", type: "sfzh", required: true },
     phone: { label: "手机号", required: true, wxPhone, disabled: false }
   }
 });
@@ -41,5 +43,11 @@ onMounted(async () => {
   userData.value.xm = data.xm || "";
   userData.value.phone = data.phone || "";
   userData.value.username = data.username || "";
+  if (data.xm) {
+    profileModel.fields.xm.disabled = true;
+  }
+  if (data.username) {
+    profileModel.fields.username.disabled = true;
+  }
 });
 </script>

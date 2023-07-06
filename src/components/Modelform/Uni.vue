@@ -264,6 +264,9 @@ const submit = async () => {
   </uni-forms>
 </template>
 <style scoped>
+:deep(.uni-input-input:disabled) {
+  color: #333333;
+}
 .dynamic-delete-button {
   cursor: pointer;
   position: relative;
