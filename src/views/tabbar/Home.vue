@@ -141,7 +141,7 @@ export default {
     return {
       panelData3: { head: "青年新闻", list: [] },
       panelData5: { head: "志愿服务", list: [] },
-      panelData4: { head: "封面女神", list: [] },
+
       searchValue: "",
       goddess: null,
       volplan: null,
@@ -202,7 +202,11 @@ export default {
   onUnload() {
     console.log("Home onUnload");
   },
-  computed: {},
+  computed: {
+    panelData4() {
+      return { head: `封面${this.goddess?.sex}神`, list: [] };
+    }
+  },
   async onShow() {
     console.log("Home.vue onShow");
     this.threads = [];
@@ -328,7 +332,6 @@ export default {
 }
 .fui-list__item {
   width: 100%;
-  height: 385rpx;
   position: relative;
   background: #eee;
 }
