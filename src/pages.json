@@ -69,7 +69,8 @@
     },
     { "path": "views/MyQrCode", "style": { "navigationBarTitleText": "" } },
     { "path": "views/AddMeFirend", "style": { "navigationBarTitleText": "" } },
-    { "path": "views/AdDetail", "style": { "navigationBarTitleText": "" } }
+    { "path": "views/AdDetail", "style": { "navigationBarTitleText": "" } },
+    { "path": "views/PollDetail", "style": { "navigationBarTitleText": "" } }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",

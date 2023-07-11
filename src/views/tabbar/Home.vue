@@ -143,6 +143,29 @@
         </swiper-item>
       </swiper>
     </fui-panel>
+
+    <fui-panel
+      v-if="polls && polls.length"
+      :panelData="panelPoll"
+      :width="150"
+      :height="120"
+      :marginTop="24"
+      :size="25"
+      :descSize="26"
+    >
+      <uni-list>
+        <uni-list-item
+          v-for="e in polls"
+          :key="e.id"
+          :title="e.title"
+          showArrow
+          link="navigateTo"
+          :to="`/views/PollDetail?id=${e.id}`"
+        >
+        </uni-list-item>
+      </uni-list>
+    </fui-panel>
+
     <fui-divider text="到底了" />
   </page-layout>
 </template>
@@ -169,10 +192,12 @@ export default {
       panelNews: { head: "青年新闻", list: [] },
       panelVolplan: { head: "志愿服务", list: [] },
       panelAd: { head: "广告赞助", list: [] },
+      panelPoll: { head: "问卷调查", list: [] },
       searchValue: "",
       goddess: null,
       volplan: null,
       ads: null,
+      polls: null,
       imageList: [],
       threads: [],
       noticeText: "",
@@ -244,6 +269,9 @@ export default {
     this.volplan = await this.getCoverVolplan();
     this.panelNews.list = await this.getNews();
     this.ads = await this.getAds();
+    this.polls = await usePost("/poll/records", {
+      hide: false
+    });
   },
   methods: {
     newsClick(e) {
@@ -383,10 +411,7 @@ export default {
   font-size: 34rpx;
   font-weight: 600;
 }
-.ad-title {
-  position: relative;
-  z-index: 100000;
-}
+
 .fui-cover {
   width: 100%;
   display: block;
