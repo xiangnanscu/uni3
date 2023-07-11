@@ -260,7 +260,7 @@ export default {
   },
   async onShow() {
     const { noticeText, goddess, volplan, ads, polls, news } = await usePost(
-      `/home_data?key=notice_bar&?limit=2`
+      `/home_data?limit=2`
     );
     this.noticeText = noticeText;
     this.goddess = goddess[0];
@@ -310,11 +310,11 @@ export default {
       return data;
     },
     async getCoverVolplan() {
-      const data = await usePost("/volplan/cover", { status: "通过" });
+      const data = await usePost("/volplan/cover");
       return data[0];
     },
     async getCoverGoddess() {
-      const data = await usePost("/goddess/cover", { status: "通过" });
+      const data = await usePost("/goddess/cover");
       return data[0];
     },
     async getNews() {
