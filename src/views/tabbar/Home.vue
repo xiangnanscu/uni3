@@ -39,9 +39,9 @@
       </uni-grid-item>
     </uni-grid>
     <fui-panel
-      v-if="panelData3.list.length > 0"
+      v-if="panelNews.list.length > 0"
       @click="newsClick"
-      :panelData="panelData3"
+      :panelData="panelNews"
       :width="150"
       :height="120"
       :marginTop="24"
@@ -60,7 +60,7 @@
     </fui-panel>
     <fui-panel
       v-if="volplan"
-      :panelData="panelData5"
+      :panelData="panelVolplan"
       :width="150"
       :height="120"
       :marginTop="24"
@@ -116,12 +116,39 @@
         <text class="fui-text__link"> {{ goddess.title }}</text>
       </fui-list-cell>
     </fui-panel>
-    <!-- <ThreadList :records="threads"></ThreadList> -->
+    <fui-panel
+      v-if="ads?.length"
+      :panelData="panelAd"
+      :marginTop="24"
+      :size="25"
+      :descSize="26"
+    >
+      <swiper
+        class="swiper"
+        circular
+        :indicator-dots="true"
+        :autoplay="true"
+        :interval="2000"
+        :duration="500"
+      >
+        <swiper-item v-for="e in ads" :key="e.id">
+          <view>
+            <image
+              @click="onAdClick(e)"
+              style="width: 100%"
+              :src="e.pics[0]"
+              mode="widthFix"
+            />
+          </view>
+        </swiper-item>
+      </swiper>
+    </fui-panel>
+    <fui-divider text="到底了" />
   </page-layout>
 </template>
 
 <script>
-// panelData3: {
+// panelNews: {
 // 	head: 'First UI介绍',
 // 	list: [{
 // 		src: '/static/images/common/logo.png',
@@ -139,12 +166,13 @@ export default {
   },
   data() {
     return {
-      panelData3: { head: "青年新闻", list: [] },
-      panelData5: { head: "志愿服务", list: [] },
-
+      panelNews: { head: "青年新闻", list: [] },
+      panelVolplan: { head: "志愿服务", list: [] },
+      panelAd: { head: "广告赞助", list: [] },
       searchValue: "",
       goddess: null,
       volplan: null,
+      ads: null,
       imageList: [],
       threads: [],
       noticeText: "",
@@ -214,7 +242,8 @@ export default {
     // this.threads = await this.getThreads();
     this.goddess = await this.getCoverGoddess();
     this.volplan = await this.getCoverVolplan();
-    this.panelData3.list = await this.getNews();
+    this.panelNews.list = await this.getNews();
+    this.ads = await this.getAds();
   },
   methods: {
     newsClick(e) {
@@ -229,6 +258,12 @@ export default {
         query: { id: this.volplan.id }
       });
     },
+    async onAdClick(e) {
+      utils.gotoPage({
+        url: "/views/AdDetail",
+        query: { id: e.id }
+      });
+    },
     async onGoddessClick() {
       utils.gotoPage({
         url: "/views/GoddessDetail",
@@ -237,6 +272,12 @@ export default {
     },
     async getNoticeBar() {
       const { data } = await Http.get("/settings?key=notice_bar");
+      return data;
+    },
+    async getAds() {
+      const data = await usePost("/ad/records", {
+        hide: false
+      });
       return data;
     },
     async getCoverVolplan() {
@@ -335,7 +376,17 @@ export default {
   position: relative;
   background: #eee;
 }
-
+.fui-banner__item {
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  font-size: 34rpx;
+  font-weight: 600;
+}
+.ad-title {
+  position: relative;
+  z-index: 100000;
+}
 .fui-cover {
   width: 100%;
   display: block;
