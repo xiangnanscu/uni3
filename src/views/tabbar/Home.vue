@@ -198,8 +198,8 @@ export default {
       volplan: null,
       ads: null,
       polls: null,
+      news: null,
       imageList: [],
-      threads: [],
       noticeText: "",
       mainKist: [
         {
@@ -244,9 +244,7 @@ export default {
       avatarUrl: "",
       nickname: "",
       phone: "",
-      authSetting: "",
-      profile: ""
-      // user: {},
+      authSetting: ""
     };
   },
   onLoad() {
@@ -261,17 +259,20 @@ export default {
     }
   },
   async onShow() {
-    console.log("Home.vue onShow");
-    this.threads = [];
-    this.noticeText = await this.getNoticeBar();
-    // this.threads = await this.getThreads();
-    this.goddess = await this.getCoverGoddess();
-    this.volplan = await this.getCoverVolplan();
-    this.panelNews.list = await this.getNews();
-    this.ads = await this.getAds();
-    this.polls = await usePost("/poll/records", {
-      hide: false
-    });
+    const { noticeText, goddess, volplan, ads, polls, news } = await usePost(
+      `/home_data?key=notice_bar&?limit=2`
+    );
+    this.noticeText = noticeText;
+    this.goddess = goddess[0];
+    this.volplan = volplan[0];
+    this.ads = ads;
+    this.polls = polls;
+    this.panelNews.list = news.map((e) => ({
+      id: e.id,
+      title: e.title,
+      src: e.pics[0],
+      desc1: e.content.slice(0, 50)
+    }));
   },
   methods: {
     newsClick(e) {
@@ -360,36 +361,6 @@ export default {
     getAvatar(e) {
       console.log("头像：", e);
       this.avatarUrl = e.detail?.avatarUrl;
-    },
-    getUserProfile() {
-      console.log("call uni.getUserProfile");
-      uni.getUserProfile({
-        desc: "用于完善会员资料",
-        fail(err) {
-          console.log("uni.getUserProfile fail", err);
-        },
-        success: (infoRes) => {
-          console.log(infoRes, `用户昵称为2：${infoRes.userInfo.nickName}`);
-          this.profile = JSON.stringify(infoRes);
-        }
-      });
-    },
-    wxUserLogin() {
-      uni.login({
-        provider: "weixin",
-        timeout: 1000,
-        fail(res) {
-          console.log("uni.login:", res);
-          this.log_err = JSON.stringify(res);
-        },
-        success: async (res) => {
-          const { data } = await Http.post("/wx_login", {
-            code: res.code
-          });
-          this.openid = data.openid;
-          this.session_key = data.session_key;
-        }
-      });
     }
   }
 };
