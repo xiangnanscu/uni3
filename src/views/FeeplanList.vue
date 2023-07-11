@@ -1,40 +1,75 @@
 <template>
-  <uni-card v-if="member" :title="branch_name" :extra="member.xm">
-    <span v-if="FeeplanList.length === 0">暂无需要缴费的记录</span>
-    <uni-list v-else :border="false">
-      <uni-list-item
-        v-for="(feeItem, index) in FeeplanList"
-        :key="index"
-        :showArrow="false"
-        :title="`${feeItem.year}年${String(feeItem.month).padStart(
-          2,
-          '0'
-        )}月团费${feeItem.amount}元`"
+  <fui-tabs
+    :tabs="tabs"
+    center
+    @change="changeActionType"
+    :current="current"
+  ></fui-tabs>
+  <uni-card>
+    <modelform-uni
+      v-if="current == 1"
+      :model="PayForOther"
+      @sendData="findOtherYouth"
+      submit-button-text="查找"
+    ></modelform-uni>
+    <template v-if="member">
+      <fui-preview
+        style="font-size: 90%"
+        :previewData="{
+          list: [
+            { label: '支部名称', value: branch_name },
+            { label: '姓名', value: member.xm }
+          ]
+        }"
+      ></fui-preview>
+      <x-alert
+        v-if="fees.length === 0"
+        class="no-member"
+        title="暂无需要缴费的记录"
+      ></x-alert>
+      <uni-list v-else :border="false">
+        <uni-list-item
+          v-for="(feeItem, index) in fees"
+          :key="index"
+          :showArrow="false"
+          :title="`${feeItem.year}年${String(feeItem.month).padStart(
+            2,
+            '0'
+          )}月团费${feeItem.amount}元`"
+        >
+          <template #footer>
+            <x-button
+              v-if="feeItem.status !== '已缴费'"
+              :disabled="disabled"
+              size="mini"
+              @click="payFee(feeItem)"
+            >
+              缴费
+            </x-button>
+            <span v-else>{{ feeItem.status }}</span>
+          </template>
+        </uni-list-item>
+      </uni-list>
+    </template>
+    <div v-else-if="ready" style="padding: 1em">
+      <x-alert title="你还不是团员, 无法缴费"> </x-alert>
+      <navigator
+        open-type="navigateBack"
+        style="display: flex; justify-content: space-around"
       >
-        <template #footer>
-          <x-button
-            v-if="feeItem.status !== '已缴费'"
-            :disabled="disabled"
-            size="mini"
-            @click="payFee(feeItem)"
-          >
-            缴费
-          </x-button>
-          <span v-else>{{ feeItem.status }}</span>
-        </template>
-      </uni-list-item>
-    </uni-list>
+        <x-button size="mini">返回</x-button>
+      </navigator>
+    </div>
   </uni-card>
-  <div v-else-if="ready" style="padding: 1em">
-    <x-alert title="你还不是团员, 无法缴费"> </x-alert>
-    <navigator
-      open-type="navigateBack"
-      style="display: flex; justify-content: space-around"
-    >
-      <x-button size="mini">返回</x-button>
-    </navigator>
-  </div>
 </template>
+
+<script setup>
+const PayForOther = Model.createModel({
+  fields: {
+    sfzh: { label: "身份证号", type: "sfzh" }
+  }
+});
+</script>
 
 <script>
 export default {
@@ -44,10 +79,12 @@ export default {
       disabled: false,
       member: null,
       branch_name: "",
-      FeeplanList: []
+      current: 0,
+      tabs: ["本人交费", "代人交费"],
+      fees: []
     };
   },
-  async onLoad(query) {
+  async onLoad() {
     if (!this.user.username) {
       await utils.gotoPage({
         url: "/views/RealNameCert",
@@ -58,26 +95,36 @@ export default {
         redirect: true
       });
     } else {
-      await this.fetchData(query);
+      await this.fetchData({ sfzh: this.user.username });
     }
   },
   methods: {
-    async fetchData(query) {
-      const { data: members } = await Http.post(`/youth_member/get`, {
-        sfzh: this.user.username
-      });
-
+    async changeActionType({ index }) {
+      this.member = null;
+      this.ready = false;
+      this.current = index;
+      if (index === 0) {
+        await this.fetchData({ sfzh: this.user.username });
+      }
+    },
+    async findOtherYouth({ sfzh }) {
+      await this.fetchData({ sfzh });
+    },
+    async fetchData({ sfzh }) {
+      const { data: members } = await Http.post(`/youth_member/get`, { sfzh });
       if (members.length === 0) {
         this.ready = true;
       } else {
-        const { data: records } = await Http.post(`/youth_fee/self`);
+        const { data: records } = await Http.post(`/youth_fee/by_sfzh`, {
+          sfzh
+        });
         this.ready = true;
+        this.fees = records;
         this.member = members[0];
         this.branch_name = this.member.branch_name.replace(
           "四川省宜宾市江安县",
           ""
         );
-        this.FeeplanList = records;
       }
     },
     async payFee(feeItem) {
