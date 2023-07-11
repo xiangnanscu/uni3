@@ -75,9 +75,11 @@ const submit = async () => {
   formRef.value.clearValidate();
   const cleanedData = await formRef.value.validate();
   const formdata = props.model.toPostValue(cleanedData, props.model.names);
-  if (vm.vnode.props.onSendData) {
-    emit("sendData", formdata);
-  }
+  // if (vm.vnode.props.onSendData) {
+  //   // 不知为何微信小程序突然props不包含onXXX属性和H5端不一致
+  //   emit("sendData", formdata);
+  // }
+  emit("sendData", formdata);
   if (!props.actionUrl) {
     return;
   }
