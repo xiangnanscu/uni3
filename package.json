@@ -1,6 +1,6 @@
 {
   "name": "uni-preset-vue",
-  "version": "1.105.0",
+  "version": "1.106.0",
   "license": "ISC",
   "scripts": {
     "env": "dotenv -e .env -e .env.local --",
@@ -64,10 +64,10 @@
     "prisma": "prisma-include prisma/schema.include.prisma > prisma/schema.prisma && yarn env prisma",
     "busted": "yarn resty -I spec bin/busted.lua -o utfTerminal",
     "set-url": "git remote set-url origin git@gitee.com:xiangnanscu/jaqn.git",
-    "add-p": "git remote add p root@jaqn.jahykj.cn:~/jaqn/.git",
+    "add-p": "git remote add p root@gqtjaxw.cn:~/jaqn/.git",
     "add-g": "git remote add g git@github.com:xiangnanscu/jaqn.git",
     "preview": "vite preview --port 4173",
-    "sync": "ssh root@jaqn.jahykj.cn \"PGPASSWORD=postgres pg_dump -c -Upostgres -hlocalhost jaqn\" > /tmp/jaqn.sql && PGPASSWORD=postgres psql -Upostgres -hlocalhost -d jaqn -f /tmp/jaqn.sql|grep ERROR",
+    "sync": "ssh root@gqtjaxw.cn \"PGPASSWORD=postgres pg_dump -c -Upostgres -hlocalhost jaqn\" > /tmp/jaqn.sql && PGPASSWORD=postgres psql -Upostgres -hlocalhost -d jaqn -f /tmp/jaqn.sql|grep ERROR",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "test": "yarn busted",
     "jest": "yarn node --experimental-vm-modules $(yarn bin jest)",

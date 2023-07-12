@@ -75,7 +75,7 @@ sudo snap install core; sudo snap refresh core
 apt-get remove certbot -y
 sudo snap install --classic certbot
 sudo ln -s /snap/bin/certbot /usr/bin/certbot
-certbot certonly --webroot -w /root/jaqn/dist -d jaqn.jahykj.cn
+certbot certonly --webroot -w /root/jaqn/dist -d gqtjaxw.cn
 sudo certbot renew --dry-run
 ```
 
