@@ -38,6 +38,7 @@ ci.upload({
   }
 }).then((res) => {
   // eslint-disable-next-line no-undef
+  console.log("success", res);
   exec(`yarn push '${desc}'`, function (err, stdout, stderr) {
     if (err) {
       console.log("seems err:", err, {
