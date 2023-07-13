@@ -27,25 +27,25 @@ const project = new ci.Project({
   privateKeyPath: "./conf/private.wxcec88a7e2c1e81c7.key",
   ignores: ["node_modules/**/*"]
 });
-
+const desc = process.argv[2] || "update";
 ci.upload({
   project,
   version: version,
-  desc: process.argv[2] || "update",
+  desc,
   setting: {
     es6: false,
-    minify: true
+    minify: false
   }
+}).then((res) => {
+  // eslint-disable-next-line no-undef
+  exec(`yarn push '${desc}'`, function (err, stdout, stderr) {
+    if (err) {
+      console.log("seems err:", err, {
+        stdout,
+        stderr
+      });
+      throw new Error(err);
+    }
+    console.log("stdout", JSON.stringify(stdout));
+  });
 });
-
-// eslint-disable-next-line no-undef
-// exec(cmd, function (err, stdout, stderr) {
-//   if (err) {
-//     console.log("seems err:", err, {
-//       stdout,
-//       stderr
-//     });
-//     throw new Error(err);
-//   }
-//   console.log("stdout", JSON.stringify(stdout));
-// });
