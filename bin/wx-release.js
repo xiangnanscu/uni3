@@ -3,23 +3,21 @@
 require("shelljs/global");
 const os = require("os");
 const ci = require("miniprogram-ci");
-
-// var exec = require('child_process').exec;
 var path = require("path");
 var { version } = require("../package.json");
 
-var keypath = path
-  .resolve("./conf/private.wxcec88a7e2c1e81c7.key")
-  .replaceAll("\\", "/");
-var description = process.argv[2] || "rc";
-var cmd;
-if (os.type() === "1Windows_NT") {
-  cmd = `cli publish --platform mp-weixin --project uni3 --upload true --appid wxcec88a7e2c1e81c7 --privatekey ${keypath} --description "${description}" --version ${version} --robot 1`;
-} else {
-  cmd = `miniprogram-ci upload --pp ./dist/build/mp-weixin --pkp ./conf/private.wxcec88a7e2c1e81c7.key --appid wxcec88a7e2c1e81c7 -r 1  --uv ${version}`;
-}
+// var keypath = path
+//   .resolve("./conf/private.wxcec88a7e2c1e81c7.key")
+//   .replaceAll("\\", "/");
+// var description = process.argv[2] || "rc";
+// var cmd;
+// if (os.type() === "1Windows_NT") {
+//   cmd = `cli publish --platform mp-weixin --project uni3 --upload true --appid wxcec88a7e2c1e81c7 --privatekey ${keypath} --description "${description}" --version ${version} --robot 1`;
+// } else {
+//   cmd = `miniprogram-ci upload --pp ./dist/build/mp-weixin --pkp ./conf/private.wxcec88a7e2c1e81c7.key --appid wxcec88a7e2c1e81c7 -r 1  --uv ${version}`;
+// }
 
-console.log();
+const desc = process.argv[2] || "update";
 const project = new ci.Project({
   appid: "wxcec88a7e2c1e81c7",
   type: "miniProgram",
@@ -27,7 +25,7 @@ const project = new ci.Project({
   privateKeyPath: "./conf/private.wxcec88a7e2c1e81c7.key",
   ignores: ["node_modules/**/*"]
 });
-const desc = process.argv[2] || "update";
+
 ci.upload({
   project,
   version: version,
@@ -38,7 +36,7 @@ ci.upload({
   }
 }).then((res) => {
   // eslint-disable-next-line no-undef
-  console.log("success", res);
+  console.log("upload success:\n", res);
   exec(`yarn push '${desc}'`, function (err, stdout, stderr) {
     if (err) {
       console.log("seems err:", err, {
