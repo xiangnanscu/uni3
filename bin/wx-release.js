@@ -47,6 +47,6 @@ ci.upload({
       });
       throw new Error(err);
     }
-    console.log("stdout", JSON.stringify(stdout));
+    console.log(stdout);
   });
 });
