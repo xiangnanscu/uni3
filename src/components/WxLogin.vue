@@ -1,7 +1,7 @@
 <script setup>
 import { WxLogin } from "@/wxlogin.js";
 
-const redirect_uri = encodeURI("http://jaqn.jahykj.cn/oauth");
+const redirect_uri = encodeURI("http://gqtjaxw.cn/oauth");
 onMounted(() => {
   console.log(import.meta.env);
   new WxLogin({
@@ -12,7 +12,7 @@ onMounted(() => {
     redirect_uri,
     state: "",
     style: "",
-    href: "",
+    href: ""
   });
 });
 
