@@ -143,9 +143,9 @@ export default {
       if (errMsg !== "login:ok") {
         throw new Error(errMsg);
       }
-      const { data } = await Http.post(`/wx/jsapi_mini_preorder`, {
+      const { data } = await Http.post(`/wx/youth_fee_preorder_wx`, {
         code,
-        timestamp: String(new Date().getTime()),
+        timestamp: new Date().getTime().toString(),
         youth_fee_id: feeItem.id,
         feeplan_id: planId
       });
@@ -157,11 +157,11 @@ export default {
       } = data;
       const self = this;
       const opts = {
-        timeStamp: String(timeStamp),
-        nonceStr: String(nonceStr),
+        timeStamp: timeStamp.toString(),
+        nonceStr: nonceStr.toString(),
         package: `prepay_id=${prepay_id}`,
         signType: "RSA",
-        paySign: paySign,
+        paySign,
         async success(res) {
           self.disabled = false;
           if (res.errMsg == "requestPayment:ok") {
