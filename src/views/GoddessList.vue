@@ -1,16 +1,17 @@
 <template>
   <page-layout class="goddess-main">
     <uni-list :border="false">
-      <uni-list-item
+      <navigator
         v-for="(item, index) in GoddessList"
         :key="index"
-        :title="item.title"
-        :showArrow="false"
-        :pageSize="pageSize"
-        :rightText="fromNow(item.ctime)"
-      />
+        :url="`/views/GoddessDetail?id=${item.id}`"
+      >
+        <uni-list-item
+          :title="item.title"
+          :showArrow="true"
+          :rightText="fromNow(item.ctime)"
+      /></navigator>
     </uni-list>
-    <uni-pagination :total="total" @change="clickPage" :current="current" />
   </page-layout>
 </template>
 
@@ -30,18 +31,11 @@ export default {
     await this.fetchData(query);
   },
   methods: {
-    async clickPage(e) {
-      this.current = e.current;
-      await this.fetchData({ page: this.current, pagesize: this.pageSize });
-    },
     async fetchData(query) {
-      const {
-        data: { records, total }
-      } = await Http.get(
-        `/goddess?page=${query.page || this.current}&pagesize=${
-          query.pagesize || this.pageSize
-        }`
-      );
+      const records = await usePost(`/goddess/records`, {
+        hide: false,
+        status: "通过"
+      });
       this.GoddessList = records;
       this.total = total;
     }

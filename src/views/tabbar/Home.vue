@@ -115,6 +115,15 @@
       >
         <text class="fui-text__link"> {{ goddess.title }}</text>
       </fui-list-cell>
+      <fui-list-cell
+        arrow
+        :bottomBorder="false"
+        topBorder
+        topLeft="32"
+        @click="onGoddessListClick"
+      >
+        <text class="fui-text__link"> 查看更多</text>
+      </fui-list-cell>
     </fui-panel>
     <fui-panel
       v-if="ads?.length"
@@ -297,6 +306,11 @@ export default {
       utils.gotoPage({
         url: "/views/GoddessDetail",
         query: { id: this.goddess.id }
+      });
+    },
+    async onGoddessListClick() {
+      utils.gotoPage({
+        url: "/views/GoddessList"
       });
     },
     async getNoticeBar() {
