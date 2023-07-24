@@ -26,7 +26,7 @@
       </view>
     </view>
     <view v-else class="file-picker__box" :style="boxStyle">
-      <x-button
+      <button
         class="file-picker__box-content is-add"
         :style="borderStyle"
         open-type="chooseAvatar"
@@ -36,7 +36,7 @@
           <view class="icon-add"></view>
           <view class="icon-add rotate"></view>
         </slot>
-      </x-button>
+      </button>
     </view>
   </view>
 </template>
