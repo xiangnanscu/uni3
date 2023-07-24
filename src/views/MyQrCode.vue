@@ -16,7 +16,25 @@
           @success-post="waiting = true"
         ></modelform-uni>
       </div>
-      <div v-else>申请已发送</div>
+      <div v-else>
+        <div
+          style="
+            font-size: 120%;
+            color: green;
+            padding: 5px;
+            margin-bottom: 1em;
+          "
+        >
+          申请已发送
+        </div>
+        <navigator
+          open-type="switchTab"
+          url="/views/tabbar/Home"
+          style="display: flex; justify-content: space-around"
+        >
+          <x-button size="mini">返回</x-button>
+        </navigator>
+      </div>
     </div>
   </page-layout>
 </template>
