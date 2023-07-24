@@ -31,6 +31,7 @@
       }.png`"
       class="actions"
     ></image>
+    <slot />
   </div>
 </template>
 

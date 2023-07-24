@@ -20,7 +20,14 @@
         :target-id="record.id"
         target-model="goddess"
         style="width: 100%"
-      />
+      >
+        <image
+          v-if="record?.usr_id"
+          @click="onAddFriend"
+          :src="`../static/img/tabbar/friend_add-taobao.png`"
+          class="actions"
+        ></image>
+      </generic-actions>
     </x-bottom>
   </page-layout>
 </template>
@@ -36,6 +43,9 @@ export default {
     };
   },
   methods: {
+    onAddFriend(e) {
+      utils.gotoPage(`/views/MyQrCode?q=/test/${2}`);
+    },
     async fetchData(query) {
       const { data: goddess } = await Http.get(`/goddess/detail/${query.id}`);
       this.record = goddess;
@@ -45,6 +55,10 @@ export default {
 </script>
 
 <style scoped>
+.actions {
+  width: 25px;
+  height: 25px;
+}
 .goddess-title {
   color: black;
   text-align: center;
