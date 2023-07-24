@@ -55,7 +55,7 @@
   </page-layout>
   <fui-fab
     v-if="showFloatPlus"
-    :distance="10"
+    :distance="30"
     position="right"
     :isDrag="true"
     @click="toggleButton"
@@ -82,6 +82,7 @@ export default {
   },
   async onLoad(query) {
     this.receiverId = Number(query.id);
+    await usePost("/message/clear_unread", { target_id: this.receiverId });
     this.timerId = setInterval(async () => {
       await this.fetchNewChatRecords(this.latestId);
     }, 1000);

@@ -66,6 +66,7 @@ const tabs = ["朋友", "待处理"];
 const type = computed(() => tabs[current.value]);
 const ready = ref(false);
 const friendsData = ref([]);
+const { setApplyCount, applyCount } = useStore();
 
 const clickFriend = async (e) => {
   await utils.gotoPage(`/views/MessageDetail?id=${e.id}`);
@@ -93,6 +94,9 @@ const changeActionType = async ({ index, name }) => {
 watch(type, setRecordsByType);
 
 onLoad(async () => {
+  if (applyCount) {
+    current.value = 1;
+  }
   await setRecordsByType(type.value);
   ready.value = true;
 });
