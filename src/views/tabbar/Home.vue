@@ -86,6 +86,15 @@
       >
         <text class="fui-text__link"> {{ volplan.title }}</text>
       </fui-list-cell>
+      <fui-list-cell
+        arrow
+        :bottomBorder="false"
+        topBorder
+        topLeft="32"
+        @click="onVolplanListClick"
+      >
+        <text class="fui-text__link"> 查看更多</text>
+      </fui-list-cell>
     </fui-panel>
     <fui-panel
       v-if="goddess"
@@ -311,6 +320,11 @@ export default {
     async onGoddessListClick() {
       utils.gotoPage({
         url: "/views/GoddessList"
+      });
+    },
+    async onVolplanListClick() {
+      utils.gotoPage({
+        url: "/views/VolplanList"
       });
     },
     async getNoticeBar() {
