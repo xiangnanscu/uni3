@@ -23,7 +23,7 @@
         :sync-values="true"
         @success-post="successPostWX"
         submit-button-text="微信登录"
-        action-url="/update_profile"
+        action-url="/update_profile?update_session=1"
       ></modelform-uni>
     </div>
     <!-- #endif -->
@@ -103,7 +103,6 @@ onLoad(async (options) => {
   } else {
     userData.value.nickname = user.nickname;
     userData.value.avatar = user.avatar;
-    console.log("login onLoad", userData.value);
     await loginUser(userData.value);
   }
 });
