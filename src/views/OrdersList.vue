@@ -7,19 +7,39 @@
         :title="extractOrderInfo(item)"
         :showArrow="false"
         :pageSize="pageSize"
-        :rightText="fromNow(item.ctime)"
+        :rightText="fromNow(item.success_time)"
       >
       </uni-list-item>
     </uni-list>
-    <uni-pagination :total="total" @change="clickPage" :current="current" />
+    <uni-pagination
+      v-if="pageSize < total"
+      :total="total"
+      @change="clickPage"
+      :current="current"
+    />
   </page-layout>
 </template>
+
+<script setup>
+const user = useUser();
+const extractOrderInfo = (order) => {
+  let payOther;
+  if (user.openid !== order.openid) {
+    payOther = "他人代缴";
+  } else if (user.username !== order.youth_fee_id__sfzh) {
+    payOther = "代他人缴";
+  } else {
+    payOther = "本人缴纳";
+  }
+  return `${order.description} / ${order.total / 100}元  / ${payOther}`;
+};
+</script>
 
 <script>
 export default {
   data() {
     return {
-      pageSize: 10,
+      pageSize: 60,
       total: 0,
       current: 1,
       query: {},
@@ -31,11 +51,6 @@ export default {
     await this.fetchData(query);
   },
   methods: {
-    extractOrderInfo(item) {
-      return `${item.description} / ${item.total / 100}元 / ${
-        item.trade_state_desc
-      }`;
-    },
     async clickPage(e) {
       this.current = e.current;
       await this.fetchData({ page: this.current, pagesize: this.pageSize });
