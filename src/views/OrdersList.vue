@@ -24,6 +24,7 @@
 const user = useUser();
 const extractOrderInfo = (order) => {
   let payOther;
+  console.log({ user, order });
   if (user.openid !== order.openid) {
     payOther = "他人代缴";
   } else if (user.username !== order.youth_fee_id__sfzh) {

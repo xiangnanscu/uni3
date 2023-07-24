@@ -91,7 +91,6 @@ async function getWxUser() {
 }
 
 onLoad(async (options) => {
-  console.log("login onLoad", options);
   const user = await getWxUser();
   userData.value.id = user.id;
   userData.value.openid = user.openid;
@@ -104,6 +103,7 @@ onLoad(async (options) => {
   } else {
     userData.value.nickname = user.nickname;
     userData.value.avatar = user.avatar;
+    console.log("login onLoad", userData.value);
     await loginUser(userData.value);
   }
 });
