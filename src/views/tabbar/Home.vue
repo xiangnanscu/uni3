@@ -188,6 +188,12 @@
   </page-layout>
 </template>
 
+<script setup>
+// onShareTimeline
+// onShareAppMessage
+useWxShare({ title: "江安youth home!" });
+</script>
+
 <script>
 // panelNews: {
 // 	head: 'First UI介绍',
@@ -209,7 +215,7 @@ export default {
     return {
       panelNews: { head: "青年新闻", list: [] },
       panelVolplan: { head: "志愿服务", list: [] },
-      panelAd: { head: "广告赞助", list: [] },
+      panelAd: { head: "", list: [] },
       panelPoll: { head: "问卷调查", list: [] },
       searchValue: "",
       goddess: null,
