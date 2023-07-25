@@ -36,7 +36,7 @@ const profileModel = Model.createModel({
 });
 
 const successPost = async (user) => {
-  await loginUser(userData.value);
+  await loginUser({ ...userData.value, ...user });
 };
 onMounted(async () => {
   const { data } = await Http.get("/usr/profile/my");
