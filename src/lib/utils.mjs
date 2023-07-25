@@ -188,7 +188,6 @@ export function getFullPath(delta = 0) {
 }
 export function getLastPageUrl() {
   const lastPage = getPage(1);
-  // lastPage.$page.fullPath
   return lastPage ? "/" + lastPage.route : UNI_HOME_PAGE;
 }
 

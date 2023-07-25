@@ -7,7 +7,11 @@
         threadOtherPrefix="/thread/other"
         fkName="thread_id"
       ></thread-head>
-      <thread-body class="chat-body" :posts="posts"></thread-body>
+      <thread-body
+        class="chat-body"
+        :posts="posts"
+        @deletePost="deletePost"
+      ></thread-body>
       <x-chatbar
         v-if="showChatBar"
         v-model:modelValue="messageText"
@@ -17,7 +21,7 @@
   </page-layout>
   <fui-fab
     v-if="showFloatPlus"
-    :distance="10"
+    :distance="30"
     position="right"
     :isDrag="true"
     @click="toggleButton"
@@ -46,6 +50,9 @@ export default {
     };
   },
   methods: {
+    deletePost({ id }) {
+      this.posts = this.posts.filter((e) => e.id !== id);
+    },
     toggleButton() {
       this.showChatBar = this.showFloatPlus;
       this.showFloatPlus = !this.showChatBar;

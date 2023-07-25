@@ -42,7 +42,6 @@
 <script setup>
 const loginPage = process.env.UNI_LOGIN_PAGE;
 const user = useUser();
-const page = usePage();
 const approver = ref();
 const ready = ref();
 const waiting = ref();
@@ -53,10 +52,9 @@ const applyModel = Model.createModel({
 });
 onLoad(async (opts) => {
   if (!user.id) {
-    console.log(page);
     utils.gotoPage({
       url: loginPage,
-      query: { redirect: page.value.$page.fullPath },
+      query: { redirect: utils.getFullPath() },
       redirect: false
     });
   } else {
