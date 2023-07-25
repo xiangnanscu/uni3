@@ -36,9 +36,11 @@ const profileModel = Model.createModel({
 });
 
 const successPost = async (user) => {
-  await loginUser({ ...userData.value, ...user });
+  const newUser = { ...userData.value, ...user };
+  console.log({ newUser });
+  await loginUser(newUser);
 };
-onMounted(async () => {
+onLoad(async () => {
   const { data } = await Http.get("/usr/profile/my");
   userData.value.xm = data.xm || "";
   userData.value.phone = data.phone || "";
