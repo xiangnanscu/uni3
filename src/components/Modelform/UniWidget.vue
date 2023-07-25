@@ -42,7 +42,9 @@ const autocompleteSearchText = ref("");
 const sendValue = (value) => {
   emit("update:modelValue", value);
 };
-const fileLimit = fieldType.endsWith("List") ? field.limit || 9 : 1;
+const fileLimit = fieldType.endsWith("List")
+  ? field.limit || field.maxCount || 9
+  : 1;
 const filePickerSelectHanlder = async ({ tempFiles, tempFilePaths }) => {
   emit("update:error", "");
   const files = filePickerRef.value.files;

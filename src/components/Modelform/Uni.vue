@@ -9,6 +9,7 @@ const props = defineProps({
   syncValues: { type: Boolean, default: false },
   actionUrl: { type: String, required: false },
   successUrl: { type: [Object, String] },
+  successMessage: { type: String },
   successUseRedirect: { type: Boolean, default: false },
   method: { type: String, default: "POST" }, // get
   hideSubmitButton: { type: Boolean, default: false },
@@ -18,8 +19,7 @@ const props = defineProps({
   labelPosition: { type: String, default: "left" }, // top
   labelWidth: { type: [String, Number], default: "5em" },
   labelAlign: { type: String, default: "right" }, //center, right
-  trigger: { type: String, default: "blur" },
-  labelCol: { type: Number, default: 3 }
+  trigger: { type: String, default: "blur" }
 });
 const deepcopy = (o) => JSON.parse(JSON.stringify(o));
 const values = props.syncValues
@@ -91,13 +91,16 @@ const submit = async () => {
     });
     const realData =
       response.data.type == "uni_error" ? response.data.data : response.data;
-    const successStuff = () => {
+    const successStuff = async () => {
       emit("successPost", realData);
       if (props.successUrl) {
-        utils.gotoPage({
+        await utils.gotoPage({
           url: props.successUrl,
           redirect: props.successUseRedirect
         });
+        if (props.successMessage) {
+          await uni.showToast({ title: props.successMessage });
+        }
       }
     };
     if (typeof realData == "object") {
@@ -132,7 +135,7 @@ const submit = async () => {
           showCancel: false
         });
       } else {
-        successStuff();
+        await successStuff();
       }
     } else if (response.data.type == "uni_error") {
       uni.showModal({
@@ -141,7 +144,7 @@ const submit = async () => {
         showCancel: false
       });
     } else {
-      successStuff();
+      await successStuff();
     }
   } catch (error) {
     console.error("uni-form error:", error);

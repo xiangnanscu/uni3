@@ -95,6 +95,14 @@
       >
       </uni-list-item>
       <uni-list-item
+        title="江安“新青年”"
+        link="navigateTo"
+        to="/views/GoddessAdd"
+        :show-extra-icon="true"
+        :extra-icon="{ color: '#666', size: '32', type: 'personadd-filled' }"
+      >
+      </uni-list-item>
+      <uni-list-item
         v-if="user.id"
         title="退出登录"
         link="switchTab"

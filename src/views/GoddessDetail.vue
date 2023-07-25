@@ -14,6 +14,7 @@
       <tinymce-text :html="record.content"></tinymce-text>
       <template #actions> </template>
     </uni-card>
+
     <div style="height: 3em"></div>
     <x-bottom>
       <generic-actions
@@ -22,8 +23,8 @@
         style="width: 100%"
       >
         <image
-          v-if="record?.usr_id"
-          @click="onAddFriend"
+          v-if="record?.creator"
+          @click="onAddFriend(record.creator)"
           :src="`../static/img/tabbar/friend_add-taobao.png`"
           class="actions"
         ></image>
@@ -43,8 +44,8 @@ export default {
     };
   },
   methods: {
-    onAddFriend(e) {
-      utils.gotoPage(`/views/MyQrCode?q=/test/${2}`);
+    async onAddFriend(id) {
+      await utils.gotoPage(`/views/MyQrCode?q=/test/${id}`);
     },
     async fetchData(query) {
       const { data: goddess } = await Http.get(`/goddess/detail/${query.id}`);
