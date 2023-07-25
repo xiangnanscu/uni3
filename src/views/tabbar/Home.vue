@@ -309,7 +309,7 @@ export default {
     if (apply_count) {
       uni.setTabBarBadge({
         index: 1,
-        text: apply_count
+        text: String(apply_count)
       });
       setApplyCount(apply_count);
     } else {
@@ -321,7 +321,7 @@ export default {
     if (unread_message_count) {
       uni.setTabBarBadge({
         index: 3,
-        text: unread_message_count
+        text: String(unread_message_count)
       });
     } else {
       uni.removeTabBarBadge({
