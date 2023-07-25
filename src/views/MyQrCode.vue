@@ -40,6 +40,9 @@
 </template>
 
 <script setup>
+const loginPage = process.env.UNI_LOGIN_PAGE;
+const user = useUser();
+const page = usePage();
 const approver = ref();
 const ready = ref();
 const waiting = ref();
@@ -49,13 +52,21 @@ const applyModel = Model.createModel({
   }
 });
 onLoad(async (opts) => {
-  // console.log("onLoad my_qr_code", opts);
-  const uid = decodeURIComponent(opts.q).split("/").pop();
-  approver.value = await usePost(`/usr/query`, {
-    get: { id: uid },
-    select: ["id", "nickname", "avatar"]
-  });
-  ready.value = true;
+  if (!user.id) {
+    console.log(page);
+    utils.gotoPage({
+      url: loginPage,
+      query: { redirect: page.value.$page.fullPath },
+      redirect: false
+    });
+  } else {
+    const uid = decodeURIComponent(opts.q).split("/").pop();
+    approver.value = await usePost(`/usr/query`, {
+      get: { id: uid },
+      select: ["id", "nickname", "avatar"]
+    });
+    ready.value = true;
+  }
 });
 </script>
 

@@ -279,7 +279,7 @@ export default {
   },
   computed: {
     panelData4() {
-      return { head: `封面${this.goddess?.sex}神`, list: [] };
+      return { head: `江安“新青年”`, list: [] };
     }
   },
   async onShow() {
@@ -311,7 +311,7 @@ export default {
         index: 1,
         text: apply_count
       });
-      setApplyCount(apply_count)
+      setApplyCount(apply_count);
     } else {
       uni.removeTabBarBadge({
         index: 1
