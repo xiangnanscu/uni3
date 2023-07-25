@@ -1,6 +1,7 @@
 <template>
   <page-layout>
     <modelform-uni
+      v-if="ready"
       label-width="6em"
       :values="values"
       :model="GoddessAddModel"
@@ -11,6 +12,8 @@
 </template>
 
 <script setup>
+import { readSync } from "fs";
+
 // onShareTimeline
 // onShareAppMessage
 useWxShare({ title: "江安“新青年”邀请你！" });
@@ -32,6 +35,7 @@ const GoddessAddModel = Model.createModel({
 });
 const values = ref({});
 const user = useUser();
+const ready = ref();
 const successPost = async (data) => {
   await utils.gotoPage({
     name: "SuccessPage",
@@ -53,6 +57,7 @@ onLoad(async () => {
     values.value.xm = user.xm;
     values.value.sfzh = user.username;
   }
+  ready.value = true;
 });
 </script>
 
