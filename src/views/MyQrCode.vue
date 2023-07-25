@@ -52,7 +52,7 @@ const applyModel = Model.createModel({
 });
 onLoad(async (opts) => {
   if (!user.id) {
-    utils.gotoPage({
+    await utils.gotoPage({
       url: loginPage,
       query: { redirect: utils.getFullPath() },
       redirect: false
