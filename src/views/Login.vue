@@ -51,7 +51,7 @@ const loginModel = Model.createModel({
 
 // #ifdef MP-WEIXIN
 const successPostWX = async (user) => {
-  await loginUser(user);
+  await loginUser({ ...userData.value, ...user });
 };
 
 const profileModel = Model.createModel({

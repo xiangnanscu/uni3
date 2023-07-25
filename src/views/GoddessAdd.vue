@@ -31,6 +31,7 @@ const GoddessAddModel = Model.createModel({
   }
 });
 const values = ref({});
+const user = useUser();
 const successPost = async (data) => {
   await utils.gotoPage({
     name: "SuccessPage",
@@ -38,7 +39,7 @@ const successPost = async (data) => {
   });
 };
 onLoad(async () => {
-  const user = useUser();
+  console.log("GODDESS-ADD:user", user);
   if (!user.username) {
     await utils.gotoPage({
       url: "/views/RealNameCert",
