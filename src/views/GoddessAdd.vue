@@ -56,6 +56,7 @@ onLoad(async () => {
   } else {
     values.value.xm = user.xm;
     values.value.sfzh = user.username;
+    values.value.sex = user.username[16] % 2 === 0 ? "女" : "男";
   }
   ready.value = true;
 });
