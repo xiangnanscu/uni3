@@ -1,6 +1,6 @@
 {
   "name": "uni-preset-vue",
-  "version": "1.126.0",
+  "version": "1.127.0",
   "license": "ISC",
   "scripts": {
     "env": "dotenv -e .env -e .env.local --",
