@@ -46,6 +46,7 @@ export default {
 <style scoped>
 :deep(.tinymce-img) {
   width: 100%;
+  height: auto;
 }
 :deep(.tinymce-p) {
   color: black;
