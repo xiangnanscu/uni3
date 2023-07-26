@@ -13,7 +13,7 @@
         :title="e.title"
         showArrow
         link="navigateTo"
-        :to="`/views/MessageDetail?id=${e.id}`"
+        :to="`/views/MessageDetail?receiverId=${e.id}`"
         thumb-size="lg"
         :thumb="e.avatar"
       >
@@ -68,9 +68,6 @@ const ready = ref(false);
 const friendsData = ref([]);
 const { setApplyCount, applyCount } = useStore();
 
-const clickFriend = async (e) => {
-  await utils.gotoPage(`/views/MessageDetail?id=${e.id}`);
-};
 const approve = async (e, status) => {
   await usePost(`/friends/approve/${e.id}`, { status });
   e.status = status;
