@@ -14,7 +14,7 @@
 <script setup>
 const ThreadAddData = ref({ title: "", content: "", pics: [] });
 const successPost = async (data) => {
-  await utils.gotoPage({ url: "/views/ThreadListAll" });
+  await utils.gotoPage({ url: "/views/ThreadListAll", redirect: true });
 };
 
 const threadModel = ref(null);

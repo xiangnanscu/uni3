@@ -81,8 +81,8 @@ export default {
     this.scrollTo();
   },
   async onLoad(query) {
-    this.receiverId = Number(query.id);
-    await usePost("/message/clear_unread", { target_id: this.receiverId });
+    this.receiverId = Number(query.receiverId);
+    await usePost("/message/clear_unread", { creator: this.receiverId });
     this.timerId = setInterval(async () => {
       await this.fetchNewChatRecords(this.latestId);
     }, 1000);
