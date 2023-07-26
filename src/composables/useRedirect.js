@@ -7,7 +7,7 @@ export function useRedirect() {
       if (redirectUrl.startsWith(process.env.UNI_LOGIN_PAGE)) {
         redirectUrl = process.env.UNI_HOME_PAGE;
       }
-      return redirectUrl;
+      return decodeURIComponent(redirectUrl);
     } else {
       return process.env.UNI_HOME_PAGE;
     }

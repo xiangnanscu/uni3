@@ -42,6 +42,7 @@
 <script setup>
 const loginPage = process.env.UNI_LOGIN_PAGE;
 const user = useUser();
+const query = useQuery();
 const approver = ref();
 const ready = ref();
 const waiting = ref();
@@ -58,7 +59,8 @@ onLoad(async (opts) => {
       redirect: false
     });
   } else {
-    const uid = decodeURIComponent(opts.q).split("/").pop();
+    console.log(query.value);
+    const uid = query.value.q.split("/").pop();
     approver.value = await usePost(`/usr/query`, {
       get: { id: uid },
       select: ["id", "nickname", "avatar"]

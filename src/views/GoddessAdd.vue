@@ -12,8 +12,6 @@
 </template>
 
 <script setup>
-import { readSync } from "fs";
-
 // onShareTimeline
 // onShareAppMessage
 useWxShare({ title: "江安“新青年”邀请你！" });
