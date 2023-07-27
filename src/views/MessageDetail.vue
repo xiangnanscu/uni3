@@ -134,7 +134,6 @@ export default {
           const view = uni.createSelectorQuery().in(this).select(".chat-body");
           view
             .boundingClientRect((res) => {
-              console.log("res?.height", res?.height);
               uni.pageScrollTo({
                 duration: 200,
                 scrollTop: res?.height || Infinity
