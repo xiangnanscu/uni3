@@ -12,6 +12,7 @@
         :posts="posts"
         @deletePost="deletePost"
       ></thread-body>
+      <fui-divider text="到底了" />
       <x-chatbar
         v-if="showChatBar"
         v-model:modelValue="messageText"

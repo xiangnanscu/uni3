@@ -27,18 +27,19 @@
         class="actions"
       ></image>
     </generic-actions>
+    <div style="height: 2em"></div>
     <thread-body
       class="chat-body"
-      style="margin-top: 1em"
       :posts="posts"
       @deletePost="deletePost"
     ></thread-body>
+    <fui-divider text="到底了" />
+    <div style="height: 2em"></div>
     <x-chatbar
       v-if="showChatBar"
       v-model:modelValue="messageText"
       @sendMessage="sendMessage"
     />
-    <div style="height: 3em"></div>
   </page-layout>
   <fui-fab
     v-if="showFloatPlus"
@@ -81,7 +82,7 @@ export default {
         ctime: newPost.ctime
       });
       this.messageText = "";
-      this.scrollTo();
+      // this.scrollTo();
       this.toggleButton();
       uni.showToast({ icon: "none", title: "发送成功" });
     },
