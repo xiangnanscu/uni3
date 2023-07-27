@@ -14,7 +14,7 @@
 <script setup>
 // onShareTimeline
 // onShareAppMessage
-useWxShare({ title: "江安“新青年”邀请你！" });
+useWxShare({ title: "江安“新青年”邀请你！", imageUrl: "" });
 const GoddessAddModel = Model.createModel({
   fieldNames: ["xm", "sex", "sfzh", "title", "pics"],
   fields: {
