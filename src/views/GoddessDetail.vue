@@ -31,6 +31,7 @@
     <thread-body
       class="chat-body"
       :posts="posts"
+      delete-url-prefix="goddess_comment"
       @deletePost="deletePost"
     ></thread-body>
     <fui-divider text="到底了" />

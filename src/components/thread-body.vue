@@ -76,7 +76,8 @@ export default {
     posts: { type: Array },
     postCreateUrl: { type: String, default: `/post/create` },
     threadOtherPrefix: { type: String, default: `/thread/other` },
-    fkName: { type: String, default: `thread_id` }
+    fkName: { type: String, default: `thread_id` },
+    deleteUrlPrefix: { type: String, default: `post` }
   },
   data() {
     return {
@@ -90,7 +91,7 @@ export default {
     async confirmDelete({ index, text }) {
       if (text == "确定") {
         const { affected_rows } = await usePost(
-          `/post/delete_self/${this.currentPost.id}`
+          `/${this.deleteUrlPrefix}/delete_self/${this.currentPost.id}`
         );
         if (affected_rows == 1) {
           this.$emit("deletePost", { id: this.currentPost.id });
