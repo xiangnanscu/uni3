@@ -51,7 +51,10 @@ export function useGenericActions({ target_model, target_id }) {
       enabled: actionValue
     });
     likeStatus.value = actionValue;
-    uni.showToast({ title: `${actionValue ? "已" : "已取消"}点赞` });
+    uni.showToast({
+      icon: "none",
+      title: `${actionValue ? "已" : "已取消"}点赞`
+    });
     return actionValue;
   };
   const onFav = async () => {
@@ -64,7 +67,10 @@ export function useGenericActions({ target_model, target_id }) {
       enabled: actionValue
     });
     favStatus.value = actionValue;
-    uni.showToast({ title: `${actionValue ? "已" : "已取消"}收藏` });
+    uni.showToast({
+      icon: "none",
+      title: `${actionValue ? "已" : "已取消"}收藏`
+    });
     return actionValue;
   };
   const onShare = async () => {

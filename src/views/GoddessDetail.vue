@@ -58,6 +58,7 @@ export default {
   mixins: [MixinShare],
   data() {
     return {
+      shareTitlePrefix: "【江安“新青年”】",
       showChatBar: false,
       showFloatPlus: true,
       messageText: "",

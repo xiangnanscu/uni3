@@ -1,6 +1,6 @@
 export default {
   data() {
-    return { record: null };
+    return { record: null, shareTitlePrefix: "" };
   },
   async onLoad(query) {
     this.query = query;
@@ -15,7 +15,7 @@ export default {
   computed: {
     shareData() {
       return {
-        title: this.record?.title,
+        title: this.shareTitlePrefix + (this.record?.title || ""),
         desc: this.record?.content.slice(0, 20) + "...",
         path: utils.getFullPath(),
         imageUrl: this.imageUrl
