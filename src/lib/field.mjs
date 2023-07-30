@@ -1010,8 +1010,7 @@ const aliossOptionNames = [
   "width",
   "prefix",
   "hash",
-  "limit", // uniapp
-  "wxAvatar" // uniapp
+  "limit"
 ];
 const mapToAntdFileValue = (url = "") => {
   const name = url.split("/").pop();
