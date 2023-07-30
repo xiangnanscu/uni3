@@ -26,8 +26,8 @@ const GoddessAddModel = Model.createModel({
       label: "封面图",
       type: "aliossImageList",
       required: true,
-      maxCount: 1,
-      size: process.env.ALIOSS_AVATAR_SIZE || "2M"
+      size: process.env.ALIOSS_AVATAR_SIZE || "2M",
+      limit: 1
     }
   }
 });

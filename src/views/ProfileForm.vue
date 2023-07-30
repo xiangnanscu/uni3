@@ -24,9 +24,9 @@ const profileModel = Model.createModel({
     avatar: {
       label: "头像",
       type: "aliossImage",
-      wxAvatar,
       required: true,
-      size: process.env.ALIOSS_AVATAR_SIZE || "2M"
+      size: process.env.ALIOSS_AVATAR_SIZE || "2M",
+      attrs: { wxAvatar }
     },
     nickname: { label: "昵称", required: true, inputType: "nickname" },
     intro: { label: "简介", inputType: "textarea" }

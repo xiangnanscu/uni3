@@ -490,7 +490,7 @@ class Model {
       }
     }
     for (const [_, field] of Object.entries(ConcreteModel.fields)) {
-      if (field.dbType === Field.BaseField.NOT_DEFIEND) {
+      if (field.dbType === field.FK_TYPE_NOT_DEFIEND) {
         field.dbType = ConcreteModel.fields[field.referenceColumn].dbType;
       }
     }

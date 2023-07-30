@@ -43,7 +43,7 @@ const sendValue = (value) => {
   emit("update:modelValue", value);
 };
 const fileLimit = fieldType.endsWith("List")
-  ? field.limit || field.maxCount || 9
+  ? field.limit || 9
   : 1;
 const filePickerSelectHanlder = async ({ tempFiles, tempFilePaths }) => {
   emit("update:error", "");
@@ -123,8 +123,8 @@ const getPhoneNumber = async (event) => {
 let wxPhoneDisabled = field.disabled === undefined ? false : field.disabled;
 // #ifdef H5
 wxPhoneDisabled = false;
-field.wxPhone = false;
-field.wxAvatar = false;
+field.attrs.wxPhone = false;
+field.attrs.wxAvatar = false;
 // #endif
 const placeholder = field.attrs?.placeholder || field.hint;
 </script>
@@ -249,7 +249,7 @@ const placeholder = field.attrs?.placeholder || field.hint;
   </picker>
   <template v-else-if="fieldType.startsWith('alioss')">
     <wx-avatar
-      v-if="field.wxAvatar"
+      v-if="field.attrs.wxAvatar"
       @update:modelValue="sendValue"
       @update:error="emit('update:error', $event)"
       :modelValue="{ url: props.modelValue, errMsg: props.error }"
@@ -274,7 +274,7 @@ const placeholder = field.attrs?.placeholder || field.hint;
       @delete="filePickerDelete"
     />
   </template>
-  <template v-else-if="field.wxPhone">
+  <template v-else-if="field.attrs.wxPhone">
     <uni-easyinput
       @blur="blurValidate"
       @update:modelValue="sendValue"

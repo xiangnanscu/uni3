@@ -60,9 +60,9 @@ const profileModel = Model.createModel({
     avatar: {
       label: "头像",
       type: "aliossImage",
-      wxAvatar: true,
       required: true,
-      size: avatarSize
+      size: avatarSize,
+      attrs: { wxAvatar: true }
     },
     nickname: { label: "昵称", required: true, inputType: "nickname" }
   }

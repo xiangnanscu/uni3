@@ -6,7 +6,7 @@ const TABLE_MAX_ROWS = 1;
 const CHOICES_ERROR_DISPLAY_COUNT = 30;
 const ERROR_MESSAGES = { required: "此项必填", choices: "无效选项" };
 const NULL = {};
-const NOT_DEFIEND = {};
+const FK_TYPE_NOT_DEFIEND = {};
 const PRIMITIVE_TYPES = {
   string: true,
   number: true,
@@ -48,8 +48,8 @@ function cleanChoice(c) {
 function getChoices(rawChoices) {
   const choices = [];
   for (let c of rawChoices) {
-    if (typeof c === "string" || typeof c === "number") {
-      c = { value: c, label: c, text: c };
+    if (PRIMITIVE_TYPES[typeof c]) {
+      c = { value: c, label: c.toString(), text: c.toString() };
     } else if (typeof c === "object") {
       const [value, label, hint] = cleanChoice(c);
       c = { value, label, hint, text: label };
@@ -94,13 +94,13 @@ const baseOptionNames = [
   "choicesUrl",
   "choicesUrlAdmin",
   "choicesUrlMethod",
-  // "choicesCallback", // antdv
   "autocomplete",
   "strict",
   "disabled",
   "errorMessages",
   "default",
   "hint",
+  "preload",
   "lazy",
   "tag",
   "image",
@@ -109,12 +109,13 @@ const baseOptionNames = [
   "verifyUrl",
   "postNames",
   "codeLifetime",
-  "tooltipVisible"
+  "tooltipVisible",
+  "attrs"
 ];
 
 class BaseField {
   static getLocalTime = getLocalTime;
-  static NOT_DEFIEND = NOT_DEFIEND;
+  static FK_TYPE_NOT_DEFIEND = FK_TYPE_NOT_DEFIEND;
   __is_field_class__ = true;
   required = false;
   get optionNames() {
@@ -141,10 +142,10 @@ class BaseField {
         this.null = false;
       }
     }
-    if (typeof this.choicesUrl == "string") {
-      this.choices = this.choices ? this.choices.map(this.choicesCallback) : [];
+    if (typeof this.choicesUrl == "string" && this.preload) {
+      this.choices = this.choices || [];
     }
-    if (this.choices) {
+    if (this.choices && this.preload) {
       if (this.strict === undefined) {
         this.strict = true;
       }
@@ -171,6 +172,11 @@ class BaseField {
         ret[name] = options[name];
       }
     }
+    if (!ret.attrs) {
+      ret.attrs = {};
+    } else {
+      ret.attrs = { ...ret.attrs };
+    }
     return ret;
   }
   getValidators(validators) {
@@ -182,15 +188,21 @@ class BaseField {
     if (this.strict) {
       if (this.choicesUrl) {
         // dynamic choices, need to access this at runtime
-        validators.push((val) => {
-          for (const { value } of this.choices) {
-            if (val === value) {
-              return value;
+        // there's no need to check a disabled field
+        !this.disabled &&
+          validators.push((val) => {
+            for (const { value } of this.choices) {
+              if (val === value) {
+                return value;
+              }
             }
-          }
-          throw new Error("无效选项, 请通过点击下拉框的形式输入");
-        });
-      } else if (Array.isArray(this.choices) && this.type !== "array") {
+            throw new Error("无效选项, 请通过点击下拉框的形式输入");
+          });
+      } else if (
+        Array.isArray(this.choices) &&
+        this.choices.length &&
+        this.type !== "array"
+      ) {
         // static choices
         validators.push(
           getChoicesValidator(this.choices, this.errorMessages.choices)
@@ -238,6 +250,15 @@ class BaseField {
     }
     if (json.tag === "input" && json.lazy === undefined) {
       json.lazy = true;
+    }
+    if (
+      json.preload === undefined &&
+      (json.choicesUrl || json.choicesUrlAdmin)
+    ) {
+      json.preload = false;
+    }
+    if (!json.attrs) {
+      json.attrs = {};
     }
     return json;
   }
@@ -300,8 +321,7 @@ const stringOptionNames = [
   "length",
   "minlength",
   "maxlength",
-  "inputType",
-  "wxPhone" // uniapp
+  "inputType"
 ];
 const stringValidatorNames = ["pattern", "length", "minlength", "maxlength"];
 class StringField extends BaseField {
@@ -340,15 +360,15 @@ class StringField extends BaseField {
     return this;
   }
   getValidators(validators) {
-    if (this.compact) {
-      validators.unshift(Validator.deleteSpaces);
-    } else if (this.trim) {
-      validators.unshift(Validator.trim);
-    }
     for (const e of stringValidatorNames) {
       if (this[e]) {
         validators.unshift(Validator[e](this[e], this.errorMessages[e]));
       }
+    }
+    if (this.compact) {
+      validators.unshift(Validator.deleteSpaces);
+    } else if (this.trim) {
+      validators.unshift(Validator.trim);
     }
     validators.unshift(Validator.string);
     return super.getValidators(validators);
@@ -364,7 +384,23 @@ class StringField extends BaseField {
     return typeof value == "string" ? value : String(value);
   }
   toPostValue(value) {
-    return this.compact ? value.replace(/\s/g, "") : value;
+    return this.compact ? value?.replace(/\s/g, "") : value || "";
+  }
+}
+
+const textOptionNames = [...baseOptionNames];
+class TextField extends BaseField {
+  type = "text";
+  dbType = "text";
+  constructor(options) {
+    super(options);
+    if (!this.attrs.autoSize) {
+      this.attrs.autoSize = true;
+    }
+    return this;
+  }
+  get optionNames() {
+    return textOptionNames;
   }
 }
 
@@ -463,11 +499,6 @@ class MonthField extends IntegerField {
     super({ min: 1, max: 12, ...options });
     return this;
   }
-}
-
-class TextField extends BaseField {
-  type = "text";
-  dbType = "text";
 }
 
 const floatValidatorNames = ["min", "max"];
@@ -730,9 +761,7 @@ const datetimeOptionNames = [
   "autoNowAdd",
   "autoNow",
   "precision",
-  "timezone",
-  "valueFormat", // antdv
-  "timeFormat" // antdv
+  "timezone"
 ];
 class DatetimeField extends BaseField {
   type = "datetime";
@@ -772,7 +801,7 @@ class DatetimeField extends BaseField {
   }
 }
 
-const dateOptionNames = [...baseOptionNames, "valueFormat"];
+const dateOptionNames = [...baseOptionNames];
 class DateField extends BaseField {
   type = "date";
   dbType = "date";
@@ -829,7 +858,6 @@ const foreignkeyOptionNames = [
   "referenceLabelColumn",
   "referenceUrl",
   "referenceUrlAdmin",
-  "realtime",
   "adminUrlName",
   "modelUrlName",
   "keywordQueryName",
@@ -846,7 +874,7 @@ class ForeignkeyField extends BaseField {
     return foreignkeyOptionNames;
   }
   constructor(options) {
-    super({ dbType: NOT_DEFIEND, ...options });
+    super({ dbType: FK_TYPE_NOT_DEFIEND, ...options });
     const fkModel = this.reference;
     if (fkModel === "self") {
       return this;
@@ -880,7 +908,7 @@ class ForeignkeyField extends BaseField {
       fk.primaryKey || fk.unique,
       "foreignkey must be a primary key or unique key"
     );
-    if (this.dbType === NOT_DEFIEND) {
+    if (this.dbType === FK_TYPE_NOT_DEFIEND) {
       this.dbType = fk.dbType || fk.type;
     }
     return this;
@@ -948,9 +976,6 @@ class ForeignkeyField extends BaseField {
     const ret = super.json();
     ret.reference = this.reference.tableName;
     ret.autocomplete = true;
-    if (ret.realtime === undefined) {
-      ret.realtime = true;
-    }
     if (ret.keywordQueryName === undefined) {
       ret.keywordQueryName = "keyword";
     }
@@ -986,12 +1011,7 @@ const aliossOptionNames = [
   "prefix",
   "hash",
   "limit", // uniapp
-  "wxAvatar", // uniapp
-  "listType", // antdv
-  "maxCount", // antdv
-  "multiple", // antdv
-  "accept", // antdv
-  "buttonText" // antdv
+  "wxAvatar" // uniapp
 ];
 const mapToAntdFileValue = (url = "") => {
   const name = url.split("/").pop();
@@ -1043,7 +1063,7 @@ class AliossField extends StringField {
   }
   toFormValue(url) {
     // console.log("call AliossField.toFormValue", JSON.stringify(url));
-    if (this.wxAvatar) {
+    if (this.attrs?.wxAvatar) {
       return url || "";
     }
     if (typeof url == "string") {
@@ -1055,7 +1075,7 @@ class AliossField extends StringField {
     }
   }
   toPostValue(fileList) {
-    if (this.wxAvatar) {
+    if (this.attrs?.wxAvatar) {
       return fileList;
     } else if (!Array.isArray(fileList) || !fileList[0]) {
       return "";
@@ -1131,6 +1151,7 @@ class AliossImageListField extends AliossListField {
   }
 }
 export {
+  getChoices,
   BaseField,
   StringField,
   EmailField,
