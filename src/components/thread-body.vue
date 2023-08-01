@@ -128,7 +128,7 @@ export default {
     },
     postDigest(post) {
       return post
-        ? `${post.creator__nickname}: ${post.content.slice(0, 6)}`
+        ? `${post.creator__nickname}: ${utils.abstractText(post.content, 15)}`
         : "";
     },
     async commentPost(post) {},
