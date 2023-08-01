@@ -9,7 +9,7 @@
       <image
         v-if="record.pics[0]"
         :src="record.pics[0]"
-        @click="previewImage({ urls: [record.pics[0]], current: 0 })"
+        @click="previewImage(record.pics[0])"
         mode="widthFix"
         style="width: 100%"
       />
@@ -68,8 +68,8 @@ export default {
     };
   },
   methods: {
-    previewImage(opts) {
-      uni.previewImage(opts);
+    previewImage(url) {
+      uni.previewImage({ urls: [url], current: 0 });
     },
     async sendMessage(content) {
       if (!content.trim()) {

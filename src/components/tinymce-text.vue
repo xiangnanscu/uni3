@@ -1,6 +1,6 @@
 <template>
   <div>
-    <rich-text :nodes="miniHtml" @itemclick="itemclick"></rich-text>
+    <rich-text :nodes="miniHtml"></rich-text>
   </div>
 </template>
 

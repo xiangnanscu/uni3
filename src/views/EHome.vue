@@ -1,7 +1,7 @@
 <template>
   <page-layout>
     <h1 style="text-align: center">团建E家</h1>
-    <uni-grid :column="4" :show-border="false" :square="false" @change="change">
+    <uni-grid :column="3" :show-border="false" :square="false" @change="change">
       <uni-grid-item
         v-for="(item, index) in mainKist"
         :index="index"
