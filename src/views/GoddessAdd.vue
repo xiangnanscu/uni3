@@ -16,7 +16,7 @@
 // onShareAppMessage
 useWxShare({ title: "江安“新青年”邀请你！", imageUrl: "" });
 const GoddessAddModel = Model.createModel({
-  fieldNames: ["xm", "sex", "sfzh", "title", "pics"],
+  field_names: ["xm", "sex", "sfzh", "title", "pics"],
   fields: {
     xm: { label: "姓名", required: true, minlength: 2 },
     sfzh: { label: "身份证号", required: true, type: "sfzh" },

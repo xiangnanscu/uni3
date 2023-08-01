@@ -1,4 +1,5 @@
 import * as Field from "./field";
+import * as utils from "./utils";
 import { Http } from "@/globals/Http";
 
 const DEFAULT_STRING_MAXLENGTH = 256;
@@ -17,7 +18,7 @@ const IS_PG_KEYWORDS = {};
 const NON_MERGE_NAMES = {
   sql: true,
   fields: true,
-  fieldNames: true,
+  field_names: true,
   extend: true,
   mixins: true,
   admin: true
@@ -55,11 +56,11 @@ const stringFormat = (s, ...varargs) => {
 const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 const baseModel = {
   abstract: true,
-  fieldNames: ["id", "ctime", "utime"],
+  field_names: ["id", "ctime", "utime"],
   fields: {
-    id: { type: "integer", primaryKey: true, serial: true },
-    ctime: { label: "创建时间", type: "datetime", autoNowAdd: true },
-    utime: { label: "更新时间", type: "datetime", autoNow: true }
+    id: { type: "integer", primary_key: true, serial: true },
+    ctime: { label: "创建时间", type: "datetime", auto_now_add: true },
+    utime: { label: "更新时间", type: "datetime", auto_now: true }
   }
 };
 const unique = (arr) => {
@@ -90,11 +91,11 @@ function checkReserved(name) {
 function normalizeArrayAndHashFields(fields) {
   assert(typeof fields === "object", "you must provide fields for a model");
   const alignedFields = [];
-  const fieldNames = [];
+  const field_names = [];
   if (Array.isArray(fields)) {
     for (const field of fields) {
       alignedFields[field.name] = field;
-      fieldNames.push(field.name);
+      field_names.push(field.name);
     }
   } else {
     for (const [name, field] of Object.entries(fields)) {
@@ -104,25 +105,25 @@ function normalizeArrayAndHashFields(fields) {
           "you must define name for a field when using array fields"
         );
         alignedFields[field.name] = field;
-        fieldNames.push(field.name);
+        field_names.push(field.name);
       } else {
         alignedFields[name] = field;
-        fieldNames.push(name);
+        field_names.push(name);
       }
     }
   }
 
-  return [alignedFields, fieldNames];
+  return [alignedFields, field_names];
 }
-function normalizeFieldNames(fieldNames) {
+function normalizeFieldNames(field_names) {
   assert(
-    typeof fieldNames === "object",
+    typeof field_names === "object",
     "you must provide field_names for a model"
   );
-  for (const name of fieldNames) {
+  for (const name of field_names) {
     assert(typeof name === "string", "element of field_names must be string");
   }
-  return fieldNames;
+  return field_names;
 }
 function getForeignObject(attrs, prefix) {
   const fk = {};
@@ -141,7 +142,7 @@ function makeRecordClass(model) {
       Object.assign(this, attrs);
     }
     async delete(key) {
-      key = model.checkUniqueKey(key || model.primaryKey);
+      key = model.checkUniqueKey(key || model.primary_key);
       if (this[key] === undefined) {
         throw new Error("empty value for delete key:" + key);
       }
@@ -211,7 +212,7 @@ function makeFieldFromJson(json, kwargs) {
   ) {
     options.maxlength = DEFAULT_STRING_MAXLENGTH;
   }
-  const fcls = Field[`${capitalize(options.type)}Field`];
+  const fcls = Field[`${capitalize(utils.snakeToCamel(options.type))}Field`];
   if (!fcls) {
     throw new Error("invalid field type:" + String(options.type));
   }
@@ -306,17 +307,17 @@ function assembleSql(opts) {
     const from = (opts.from && " FROM " + opts.from) || "";
     const where = (opts.where && " WHERE " + opts.where) || "";
     const returning = getReturningToken(opts);
-    statement = `UPDATE ${opts.tableName} SET ${opts.update}${from}${where}${returning}`;
+    statement = `UPDATE ${opts.table_name} SET ${opts.update}${from}${where}${returning}`;
   } else if (opts.insert) {
     const returning = getReturningToken(opts);
-    statement = `INSERT INTO ${opts.tableName} ${opts.insert}${returning}`;
+    statement = `INSERT INTO ${opts.table_name} ${opts.insert}${returning}`;
   } else if (opts.delete) {
     const using = (opts.using && " USING " + opts.using) || "";
     const where = (opts.where && " WHERE " + opts.where) || "";
     const returning = getReturningToken(opts);
-    statement = `DELETE FROM ${opts.tableName}${using}${where}${returning}`;
+    statement = `DELETE FROM ${opts.table_name}${using}${where}${returning}`;
   } else {
-    const from = opts.from || opts.tableName;
+    const from = opts.from || opts.table_name;
     const where = (opts.where && " WHERE " + opts.where) || "";
     const group = (opts.group && " GROUP BY " + opts.group) || "";
     const having = (opts.having && " HAVING " + opts.having) || "";
@@ -372,30 +373,38 @@ class Model {
   }
   static async createModelAsync(options) {
     // 目前主要是异步获取referenceUrl和choicesUrl资源
-    for (const name of options.fieldNames || Object.keys(options.fields)) {
+    for (const name of options.field_names || Object.keys(options.fields)) {
       const field = options.fields[name];
-      if (field.choicesUrl) {
-        const choicesUrl = options.isAdminMode
-          ? field.choicesUrlAdmin
-          : field.choicesUrl;
-        const { data: choices } = await Http[field.choicesUrlMethod || "post"](
-          choicesUrl
-        );
-        field.choices = options.choicesCallback
-          ? options.choicesCallback(choices, field)
-          : choices;
+      if (field.choices_url) {
+        const fetchChoices = async () => {
+          const choices_url = options.isAdminMode
+            ? field.choices_url_admin || field.choices_url // 如果不是fk,那么choicesUrlAdmin不会定义
+            : field.choices_url;
+          const { data: choices } = await Http[
+            field.choices_url_method || "post"
+          ](choices_url);
+          const res = options.choicesCallback
+            ? options.choicesCallback(choices, field)
+            : choices;
+          return res;
+        };
+        if (field.preload) {
+          field.choices = await fetchChoices();
+        } else {
+          field.choices = fetchChoices;
+        }
       }
       if (typeof field.reference == "string") {
         const modelUrl = options.isAdminMode
-          ? field.referenceUrlAdmin
-          : field.referenceUrl || field.reference;
+          ? field.reference_url_admin
+          : field.reference_url || field.reference;
         field.reference = await this.getHttpModel(
           modelUrl,
           options.isAdminMode
         );
       }
       if (field.type == "table" && !field.model?.__isModelClass__) {
-        const modelKey = field.model.tableName;
+        const modelKey = field.model.table_name;
         if (!this.httpModelCache[modelKey]) {
           this.httpModelCache[modelKey] = await Model.createModelAsync({
             ...field.model,
@@ -429,36 +438,36 @@ class Model {
     return ModelProxy.createProxy(XodelClass);
   }
   static setLabelNameDict() {
-    this.labelToName = {};
-    this.nameToLabel = {};
+    this.label_to_name = {};
+    this.name_to_label = {};
     for (const [name, field] of Object.entries(this.fields)) {
-      this.labelToName[field.label] = name;
-      this.nameToLabel[name] = field.label;
+      this.label_to_name[field.label] = name;
+      this.name_to_label[name] = field.label;
     }
   }
-  static setClassName(tableName) {
+  static setClassName(table_name) {
     const className = {
-      value: `${capitalize(tableName)}Model`
+      value: `${capitalize(table_name)}Model`
     };
     Object.defineProperty(this, "name", className);
   }
   static makeModelClass(opts) {
     class ConcreteModel extends this {
       static sqlQuery = opts.sqlQuery ? opts.sqlQuery : this.sqlQuery;
-      static tableName = opts.tableName;
+      static table_name = opts.table_name;
       static admin = opts.admin;
-      static label = opts.label || opts.tableName;
+      static label = opts.label || opts.table_name;
       static fields = opts.fields;
-      static fieldNames = opts.fieldNames;
-      static primaryKey = opts.primaryKey;
-      static defaultPrimaryKey = opts.defaultPrimaryKey;
+      static field_names = opts.field_names;
+      static primary_key = opts.primary_key;
+      static default_primary_key = opts.default_primary_key;
       static mixins = opts.mixins;
       static extend = opts.extend;
       static abstract = opts.abstract;
-      static nameToLabel = opts.nameToLabel;
-      static labelToName = opts.labelToName;
-      static disableAutoPrimaryKey =
-        opts.disableAutoPrimaryKey == undefined ? true : false;
+      static name_to_label = opts.name_to_label;
+      static label_to_name = opts.label_to_name;
+      static disable_auto_primary_key =
+        opts.disable_auto_primary_key == undefined ? true : false;
       cls = ConcreteModel;
     }
     let pkDefined = false;
@@ -473,31 +482,31 @@ class Model {
       if (fkModel) {
         ConcreteModel.foreignKeys[name] = field;
       }
-      if (field.primaryKey) {
+      if (field.primary_key) {
         const pkName = field.name;
         assert(
           !pkDefined,
           `duplicated primary key: "${pkName}" and "${pkDefined}"`
         );
         pkDefined = pkName;
-        ConcreteModel.primaryKey = pkName;
-      } else if (field.autoNow) {
+        ConcreteModel.primary_key = pkName;
+      } else if (field.auto_now) {
         ConcreteModel.autoNowName = field.name;
-      } else if (field.autoNowAdd) {
+      } else if (field.auto_now_add) {
         ConcreteModel.autoNowAddName = field.name;
       } else {
         ConcreteModel.names.push(name);
       }
     }
     for (const [_, field] of Object.entries(ConcreteModel.fields)) {
-      if (field.dbType === field.FK_TYPE_NOT_DEFIEND) {
-        field.dbType = ConcreteModel.fields[field.referenceColumn].dbType;
+      if (field.db_type === Field.BaseField.FK_TYPE_NOT_DEFIEND) {
+        field.db_type = ConcreteModel.fields[field.reference_column].db_type;
       }
     }
     ConcreteModel.__isModelClass__ = true;
-    if (ConcreteModel.tableName) {
+    if (ConcreteModel.table_name) {
       ConcreteModel.materializeWithTableName({
-        tableName: ConcreteModel.tableName
+        table_name: ConcreteModel.table_name
       });
     } else {
       ConcreteModel.setClassName("Abstract");
@@ -506,34 +515,34 @@ class Model {
     return ConcreteModel;
   }
 
-  static materializeWithTableName({ tableName, label }) {
-    if (!tableName) {
+  static materializeWithTableName({ table_name, label }) {
+    if (!table_name) {
       const namesHint =
-        (this.fieldNames && this.fieldNames.join(",")) || "no field_names";
+        (this.field_names && this.field_names.join(",")) || "no field_names";
       throw new Error(
         `you must define table_name for a non-abstract model (${namesHint})`
       );
     }
-    checkReserved(tableName);
-    this.setClassName(tableName);
-    this.tableName = tableName;
-    this.label = this.label || label || tableName;
+    checkReserved(table_name);
+    this.setClassName(table_name);
+    this.table_name = table_name;
+    this.label = this.label || label || table_name;
     this.abstract = false;
-    if (!this.primaryKey && !this.disableAutoPrimaryKey) {
-      const pkName = this.defaultPrimaryKey || "id";
-      this.primaryKey = pkName;
+    if (!this.primary_key && !this.disable_auto_primary_key) {
+      const pkName = this.default_primary_key || "id";
+      this.primary_key = pkName;
       this.fields[pkName] = Field.IntegerField.new({
         name: pkName,
-        primaryKey: true,
+        primary_key: true,
         serial: true
       });
-      this.fieldNames.unshift(pkName);
+      this.field_names.unshift(pkName);
     }
     this.nameCache = {};
     for (const [name, field] of Object.entries(this.fields)) {
-      this.nameCache[name] = this.tableName + ("." + name);
+      this.nameCache[name] = this.table_name + ("." + name);
       if (field.reference) {
-        field.tableName = tableName;
+        field.table_name = table_name;
       }
     }
     this.RecordClass = makeRecordClass(this);
@@ -546,7 +555,7 @@ class Model {
   }
   static toFormValue(values, names) {
     const res = {};
-    for (const name of names || this.fieldNames) {
+    for (const name of names || this.field_names) {
       const field = this.fields[name];
       const value = field.toFormValue(values[name]);
       res[name] = value;
@@ -555,7 +564,7 @@ class Model {
   }
   static toPostValue(values, names) {
     const data = {};
-    for (const name of names || this.fieldNames) {
+    for (const name of names || this.field_names) {
       const field = this.fields[name];
       data[name] = field.toPostValue(values[name]);
     }
@@ -565,32 +574,37 @@ class Model {
     const extend = options.extend;
     const model = {
       admin: options.admin,
-      tableName: options.tableName || extend?.tableName,
+      table_name: options.table_name || extend?.table_name,
       sqlQuery: options.sqlQuery
     };
     const [optsFields, optsFieldNames] = normalizeArrayAndHashFields(
       options.fields || []
     );
-    let optsNames = options.fieldNames;
+    let optsNames = options.field_names;
     if (!optsNames) {
       if (extend) {
-        optsNames = unique([...extend.fieldNames, ...optsFieldNames]);
+        optsNames = unique([...extend.field_names, ...optsFieldNames]);
       } else {
         optsNames = optsFieldNames;
       }
     }
-    model.fieldNames = normalizeFieldNames(clone(optsNames));
+    model.field_names = normalizeFieldNames(clone(optsNames));
     model.fields = {};
     for (const name of optsNames) {
       checkReserved(name);
-      if (name !== "name" && this[name] !== undefined) {
+      if (
+        name !== "name" &&
+        name !== "apply" &&
+        name !== "call" &&
+        this[name] !== undefined
+      ) {
         throw new Error(
           `field name "${name}" conflicts with model class attributes`
         );
       }
       let field = optsFields[name];
       if (!field) {
-        const tname = options.tableName || "[abstract model]";
+        const tname = options.table_name || "[abstract model]";
         if (extend) {
           field = extend.fields[name];
           if (!field) {
@@ -611,7 +625,7 @@ class Model {
                 abstract: true,
                 extend: pfield.model,
                 fields: field.model.fields,
-                fieldNames: field.model.fieldNames
+                field_names: field.model.field_names
               });
             }
           }
@@ -635,7 +649,7 @@ class Model {
     if (options.abstract !== undefined) {
       abstract = !!options.abstract;
     } else {
-      abstract = options.tableName === undefined;
+      abstract = options.table_name === undefined;
     }
     model.abstract = abstract;
     model.__normalized__ = true;
@@ -670,9 +684,9 @@ class Model {
     const A = (a.__normalized__ && a) || this.normalize(a);
     const B = (b.__normalized__ && b) || this.normalize(b);
     const C = {};
-    const fieldNames = unique([...A.fieldNames, ...B.fieldNames]);
+    const field_names = unique([...A.field_names, ...B.field_names]);
     const fields = {};
-    for (const name of fieldNames) {
+    for (const name of field_names) {
       const af = A.fields[name];
       const bf = B.fields[name];
       if (af && bf) {
@@ -682,7 +696,7 @@ class Model {
       } else {
         fields[name] = assert(
           bf,
-          `can't find field ${name} for model ${B.tableName}`
+          `can't find field ${name} for model ${B.table_name}`
         );
       }
     }
@@ -693,7 +707,7 @@ class Model {
         }
       }
     }
-    C.fieldNames = fieldNames;
+    C.field_names = field_names;
     C.fields = fields;
     return this.normalize(C);
   }
@@ -710,14 +724,14 @@ class Model {
     return await this.newSql().where(kwargs).exec();
   }
   static async all() {
-    const records = await this.sqlQuery("SELECT * FROM " + this.tableName);
+    const records = await this.sqlQuery("SELECT * FROM " + this.table_name);
     for (let i = 0; i < records.length; i = i + 1) {
       records[i] = this.load(records[i]);
     }
     return records;
   }
   static async save(input, names, key) {
-    key = key || this.primaryKey;
+    key = key || this.primary_key;
     if (input[key] !== undefined) {
       return await this.saveUpdate(input, names, key);
     } else {
@@ -729,14 +743,14 @@ class Model {
     if (!pkf) {
       throw new Error("invalid field name: " + key);
     }
-    if (!(pkf.primaryKey || pkf.unique)) {
+    if (!(pkf.primary_key || pkf.unique)) {
       throw new Error(`field '${key}' is not primary_key or not unique`);
     }
     return key;
   }
   static async saveCreate(input, names, key) {
     const data = this.validateCreate(input, names);
-    key = key || this.primaryKey;
+    key = key || this.primary_key;
     const prepared = this.prepareForDb(data);
     const created = await this.newSql()
       ._baseInsert(prepared)
@@ -748,7 +762,7 @@ class Model {
   static async saveUpdate(input, names, key) {
     const data = this.validateUpdate(input, names);
     if (!key) {
-      key = this.primaryKey;
+      key = this.primary_key;
     } else {
       key = this.checkUniqueKey(key);
     }
@@ -767,11 +781,11 @@ class Model {
       return this.newRecord(data);
     } else if (updated.length === 0) {
       throw new Error(
-        `update failed, record does not exist(model:${this.tableName}, key:${key}, value:${lookValue})`
+        `update failed, record does not exist(model:${this.table_name}, key:${key}, value:${lookValue})`
       );
     } else {
       throw new Error(
-        `expect 1 but ${updated.affectedRows} records are updated(model:${this.tableName}, key:${key}, value:${lookValue})`
+        `expect 1 but ${updated.affectedRows} records are updated(model:${this.table_name}, key:${key}, value:${lookValue})`
       );
     }
   }
@@ -779,7 +793,7 @@ class Model {
     return new this.RecordClass(data);
   }
   static newSql() {
-    return new this({ tableName: this.tableName });
+    return new this({ table_name: this.table_name });
   }
   static throwFieldError({ name, message, index }) {
     const label = this.fields[name].label;
@@ -835,7 +849,7 @@ class Model {
     return [rows, key];
   }
   static validate(input, names, key) {
-    if (input[key || this.primaryKey] !== undefined) {
+    if (input[key || this.primary_key] !== undefined) {
       return this.validateUpdate(input, names);
     } else {
       return this.validateCreate(input, names);
@@ -848,7 +862,7 @@ class Model {
       const field = this.fields[name];
       if (!field) {
         throw new Error(
-          `invalid field name '${name}' for model '${this.tableName}'`
+          `invalid field name '${name}' for model '${this.table_name}'`
         );
       }
       try {
@@ -888,7 +902,7 @@ class Model {
       const field = this.fields[name];
       if (!field) {
         throw new Error(
-          `invalid field name '${name}' for model '${this.tableName}'`
+          `invalid field name '${name}' for model '${this.table_name}'`
         );
       }
       value = input[name];
@@ -923,7 +937,7 @@ class Model {
       throw new Error("can't parse this model error message: " + err);
     } else {
       const { name, message } = captured.groups;
-      const label = this.nameToLabel[name];
+      const label = this.name_to_label[name];
       return { name, message, label };
     }
   }
@@ -994,7 +1008,7 @@ class Model {
   static validateCreateRows(rows, key, columns) {
     const [checkedRows, checkedKey] = this.checkUpsertKey(
       rows,
-      key || this.primaryKey
+      key || this.primary_key
     );
     const [cleanedRows, cleanedColumns] = this.validateCreateData(
       checkedRows,
@@ -1005,7 +1019,7 @@ class Model {
   static validateUpdateRows(rows, key, columns) {
     const [checkedRows, checkedKey] = this.checkUpsertKey(
       rows,
-      key || this.primaryKey
+      key || this.primary_key
     );
     const [cleanedRows, cleanedColumns] = this.validateUpdateData(
       checkedRows,
@@ -1040,7 +1054,7 @@ class Model {
       const field = this.fields[name];
       if (!field) {
         throw new Error(
-          `invalid field name '${name}' for model '${this.tableName}'`
+          `invalid field name '${name}' for model '${this.table_name}'`
         );
       }
       const value = data[name];
@@ -1146,7 +1160,7 @@ class Model {
     const cteValues = `(VALUES ${asToken(rows)})`;
     const joinCond = this._getJoinConditions(key, "V", "T");
     const valsColumns = columns.map(_prefixWith_V);
-    const insertSubquery = Model.new({ tableName: "V" })
+    const insertSubquery = Model.new({ table_name: "V" })
       ._baseSelect(valsColumns)
       ._baseLeftJoin("U AS T", joinCond)
       ._baseWhereNull("T." + (Array.isArray(key) ? key[0] : key));
@@ -1155,11 +1169,11 @@ class Model {
       (typeof key === "object" && key.length === columns.length) ||
       columns.length === 1
     ) {
-      updatedSubquery = Model.new({ tableName: "V" })
+      updatedSubquery = Model.new({ table_name: "V" })
         ._baseSelect(valsColumns)
-        ._baseJoin(this.tableName + " AS T", joinCond);
+        ._baseJoin(this.table_name + " AS T", joinCond);
     } else {
-      updatedSubquery = Model.new({ tableName: this.tableName, _as: "T" })
+      updatedSubquery = Model.new({ table_name: this.table_name, _as: "T" })
         ._baseUpdate(this._getUpdateTokenWithPrefix(columns, key, "V"))
         ._baseFrom("V")
         ._baseWhere(joinCond)
@@ -1190,7 +1204,7 @@ class Model {
       const joinCond = this._getJoinConditions(
         key,
         "V",
-        this._as || this.tableName
+        this._as || this.table_name
       );
       this.with(cteName, rows);
       return this._baseUpdate(this._getUpdateTokenWithPrefix(columns, key, "V"))
@@ -1205,7 +1219,7 @@ class Model {
       const joinCond = this._getJoinConditions(
         key,
         "V",
-        this._as || this.tableName
+        this._as || this.table_name
       );
       this.with(cteName, cteValues);
       return this._baseUpdate(this._getUpdateTokenWithPrefix(columns, key, "V"))
@@ -1222,7 +1236,7 @@ class Model {
     const joinCond = this._getJoinConditions(
       columns,
       "V",
-      this._as || this.tableName
+      this._as || this.table_name
     );
     const cteName = `V(${columns.join(", ")})`;
     const cteValues = `(VALUES ${asToken(keys)})`;
@@ -1482,12 +1496,12 @@ class Model {
     rows = this._rowsToArray(rows, columns);
     return [map(rows, asLiteral), columns];
   }
-  _getUpdateTokenWithPrefix(columns, key, tableName) {
+  _getUpdateTokenWithPrefix(columns, key, table_name) {
     const tokens = [];
     if (typeof key === "string") {
       for (const col of columns) {
         if (col !== key) {
-          tokens.push(`${col} = ${tableName}.${col}`);
+          tokens.push(`${col} = ${table_name}.${col}`);
         }
       }
     } else {
@@ -1497,7 +1511,7 @@ class Model {
       }
       for (const col of columns) {
         if (!sets[col]) {
-          tokens.push(`${col} = ${tableName}.${col}`);
+          tokens.push(`${col} = ${table_name}.${col}`);
         }
       }
     }
@@ -1586,7 +1600,7 @@ class Model {
     if (cteReturn) {
       const cteColumns = cteReturn.columns;
       const insertColumns = [...cteColumns, ...cteReturn.literalColumns];
-      const cudSelectQuery = Model.new({ tableName: "d" })._baseSelect(
+      const cudSelectQuery = Model.new({ table_name: "d" })._baseSelect(
         insertColumns
       );
       this.with(`d(${asToken(insertColumns)})`, subQuery);
@@ -1595,7 +1609,7 @@ class Model {
       )}) ${cudSelectQuery.statement()}`;
     } else if (subQuery._returningArgs) {
       const insertColumns = subQuery._returningArgs.flat();
-      const cudSelectQuery = Model.new({ tableName: "d" })._baseSelect(
+      const cudSelectQuery = Model.new({ table_name: "d" })._baseSelect(
         insertColumns
       );
       this.with(`d(${asToken(insertColumns)})`, subQuery);
@@ -1721,7 +1735,7 @@ class Model {
     for (const [i, col] of columns.entries()) {
       const [field] = this._findFieldModel(col);
       if (field) {
-        firstRow[i] = `${asLiteral(firstRow[i])}::${field.dbType}`;
+        firstRow[i] = `${asLiteral(firstRow[i])}::${field.db_type}`;
       } else if (noCheck) {
         firstRow[i] = asLiteral(firstRow[i]);
       } else {
@@ -1763,10 +1777,10 @@ class Model {
     const fkColumn = joinArgs.fkColumn;
     let joinKey;
     if (joinArgs.joinKey === undefined) {
-      if (this.tableName === model.tableName) {
-        joinKey = column + "__" + fkModel.tableName;
+      if (this.table_name === model.table_name) {
+        joinKey = column + "__" + fkModel.table_name;
       } else {
-        joinKey = `${joinType}__${model.tableName}__${column}__${fkModel.tableName}__${fkColumn}`;
+        joinKey = `${joinType}__${model.table_name}__${column}__${fkModel.table_name}__${fkColumn}`;
       }
     } else {
       joinKey = joinArgs.joinKey;
@@ -1781,12 +1795,12 @@ class Model {
         joinType: joinType,
         model: model,
         column: column,
-        alias: joinArgs.alias || model.tableName,
+        alias: joinArgs.alias || model.table_name,
         fkModel: fkModel,
         fkColumn: fkColumn,
         fkAlias: "T" + this._getJoinNumber()
       };
-      const joinTable = `${fkModel.tableName} ${joinObj.fkAlias}`;
+      const joinTable = `${fkModel.table_name} ${joinObj.fkAlias}`;
       const joinCond = `${joinObj.alias}.${joinObj.column} = ${joinObj.fkAlias}.${joinObj.fkColumn}`;
       this._handleJoin(joinType, joinTable, joinCond);
       this._joinKeys[joinKey] = joinObj;
@@ -1796,18 +1810,18 @@ class Model {
   _findFieldModel(col) {
     const field = this.cls.fields[col];
     if (field) {
-      return [field, this, this._as || this.cls.tableName];
+      return [field, this, this._as || this.cls.table_name];
     }
     if (!this._joinKeys) {
       return [false];
     }
     for (const joinObj of Object.values(this._joinKeys)) {
       const fkField = joinObj.fkModel.fields[col];
-      if (joinObj.model.tableName === this.cls.tableName && fkField) {
+      if (joinObj.model.table_name === this.cls.table_name && fkField) {
         return [
           fkField,
           joinObj.fkModel,
-          joinObj.fkAlias || joinObj.fkModel.tableName
+          joinObj.fkAlias || joinObj.fkModel.table_name
         ];
       }
     }
@@ -1820,14 +1834,14 @@ class Model {
     let e = key.slice(0, a);
     let [field, model, prefix] = this._findFieldModel(e);
     if (!field) {
-      throw new Error(`${e} is not a valid field name for ${this.tableName}`);
+      throw new Error(`${e} is not a valid field name for ${this.table_name}`);
     }
     let i, state, fkModel, rc, joinKey;
     let op = "eq";
     let fieldName = e;
     if (field.reference) {
       fkModel = field.reference;
-      rc = field.referenceColumn;
+      rc = field.reference_column;
       state = FOREIGN_KEY;
     } else {
       state = NON_FOREIGN_KEY;
@@ -1848,7 +1862,7 @@ class Model {
         const fieldOfFk = fkModel.fields[e];
         if (fieldOfFk) {
           if (!joinKey) {
-            joinKey = fieldName + "__" + fkModel.tableName;
+            joinKey = fieldName + "__" + fkModel.table_name;
           } else {
             joinKey = joinKey + "__" + fieldName;
           }
@@ -1856,7 +1870,7 @@ class Model {
             joinKey: joinKey,
             model: model,
             column: fieldName,
-            alias: prefix || model.tableName,
+            alias: prefix || model.table_name,
             fkModel: fkModel,
             fkColumn: rc
           });
@@ -1864,7 +1878,7 @@ class Model {
           if (fieldOfFk.reference) {
             model = fkModel;
             fkModel = fieldOfFk.reference;
-            rc = fieldOfFk.referenceColumn;
+            rc = fieldOfFk.reference_column;
           } else {
             state = NON_FOREIGN_KEY;
           }
@@ -1893,7 +1907,7 @@ class Model {
     }
     for (const joinObj of Object.values(this._joinKeys)) {
       if (
-        joinObj.model.tableName === this.tableName &&
+        joinObj.model.table_name === this.table_name &&
         joinObj.fkModel.fields[key]
       ) {
         return joinObj.fkAlias + "." + key;
@@ -2028,9 +2042,9 @@ class Model {
     return statement;
   }
   statement() {
-    const tableName = this.getTable();
+    const table_name = this.getTable();
     const statement = assembleSql({
-      tableName: tableName,
+      table_name: table_name,
       with: this._with,
       join: this._join,
       distinct: this._distinct,
@@ -2176,7 +2190,7 @@ class Model {
     const joinCond = this._getJoinConditions(
       key,
       "V",
-      this._as || this.tableName
+      this._as || this.table_name
     );
     const cteName = `V(${columns.join(", ")})`;
     const cteValues = `(VALUES ${asToken(rows)})`;
@@ -2300,8 +2314,8 @@ class Model {
   }
   getTable() {
     return (
-      (this._as === undefined && this.tableName) ||
-      this.tableName + " AS " + this._as
+      (this._as === undefined && this.table_name) ||
+      this.table_name + " AS " + this._as
     );
   }
   join(joinArgs, key, op, val) {
@@ -2651,7 +2665,7 @@ class Model {
     return this;
   }
   async exists() {
-    const statement = `SELECT EXISTS (${this.select("").limit(1).statement()})`;
+    const statement = `SELECT EXISTS (${this.select(1).limit(1).statement()})`;
     const res = await this.cls.sqlQuery(statement);
     return res;
   }
@@ -2732,7 +2746,7 @@ class Model {
     if (records.length === 1) {
       return [records[0], false];
     } else if (records.length === 0) {
-      const pk = this.primaryKey;
+      const pk = this.primary_key;
       const data = { ...params, ...defaults };
       //**NOTE: transacion here?
       const res = await this.newSql()
@@ -2777,9 +2791,9 @@ class Model {
         }
       } else {
         const fields = cls.fields;
-        const fieldNames = cls.fieldNames;
+        const field_names = cls.field_names;
         for (const [i, record] of records.entries()) {
-          for (const name of fieldNames) {
+          for (const name of field_names) {
             const field = fields[name];
             const value = record[name];
             if (value !== undefined) {
@@ -2807,16 +2821,16 @@ class Model {
     const fk = this.foreignKeys[fkName];
     if (fk === undefined) {
       throw new Error(
-        fkName + (" is not a valid forein key name for " + this.tableName)
+        fkName + (" is not a valid forein key name for " + this.table_name)
       );
     }
     const fkModel = fk.reference;
-    const joinKey = fkName + "__" + fkModel.tableName;
+    const joinKey = fkName + "__" + fkModel.table_name;
     const joinObj = this._registerJoinModel({
       joinKey: joinKey,
       column: fkName,
       fkModel: fkModel,
-      fkColumn: fk.referenceColumn
+      fkColumn: fk.reference_column
     });
     if (!this._loadFk) {
       this._loadFk = {};
@@ -2837,7 +2851,7 @@ class Model {
       fks = res.join(", ");
     } else if (selectNames === "*") {
       const res = [];
-      for (const fkn of fkModel.fieldNames) {
+      for (const fkn of fkModel.field_names) {
         res.push(`${rightAlias}.${fkn} AS ${fkName}__${fkn}`);
       }
       fks = res.join(", ");

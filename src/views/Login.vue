@@ -41,7 +41,7 @@ const successPostH5 = async (user) => {
 };
 
 const loginModel = Model.createModel({
-  fieldNames: ["username", "password"],
+  field_names: ["username", "password"],
   fields: {
     username: { label: "用户名", hint: "昵称/手机号/身份证号" },
     password: { label: "密码", type: "password" }
@@ -55,7 +55,7 @@ const successPostWX = async (user) => {
 };
 
 const profileModel = Model.createModel({
-  fieldNames: ["avatar", "nickname"],
+  field_names: ["avatar", "nickname"],
   fields: {
     avatar: {
       label: "头像",

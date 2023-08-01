@@ -15,7 +15,7 @@
 const formData = ref({ title: "", content: "", pics: [] });
 
 const volplanModel = Model.createModel({
-  fieldNames: [
+  field_names: [
     "title",
     "xm",
     "sfzh",

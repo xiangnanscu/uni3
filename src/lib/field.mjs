@@ -58,6 +58,7 @@ function getChoices(rawChoices) {
     }
     choices.push(c);
   }
+  console.log(choices);
   return choices;
 }
 function serializeChoice(choice) {
@@ -84,32 +85,27 @@ function getChoicesValidator(choices, message) {
   }
   return choicesValidator;
 }
-const databaseOptionNames = ["primaryKey", "null", "unique", "index", "dbType"];
 const baseOptionNames = [
-  ...databaseOptionNames,
+  "primary_key",
+  "null",
+  "unique",
+  "index",
+  "db_type",
   "required",
-  "label",
-  "style",
-  "choices",
-  "choicesUrl",
-  "choicesUrlAdmin",
-  "choicesUrlMethod",
-  "autocomplete",
-  "strict",
   "disabled",
-  "errorMessages",
   "default",
+  "label",
   "hint",
+  "error_messages",
+  "choices",
+  "strict",
+  "choices_url",
+  "choices_url_admin",
+  "choices_url_method",
+  "autocomplete",
   "preload",
   "lazy",
   "tag",
-  "image",
-  "url",
-  "columns",
-  "verifyUrl",
-  "postNames",
-  "codeLifetime",
-  "tooltipVisible",
   "attrs"
 ];
 
@@ -129,8 +125,8 @@ class BaseField {
   }
   constructor(options) {
     Object.assign(this, this.getOptions(options));
-    if (this.dbType === undefined) {
-      this.dbType = this.type;
+    if (this.db_type === undefined) {
+      this.db_type = this.type;
     }
     if (this.label === undefined) {
       this.label = this.name;
@@ -142,10 +138,10 @@ class BaseField {
         this.null = false;
       }
     }
-    if (typeof this.choicesUrl == "string" && this.preload) {
+    if (typeof this.choices_url == "string" && this.preload) {
       this.choices = this.choices || [];
     }
-    if (this.choices && this.preload) {
+    if (this.choices) {
       if (this.strict === undefined) {
         this.strict = true;
       }
@@ -155,7 +151,7 @@ class BaseField {
         throw new Error("invalid choices type: " + typeof this.choices);
       }
     }
-    this.errorMessages = { ...ERROR_MESSAGES, ...this.errorMessages };
+    this.error_messages = { ...ERROR_MESSAGES, ...this.error_messages };
     return this;
   }
 
@@ -181,12 +177,12 @@ class BaseField {
   }
   getValidators(validators) {
     if (this.required) {
-      validators.unshift(Validator.required(this.errorMessages.required));
+      validators.unshift(Validator.required(this.error_messages.required));
     } else {
       validators.unshift(Validator.notRequired);
     }
     if (this.strict) {
-      if (this.choicesUrl) {
+      if (this.choices_url) {
         // dynamic choices, need to access this at runtime
         // there's no need to check a disabled field
         !this.disabled &&
@@ -205,7 +201,7 @@ class BaseField {
       ) {
         // static choices
         validators.push(
-          getChoicesValidator(this.choices, this.errorMessages.choices)
+          getChoicesValidator(this.choices, this.error_messages.choices)
         );
       }
     }
@@ -234,7 +230,7 @@ class BaseField {
   }
   json() {
     const json = this.getOptions();
-    delete json.errorMessages;
+    delete json.error_messages;
     if (typeof json.default === "function") {
       delete json.default;
     }
@@ -253,7 +249,7 @@ class BaseField {
     }
     if (
       json.preload === undefined &&
-      (json.choicesUrl || json.choicesUrlAdmin)
+      (json.choices_url || json.choices_url_admin)
     ) {
       json.preload = false;
     }
@@ -321,12 +317,12 @@ const stringOptionNames = [
   "length",
   "minlength",
   "maxlength",
-  "inputType"
+  "input_type"
 ];
 const stringValidatorNames = ["pattern", "length", "minlength", "maxlength"];
 class StringField extends BaseField {
   type = "string";
-  dbType = "varchar";
+  db_type = "varchar";
   compact = true;
   trim = true;
   get optionNames() {
@@ -342,7 +338,7 @@ class StringField extends BaseField {
     if (this.compact === undefined) {
       this.compact = true;
     }
-    if (this.default === undefined && !this.primaryKey && !this.unique) {
+    if (this.default === undefined && !this.primary_key && !this.unique) {
       this.default = "";
     }
     if (Array.isArray(this.choices) && this.choices.length > 0) {
@@ -362,7 +358,7 @@ class StringField extends BaseField {
   getValidators(validators) {
     for (const e of stringValidatorNames) {
       if (this[e]) {
-        validators.unshift(Validator[e](this[e], this.errorMessages[e]));
+        validators.unshift(Validator[e](this[e], this.error_messages[e]));
       }
     }
     if (this.compact) {
@@ -391,7 +387,7 @@ class StringField extends BaseField {
 const textOptionNames = [...baseOptionNames];
 class TextField extends BaseField {
   type = "text";
-  dbType = "text";
+  db_type = "text";
   constructor(options) {
     super(options);
     if (!this.attrs.autoSize) {
@@ -406,7 +402,7 @@ class TextField extends BaseField {
 
 class SfzhField extends StringField {
   type = "sfzh";
-  dbType = "varchar";
+  db_type = "varchar";
   constructor(options) {
     super({ ...options, length: 18 });
     return this;
@@ -419,7 +415,7 @@ class SfzhField extends StringField {
 
 class EmailField extends StringField {
   type = "email";
-  dbType = "varchar";
+  db_type = "varchar";
   constructor(options) {
     super({ maxlength: 255, ...options });
     return this;
@@ -428,7 +424,7 @@ class EmailField extends StringField {
 
 class PasswordField extends StringField {
   type = "password";
-  dbType = "varchar";
+  db_type = "varchar";
   constructor(options) {
     super({ maxlength: 255, ...options });
     return this;
@@ -437,7 +433,7 @@ class PasswordField extends StringField {
 
 class YearMonthField extends StringField {
   type = "yearMonth";
-  dbType = "varchar";
+  db_type = "varchar";
   constructor(options) {
     super({ length: 7, ...options });
     return this;
@@ -452,14 +448,14 @@ const integerOptionNames = [...baseOptionNames, "min", "max", "step", "serial"];
 const intergerValidatorNames = ["min", "max"];
 class IntegerField extends BaseField {
   type = "integer";
-  dbType = "integer";
+  db_type = "integer";
   get optionNames() {
     return integerOptionNames;
   }
   addMinOrMaxValidators(validators) {
     for (const e of intergerValidatorNames) {
       if (this[e]) {
-        validators.unshift(Validator[e](this[e], this.errorMessages[e]));
+        validators.unshift(Validator[e](this[e], this.error_messages[e]));
       }
     }
   }
@@ -470,7 +466,7 @@ class IntegerField extends BaseField {
   }
   json() {
     const json = super.json();
-    if (json.primaryKey && json.disabled === undefined) {
+    if (json.primary_key && json.disabled === undefined) {
       json.disabled = true;
     }
     return json;
@@ -486,7 +482,7 @@ class IntegerField extends BaseField {
 
 class YearField extends IntegerField {
   type = "year";
-  dbType = "integer";
+  db_type = "integer";
   constructor(options) {
     super({ min: 1000, max: 9999, ...options });
     return this;
@@ -494,7 +490,7 @@ class YearField extends IntegerField {
 }
 class MonthField extends IntegerField {
   type = "month";
-  dbType = "integer";
+  db_type = "integer";
   constructor(options) {
     super({ min: 1, max: 12, ...options });
     return this;
@@ -511,14 +507,14 @@ const floatOptionNames = [
 ];
 class FloatField extends BaseField {
   type = "float";
-  dbType = "float";
+  db_type = "float";
   get optionNames() {
     return floatOptionNames;
   }
   addMinOrMaxValidators(validators) {
     for (const e of floatValidatorNames) {
       if (this[e]) {
-        validators.unshift(Validator[e](this[e], this.errorMessages[e]));
+        validators.unshift(Validator[e](this[e], this.error_messages[e]));
       }
     }
   }
@@ -544,7 +540,7 @@ const DEFAULT_BOOLEAN_CHOICES = [
 const booleanOptionNames = [...baseOptionNames, "cn"];
 class BooleanField extends BaseField {
   type = "boolean";
-  dbType = "boolean";
+  db_type = "boolean";
   get optionNames() {
     return booleanOptionNames;
   }
@@ -576,7 +572,7 @@ class BooleanField extends BaseField {
 const jsonOptionNames = [...baseOptionNames];
 class JsonField extends BaseField {
   type = "json";
-  dbType = "jsonb";
+  db_type = "jsonb";
   get optionNames() {
     return jsonOptionNames;
   }
@@ -618,14 +614,14 @@ function nonEmptyArrayRequired(message) {
   }
   return arrayValidator;
 }
-const arrayOptionNames = [...baseOptionNames, "arrayType", "min", "max"];
+const arrayOptionNames = [...baseOptionNames, "array_type", "min", "max"];
 class BaseArrayField extends JsonField {
   get optionNames() {
     return arrayOptionNames;
   }
   getValidators(validators) {
     if (this.required) {
-      validators.unshift(nonEmptyArrayRequired(this.errorMessages.required));
+      validators.unshift(nonEmptyArrayRequired(this.error_messages.required));
     }
     validators.unshift(checkArrayType);
     validators.unshift(skipValidateWhenString);
@@ -645,7 +641,7 @@ class BaseArrayField extends JsonField {
 }
 class ArrayField extends BaseArrayField {
   type = "array";
-  dbType = "jsonb";
+  db_type = "jsonb";
   constructor(options) {
     super(options);
     const maps = {
@@ -674,7 +670,7 @@ class ArrayField extends BaseArrayField {
       SfzhField
     };
     const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1);
-    const cls = maps[`${capitalize(this.arrayType || "string")}Field`];
+    const cls = maps[`${capitalize(this.array_type || "string")}Field`];
     this.arrayField = cls.new(options);
   }
   getValidators(validators) {
@@ -690,10 +686,16 @@ function makeEmptyArray() {
   return [];
 }
 
-const tableOptionNames = [...baseOptionNames, "model", "maxRows", "uploadable"];
+const tableOptionNames = [
+  ...baseOptionNames,
+  "model",
+  "max_rows",
+  "uploadable",
+  "columns"
+];
 class TableField extends BaseArrayField {
   type = "table";
-  maxRows = TABLE_MAX_ROWS;
+  max_rows = TABLE_MAX_ROWS;
   get optionNames() {
     return tableOptionNames;
   }
@@ -705,9 +707,9 @@ class TableField extends BaseArrayField {
     if (!this.default || this.default === "") {
       this.default = makeEmptyArray;
     }
-    if (!this.model.tableName) {
+    if (!this.model.table_name) {
       this.model.materializeWithTableName({
-        tableName: this.name,
+        table_name: this.name,
         label: this.label
       });
     }
@@ -736,10 +738,10 @@ class TableField extends BaseArrayField {
   }
   json() {
     const ret = super.json();
-    const model = { fieldNames: [], fields: {} };
-    for (const name of this.model.fieldNames) {
+    const model = { field_names: [], fields: {} };
+    for (const name of this.model.field_names) {
       const field = this.model.fields[name];
-      model.fieldNames.push(name);
+      model.field_names.push(name);
       model.fields[name] = field.json();
     }
     ret.model = model;
@@ -758,14 +760,14 @@ class TableField extends BaseArrayField {
 
 const datetimeOptionNames = [
   ...baseOptionNames,
-  "autoNowAdd",
-  "autoNow",
+  "auto_now_add",
+  "auto_now",
   "precision",
   "timezone"
 ];
 class DatetimeField extends BaseField {
   type = "datetime";
-  dbType = "timestamp";
+  db_type = "timestamp";
   precision = 0;
   timezone = true;
   get optionNames() {
@@ -773,7 +775,7 @@ class DatetimeField extends BaseField {
   }
   constructor(options) {
     super(options);
-    if (this.autoNowAdd) {
+    if (this.auto_now_add) {
       this.default = getLocalTime;
     }
     return this;
@@ -785,13 +787,13 @@ class DatetimeField extends BaseField {
   }
   json() {
     const ret = super.json();
-    if (ret.disabled === undefined && (ret.autoNow || ret.autoNowAdd)) {
+    if (ret.disabled === undefined && (ret.auto_now || ret.auto_now_add)) {
       ret.disabled = true;
     }
     return ret;
   }
   prepareForDb(value) {
-    if (this.autoNow) {
+    if (this.auto_now) {
       return getLocalTime();
     } else if (value === "" || value === undefined) {
       return NULL;
@@ -804,7 +806,7 @@ class DatetimeField extends BaseField {
 const dateOptionNames = [...baseOptionNames];
 class DateField extends BaseField {
   type = "date";
-  dbType = "date";
+  db_type = "date";
   get optionNames() {
     return dateOptionNames;
   }
@@ -823,7 +825,7 @@ class DateField extends BaseField {
 const timeOptionNames = [...baseOptionNames, "precision", "timezone"];
 class TimeField extends BaseField {
   type = "time";
-  dbType = "time";
+  db_type = "time";
   precision = 0;
   timezone = true;
   get optionNames() {
@@ -854,27 +856,27 @@ const VALID_FOREIGN_KEY_TYPES = {
 const foreignkeyOptionNames = [
   ...baseOptionNames,
   "reference",
-  "referenceColumn",
-  "referenceLabelColumn",
-  "referenceUrl",
-  "referenceUrlAdmin",
-  "adminUrlName",
+  "reference_column",
+  "reference_label_column",
+  "reference_url",
+  "reference_url_admin",
+  "admin_url_name",
   "modelUrlName",
-  "keywordQueryName",
-  "limitQueryName",
+  "keyword_query_name",
+  "limit_query_name",
   "autocomplete",
-  "tableName"
+  "table_name"
 ];
 class ForeignkeyField extends BaseField {
   type = "foreignkey";
-  adminUrlName = "admin";
-  modelsUrlName = "model";
+  admin_url_name = "admin";
+  models_url_name = "model";
   convert = String;
   get optionNames() {
     return foreignkeyOptionNames;
   }
   constructor(options) {
-    super({ dbType: FK_TYPE_NOT_DEFIEND, ...options });
+    super({ db_type: FK_TYPE_NOT_DEFIEND, ...options });
     const fkModel = this.reference;
     if (fkModel === "self") {
       return this;
@@ -883,39 +885,39 @@ class ForeignkeyField extends BaseField {
       fkModel.__isModelClass__,
       `a foreignkey must define reference model. not ${fkModel}(type: ${typeof fkModel})`
     );
-    const rc = this.referenceColumn || fkModel.primaryKey || "id";
+    const rc = this.reference_column || fkModel.primary_key || "id";
     const fk = fkModel.fields[rc];
     assert(
       fk,
       `invalid foreignkey name ${rc} for foreign model ${
-        fkModel.tableName || "[TABLE NAME NOT DEFINED YET]"
+        fkModel.table_name || "[TABLE NAME NOT DEFINED YET]"
       }`
     );
-    this.referenceColumn = rc;
-    const rlc = this.referenceLabelColumn || this.referenceColumn;
+    this.reference_column = rc;
+    const rlc = this.reference_label_column || this.reference_column;
     assert(
       fkModel.fields[rlc],
       `invalid foreignkey label name ${rlc} for foreign model ${
-        fkModel.tableName || "[TABLE NAME NOT DEFINED YET]"
+        fkModel.table_name || "[TABLE NAME NOT DEFINED YET]"
       }`
     );
-    this.referenceLabelColumn = rlc;
+    this.reference_label_column = rlc;
     this.convert = assert(
       VALID_FOREIGN_KEY_TYPES[fk.type],
       `invalid foreignkey (name:${fk.name}, type:${fk.type})`
     );
     assert(
-      fk.primaryKey || fk.unique,
+      fk.primary_key || fk.unique,
       "foreignkey must be a primary key or unique key"
     );
-    if (this.dbType === FK_TYPE_NOT_DEFIEND) {
-      this.dbType = fk.dbType || fk.type;
+    if (this.db_type === FK_TYPE_NOT_DEFIEND) {
+      this.db_type = fk.db_type || fk.type;
     }
     return this;
   }
 
   getValidators(validators) {
-    const fkName = this.referenceColumn;
+    const fkName = this.reference_column;
     const foreignkeyValidator = (v) => {
       if (typeof v === "object") {
         v = v[fkName];
@@ -932,14 +934,14 @@ class ForeignkeyField extends BaseField {
   }
   toFormValue(value) {
     if (typeof value == "object") {
-      return value[this.referenceColumn];
+      return value[this.reference_column];
     } else {
       return value;
     }
   }
   load(value) {
     //** todo 用Proxy改写
-    const fkName = this.referenceColumn;
+    const fkName = this.reference_column;
     const fkModel = this.reference;
     // function __index(t, key) {
     //   if (fkModel[key]) {
@@ -974,16 +976,16 @@ class ForeignkeyField extends BaseField {
   }
   json() {
     const ret = super.json();
-    ret.reference = this.reference.tableName;
+    ret.reference = this.reference.table_name;
     ret.autocomplete = true;
-    if (ret.keywordQueryName === undefined) {
-      ret.keywordQueryName = "keyword";
+    if (ret.keyword_query_name === undefined) {
+      ret.keyword_query_name = "keyword";
     }
-    if (ret.limitQueryName === undefined) {
-      ret.limitQueryName = "limit";
+    if (ret.limit_query_name === undefined) {
+      ret.limit_query_name = "limit";
     }
-    if (ret.choicesUrl === undefined) {
-      ret.choicesUrl = `/${ret.adminUrlName}/${ret.modelsUrlName}/${ret.tableName}/fk/${ret.name}/${ret.referenceLabelColumn}`;
+    if (ret.choices_url === undefined) {
+      ret.choices_url = `/${ret.admin_url_name}/${ret.models_url_name}/${ret.table_name}/fk/${ret.name}/${ret.reference_label_column}`;
     }
     return ret;
   }
@@ -998,13 +1000,13 @@ const aliossOptionNames = [
   ...baseOptionNames,
   "size",
   "policy",
-  "sizeArg",
+  "size_arg",
   "times",
   "payload",
-  "payloadUrl",
-  "uploadUrl",
-  "mediaType",
-  "inputType",
+  "payload_url",
+  "upload_url",
+  "media_type",
+  "input_type",
   "image",
   "maxlength",
   "width",
@@ -1026,21 +1028,21 @@ const mapToAntdFileValue = (url = "") => {
 };
 class AliossField extends StringField {
   type = "alioss";
-  dbType = "varchar";
+  db_type = "varchar";
   constructor(options) {
     super({ maxlength: 255, ...options });
     const size = options.size || ALIOSS_SIZE;
-    this.sizeArg = size;
+    this.size_arg = size;
     this.size = parseSize(size);
     this.lifetime = options.lifetime || ALIOSS_LIFETIME;
-    this.uploadUrl = process.env.ALIOSS_URL;
+    this.upload_url = process.env.ALIOSS_URL;
     return this;
   }
   get optionNames() {
     return aliossOptionNames;
   }
   async getPayload(options) {
-    const { data } = await Http.post(this.payloadUrl, {
+    const { data } = await Http.post(this.payload_url, {
       ...options,
       size: options.size || this.size,
       lifetime: options.lifetime || this.lifetime
@@ -1054,9 +1056,9 @@ class AliossField extends StringField {
   }
   getOptions(options) {
     const json = super.getOptions(options);
-    if (json.sizeArg) {
-      json.size = json.sizeArg;
-      delete json.sizeArg;
+    if (json.size_arg) {
+      json.size = json.size_arg;
+      delete json.size_arg;
     }
     return json;
   }
@@ -1084,8 +1086,8 @@ class AliossField extends StringField {
   }
   json() {
     const ret = super.json();
-    if (ret.inputType === undefined) {
-      ret.inputType = "file";
+    if (ret.input_type === undefined) {
+      ret.input_type = "file";
     }
     return ret;
   }
@@ -1093,11 +1095,11 @@ class AliossField extends StringField {
 
 class AliossImageField extends AliossField {
   type = "aliossImage";
-  dbType = "varchar";
+  db_type = "varchar";
 }
 class AliossListField extends AliossField {
   type = "aliossList";
-  dbType = "jsonb";
+  db_type = "jsonb";
   getValidators(validators) {
     return BaseArrayField.prototype.getValidators.call(this, validators);
   }
@@ -1109,7 +1111,7 @@ class AliossListField extends AliossField {
       ...BaseArrayField.prototype.getOptions.call(this, options),
       ...AliossField.prototype.getOptions.call(this, options),
       type: this.type,
-      dbType: "jsonb"
+      db_type: "jsonb"
     };
   }
   json() {
@@ -1137,7 +1139,7 @@ class AliossListField extends AliossField {
 
 class AliossImageListField extends AliossListField {
   type = "aliossImageList";
-  dbType = "jsonb";
+  db_type = "jsonb";
   constructor(options) {
     super(options);
     this.image = true;

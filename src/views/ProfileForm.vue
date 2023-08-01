@@ -19,7 +19,7 @@ wxAvatar = false;
 // #endif
 const userData = ref({ id: session.user.id });
 const profileModel = Model.createModel({
-  fieldNames: ["avatar", "nickname", "intro"],
+  field_names: ["avatar", "nickname", "intro"],
   fields: {
     avatar: {
       label: "头像",

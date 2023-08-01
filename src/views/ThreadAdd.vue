@@ -21,7 +21,7 @@ const threadModel = ref(null);
 const ready = ref(false);
 onLoad(async () => {
   threadModel.value = await Model.createModelAsync({
-    fieldNames: ["type", "title", "content", "pics"],
+    field_names: ["type", "title", "content", "pics"],
     fields: {
       type: { label: "贴吧", required: true, choicesUrl: "/forum/types" },
       pics: {

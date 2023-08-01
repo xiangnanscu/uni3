@@ -15,7 +15,7 @@
 const formData = ref({});
 const ready = ref(false);
 const forumModel = Model.createModel({
-  fieldNames: ["xm", "sfzh", "lxdh", "name", "avatar"],
+  field_names: ["xm", "sfzh", "lxdh", "name", "avatar"],
   fields: {
     xm: { label: "创建人", required: true },
     sfzh: { label: "身份证号", required: true, type: "sfzh" },

@@ -13,7 +13,7 @@ const props = defineProps({
   // tableName: { type: String },
   // primaryKey: { type: String },
   names: { type: Array }
-  // fieldNames: { type: Array, default: () => [] },
+  // field_names: { type: Array, default: () => [] },
   // fields: { type: Object, default: () => ({}) },
   // labelToName: { type: Object, default: () => ({}) },
   // nameToLabel: { type: Object, default: () => ({}) },

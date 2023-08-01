@@ -56,7 +56,7 @@ onBeforeMount(async () => {
   const { data } = await Http.get(`/{*table_name*}/json`);
   {*component_name*} = await Model.createModelAsync(data);
   modelLoaded.value = true;
-  for (const name of {*component_name*}.fieldNames) {
+  for (const name of {*component_name*}.field_names) {
     const field = {*component_name*}.fields[name];
     fields[name] = field;
     rules[name] = field.getAntdRule();
