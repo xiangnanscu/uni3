@@ -22,7 +22,6 @@
                   <image
                     class="post-action-dot"
                     src="../static/img/tabbar/more-tpp.png"
-                    mode="scaleToFill"
                   />
                 </div>
               </view>
@@ -181,8 +180,8 @@ export default {
   padding: 1em;
 }
 .post-action-dot {
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
 }
 .fui-custom__wrap {
   width: 100%;
