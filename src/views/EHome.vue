@@ -42,7 +42,7 @@ const mainKist = [
     url: "../static/img/party-class.png",
     text: "三会两制一课",
     badge: "",
-    pagePath: "/views/VolplanList",
+    pagePath: "/views/NewsList?type=三会两制一课",
     type: "error"
   },
   {
@@ -55,14 +55,14 @@ const mainKist = [
   {
     url: "../static/img/work-open.png",
     text: "团务公开",
-    pagePath: "/views/NewsList",
+    pagePath: "/views/NewsList?type=团务公开",
     badge: "",
     type: "error"
   },
   {
     url: "../static/img/manual.png",
     text: "团务手册",
-    pagePath: "/views/ThreadListAll",
+    pagePath: "/views/NewsList?type=团务手册",
     badge: "",
     type: "error"
   },
@@ -70,15 +70,18 @@ const mainKist = [
     url: "../static/img/law.png",
     text: "团章",
     badge: "",
-    pagePath: "/views/VolplanList",
+    pagePath: "/views/NewsList?type=团章",
     type: "error"
   }
 ];
 </script>
 
 <style scoped>
+.logo-text {
+  font-size: 90%;
+}
 .banner-image {
-  width: 120upx;
-  height: 120upx;
+  width: 80upx;
+  height: 80upx;
 }
 </style>

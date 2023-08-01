@@ -6,6 +6,13 @@
         <div>浏览：{{ record.views }}</div>
         <div>{{ utils.fromNow(record.ctime) }}</div>
       </x-subtitle>
+      <video
+        v-if="record.video"
+        :src="'https:' + record.video"
+        :show-mute-btn="true"
+        controls
+        style="width: 100%"
+      ></video>
       <image
         v-if="record.pics[0]"
         :src="record.pics[0]"

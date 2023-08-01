@@ -1,5 +1,15 @@
 <template>
   <page-layout>
+    <div
+      style="
+        text-align: center;
+        font-size: 120%;
+        font-weight: bold;
+        padding: 1em;
+      "
+    >
+      {{ type }}
+    </div>
     <div v-if="NewsRecords.length">
       <uni-list :border="false">
         <navigator
@@ -22,11 +32,13 @@
 export default defineComponent({
   data() {
     return {
+      type: "",
       NewsRecords: []
     };
   },
-  async onLoad() {
-    this.NewsRecords = await usePost(`/news/records`, {});
+  async onLoad(opts) {
+    this.type = opts.type || "今日热点";
+    this.NewsRecords = await usePost(`/news/records`, { type: this.type });
   }
 });
 </script>
