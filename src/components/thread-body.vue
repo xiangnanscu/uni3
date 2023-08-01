@@ -127,7 +127,9 @@ export default {
       return this.user.id === post?.creator;
     },
     postDigest(post) {
-      return `${post.creator__nickname}: ${post.content.slice(0, 6)}`;
+      return post
+        ? `${post.creator__nickname}: ${post.content.slice(0, 6)}`
+        : "";
     },
     async commentPost(post) {},
     async confirmDelete({ index, text }) {
