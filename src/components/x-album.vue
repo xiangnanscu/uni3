@@ -7,7 +7,12 @@
   >
     <uni-grid-item v-for="(url, index) in urls" :index="index" :key="index">
       <view class="grid-item-box">
-        <image class="grid-item-box" :src="url" mode="aspectFit" />
+        <image
+          class="grid-item-box"
+          :src="url"
+          mode="aspectFit"
+          @click="previewImage(index)"
+        />
       </view>
     </uni-grid-item>
   </uni-grid>
@@ -24,6 +29,13 @@ export default {
     };
   },
   methods: {
+    previewImage(index) {
+      uni.previewImage({
+        current: index,
+        urls: this.urls,
+        loop: true
+      });
+    },
     change(event) {
       this.$emit("change", event);
     }

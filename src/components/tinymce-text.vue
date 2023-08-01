@@ -1,6 +1,6 @@
 <template>
   <div>
-    <rich-text :nodes="miniHtml"></rich-text>
+    <rich-text :nodes="miniHtml" @itemclick="itemclick"></rich-text>
   </div>
 </template>
 
@@ -27,6 +27,7 @@ export default {
   computed: {
     miniHtml() {
       let res = this.html;
+      // res = res.replaceAll(/<img/g, '<img click="foo"');
       for (const tag of classTagNames) {
         res = res.replaceAll(
           new RegExp(`<${tag}`, "g"),
@@ -38,7 +39,15 @@ export default {
     }
   },
   methods: {
-    change() {}
+    itemclick(e) {
+      console.log("itemclick", e);
+      if (e.detail?.node?.name == "img") {
+        uni.previewImage({
+          urls: [e.detail.node.attrs.src],
+          current: 0
+        });
+      }
+    }
   }
 };
 </script>

@@ -248,9 +248,9 @@ export default {
           type: "error"
         },
         {
-          url: "../../static/img/fee8.png",
-          text: "团费",
-          pagePath: "/views/FeeplanList",
+          url: "../../static/img/e-home.png",
+          text: "团建E家",
+          pagePath: "/views/EHome",
           badge: "",
           type: "error"
         }

@@ -71,7 +71,8 @@
     { "path": "views/AddMeFirend", "style": { "navigationBarTitleText": "" } },
     { "path": "views/AdDetail", "style": { "navigationBarTitleText": "" } },
     { "path": "views/PollDetail", "style": { "navigationBarTitleText": "" } },
-    { "path": "views/SuccessPage", "style": { "navigationBarTitleText": "" } }
+    { "path": "views/SuccessPage", "style": { "navigationBarTitleText": "" } },
+    { "path": "views/EHome", "style": { "navigationBarTitleText": "" } }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
@@ -109,7 +110,7 @@
         "pagePath": "views/tabbar/PublishCenter",
         "iconPath": "static/img/tabbar/add1.png",
         "selectedIconPath": "static/img/tabbar/add-active1.png",
-        "text": "发布"
+        "text": " "
       },
       {
         "pagePath": "views/tabbar/Message",

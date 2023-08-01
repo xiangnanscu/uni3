@@ -1,6 +1,7 @@
 import cookie from "cookie";
 import { useStore } from "@/store";
 import { useSession } from "@/store/session";
+import { version } from "../package.json";
 
 const viteEnv = import.meta.env;
 
@@ -42,6 +43,7 @@ const setupRequest = () => {
       }
       // #endif
       header["Uni-Request"] = "on";
+      header["X-Version"] = version;
       args.header = header;
       if (!/^https?|^\/\//.test(args.url)) args.url = baseURL + args.url;
     },

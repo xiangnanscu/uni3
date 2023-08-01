@@ -9,6 +9,7 @@
       <image
         v-if="record.pics[0]"
         :src="record.pics[0]"
+        @click="previewImage({ urls: [record.pics[0]], current: 0 })"
         mode="widthFix"
         style="width: 100%"
       />
@@ -67,6 +68,9 @@ export default {
     };
   },
   methods: {
+    previewImage(opts) {
+      uni.previewImage(opts);
+    },
     async sendMessage(content) {
       if (!content.trim()) {
         return uni.showToast({ title: "必须输入内容", icon: "error" });
