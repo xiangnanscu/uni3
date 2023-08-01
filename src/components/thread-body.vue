@@ -18,11 +18,12 @@
             <view class="post-body">
               <view class="post-header">
                 <div>{{ post.creator__nickname }}</div>
-                <div
-                  @click="togglePostActionPanel(post)"
-                  class="post-action-dot"
-                >
-                  ···
+                <div @click="togglePostActionPanel(post)">
+                  <image
+                    class="post-action-dot"
+                    src="../static/img/tabbar/more-tpp.png"
+                    mode="scaleToFill"
+                  />
                 </div>
               </view>
               <view class="post-content">
@@ -43,18 +44,53 @@
         :show="showPostActionPanel"
         @close="closePostActionPanel"
       >
-        <view class="fui-custom__wrap">
-          <div v-if="currentPost?.creator == user.id" @click="clickDelete">
-            <div>
-              <image
-                style="width: 35px; height: 35px"
-                src="../static/img/tabbar/delete-tpp.png"
-                class="actions"
-              ></image>
-            </div>
-            <span>删除</span>
-          </div>
-        </view>
+        <uni-card :border="false" :is-full="true">
+          <template #title>
+            <div class="action-panel-title">{{ postDigest(currentPost) }}</div>
+          </template>
+          <view class="fui-custom__wrap">
+            <uni-grid
+              :column="isSelfPost(currentPost) ? 2 : 1"
+              :show-border="false"
+              :square="false"
+              @change="change"
+            >
+              <uni-grid-item
+                v-if="isSelfPost(currentPost)"
+                @click="clickDelete"
+              >
+                <view
+                  class="grid-item-box"
+                  style="text-align: center; margin-top: 1em"
+                >
+                  <image
+                    style="width: 35px; height: 35px"
+                    src="../static/img/tabbar/delete-tpp.png"
+                    class="actions"
+                  ></image>
+                  <view>
+                    <text class="logo-text">删除</text>
+                  </view>
+                </view>
+              </uni-grid-item>
+              <uni-grid-item @click="commentPost(currentPost)">
+                <view
+                  class="grid-item-box"
+                  style="text-align: center; margin-top: 1em"
+                >
+                  <image
+                    style="width: 35px; height: 35px"
+                    src="../static/img/tabbar/comment-tpp.png"
+                    class="actions"
+                  ></image>
+                  <view>
+                    <text class="logo-text">回复</text>
+                  </view>
+                </view>
+              </uni-grid-item>
+            </uni-grid>
+          </view>
+        </uni-card>
       </fui-bottom-popup>
       <fui-modal
         :show="showDelete"
@@ -70,12 +106,6 @@
 
 <script>
 export default {
-  setup() {
-    const user = useUser();
-    return {
-      user
-    };
-  },
   props: {
     thread: { type: Object },
     posts: { type: Array },
@@ -93,6 +123,13 @@ export default {
   },
 
   methods: {
+    isSelfPost(post) {
+      return this.user.id === post?.creator;
+    },
+    postDigest(post) {
+      return `${post.creator__nickname}: ${post.content.slice(0, 6)}`;
+    },
+    async commentPost(post) {},
     async confirmDelete({ index, text }) {
       if (text == "确定") {
         const { affected_rows } = await usePost(
@@ -133,12 +170,21 @@ export default {
 </script>
 
 <style scoped>
+.logo-text {
+  font-size: 90%;
+}
+.action-panel-title {
+  text-align: center;
+  font-size: 90%;
+  padding: 1em;
+}
 .post-action-dot {
-  font-size: 200%;
+  width: 16px;
+  height: 16px;
 }
 .fui-custom__wrap {
   width: 100%;
-  height: 520rpx;
+  height: 200rpx;
   display: flex;
   align-items: center;
   justify-content: center;
