@@ -18,7 +18,12 @@
             <view class="post-body">
               <view class="post-header">
                 <div>{{ post.creator__nickname }}</div>
-                <div @click="togglePostActionPanel(post)">...</div>
+                <div
+                  @click="togglePostActionPanel(post)"
+                  class="post-action-dot"
+                >
+                  ···
+                </div>
               </view>
               <view class="post-content">
                 <text>{{ post.content }}</text>
@@ -128,6 +133,9 @@ export default {
 </script>
 
 <style scoped>
+.post-action-dot {
+  font-size: 200%;
+}
 .fui-custom__wrap {
   width: 100%;
   height: 520rpx;
