@@ -64,9 +64,7 @@
                     src="../static/img/tabbar/delete-tpp.png"
                     class="actions"
                   ></image>
-                  <view>
-                    <text class="logo-text">删除</text>
-                  </view>
+                  <view class="logo-text">删除</view>
                 </view>
               </uni-grid-item>
               <uni-grid-item @click="commentPost(currentPost)">
@@ -76,9 +74,7 @@
                     src="../static/img/tabbar/comment-tpp.png"
                     class="actions"
                   ></image>
-                  <view>
-                    <text class="logo-text">回复</text>
-                  </view>
+                  <view class="logo-text">回复</view>
                 </view>
               </uni-grid-item>
             </uni-grid>
@@ -142,7 +138,10 @@ export default {
       this.showDelete = false;
     },
     closePostActionPanel(e) {
+      console.log("closePostActionPanel");
+      // 似乎只在点击空白关闭时触发
       this.showPostActionPanel = false;
+      this.currentPost = null;
     },
     clickDelete() {
       this.showPostActionPanel = false;
