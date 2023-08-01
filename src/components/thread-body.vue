@@ -43,7 +43,7 @@
         :show="showPostActionPanel"
         @close="closePostActionPanel"
       >
-        <uni-card :border="false" :is-full="true">
+        <uni-card :border="false" :is-full="true" v-if="currentPost">
           <template #title>
             <div class="action-panel-title">{{ postDigest(currentPost) }}</div>
           </template>
@@ -58,10 +58,7 @@
                 v-if="isSelfPost(currentPost)"
                 @click="clickDelete"
               >
-                <view
-                  class="grid-item-box"
-                  style="text-align: center; margin-top: 1em"
-                >
+                <view class="grid-item-box" style="text-align: center">
                   <image
                     style="width: 35px; height: 35px"
                     src="../static/img/tabbar/delete-tpp.png"
@@ -73,10 +70,7 @@
                 </view>
               </uni-grid-item>
               <uni-grid-item @click="commentPost(currentPost)">
-                <view
-                  class="grid-item-box"
-                  style="text-align: center; margin-top: 1em"
-                >
+                <view class="grid-item-box" style="text-align: center">
                   <image
                     style="width: 35px; height: 35px"
                     src="../static/img/tabbar/comment-tpp.png"
