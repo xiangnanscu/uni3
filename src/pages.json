@@ -42,6 +42,19 @@
     { "path": "views/ProfileForm", "style": { "navigationBarTitleText": "" } },
     { "path": "views/RealNameCert", "style": { "navigationBarTitleText": "" } },
     { "path": "views/SuccessPage", "style": { "navigationBarTitleText": "" } },
+    { "path": "views/tabbar/Heart", "style": { "navigationBarTitleText": "" } },
+    {
+      "path": "views/tabbar/Message",
+      "style": { "navigationBarTitleText": "" }
+    },
+    {
+      "path": "views/tabbar/ProfileMy",
+      "style": { "navigationBarTitleText": "" }
+    },
+    {
+      "path": "views/tabbar/PublishCenter",
+      "style": { "navigationBarTitleText": "" }
+    },
     { "path": "views/ThreadAdd", "style": { "navigationBarTitleText": "" } },
     { "path": "views/ThreadDetail", "style": { "navigationBarTitleText": "" } },
     {
@@ -56,23 +69,7 @@
       "style": { "navigationBarTitleText": "" }
     },
     { "path": "views/VolplanList", "style": { "navigationBarTitleText": "" } },
-    {
-      "path": "views/VolplanListMy",
-      "style": { "navigationBarTitleText": "" }
-    },
-    { "path": "views/tabbar/Heart", "style": { "navigationBarTitleText": "" } },
-    {
-      "path": "views/tabbar/Message",
-      "style": { "navigationBarTitleText": "" }
-    },
-    {
-      "path": "views/tabbar/ProfileMy",
-      "style": { "navigationBarTitleText": "" }
-    },
-    {
-      "path": "views/tabbar/PublishCenter",
-      "style": { "navigationBarTitleText": "" }
-    }
+    { "path": "views/VolplanListMy", "style": { "navigationBarTitleText": "" } }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",

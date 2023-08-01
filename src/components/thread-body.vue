@@ -34,6 +34,11 @@
                 ></view
               >
             </view>
+            <view class="post-comment" v-if="post.comments">
+              <template v-for="c in post.comments" :key="c.id">
+                <p>{{ c.creator__nickname }}: {{ c.content }}</p>
+              </template>
+            </view>
           </template>
           <template v-slot:footer> </template>
         </uni-list-item>
@@ -43,10 +48,8 @@
         :show="showPostActionPanel"
         @close="closePostActionPanel"
       >
-        <uni-card :border="false" :is-full="true" v-if="currentPost">
-          <template #title>
-            <div class="action-panel-title">{{ postDigest(currentPost) }}</div>
-          </template>
+        <div :border="false" :is-full="true" v-if="currentPost">
+          <div class="action-panel-title">{{ postDigest(currentPost) }}</div>
           <view class="fui-custom__wrap">
             <uni-grid
               :column="isSelfPost(currentPost) ? 2 : 1"
@@ -79,7 +82,7 @@
               </uni-grid-item>
             </uni-grid>
           </view>
-        </uni-card>
+        </div>
       </fui-bottom-popup>
       <fui-modal
         :show="showDelete"
@@ -164,6 +167,11 @@ export default {
 </script>
 
 <style scoped>
+.post-comment {
+  background-color: #eeecec;
+  padding: 6px;
+  border-radius: 3px;
+}
 .logo-text {
   font-size: 90%;
 }
@@ -178,10 +186,8 @@ export default {
 }
 .fui-custom__wrap {
   width: 100%;
-  height: 200rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  height: 220rpx;
+  margin-top: 1em;
 }
 .post-header {
   color: #666;

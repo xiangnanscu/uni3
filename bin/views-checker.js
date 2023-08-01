@@ -24,7 +24,7 @@ function readDir(dir, fileList) {
   return fileList;
 }
 const fileList = readDir("src/views").map(
-  (file) => file.match(/src\/(.+)\.vue/)[1]
+  (file) => file.replaceAll(/\\/g, "/").match(/src\/(.+)\.vue/)?.[1]
 );
 for (const url of fileList) {
   const page = pages.pages.find((e) => e.path == url);
