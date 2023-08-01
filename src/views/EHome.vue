@@ -1,13 +1,22 @@
 <template>
   <page-layout>
-    <h1 style="text-align: center">团建E家</h1>
+    <div
+      style="
+        text-align: center;
+        font-size: 150%;
+        font-weight: bold;
+        padding: 1em;
+      "
+    >
+      团建E家
+    </div>
     <uni-grid :column="3" :show-border="false" :square="false" @change="change">
       <uni-grid-item
         v-for="(item, index) in mainKist"
         :index="index"
         :key="index"
       >
-        <view class="grid-item-box" style="text-align: center">
+        <view class="grid-item-box" style="text-align: center; margin-top: 2em">
           <navigator
             :url="item.pagePath"
             hover-class="navigator-hover"
