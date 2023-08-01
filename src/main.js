@@ -20,6 +20,16 @@ export function createApp() {
         const { session } = useSession();
         return session.user;
       }
+    },
+    methods: {
+      previewImage(url) {
+        if (url.startsWith("//")) {
+          url = "https:" + url;
+        } else if (url.startsWith("http:")) {
+          url = `https:${url.slice(5)}`;
+        }
+        uni.previewImage({ urls: [url], current: 0 });
+      }
     }
   });
   setTimeout(() => {

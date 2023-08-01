@@ -11,7 +11,7 @@
           class="grid-item-box"
           :src="url"
           mode="aspectFit"
-          @click="previewImage(index)"
+          @click="previewImages(index)"
         />
       </view>
     </uni-grid-item>
@@ -29,7 +29,7 @@ export default {
     };
   },
   methods: {
-    previewImage(index) {
+    previewImages(index) {
       uni.previewImage({
         current: index,
         urls: this.urls,

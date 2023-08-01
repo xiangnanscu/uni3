@@ -68,9 +68,6 @@ export default {
     };
   },
   methods: {
-    previewImage(url) {
-      uni.previewImage({ urls: [url], current: 0 });
-    },
     async sendMessage(content) {
       if (!content.trim()) {
         return uni.showToast({ title: "必须输入内容", icon: "error" });
