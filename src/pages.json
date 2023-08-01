@@ -7,221 +7,71 @@
     }
   },
   "pages": [
-    {
-      "path": "views/tabbar/Home",
-      "style": {
-        "navigationBarTitleText": ""
-      }
-    },
+    { "path": "views/tabbar/Home", "style": { "navigationBarTitleText": "" } },
     {
       "path": "views/ActionsListMy",
-      "style": {
-        "navigationBarTitleText": ""
-      }
+      "style": { "navigationBarTitleText": "" }
     },
-    {
-      "path": "views/AdDetail",
-      "style": {
-        "navigationBarTitleText": ""
-      }
-    },
-    {
-      "path": "views/AddMeFirend",
-      "style": {
-        "navigationBarTitleText": ""
-      }
-    },
-    {
-      "path": "views/EHome",
-      "style": {
-        "navigationBarTitleText": ""
-      }
-    },
+    { "path": "views/AdDetail", "style": { "navigationBarTitleText": "" } },
+    { "path": "views/AddMeFirend", "style": { "navigationBarTitleText": "" } },
+    { "path": "views/EHome", "style": { "navigationBarTitleText": "" } },
     {
       "path": "views/FeeplanDetail",
-      "style": {
-        "navigationBarTitleText": ""
-      }
+      "style": { "navigationBarTitleText": "" }
     },
-    {
-      "path": "views/FeeplanList",
-      "style": {
-        "navigationBarTitleText": ""
-      }
-    },
-    {
-      "path": "views/ForumAdd",
-      "style": {
-        "navigationBarTitleText": ""
-      }
-    },
-    {
-      "path": "views/GoddessAdd",
-      "style": {
-        "navigationBarTitleText": ""
-      }
-    },
+    { "path": "views/FeeplanList", "style": { "navigationBarTitleText": "" } },
+    { "path": "views/ForumAdd", "style": { "navigationBarTitleText": "" } },
+    { "path": "views/GoddessAdd", "style": { "navigationBarTitleText": "" } },
     {
       "path": "views/GoddessDetail",
-      "style": {
-        "navigationBarTitleText": ""
-      }
+      "style": { "navigationBarTitleText": "" }
     },
-    {
-      "path": "views/GoddessList",
-      "style": {
-        "navigationBarTitleText": ""
-      }
-    },
-    {
-      "path": "views/Login",
-      "style": {
-        "navigationBarTitleText": ""
-      }
-    },
+    { "path": "views/GoddessList", "style": { "navigationBarTitleText": "" } },
+    { "path": "views/Login", "style": { "navigationBarTitleText": "" } },
     {
       "path": "views/MessageDetail",
-      "style": {
-        "navigationBarTitleText": ""
-      }
+      "style": { "navigationBarTitleText": "" }
     },
-    {
-      "path": "views/MyQrCode",
-      "style": {
-        "navigationBarTitleText": ""
-      }
-    },
-    {
-      "path": "views/NewsDetail",
-      "style": {
-        "navigationBarTitleText": ""
-      }
-    },
-    {
-      "path": "views/NewsList",
-      "style": {
-        "navigationBarTitleText": ""
-      }
-    },
-    {
-      "path": "views/OrdersList",
-      "style": {
-        "navigationBarTitleText": ""
-      }
-    },
-    {
-      "path": "views/PasswordSet",
-      "style": {
-        "navigationBarTitleText": ""
-      }
-    },
-    {
-      "path": "views/PollDetail",
-      "style": {
-        "navigationBarTitleText": ""
-      }
-    },
-    {
-      "path": "views/Profile",
-      "style": {
-        "navigationBarTitleText": ""
-      }
-    },
-    {
-      "path": "views/ProfileForm",
-      "style": {
-        "navigationBarTitleText": ""
-      }
-    },
-    {
-      "path": "views/RealNameCert",
-      "style": {
-        "navigationBarTitleText": ""
-      }
-    },
-    {
-      "path": "views/SuccessPage",
-      "style": {
-        "navigationBarTitleText": ""
-      }
-    },
-    {
-      "path": "views/ThreadAdd",
-      "style": {
-        "navigationBarTitleText": ""
-      }
-    },
-    {
-      "path": "views/ThreadDetail",
-      "style": {
-        "navigationBarTitleText": ""
-      }
-    },
+    { "path": "views/MyQrCode", "style": { "navigationBarTitleText": "" } },
+    { "path": "views/NewsDetail", "style": { "navigationBarTitleText": "" } },
+    { "path": "views/NewsList", "style": { "navigationBarTitleText": "" } },
+    { "path": "views/OrdersList", "style": { "navigationBarTitleText": "" } },
+    { "path": "views/PasswordSet", "style": { "navigationBarTitleText": "" } },
+    { "path": "views/PollDetail", "style": { "navigationBarTitleText": "" } },
+    { "path": "views/Profile", "style": { "navigationBarTitleText": "" } },
+    { "path": "views/ProfileForm", "style": { "navigationBarTitleText": "" } },
+    { "path": "views/RealNameCert", "style": { "navigationBarTitleText": "" } },
+    { "path": "views/SuccessPage", "style": { "navigationBarTitleText": "" } },
+    { "path": "views/ThreadAdd", "style": { "navigationBarTitleText": "" } },
+    { "path": "views/ThreadDetail", "style": { "navigationBarTitleText": "" } },
     {
       "path": "views/ThreadListAll",
-      "style": {
-        "navigationBarTitleText": ""
-      }
+      "style": { "navigationBarTitleText": "" }
     },
-    {
-      "path": "views/ThreadListMy",
-      "style": {
-        "navigationBarTitleText": ""
-      }
-    },
-    {
-      "path": "views/Uform",
-      "style": {
-        "navigationBarTitleText": ""
-      }
-    },
-    {
-      "path": "views/VolAdd",
-      "style": {
-        "navigationBarTitleText": ""
-      }
-    },
+    { "path": "views/ThreadListMy", "style": { "navigationBarTitleText": "" } },
+    { "path": "views/Uform", "style": { "navigationBarTitleText": "" } },
+    { "path": "views/VolAdd", "style": { "navigationBarTitleText": "" } },
     {
       "path": "views/VolplanDetail",
-      "style": {
-        "navigationBarTitleText": ""
-      }
+      "style": { "navigationBarTitleText": "" }
     },
-    {
-      "path": "views/VolplanList",
-      "style": {
-        "navigationBarTitleText": ""
-      }
-    },
+    { "path": "views/VolplanList", "style": { "navigationBarTitleText": "" } },
     {
       "path": "views/VolplanListMy",
-      "style": {
-        "navigationBarTitleText": ""
-      }
+      "style": { "navigationBarTitleText": "" }
     },
-    {
-      "path": "views/tabbar/Heart",
-      "style": {
-        "navigationBarTitleText": ""
-      }
-    },
+    { "path": "views/tabbar/Heart", "style": { "navigationBarTitleText": "" } },
     {
       "path": "views/tabbar/Message",
-      "style": {
-        "navigationBarTitleText": ""
-      }
+      "style": { "navigationBarTitleText": "" }
     },
     {
       "path": "views/tabbar/ProfileMy",
-      "style": {
-        "navigationBarTitleText": ""
-      }
+      "style": { "navigationBarTitleText": "" }
     },
     {
       "path": "views/tabbar/PublishCenter",
-      "style": {
-        "navigationBarTitleText": ""
-      }
+      "style": { "navigationBarTitleText": "" }
     }
   ],
   "globalStyle": {
