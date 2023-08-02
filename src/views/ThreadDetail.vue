@@ -58,6 +58,7 @@ export default {
       this.messageType = "replyPost";
       this.post = post;
       this.showChatBar = true;
+      this.showFloatPlus = false;
     },
     deletePost({ id }) {
       this.posts = this.posts.filter((e) => e.id !== id);

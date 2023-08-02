@@ -22,6 +22,12 @@
     </uni-drawer>
     <thread-list :records="threads"></thread-list>
   </page-layout>
+  <fui-fab
+    :distance="30"
+    position="right"
+    :isDrag="true"
+    @click="addThread"
+  ></fui-fab>
 </template>
 
 <script>
@@ -42,6 +48,9 @@ export default {
     await this.fetchData(this.query);
   },
   methods: {
+    addThread() {
+      utils.gotoPage("ThreadAdd");
+    },
     showDrawer() {
       this.$refs.showLeft.open();
     },

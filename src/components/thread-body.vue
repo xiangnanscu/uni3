@@ -35,7 +35,9 @@
               >
               <view class="post-comment" v-if="post.comments?.length">
                 <template v-for="c in post.comments" :key="c.id">
-                  <p>{{ c.creator__nickname }}: {{ c.content }}</p>
+                  <p style="margin-bottom: 5px">
+                    {{ c.creator__nickname }}: {{ c.content }}
+                  </p>
                 </template>
               </view>
             </view>
@@ -170,10 +172,14 @@ export default {
 </script>
 
 <style scoped>
+.post-content {
+  font-size: 98%;
+}
 .post-comment {
   background-color: #f5f5f5;
   padding: 6px;
   border-radius: 3px;
+  font-size: 90%;
 }
 .logo-text {
   font-size: 90%;
