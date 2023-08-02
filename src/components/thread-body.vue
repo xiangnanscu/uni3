@@ -59,11 +59,12 @@
               :square="false"
               @change="change"
             >
-              <uni-grid-item
-                v-if="isSelfPost(currentPost)"
-                @click="clickDelete"
-              >
-                <view class="grid-item-box" style="text-align: center">
+              <uni-grid-item v-if="isSelfPost(currentPost)">
+                <view
+                  @click="clickDelete"
+                  class="grid-item-box"
+                  style="text-align: center"
+                >
                   <image
                     style="width: 35px; height: 35px"
                     src="../static/img/tabbar/delete-tpp.png"
@@ -72,8 +73,12 @@
                   <view class="logo-text">删除</view>
                 </view>
               </uni-grid-item>
-              <uni-grid-item @click="commentPost(currentPost)">
-                <view class="grid-item-box" style="text-align: center">
+              <uni-grid-item>
+                <view
+                  @click="commentPost(currentPost)"
+                  class="grid-item-box"
+                  style="text-align: center"
+                >
                   <image
                     style="width: 35px; height: 35px"
                     src="../static/img/tabbar/comment-tpp.png"

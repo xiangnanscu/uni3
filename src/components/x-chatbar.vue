@@ -42,7 +42,7 @@
 <script setup>
 const props = defineProps({
   focus: { type: Boolean, default: true },
-  showVoiceBar: { type: Boolean, default: true },
+  showVoiceBar: { type: Boolean, default: false },
   modelValue: { type: String, default: "" }
 });
 const emit = defineEmits(["update:modelValue", "sendMessage"]);
