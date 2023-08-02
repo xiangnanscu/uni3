@@ -33,11 +33,11 @@
                   >第{{ index + 1 }}楼 {{ fromNow(post.ctime) }}</text
                 ></view
               >
-            </view>
-            <view class="post-comment" v-if="post.comments">
-              <template v-for="c in post.comments" :key="c.id">
-                <p>{{ c.creator__nickname }}: {{ c.content }}</p>
-              </template>
+              <view class="post-comment" v-if="post.comments">
+                <template v-for="c in post.comments" :key="c.id">
+                  <p>{{ c.creator__nickname }}: {{ c.content }}</p>
+                </template>
+              </view>
             </view>
           </template>
           <template v-slot:footer> </template>
@@ -168,7 +168,7 @@ export default {
 
 <style scoped>
 .post-comment {
-  background-color: #eeecec;
+  background-color: #f5f5f5;
   padding: 6px;
   border-radius: 3px;
 }
