@@ -107,11 +107,11 @@
 export default {
   props: {
     thread: { type: Object },
-    posts: { type: Array },
-    postCreateUrl: { type: String, default: `/post/create` },
-    threadOtherPrefix: { type: String, default: `/thread/other` },
-    fkName: { type: String, default: `thread_id` },
-    deleteUrlPrefix: { type: String, default: `post` }
+    posts: { type: Array }
+    // postCreateUrl: { type: String, default: `/post/create` },
+    // threadOtherPrefix: { type: String, default: `/thread/other` },
+    // fkName: { type: String, default: `thread_id` },
+    // deleteUrlPrefix: { type: String, default: `post` }
   },
   data() {
     return {
@@ -127,18 +127,12 @@ export default {
     },
     postDigest(post) {
       return post
-        ? `${post.creator__nickname}: ${utils.abstractText(post.content, 15)}`
+        ? `${post.creator__nickname}：${utils.abstractText(post.content, 15)}`
         : "";
     },
     async confirmDelete({ index, text }) {
       if (text == "确定") {
-        const { affected_rows } = await usePost(
-          `/${this.deleteUrlPrefix}/delete_self/${this.currentPost.id}`
-        );
-        if (affected_rows == 1) {
-          this.$emit("deletePost", { id: this.currentPost.id });
-          uni.showToast({ title: "成功删除" });
-        }
+        this.$emit("deletePost", this.currentPost);
       }
       this.showDelete = false;
     },
@@ -158,6 +152,7 @@ export default {
     },
     commentPost(post) {
       this.showPostActionPanel = false;
+      post.digest = this.postDigest(post);
       this.$emit("replyPost", post);
     },
     togglePostActionPanel(post) {

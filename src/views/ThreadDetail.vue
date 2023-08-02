@@ -14,11 +14,20 @@
         @replyPost="replyPost"
       ></thread-body>
       <fui-divider text="到底了" />
-      <x-chatbar
-        v-if="showChatBar"
-        v-model.trim:modelValue="messageText"
-        @sendMessage="sendMessage"
-      />
+      <div v-if="showChatBar">
+        <x-chatbar
+          v-model.trim:modelValue="messageText"
+          @sendMessage="sendMessage"
+        >
+          <template #head>
+            <div class="action-panel-title">
+              回复：{{
+                messageType == "replyPost" ? post?.digest : record.title
+              }}
+            </div>
+          </template>
+        </x-chatbar>
+      </div>
     </view>
   </page-layout>
   <fui-fab
@@ -40,55 +49,25 @@
 
 <script>
 import MixinShare from "./MixinShare";
+import MixinThreadPost from "./MixinThreadPost";
 
 export default {
-  mixins: [MixinShare],
+  mixins: [MixinShare, MixinThreadPost],
   data() {
-    return {
-      showFloatPlus: true,
-      showChatBar: false,
-      messageType: "",
-      messageText: "",
-      post: null,
-      posts: []
-    };
+    return {};
   },
   methods: {
-    replyPost(post) {
-      this.messageType = "replyPost";
-      this.post = post;
-      this.showChatBar = true;
-      this.showFloatPlus = false;
-    },
-    deletePost({ id }) {
-      this.posts = this.posts.filter((e) => e.id !== id);
-    },
-    showChatBarReplyThread() {
-      this.messageType = "replyThread";
-      this.showChatBar = true;
-      this.showFloatPlus = false;
-    },
-    resetChatBar() {
-      this.messageText = "";
-      this.messageType = "";
-      this.showChatBar = false;
-      this.showFloatPlus = true;
-      this.post = null;
-    },
     async fetchData(query) {
       const { data: thread } = await Http.get(`/thread/detail/${query.id}`);
       this.record = thread;
       const { data: posts } = await Http.get(`/post/thread/${this.record.id}`);
       this.posts = posts;
     },
-    async sendMessage(content) {
-      if (!content.trim()) {
-        return uni.showToast({ title: "必须输入内容", icon: "error" });
-      }
-      if (this.messageType == "replyThread") {
-        return await this.sendPost(content);
-      } else if (this.messageType == "replyPost") {
-        return await this.sendComment(content);
+    async deletePost({ id }) {
+      const { affected_rows } = await usePost(`/post/delete_self/${id}`);
+      if (affected_rows == 1) {
+        this.posts = this.posts.filter((e) => e.id !== id);
+        uni.showToast({ title: "成功删除" });
       }
     },
     async sendPost(content) {
@@ -128,27 +107,18 @@ export default {
       });
       this.resetChatBar();
       uni.showToast({ icon: "none", title: "评论成功" });
-    },
-    scrollTo() {
-      this.$nextTick(() => {
-        setTimeout(() => {
-          const view = uni.createSelectorQuery().in(this).select(".chat-body");
-          view
-            .boundingClientRect((res) => {
-              console.log("res?.height", res?.height);
-              uni.pageScrollTo({
-                duration: 200,
-                scrollTop: res?.height || Infinity
-              });
-            })
-            .exec();
-        }, 100);
-      });
     }
   }
 };
 </script>
 <style scoped>
+.action-panel-title {
+  text-align: center;
+  font-size: 80%;
+  padding: 5px;
+  background: #f8f8f8;
+  color: #666;
+}
 .thread-reply {
   position: fixed;
   bottom: 0px;

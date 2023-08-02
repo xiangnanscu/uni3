@@ -1,5 +1,6 @@
 <template>
   <view class="fui-chatbar__fixed">
+    <slot name="head" />
     <view class="fui-chatbar__wrap">
       <view v-if="showVoiceBar" class="fui-chatbar__icon-box" @tap="change">
         <fui-icon :name="isVoice ? 'voice' : 'keyboard'"></fui-icon>

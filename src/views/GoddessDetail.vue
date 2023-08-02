@@ -39,46 +39,62 @@
     <thread-body
       class="chat-body"
       :posts="posts"
-      delete-url-prefix="goddess_comment"
       @deletePost="deletePost"
+      @replyPost="replyPost"
     ></thread-body>
     <fui-divider text="到底了" />
     <div style="height: 2em"></div>
-    <x-chatbar
-      v-if="showChatBar"
-      v-model:modelValue="messageText"
-      @sendMessage="sendMessage"
-    />
+    <div v-if="showChatBar">
+      <x-chatbar
+        v-model.trim:modelValue="messageText"
+        @sendMessage="sendMessage"
+      >
+        <template #head>
+          <div class="action-panel-title">
+            回复：{{ messageType == "replyPost" ? post?.digest : record.title }}
+          </div>
+        </template>
+      </x-chatbar>
+    </div>
   </page-layout>
   <fui-fab
     v-if="showFloatPlus"
     :distance="30"
     position="right"
     :isDrag="true"
-    @click="toggleButton"
+    @click="showChatBarReplyThread"
   ></fui-fab>
 </template>
 
 <script>
 import MixinShare from "./MixinShare";
+import MixinThreadPost from "./MixinThreadPost";
 
 export default {
-  mixins: [MixinShare],
+  mixins: [MixinShare, MixinThreadPost],
   data() {
     return {
-      shareTitlePrefix: "【江安“新青年”】",
-      showChatBar: false,
-      showFloatPlus: true,
-      messageText: "",
-      posts: [],
-      record: null
+      shareTitlePrefix: "【江安“新青年”】"
     };
   },
   methods: {
-    async sendMessage(content) {
-      if (!content.trim()) {
-        return uni.showToast({ title: "必须输入内容", icon: "error" });
+    async onAddFriend(id) {
+      await utils.gotoPage(`/views/MyQrCode?q=/test/${id}`);
+    },
+    async fetchData(query) {
+      this.record = await useGet(`/goddess/detail/${query.id}`);
+      this.posts = await useGet(`/goddess_comment/goddess/${this.record.id}`);
+    },
+    async deletePost({ id }) {
+      const { affected_rows } = await usePost(
+        `/goddess_comment/delete_self/${id}`
+      );
+      if (affected_rows == 1) {
+        this.posts = this.posts.filter((e) => e.id !== id);
+        uni.showToast({ title: "成功删除" });
       }
+    },
+    async sendPost(content) {
       const { data: newPost } = await Http.post("/goddess_comment/create", {
         content,
         goddess_id: this.record.id
@@ -91,49 +107,43 @@ export default {
         creator__avatar: this.user.avatar,
         ctime: newPost.ctime
       });
-      this.messageText = "";
-      // this.scrollTo();
-      this.toggleButton();
-      uni.showToast({ icon: "none", title: "发送成功" });
+      this.resetChatBar();
+      this.scrollTo();
+      uni.showToast({ icon: "none", title: "回帖成功" });
     },
-    scrollTo() {
-      this.$nextTick(() => {
-        setTimeout(() => {
-          const view = uni.createSelectorQuery().in(this).select(".chat-body");
-          view
-            .boundingClientRect((res) => {
-              uni.pageScrollTo({
-                duration: 200,
-                scrollTop: res?.height || Infinity
-              });
-            })
-            .exec();
-        }, 100);
+    async sendComment(content) {
+      const newComment = await usePost("/goddess_comment_comment/create", {
+        content,
+        post_id: this.post.id,
+        post_comment_id: this.post.comment_id
       });
-    },
-    deletePost({ id }) {
-      this.posts = this.posts.filter((e) => e.id !== id);
-    },
-    toggleButton() {
-      this.showChatBar = this.showFloatPlus;
-      this.showFloatPlus = !this.showChatBar;
-    },
-    async onAddFriend(id) {
-      await utils.gotoPage(`/views/MyQrCode?q=/test/${id}`);
-    },
-    async fetchData(query) {
-      const { data: goddess } = await Http.get(`/goddess/detail/${query.id}`);
-      this.record = goddess;
-      const { data: posts } = await Http.get(
-        `/goddess_comment/goddess/${this.record.id}`
-      );
-      this.posts = posts;
+      if (!this.post.comments) {
+        this.post.comments = [];
+      }
+      this.post.comments.push({
+        id: newComment.id,
+        content: newComment.content,
+        post_id: this.post.id,
+        post_comment_id: this.post.comment_id,
+        creator: this.user.id,
+        creator__nickname: this.user.nickname,
+        ctime: newComment.ctime
+      });
+      this.resetChatBar();
+      uni.showToast({ icon: "none", title: "评论成功" });
     }
   }
 };
 </script>
 
 <style scoped>
+.action-panel-title {
+  text-align: center;
+  font-size: 80%;
+  padding: 5px;
+  background: #f8f8f8;
+  color: #666;
+}
 .actions {
   width: 25px;
   height: 25px;
