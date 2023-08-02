@@ -1,7 +1,7 @@
 <template>
   <view class="fui-chatbar__fixed">
     <view class="fui-chatbar__wrap">
-      <view class="fui-chatbar__icon-box" @tap="change">
+      <view v-if="showVoiceBar" class="fui-chatbar__icon-box" @tap="change">
         <fui-icon :name="isVoice ? 'voice' : 'keyboard'"></fui-icon>
       </view>
       <view class="fui-chatbar__input-box">
@@ -42,6 +42,7 @@
 <script setup>
 const props = defineProps({
   focus: { type: Boolean, default: true },
+  showVoiceBar: { type: Boolean, default: true },
   modelValue: { type: String, default: "" }
 });
 const emit = defineEmits(["update:modelValue", "sendMessage"]);
@@ -115,6 +116,7 @@ page {
   flex-direction: row;
   flex: 1;
   position: relative;
+  margin-left: 1em;
 }
 
 .fui-chatbar__input {

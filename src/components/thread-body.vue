@@ -33,7 +33,7 @@
                   >第{{ index + 1 }}楼 {{ fromNow(post.ctime) }}</text
                 ></view
               >
-              <view class="post-comment" v-if="post.comments">
+              <view class="post-comment" v-if="post.comments?.length">
                 <template v-for="c in post.comments" :key="c.id">
                   <p>{{ c.creator__nickname }}: {{ c.content }}</p>
                 </template>
@@ -123,7 +123,6 @@ export default {
         ? `${post.creator__nickname}: ${utils.abstractText(post.content, 15)}`
         : "";
     },
-    async commentPost(post) {},
     async confirmDelete({ index, text }) {
       if (text == "确定") {
         const { affected_rows } = await usePost(
@@ -149,6 +148,10 @@ export default {
     clickDelete() {
       this.showPostActionPanel = false;
       this.showDelete = true;
+    },
+    commentPost(post) {
+      this.showPostActionPanel = false;
+      this.$emit("replyPost", post);
     },
     togglePostActionPanel(post) {
       this.showPostActionPanel = !this.showPostActionPanel;
