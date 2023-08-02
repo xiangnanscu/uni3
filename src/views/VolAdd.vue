@@ -53,7 +53,7 @@ const volplanModel = Model.createModel({
       limit: 1
     },
     amount: { label: "召集人数", required: true, type: "integer" },
-    content: { label: "正文", required: true, inputType: "textarea" }
+    content: { label: "正文", required: true, input_type: "textarea" }
   }
 });
 

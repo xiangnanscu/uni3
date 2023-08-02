@@ -138,7 +138,7 @@ const tagColorArray = [
         <template v-if="col.field.type === 'foreignkey'">
           {{
             typeof row[col.name] == "object"
-              ? row[col.name][col.field.referenceColumn]
+              ? row[col.name][col.field.reference_column]
               : row[col.name]
           }}
         </template>

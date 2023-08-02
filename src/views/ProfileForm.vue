@@ -28,8 +28,8 @@ const profileModel = Model.createModel({
       size: process.env.ALIOSS_AVATAR_SIZE || "2M",
       attrs: { wxAvatar }
     },
-    nickname: { label: "昵称", required: true, inputType: "nickname" },
-    intro: { label: "简介", inputType: "textarea" }
+    nickname: { label: "昵称", required: true, input_type: "nickname" },
+    intro: { label: "简介", input_type: "textarea" }
   }
 });
 

@@ -12,9 +12,9 @@ const props = defineProps({
 // const uniFormItem = inject("uniFormItem", null);
 const field = props.field;
 const fieldType =
-  props.field.type == "array" ? field.arrayType || "string" : props.field.type;
+  props.field.type == "array" ? field.array_type || "string" : props.field.type;
 const mediaType =
-  field.mediaType == "video"
+  field.media_type == "video"
     ? "video"
     : fieldType.includes("Image")
     ? "image"
@@ -42,9 +42,7 @@ const autocompleteSearchText = ref("");
 const sendValue = (value) => {
   emit("update:modelValue", value);
 };
-const fileLimit = fieldType.endsWith("List")
-  ? field.limit || 9
-  : 1;
+const fileLimit = fieldType.endsWith("List") ? field.limit || 9 : 1;
 const filePickerSelectHanlder = async ({ tempFiles, tempFilePaths }) => {
   emit("update:error", "");
   const files = filePickerRef.value.files;
@@ -54,7 +52,7 @@ const filePickerSelectHanlder = async ({ tempFiles, tempFilePaths }) => {
       emit(
         "update:error",
         `文件过大(当前${Math.round(file.size / 1024 / 1024)}MB,上限${
-          field.sizeArg
+          field.size_arg
         })`
       );
       files.splice(uniFileIndex, 1);
@@ -109,7 +107,7 @@ const easyInputTypeMap = {
   text: "textarea"
 };
 const easyType = computed(
-  () => easyInputTypeMap[field.type] || easyInputTypeMap[field.inputType]
+  () => easyInputTypeMap[field.type] || easyInputTypeMap[field.input_type]
 );
 const getPhoneNumber = async (event) => {
   // 用户允许: e.detail = {errMsg: "getPhoneNumber:ok", code: "??", encryptedData: "??", iv: "??"}
@@ -253,7 +251,7 @@ const placeholder = field.attrs?.placeholder || field.hint;
       @update:modelValue="sendValue"
       @update:error="emit('update:error', $event)"
       :modelValue="{ url: props.modelValue, errMsg: props.error }"
-      :size="field.sizeArg"
+      :size="field.size_arg"
     ></wx-avatar>
     <uni-file-picker
       v-else

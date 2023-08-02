@@ -23,7 +23,7 @@ onLoad(async () => {
   threadModel.value = await Model.createModelAsync({
     field_names: ["type", "title", "content", "pics"],
     fields: {
-      type: { label: "贴吧", required: true, choicesUrl: "/forum/types" },
+      type: { label: "贴吧", required: true, choices_url: "/forum/types" },
       pics: {
         label: "图片",
         type: "aliossImageList",
@@ -31,7 +31,7 @@ onLoad(async () => {
         size: process.env.ALIOSS_AVATAR_SIZE || "2M"
       },
       title: { label: "标题", required: true },
-      content: { label: "内容", required: true, inputType: "textarea" }
+      content: { label: "内容", required: true, input_type: "textarea" }
     }
   });
   ready.value = true;

@@ -64,7 +64,7 @@ const profileModel = Model.createModel({
       size: avatarSize,
       attrs: { wxAvatar: true }
     },
-    nickname: { label: "昵称", required: true, inputType: "nickname" }
+    nickname: { label: "昵称", required: true, input_type: "nickname" }
   }
 });
 const needCompleteProfile = ref(false);

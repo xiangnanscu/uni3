@@ -52,7 +52,7 @@ const testModel = Model.createModel({
     family: {
       label: "家人姓名",
       maxlength: 2,
-      // arrayType: "boolean"
+      // array_type: "boolean"
       type: "array"
     },
     xz: {
@@ -65,7 +65,7 @@ const testModel = Model.createModel({
       label: "生活视频",
       required: false,
       size: "50M",
-      mediaType: "video",
+      media_type: "video",
       type: "alioss"
     },
     bg: {
