@@ -23,7 +23,12 @@ onLoad(async () => {
   threadModel.value = await Model.createModelAsync({
     field_names: ["type", "title", "content", "pics"],
     fields: {
-      type: { label: "贴吧", required: true, choices_url: "/forum/types" },
+      type: {
+        label: "贴吧",
+        required: true,
+        choices_url: "/forum/types",
+        preload: true
+      },
       pics: {
         label: "图片",
         type: "aliossImageList",

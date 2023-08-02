@@ -58,7 +58,6 @@ function getChoices(rawChoices) {
     }
     choices.push(c);
   }
-  console.log(choices);
   return choices;
 }
 function serializeChoice(choice) {
@@ -138,18 +137,11 @@ class BaseField {
         this.null = false;
       }
     }
-    if (typeof this.choices_url == "string" && this.preload) {
-      this.choices = this.choices || [];
+    if (Array.isArray(this.choices)) {
+      this.choices = getChoices(this.choices);
     }
-    if (this.choices) {
-      if (this.strict === undefined) {
-        this.strict = true;
-      }
-      if (Array.isArray(this.choices)) {
-        this.choices = getChoices(this.choices);
-      } else {
-        throw new Error("invalid choices type: " + typeof this.choices);
-      }
+    if (this.choices && this.strict === undefined) {
+      this.strict = true;
     }
     this.error_messages = { ...ERROR_MESSAGES, ...this.error_messages };
     return this;
