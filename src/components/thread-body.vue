@@ -35,8 +35,13 @@
               >
               <view class="post-comment" v-if="post.comments?.length">
                 <template v-for="c in post.comments" :key="c.id">
-                  <p style="margin-bottom: 5px">
-                    {{ c.creator__nickname }}: {{ c.content }}
+                  <p @click="replyPostComment({post, comment:c})" style="margin-bottom: 5px">
+                    <template v-if="c.post_comment_id">
+                      {{ c.creator__nickname }} 回复 {{c.post_comment_id__creator__nickname }} ： {{ c.content }}
+                    </template>
+                    <template v-else>
+                      {{ c.creator__nickname }}：{{ c.content }}
+                    </template>
                   </p>
                 </template>
               </view>
@@ -75,7 +80,7 @@
               </uni-grid-item>
               <uni-grid-item>
                 <view
-                  @click="commentPost(currentPost)"
+                  @click="replyPost(currentPost)"
                   class="grid-item-box"
                   style="text-align: center"
                 >
@@ -150,10 +155,14 @@ export default {
       this.showPostActionPanel = false;
       this.showDelete = true;
     },
-    commentPost(post) {
-      this.showPostActionPanel = false;
+    replyPost(post) {
       post.digest = this.postDigest(post);
       this.$emit("replyPost", post);
+      this.showPostActionPanel = false;
+    },
+    replyPostComment({post, comment}) {
+      post.digest = this.postDigest(comment);
+      this.$emit("replyPostComment", {post, comment});
     },
     togglePostActionPanel(post) {
       this.showPostActionPanel = !this.showPostActionPanel;

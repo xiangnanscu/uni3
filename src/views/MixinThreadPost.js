@@ -6,6 +6,7 @@ export default {
       messageType: "",
       messageText: "",
       post: null,
+      comment: null,
       posts: []
     };
   },
@@ -13,6 +14,13 @@ export default {
     replyPost(post) {
       this.messageType = "replyPost";
       this.post = post;
+      this.showChatBar = true;
+      this.showFloatPlus = false;
+    },
+    replyPostComment({post,comment}) {
+      this.messageType = "replyPost";
+      this.post = post;
+      this.comment = comment
       this.showChatBar = true;
       this.showFloatPlus = false;
     },
@@ -27,6 +35,7 @@ export default {
       this.showChatBar = false;
       this.showFloatPlus = true;
       this.post = null;
+      this.comment = null
     },
     async sendMessage(content) {
       if (!content.trim()) {
