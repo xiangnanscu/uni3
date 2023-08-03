@@ -17,14 +17,15 @@ export default {
       this.showChatBar = true;
       this.showFloatPlus = false;
     },
-    replyPostComment({post,comment}) {
+    replyPostComment({ post, comment }) {
       this.messageType = "replyPost";
       this.post = post;
-      this.comment = comment
+      this.comment = comment;
       this.showChatBar = true;
       this.showFloatPlus = false;
     },
     showChatBarReplyThread() {
+      this.checkLogin();
       this.messageType = "replyThread";
       this.showChatBar = true;
       this.showFloatPlus = false;
@@ -35,7 +36,7 @@ export default {
       this.showChatBar = false;
       this.showFloatPlus = true;
       this.post = null;
-      this.comment = null
+      this.comment = null;
     },
     async sendMessage(content) {
       if (!content.trim()) {

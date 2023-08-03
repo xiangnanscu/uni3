@@ -116,7 +116,7 @@ export default {
       const newComment = await usePost("/goddess_comment_comment/create", {
         content,
         post_id: this.post.id,
-        post_comment_id: this.comment.id
+        post_comment_id: this.comment?.id
       });
       if (!this.post.comments) {
         this.post.comments = [];
@@ -125,10 +125,10 @@ export default {
         id: newComment.id,
         content: newComment.content,
         post_id: this.post.id,
-        post_comment_id: this.comment.id,
+        post_comment_id: this.comment?.id,
         creator: this.user.id,
         creator__nickname: this.user.nickname,
-        post_comment_id__creator__nickname:this.comment.creator__nickname,
+        post_comment_id__creator__nickname: this.comment?.creator__nickname,
         ctime: newComment.ctime
       });
       this.resetChatBar();

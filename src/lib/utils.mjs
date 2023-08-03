@@ -1,5 +1,6 @@
 import { Buffer } from "buffer";
 import pagesJson from "@/pages.json";
+import { useSession } from "@/store/session";
 
 export function isWeixin() {
   const ua = navigator.userAgent.toLowerCase();
@@ -259,4 +260,16 @@ export const toModelName = (s) => {
 
 export const abstractText = (s, n = 10) => {
   return s.length <= n ? s : s.slice(0, n) + "...";
+};
+
+export const isLogin = () => {
+  const sessionCookie = uni.getStorageSync("cookie_session");
+  if (!sessionCookie) {
+    return false;
+  }
+  const { session } = useSession();
+  if (!session?.user?.id) {
+    return false;
+  }
+  return true;
 };

@@ -1,3 +1,4 @@
+// 此模块不应依赖"@/lib/utils";
 interface SessionUser {
   id: number;
   username: string;
@@ -41,9 +42,7 @@ const getSession = () => {
 export const useSession = defineStore("session", () => {
   const session = getSession();
   function login(user: SessionUser) {
-    console.log(user);
     Object.assign(session.user, user);
-    console.log(session.user);
     uni.setStorageSync("session", JSON.stringify(session));
   }
   function logout() {

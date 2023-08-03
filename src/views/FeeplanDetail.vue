@@ -47,9 +47,9 @@ export default {
         });
       }
       this.disabled = true;
-      const [err, { code }] = await uni.login();
-      if (err) {
-        throw new Error(err);
+      const { code, errMsg } = await uni.login();
+      if (errMsg !== "login:ok") {
+        throw new Error(errMsg);
       }
       const { data } = await Http.post(`/wx/jsapi_mini_preorder`, {
         code,

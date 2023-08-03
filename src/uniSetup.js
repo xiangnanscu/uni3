@@ -1,7 +1,7 @@
 import cookie from "cookie";
 import { useStore } from "@/store";
-import { useSession } from "@/store/session";
 import { version } from "../package.json";
+import { isLogin } from "@/lib/utils";
 
 const viteEnv = import.meta.env;
 
@@ -84,6 +84,7 @@ const whiteList = [
   process.env.UNI_HOME_PAGE,
   loginPage,
   "/views/tabbar/ProfileMy",
+  "/views/AdDetail",
   "/views/NewsDetail",
   "/views/ThreadDetail",
   "/views/GoddessDetail",
@@ -105,9 +106,7 @@ const setupNav = () => {
           console.log("路由拦截-白名单", url, JSON.stringify(opts));
           return opts;
         }
-        const sessionCookie = uni.getStorageSync("cookie_session");
-        const { session } = useSession();
-        if (sessionCookie && session?.user?.id) {
+        if (isLogin()) {
           return opts;
         }
         utils.gotoPage({

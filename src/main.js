@@ -3,9 +3,11 @@ import { createSSRApp } from "vue";
 import App from "./App.vue";
 import { createPinia } from "pinia";
 import uniSetup from "./uniSetup";
+import { isLogin } from "@/lib/utils";
 
 const pinia = createPinia();
-
+const LOGIN_HINT = "login required";
+const loginPage = process.env.UNI_LOGIN_PAGE;
 // https://pinia.vuejs.org/core-concepts/plugins.html#adding-new-external-properties
 // pinia.use(({ store }) => {
 //   store.router = markRaw(router);
@@ -22,6 +24,11 @@ export function createApp() {
       }
     },
     methods: {
+      checkLogin() {
+        if (!isLogin()) {
+          throw new Error(LOGIN_HINT);
+        }
+      },
       previewImage(url) {
         if (url.startsWith("//")) {
           url = "https:" + url;
@@ -34,14 +41,21 @@ export function createApp() {
   });
   setTimeout(() => {
     app.config.errorHandler = (err, instance, info) => {
-      console.error("errorHandler captured...", err);
-      console.log(instance, info);
-      if (err.type == "uni_error") {
+      console.error("errorHandler captured...", { err, instance, info });
+      if (err.message == LOGIN_HINT) {
+        utils.gotoPage({
+          url: loginPage,
+          query: { redirect: utils.getFullPath() },
+          redirect: true
+        });
+      } else if (err.type == "uni_error") {
         uni.showModal({
           title: `错误`,
           content: err.message,
           showCancel: false
         });
+      } else {
+        console.error(err);
       }
     };
   });
