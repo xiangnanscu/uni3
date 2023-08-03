@@ -69,7 +69,8 @@ export default {
     async sendPost(content) {
       const { data: newPost } = await Http.post("/post/create", {
         content,
-        thread_id: this.record.id
+        target_model: 'thread',
+        target_id: this.record.id
       });
       this.posts.push({
         id: newPost.id,

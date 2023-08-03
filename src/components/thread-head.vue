@@ -37,9 +37,6 @@
 const props = defineProps({
   thread: { type: Object },
   posts: { type: Array },
-  postCreateUrl: { type: String, default: `/post/create` },
-  threadOtherPrefix: { type: String, default: `/thread/other` },
-  fkName: { type: String, default: `thread_id` }
 });
 const picsUrls = computed(() => props.thread?.pics || []);
 </script>

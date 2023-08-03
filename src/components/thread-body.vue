@@ -113,10 +113,6 @@ export default {
   props: {
     thread: { type: Object },
     posts: { type: Array }
-    // postCreateUrl: { type: String, default: `/post/create` },
-    // threadOtherPrefix: { type: String, default: `/thread/other` },
-    // fkName: { type: String, default: `thread_id` },
-    // deleteUrlPrefix: { type: String, default: `post` }
   },
   data() {
     return {
