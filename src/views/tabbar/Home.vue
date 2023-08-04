@@ -271,8 +271,16 @@ export default {
       authSetting: ""
     };
   },
-  onLoad() {
-    console.log("Home onLoad");
+  async onLoad() {
+    // #ifdef MP-WEIXIN
+    if (!this.user.id) {
+      const { code, errMsg } = await uni.login();
+      if (errMsg !== "login:ok") {
+        throw new Error(errMsg);
+      }
+      await usePost("/wx_login", { code });
+    }
+    // #endif
   },
   onUnload() {
     console.log("Home onUnload");
