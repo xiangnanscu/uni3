@@ -15,7 +15,7 @@ const props = defineProps({
 const adminModel = props.field.model;
 
 const tableColumns = computed(() =>
-  (adminModel.admin?.listNames || adminModel.names).map((name, index) => ({
+  (adminModel.admin?.list_names || adminModel.names).map((name, index) => ({
     index,
     name,
     label: adminModel.nameToLabel[name],
