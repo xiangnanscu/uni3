@@ -59,44 +59,6 @@
       </fui-list-cell>
     </fui-panel>
     <fui-panel
-      v-if="volplan"
-      :panelData="panelVolplan"
-      :width="150"
-      :height="120"
-      :marginTop="24"
-      :size="25"
-      :descSize="26"
-    >
-      <fui-card>
-        <view class="fui-list__item">
-          <image
-            @click="onVolplanClick"
-            style="width: 100%"
-            :src="volplan.pics[0]"
-            mode="widthFix"
-          />
-        </view>
-      </fui-card>
-      <fui-list-cell
-        arrow
-        :bottomBorder="false"
-        topBorder
-        topLeft="32"
-        @click="onVolplanClick"
-      >
-        <text class="fui-text__link"> {{ volplan.title }}</text>
-      </fui-list-cell>
-      <fui-list-cell
-        arrow
-        :bottomBorder="false"
-        topBorder
-        topLeft="32"
-        @click="onVolplanListClick"
-      >
-        <text class="fui-text__link"> 查看更多</text>
-      </fui-list-cell>
-    </fui-panel>
-    <fui-panel
       v-if="goddess"
       :panelData="panelData4"
       :width="150"
@@ -130,6 +92,44 @@
         topBorder
         topLeft="32"
         @click="onGoddessListClick"
+      >
+        <text class="fui-text__link"> 查看更多</text>
+      </fui-list-cell>
+    </fui-panel>
+    <fui-panel
+      v-if="volplan"
+      :panelData="panelVolplan"
+      :width="150"
+      :height="120"
+      :marginTop="24"
+      :size="25"
+      :descSize="26"
+    >
+      <fui-card>
+        <view class="fui-list__item">
+          <image
+            @click="onVolplanClick"
+            style="width: 100%"
+            :src="volplan.pics[0]"
+            mode="widthFix"
+          />
+        </view>
+      </fui-card>
+      <fui-list-cell
+        arrow
+        :bottomBorder="false"
+        topBorder
+        topLeft="32"
+        @click="onVolplanClick"
+      >
+        <text class="fui-text__link"> {{ volplan.title }}</text>
+      </fui-list-cell>
+      <fui-list-cell
+        arrow
+        :bottomBorder="false"
+        topBorder
+        topLeft="32"
+        @click="onVolplanListClick"
       >
         <text class="fui-text__link"> 查看更多</text>
       </fui-list-cell>
