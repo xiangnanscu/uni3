@@ -11,6 +11,59 @@ export default {
     };
   },
   methods: {
+    async fetchData(query) {
+      this.record = await useGet(`/${this.target_model}/detail/${query.id}`);
+      this.posts = await useGet(
+        `/post/target/${this.target_model}/${this.record.id}`
+      );
+    },
+    async deletePost({ id }) {
+      const { affected_rows } = await usePost(`/post/delete_self/${id}`);
+      if (affected_rows == 1) {
+        this.posts = this.posts.filter((e) => e.id !== id);
+        uni.showToast({ title: "成功删除" });
+      }
+    },
+    async sendPost(content) {
+      const { data: newPost } = await Http.post("/post/create", {
+        content,
+        target_model: this.target_model,
+        target_id: this.record.id
+      });
+      this.posts.push({
+        id: newPost.id,
+        content: newPost.content,
+        creator: this.user.id,
+        creator__nickname: this.user.nickname,
+        creator__avatar: this.user.avatar,
+        ctime: newPost.ctime
+      });
+      this.resetChatBar();
+      this.scrollTo();
+      uni.showToast({ icon: "none", title: "回帖成功" });
+    },
+    async sendComment(content) {
+      const { data: newComment } = await Http.post("/post_comment/create", {
+        content,
+        post_id: this.post.id,
+        post_comment_id: this.comment?.id
+      });
+      if (!this.post.comments) {
+        this.post.comments = [];
+      }
+      this.post.comments.push({
+        id: newComment.id,
+        content: newComment.content,
+        post_id: this.post.id,
+        post_comment_id: this.comment?.id,
+        creator: this.user.id,
+        creator__nickname: this.user.nickname,
+        post_comment_id__creator__nickname: this.comment?.creator__nickname,
+        ctime: newComment.ctime
+      });
+      this.resetChatBar();
+      uni.showToast({ icon: "none", title: "评论成功" });
+    },
     replyPost(post) {
       this.messageType = "replyPost";
       this.post = post;

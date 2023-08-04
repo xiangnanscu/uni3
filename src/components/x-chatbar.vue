@@ -1,6 +1,6 @@
 <template>
   <view class="fui-chatbar__fixed">
-    <slot name="head" />
+    <div v-if="title" class="action-panel-title">{{ title }}</div>
     <view class="fui-chatbar__wrap">
       <view v-if="showVoiceBar" class="fui-chatbar__icon-box" @tap="change">
         <fui-icon :name="isVoice ? 'voice' : 'keyboard'"></fui-icon>
@@ -44,6 +44,7 @@
 const props = defineProps({
   focus: { type: Boolean, default: true },
   showVoiceBar: { type: Boolean, default: false },
+  title: { type: String, default: "" },
   modelValue: { type: String, default: "" }
 });
 const emit = defineEmits(["update:modelValue", "sendMessage"]);
@@ -78,6 +79,13 @@ export default {
 </script>
 
 <style>
+.action-panel-title {
+  text-align: center;
+  font-size: 80%;
+  padding: 5px;
+  background: #f8f8f8;
+  color: #666;
+}
 /* #ifndef APP-NVUE */
 page {
   font-weight: normal;

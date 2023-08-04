@@ -35,9 +35,14 @@
               >
               <view class="post-comment" v-if="post.comments?.length">
                 <template v-for="c in post.comments" :key="c.id">
-                  <p @click="replyPostComment({post, comment:c})" style="margin-bottom: 5px">
+                  <p
+                    @click="replyPostComment({ post, comment: c })"
+                    style="margin-bottom: 5px"
+                  >
                     <template v-if="c.post_comment_id">
-                      {{ c.creator__nickname }} 回复 {{c.post_comment_id__creator__nickname }} ： {{ c.content }}
+                      {{ c.creator__nickname }} 回复
+                      {{ c.post_comment_id__creator__nickname }} ：
+                      {{ c.content }}
                     </template>
                     <template v-else>
                       {{ c.creator__nickname }}：{{ c.content }}
@@ -111,7 +116,6 @@
 <script>
 export default {
   props: {
-    thread: { type: Object },
     posts: { type: Array }
   },
   data() {
@@ -152,13 +156,15 @@ export default {
       this.showDelete = true;
     },
     replyPost(post) {
+      this.checkLogin();
       post.digest = this.postDigest(post);
       this.$emit("replyPost", post);
       this.showPostActionPanel = false;
     },
-    replyPostComment({post, comment}) {
+    replyPostComment({ post, comment }) {
+      this.checkLogin();
       post.digest = this.postDigest(comment);
-      this.$emit("replyPostComment", {post, comment});
+      this.$emit("replyPostComment", { post, comment });
     },
     togglePostActionPanel(post) {
       this.showPostActionPanel = !this.showPostActionPanel;
