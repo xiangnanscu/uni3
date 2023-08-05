@@ -18,19 +18,47 @@
         class="actions"
       ></image>
     </button>
+    <uni-badge
+      class="uni-badge-left-margin"
+      :text="favCount"
+      absolute="rightTop"
+      type2="info"
+      :inverted2="false"
+      :custom-style2="{
+        'font-size': '100%',
+        color: '#515151',
+        'background-color': 'transparent',
+        border: '0'
+      }"
+      :offset2="[5, 5]"
+      size="normal"
+    >
+      <image
+        @click="onFav"
+        :src="`../static/img/tabbar/fav${favStatus ? '_fill_yellow' : ''}.png`"
+        class="actions"
+      ></image>
+    </uni-badge>
 
-    <image
-      @click="onFav"
-      :src="`../static/img/tabbar/fav${favStatus ? '_fill_yellow' : ''}.png`"
-      class="actions"
-    ></image>
-    <image
-      @click="onLike"
-      :src="`../static/img/tabbar/appreciate${
-        likeStatus ? '_fill_yellow' : ''
-      }.png`"
-      class="actions"
-    ></image>
+    <uni-badge
+      class="uni-badge-left-margin"
+      :text="likeCount"
+      absolute="rightTop"
+      size="normal"
+      :custom-style="{
+        'z-index': 3
+      }"
+      :offset2="[5, 5]"
+    >
+      <image
+        @click="onLike"
+        :src="`../static/img/tabbar/appreciate${
+          likeStatus ? '_fill_yellow' : ''
+        }.png`"
+        class="actions"
+      ></image>
+    </uni-badge>
+
     <slot />
   </div>
 </template>
@@ -46,6 +74,9 @@ const {
   favStatus,
   shareStatus,
   likeStatus,
+  favCount,
+  likeCount,
+  shareCount,
   onLike,
   onFav,
   onShare
@@ -53,6 +84,7 @@ const {
   target_model: props.targetModel,
   target_id: props.targetId
 });
+console.log({ favCount, likeCount });
 </script>
 
 <style lang="scss" scoped>

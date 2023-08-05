@@ -4,6 +4,9 @@ export function useGenericActions({ target_model, target_id }) {
   const favStatus = ref(false);
   const shareStatus = ref(false);
   const likeStatus = ref(false);
+  const shareCount = ref(0);
+  const likeCount = ref(0);
+  const favCount = ref(0);
   const actionsMap = {
     分享: shareStatus,
     收藏: favStatus,
@@ -14,7 +17,7 @@ export function useGenericActions({ target_model, target_id }) {
     if (!session.user.id) {
       return;
     }
-    const { data: actions } = await Http.post(`/actions/stat`, {
+    const actions = await usePost(`/actions/stat`, {
       target_model,
       target_id
     });
@@ -22,6 +25,19 @@ export function useGenericActions({ target_model, target_id }) {
       const existed = actions.find((e) => e.type === actionName);
       if (existed) {
         actionRef.value = true;
+      }
+    }
+    const actionsCount = await usePost(`/actions/stat_count`, {
+      target_model,
+      target_id
+    });
+    for (const e of actionsCount) {
+      if (e.type == "点赞") {
+        likeCount.value = e.count;
+      } else if (e.type == "收藏") {
+        favCount.value = e.count;
+      } else if (e.type == "分享") {
+        shareCount.value = e.count;
       }
     }
     actionsReady.value = true;
@@ -51,6 +67,7 @@ export function useGenericActions({ target_model, target_id }) {
       enabled: actionValue
     });
     likeStatus.value = actionValue;
+    likeCount.value += actionValue ? 1 : -1;
     uni.showToast({
       icon: "none",
       title: `${actionValue ? "已" : "已取消"}点赞`
@@ -67,6 +84,7 @@ export function useGenericActions({ target_model, target_id }) {
       enabled: actionValue
     });
     favStatus.value = actionValue;
+    favCount.value += actionValue ? 1 : -1;
     uni.showToast({
       icon: "none",
       title: `${actionValue ? "已" : "已取消"}收藏`
@@ -86,6 +104,9 @@ export function useGenericActions({ target_model, target_id }) {
     return actionValue;
   };
   return {
+    shareCount,
+    favCount,
+    likeCount,
     actionsReady,
     actionsMap,
     favStatus,
