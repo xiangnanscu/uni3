@@ -67,7 +67,7 @@
         link="navigateTo"
         to="/views/ProfileForm"
         :show-extra-icon="true"
-        :extra-icon="{ color: '#666', size: '32', type: 'auth-filled' }"
+        :extra-icon="{ color: '#666', size: '32', type: 'person-filled' }"
       >
       </uni-list-item>
       <uni-list-item
@@ -100,6 +100,14 @@
         to="/views/GoddessAdd"
         :show-extra-icon="true"
         :extra-icon="{ color: '#666', size: '32', type: 'personadd-filled' }"
+      >
+      </uni-list-item>
+      <uni-list-item
+        title="关于"
+        link="navigateTo"
+        to="/views/About"
+        :show-extra-icon="true"
+        :extra-icon="{ color: '#666', size: '32', type: 'more-filled' }"
       >
       </uni-list-item>
       <uni-list-item

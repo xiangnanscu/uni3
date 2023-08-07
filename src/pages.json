@@ -79,7 +79,8 @@
     {
       "path": "views/tabbar/SystemMessage",
       "style": { "navigationBarTitleText": "" }
-    }
+    },
+    { "path": "views/About", "style": { "navigationBarTitleText": "" } }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
