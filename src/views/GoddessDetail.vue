@@ -39,6 +39,7 @@
     <thread-body
       class="chat-body"
       :posts="posts"
+      target-model="goddess"
       @deletePost="deletePost"
       @replyPost="replyPost"
       @replyPostComment="replyPostComment"

@@ -1,55 +1,58 @@
 <template>
   <PageLayout>
     <uni-list v-if="messages.length" :border="false">
-      <navigator
-        v-for="(a, index) in messages"
-        :url="`/views/MessageDetail?receiverId=${a.receiver.id}`"
-        :key="index"
+      <uni-list-item
+        v-for="e of messages"
+        :key="e.id"
+        :title="`${e.content.creator__nickname}`"
+        :note="` ${e.actionText}“${e.content.target_digest}”：${e.content.content}`"
+        :to="e.url"
+        showArrow
+        :thumb="e.content.creator__avatar"
+        thumb-size="lg"
+        :rightText="e.ctime"
       >
-        <uni-list-item>
-          <template v-slot:header>
-            <view class="slot-box">
-              <uni-badge
-                :is-dot="true"
-                :text="a.target.id == user.id && !a.readed ? 1 : 0"
-                absolute="rightTop"
-                size="normal"
-                :offset2="[5, 5]"
-              >
-                <image
-                  class="message-avatar slot-image"
-                  :src="a.receiver.avatar"
-                  mode="widthFix"
-                ></image>
-              </uni-badge>
-            </view>
-          </template>
-          <template v-slot:body
-            ><text class="message-body slot-box slot-text">{{
-              utils.abstractText(a.content, 10)
-            }}</text>
-          </template>
-          <template v-slot:footer>
-            <view style="text-align: right">
-              <view class="message-header">{{ a.receiver.nickname }}</view>
-              <view class="message-footer"
-                ><text>{{ fromNow(a.ctime) }}</text></view
-              >
-            </view></template
-          >
-        </uni-list-item>
-      </navigator>
+      </uni-list-item>
     </uni-list>
     <uni-notice-bar v-else single text="没有收到任何信息" />
   </PageLayout>
 </template>
 
 <script>
+const detailViewMap = {
+  post: "PostDetail",
+  comment: "CommentDetail",
+  thread: "ThreadDetail",
+  goddess: "GoddessDetail"
+};
+const actionTextMap = {
+  reply_thread: "回复了你的帖子",
+  reply_post: "评论了你的回帖",
+  reply_post_comment: "回复了你的评论"
+};
 export default {
   data() {
     return {
       messages: []
     };
+  },
+  async onShow() {
+    this.messages = (await this.fetchData()).map((e) => {
+      e.ctime = utils.fromNow(e.ctime);
+      e.url = `/views/${detailViewMap[e.content.target_model]}?id=${
+        e.content.target_id
+      }`;
+      e.actionText = actionTextMap[e.type];
+      return e;
+    });
+  },
+  methods: {
+    async fetchData() {
+      return await usePost(`/system_message/records`, {
+        target_usr: this.user.id,
+        readed: false
+      });
+    }
   }
 };
 </script>

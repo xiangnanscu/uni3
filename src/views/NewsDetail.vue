@@ -19,6 +19,7 @@
     <thread-body
       class="chat-body"
       :posts="posts"
+      target-model="news"
       @deletePost="deletePost"
       @replyPost="replyPost"
       @replyPostComment="replyPostComment"

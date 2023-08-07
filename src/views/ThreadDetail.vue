@@ -5,6 +5,7 @@
       <thread-body
         class="chat-body"
         :posts="posts"
+        target-model="thread"
         @deletePost="deletePost"
         @replyPost="replyPost"
         @replyPostComment="replyPostComment"

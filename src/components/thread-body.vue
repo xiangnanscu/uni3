@@ -116,6 +116,7 @@
 <script>
 export default {
   props: {
+    targetModel: { type: String },
     posts: { type: Array }
   },
   data() {
@@ -132,7 +133,7 @@ export default {
     },
     postDigest(post) {
       return post
-        ? `${post.creator__nickname}：${utils.abstractText(post.content, 15)}`
+        ? `${post.creator__nickname}：${utils.textDigest(post.content, 15)}`
         : "";
     },
     async confirmDelete({ index, text }) {

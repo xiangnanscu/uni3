@@ -25,7 +25,7 @@
         </template>
         <template v-slot:body
           ><text class="message-body slot-box slot-text">{{
-            utils.abstractText(a.content, 10)
+            utils.textDigest(a.content, 10)
           }}</text>
         </template>
         <template v-slot:footer>

@@ -261,7 +261,7 @@ export const toModelName = (s) => {
   return capitalize(snakeToCamel(s));
 };
 
-export const abstractText = (s, n = 10) => {
+export const textDigest = (s, n = 10) => {
   return s.length <= n ? s : s.slice(0, n) + "...";
 };
 

@@ -7,6 +7,7 @@ export default {
       messageText: "",
       post: null,
       comment: null,
+      target_model: "",
       posts: []
     };
   },
@@ -25,13 +26,21 @@ export default {
       }
     },
     async sendPost(content) {
-      console.log("this.record", this.record);
-      const { data: newPost } = await Http.post("/post/create", {
+      const newPost = await usePost("/post/create", {
         content,
         target_model: this.target_model,
-        target_id: this.record.id,
-        target_thread_creator: this.record.creator
+        target_id: this.record.id
       });
+      if (this.record.creator && this.record.creator !== this.user.id) {
+        newPost.creator__nickname = this.user.nickname;
+        newPost.creator__avatar = this.user.avatar;
+        newPost.target_digest = utils.textDigest(this.record.title, 31);
+        await usePost("/system_message/create", {
+          type: "reply_thread",
+          target_usr: this.record.creator,
+          content: newPost
+        });
+      }
       this.posts.push({
         id: newPost.id,
         content: newPost.content,
@@ -48,15 +57,63 @@ export default {
       const newComment = await usePost("/post_comment/create", {
         content,
         post_id: this.post.id,
-        post_comment_id: this.comment?.id,
-        target_thread_creator: this.record.creator,
-        target_post_creator: this.post.creator,
-        target_post_comment_creator: this.comment?.creator
+        post_comment_id: this.comment?.id
       });
+      newComment.creator__nickname = this.user.nickname;
+      newComment.creator__avatar = this.user.avatar;
 
-      await usePost("/system_message/insert", [
-        { type: "reply_post", target: this.post.creator, content: {} }
-      ]);
+      const notices = [];
+      const alreadyNoticed = {}; // 避免重复通知
+      if (this.comment && this.comment.creator !== this.user.id) {
+        alreadyNoticed[this.comment.creator] = true;
+        notices.push({
+          type: "reply_post_comment",
+          target_usr: this.comment.creator,
+          content: {
+            ...newComment,
+            target_model: "comment",
+            target_id: this.comment.id,
+            target_digest: utils.textDigest(this.comment.content, 31)
+          }
+        });
+      }
+      if (
+        !alreadyNoticed[this.post.creator] &&
+        this.post.creator !== this.user.id
+      ) {
+        // 评论自己的帖子不用通知
+        alreadyNoticed[this.post.creator] = true;
+        notices.push({
+          type: "reply_post",
+          target_usr: this.post.creator,
+          content: {
+            ...newComment,
+            target_model: "post",
+            target_id: this.post.id,
+            target_digest: utils.textDigest(this.post.content, 31)
+          }
+        });
+      }
+      if (
+        this.record.creator &&
+        !alreadyNoticed[this.record.creator] &&
+        this.record.creator !== this.user.id
+      ) {
+        // 新闻和团委发布的新青年没有creator
+        notices.push({
+          type: "reply_thread",
+          target_usr: this.record.creator,
+          content: {
+            ...newComment,
+            target_model: this.target_model,
+            target_id: this.record.id,
+            target_digest: utils.textDigest(this.record.title, 31)
+          }
+        });
+      }
+      if (notices.length) {
+        await usePost("/system_message/insert", notices);
+      }
       if (!this.post.comments) {
         this.post.comments = [];
       }
