@@ -1,10 +1,15 @@
 <template>
   <page-layout>
     <view v-if="record">
-      <thread-head :thread="record" :posts="posts"></thread-head>
+      <thread-head
+        :target="record"
+        target-model="thread"
+        :posts="posts"
+      ></thread-head>
       <thread-body
         class="chat-body"
         :posts="posts"
+        :scroll-id="query.scrollId"
         target-model="thread"
         @deletePost="deletePost"
         @replyPost="replyPost"

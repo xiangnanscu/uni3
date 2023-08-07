@@ -16,11 +16,7 @@
     </uni-card>
     <div style="height: 3em"></div>
     <x-bottom>
-      <generic-actions
-        :target-id="record.id"
-        target-model="ad"
-        style="width: 100%"
-      />
+      <generic-actions :target="record" target-model="ad" style="width: 100%" />
     </x-bottom>
   </page-layout>
 </template>

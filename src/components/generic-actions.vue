@@ -66,7 +66,7 @@
 <script setup>
 const props = defineProps({
   targetModel: { type: String, required: true },
-  targetId: { type: Number, required: true }
+  target: { type: Object, required: true }
 });
 const {
   actionsReady,
@@ -81,10 +81,9 @@ const {
   onFav,
   onShare
 } = useGenericActions({
-  target_model: props.targetModel,
-  target_id: props.targetId
+  targetModel: props.targetModel,
+  target: props.target
 });
-console.log({ favCount, likeCount });
 </script>
 
 <style lang="scss" scoped>

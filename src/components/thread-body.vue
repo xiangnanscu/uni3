@@ -1,8 +1,12 @@
 <template>
   <div>
-    <scroll-view :scroll-y="true" :scroll-top="99999">
+    <scroll-view :scroll-y="true" :scroll-into-view="scrollTo">
       <uni-list>
-        <uni-list-item v-for="(post, index) in posts" :key="index">
+        <uni-list-item
+          v-for="(post, index) in posts"
+          :key="post.id"
+          :id="`post-${post.id}`"
+        >
           <template v-slot:header>
             <view class="slot-box avatar-container">
               <navigator :url="`/views/Profile?id=${post.creator}`">
@@ -116,17 +120,23 @@
 <script>
 export default {
   props: {
+    scrollId: { type: String },
     targetModel: { type: String },
     posts: { type: Array }
   },
   data() {
     return {
+      scrollTo: null,
       currentPost: null,
       showDelete: false,
       showPostActionPanel: false
     };
   },
-
+  mounted() {
+    setTimeout(() => {
+      this.scrollTo = this.scrollId;
+    }, 500);
+  },
   methods: {
     isSelfPost(post) {
       return this.user.id === post?.creator;

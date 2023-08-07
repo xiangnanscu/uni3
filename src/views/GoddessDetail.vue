@@ -24,7 +24,7 @@
       <template #actions> </template>
     </uni-card>
     <generic-actions
-      :target-id="record.id"
+      :target="record"
       target-model="goddess"
       style="width: 100%"
     >
@@ -39,6 +39,7 @@
     <thread-body
       class="chat-body"
       :posts="posts"
+      :scroll-id="query.scrollId"
       target-model="goddess"
       @deletePost="deletePost"
       @replyPost="replyPost"

@@ -10,11 +10,7 @@
       <tinymce-text :html="record.content"></tinymce-text>
       <template #actions> </template>
     </uni-card>
-    <generic-actions
-      :target-id="record.id"
-      target-model="news"
-      style="width: 100%"
-    />
+    <generic-actions :target="record" target-model="news" style="width: 100%" />
     <div style="height: 2em"></div>
     <thread-body
       class="chat-body"

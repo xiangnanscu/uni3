@@ -1,3 +1,5 @@
+const messageDigestNumber = 31;
+
 export default {
   data() {
     return {
@@ -8,8 +10,13 @@ export default {
       post: null,
       comment: null,
       target_model: "",
+      scrollId: null,
       posts: []
     };
+  },
+  async onLoad(query) {
+    this.query = query;
+    await this.fetchData(query);
   },
   methods: {
     async fetchData(query) {
@@ -34,7 +41,10 @@ export default {
       if (this.record.creator && this.record.creator !== this.user.id) {
         newPost.creator__nickname = this.user.nickname;
         newPost.creator__avatar = this.user.avatar;
-        newPost.target_digest = utils.textDigest(this.record.title, 31);
+        newPost.target_digest = utils.textDigest(
+          this.record.title,
+          messageDigestNumber
+        );
         await usePost("/system_message/create", {
           type: "reply_thread",
           target_usr: this.record.creator,
@@ -61,7 +71,8 @@ export default {
       });
       newComment.creator__nickname = this.user.nickname;
       newComment.creator__avatar = this.user.avatar;
-
+      newComment.url_model = this.target_model;
+      newComment.url_id = this.record.id;
       const notices = [];
       const alreadyNoticed = {}; // 避免重复通知
       if (this.comment && this.comment.creator !== this.user.id) {
@@ -73,7 +84,10 @@ export default {
             ...newComment,
             target_model: "comment",
             target_id: this.comment.id,
-            target_digest: utils.textDigest(this.comment.content, 31)
+            target_digest: utils.textDigest(
+              this.comment.content,
+              messageDigestNumber
+            )
           }
         });
       }
@@ -90,7 +104,10 @@ export default {
             ...newComment,
             target_model: "post",
             target_id: this.post.id,
-            target_digest: utils.textDigest(this.post.content, 31)
+            target_digest: utils.textDigest(
+              this.post.content,
+              messageDigestNumber
+            )
           }
         });
       }
@@ -107,7 +124,10 @@ export default {
             ...newComment,
             target_model: this.target_model,
             target_id: this.record.id,
-            target_digest: utils.textDigest(this.record.title, 31)
+            target_digest: utils.textDigest(
+              this.record.title,
+              messageDigestNumber
+            )
           }
         });
       }

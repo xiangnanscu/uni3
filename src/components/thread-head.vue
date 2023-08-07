@@ -3,17 +3,17 @@
     <view>
       <view class="thread-main">
         <div class="slot-box avatar-container">
-          <navigator :url="`/views/Profile?id=${thread.creator}`">
+          <navigator :url="`/views/Profile?id=${target.creator}`">
             <image
               class="post-avatar"
-              :src="thread.creator__avatar"
+              :src="target.creator__avatar"
               mode="widthFix"
             ></image
           ></navigator>
         </div>
         <div style="padding: 2px">
-          <div class="thread-nickname">{{ thread.creator__nickname }}</div>
-          <div class="thread-restinfo">{{ fromNow(thread.ctime) }}</div>
+          <div class="thread-nickname">{{ target.creator__nickname }}</div>
+          <div class="thread-restinfo">{{ fromNow(target.ctime) }}</div>
         </div>
       </view>
       <uni-card
@@ -23,11 +23,11 @@
         padding="10px 0px"
       >
         <template v-slot:title
-          ><span class="thread-title">{{ thread.title }}</span></template
+          ><span class="thread-title">{{ target.title }}</span></template
         >
-        <text user-select class="thread-content">{{ thread.content }}</text>
+        <text user-select class="thread-content">{{ target.content }}</text>
         <x-album v-if="picsUrls.length" :urls="picsUrls" :columns="1"></x-album>
-        <generic-actions :target-id="thread.id" target-model="thread" />
+        <generic-actions :target="target" :target-model="targetModel" />
       </uni-card>
     </view>
   </page-layout>
@@ -35,10 +35,11 @@
 
 <script setup>
 const props = defineProps({
-  thread: { type: Object },
-  posts: { type: Array },
+  target: { type: Object },
+  targetModel: { type: String },
+  posts: { type: Array }
 });
-const picsUrls = computed(() => props.thread?.pics || []);
+const picsUrls = computed(() => props.target?.pics || []);
 </script>
 
 <style scoped>

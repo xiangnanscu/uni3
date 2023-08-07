@@ -197,6 +197,10 @@ const tabbarPagesMap = Object.fromEntries(
   tabbarPages.map((e) => [`/${e.pagePath}`, true])
 );
 export const isTabbarPage = (url) => {
+  if (!url) {
+    const page = getPage();
+    url = "/" + page.route;
+  }
   return tabbarPagesMap[url];
 };
 const pagesMap = {};
@@ -244,7 +248,6 @@ export async function tryGotoPage(opts) {
       });
     }
     const lastUrl = getLastPageUrl();
-    // console.log("tryGotoPage", getCurrentPages(), { lastUrl });
     return await gotoPage({
       url: lastUrl
     });

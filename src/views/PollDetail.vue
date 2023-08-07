@@ -23,7 +23,7 @@
     <div style="height: 3em"></div>
     <x-bottom>
       <generic-actions
-        :target-id="record.id"
+        :target="record"
         target-model="poll"
         style="width: 100%"
       />

@@ -17,8 +17,7 @@ export const useBadgeNumber = async (opts) => {
   if (typeof system_message_count == "number") {
     setSystemMessageCount(system_message_count);
   }
-  const page = utils.getPage();
-  if (utils.isTabbarPage("/" + page.route)) {
+  if (utils.isTabbarPage()) {
     const friendsMessageTotalCount =
       friendsApplyCount.value + friendsMessageCount.value;
 

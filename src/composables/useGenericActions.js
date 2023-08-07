@@ -1,4 +1,4 @@
-export function useGenericActions({ target_model, target_id }) {
+export function useGenericActions({ targetModel, target }) {
   const { session } = useSession();
   const actionsReady = ref(false);
   const favStatus = ref(false);
@@ -7,13 +7,14 @@ export function useGenericActions({ target_model, target_id }) {
   const shareCount = ref(0);
   const likeCount = ref(0);
   const favCount = ref(0);
+  const target_id = target.id;
+  const target_model = targetModel;
   const actionsMap = {
     分享: shareStatus,
     收藏: favStatus,
     点赞: likeStatus
   };
   onMounted(async () => {
-    console.log("useGenericActions onMounted");
     if (!session.user.id) {
       return;
     }
@@ -66,6 +67,19 @@ export function useGenericActions({ target_model, target_id }) {
       type: "点赞",
       enabled: actionValue
     });
+    if (actionValue && target.creator && target.creator !== session.user.id) {
+      await usePost("/system_message/create", {
+        type: "thumb_up",
+        target_usr: target.creator,
+        content: {
+          target_model,
+          target_id,
+          target_digest: utils.textDigest(target.title, 31),
+          creator__avatar: session.user.avatar,
+          creator__nickname: session.user.nickname
+        }
+      });
+    }
     likeStatus.value = actionValue;
     likeCount.value += actionValue ? 1 : -1;
     uni.showToast({

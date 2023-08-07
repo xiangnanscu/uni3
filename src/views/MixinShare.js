@@ -2,10 +2,6 @@ export default {
   data() {
     return { record: null, shareTitlePrefix: "" };
   },
-  async onLoad(query) {
-    this.query = query;
-    await this.fetchData(query);
-  },
   onShareTimeline(options) {
     return this.shareData;
   },

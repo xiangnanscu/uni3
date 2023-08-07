@@ -96,14 +96,14 @@ const setupNav = () => {
   navHandlerList.forEach((handler) => {
     uni.addInterceptor(handler, {
       invoke(opts) {
-        console.log("路由拦截", handler, opts.url);
+        // console.log("路由拦截", handler, opts);
         navStack.push(new Date().getTime());
         const { message, error } = storeToRefs(useStore());
         message.value = "";
         error.value = "";
         const [url, qs] = opts.url.split("?");
         if (whiteList.includes(url)) {
-          console.log("路由拦截-白名单", url, JSON.stringify(opts));
+          // console.log("路由拦截-白名单", url, JSON.stringify(opts));
           return opts;
         }
         if (isLogin()) {
