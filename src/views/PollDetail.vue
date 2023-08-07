@@ -42,6 +42,10 @@ export default {
       record: null
     };
   },
+  async onLoad(query) {
+    this.query = query;
+    await this.fetchData(query);
+  },
   computed: {
     pollChoices() {
       return this.record.model.map((e) => ({
