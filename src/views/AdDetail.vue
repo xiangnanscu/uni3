@@ -31,6 +31,10 @@ export default {
       record: null
     };
   },
+  async onLoad(query) {
+    this.query = query;
+    await this.fetchData(query);
+  },
   methods: {
     async fetchData(query) {
       const { data: ad } = await Http.get(`/ad/detail/${query.id}`);
