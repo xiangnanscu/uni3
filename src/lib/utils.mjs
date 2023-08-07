@@ -196,6 +196,9 @@ const tabbarPages = pagesJson.tabBar?.list;
 const tabbarPagesMap = Object.fromEntries(
   tabbarPages.map((e) => [`/${e.pagePath}`, true])
 );
+export const isTabbarPage = (url) => {
+  return tabbarPagesMap[url];
+};
 const pagesMap = {};
 for (const page of pagesJson.pages) {
   const name = page.path.split("/").pop();

@@ -25,10 +25,12 @@ export default {
       }
     },
     async sendPost(content) {
+      console.log("this.record", this.record);
       const { data: newPost } = await Http.post("/post/create", {
         content,
         target_model: this.target_model,
-        target_id: this.record.id
+        target_id: this.record.id,
+        target_thread_creator: this.record.creator
       });
       this.posts.push({
         id: newPost.id,
@@ -43,11 +45,18 @@ export default {
       uni.showToast({ icon: "none", title: "回帖成功" });
     },
     async sendComment(content) {
-      const { data: newComment } = await Http.post("/post_comment/create", {
+      const newComment = await usePost("/post_comment/create", {
         content,
         post_id: this.post.id,
-        post_comment_id: this.comment?.id
+        post_comment_id: this.comment?.id,
+        target_thread_creator: this.record.creator,
+        target_post_creator: this.post.creator,
+        target_post_comment_creator: this.comment?.creator
       });
+
+      await usePost("/system_message/insert", [
+        { type: "reply_post", target: this.post.creator, content: {} }
+      ]);
       if (!this.post.comments) {
         this.post.comments = [];
       }

@@ -42,11 +42,6 @@
     { "path": "views/ProfileForm", "style": { "navigationBarTitleText": "" } },
     { "path": "views/RealNameCert", "style": { "navigationBarTitleText": "" } },
     { "path": "views/SuccessPage", "style": { "navigationBarTitleText": "" } },
-    { "path": "views/tabbar/Heart", "style": { "navigationBarTitleText": "" } },
-    {
-      "path": "views/tabbar/Message",
-      "style": { "navigationBarTitleText": "" }
-    },
     {
       "path": "views/tabbar/ProfileMy",
       "style": { "navigationBarTitleText": "" }
@@ -69,7 +64,22 @@
       "style": { "navigationBarTitleText": "" }
     },
     { "path": "views/VolplanList", "style": { "navigationBarTitleText": "" } },
-    { "path": "views/VolplanListMy", "style": { "navigationBarTitleText": "" } }
+    {
+      "path": "views/VolplanListMy",
+      "style": { "navigationBarTitleText": "" }
+    },
+    {
+      "path": "views/tabbar/Friends",
+      "style": { "navigationBarTitleText": "" }
+    },
+    {
+      "path": "views/FriendsMessage",
+      "style": { "navigationBarTitleText": "" }
+    },
+    {
+      "path": "views/tabbar/SystemMessage",
+      "style": { "navigationBarTitleText": "" }
+    }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
@@ -98,7 +108,7 @@
         "text": "首页"
       },
       {
-        "pagePath": "views/tabbar/Heart",
+        "pagePath": "views/tabbar/Friends",
         "iconPath": "static/img/tabbar/friends.png",
         "selectedIconPath": "static/img/tabbar/friends-active.png",
         "text": "朋友"
@@ -110,7 +120,7 @@
         "text": ""
       },
       {
-        "pagePath": "views/tabbar/Message",
+        "pagePath": "views/tabbar/SystemMessage",
         "iconPath": "static/img/tabbar/msg.png",
         "selectedIconPath": "static/img/tabbar/msg-active.png",
         "text": "消息"

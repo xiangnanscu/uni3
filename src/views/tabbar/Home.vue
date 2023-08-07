@@ -291,17 +291,10 @@ export default {
     }
   },
   async onShow() {
-    const { setApplyCount } = useStore();
-    const {
-      noticeText,
-      goddess,
-      volplan,
-      ads,
-      polls,
-      news,
-      apply_count,
-      unread_message_count
-    } = await usePost(`/home_data?limit=2`);
+    await useBadgeNumber();
+    const { noticeText, goddess, volplan, ads, polls, news } = await usePost(
+      `/home_data`
+    );
     this.noticeText = noticeText;
     this.goddess = goddess[0];
     this.volplan = volplan[0];
@@ -313,29 +306,6 @@ export default {
       src: e.pics[0],
       desc1: e.content.slice(0, 50)
     }));
-
-    if (apply_count) {
-      uni.setTabBarBadge({
-        index: 1,
-        text: String(apply_count)
-      });
-      setApplyCount(apply_count);
-    } else {
-      uni.removeTabBarBadge({
-        index: 1
-      });
-    }
-
-    if (unread_message_count) {
-      uni.setTabBarBadge({
-        index: 3,
-        text: String(unread_message_count)
-      });
-    } else {
-      uni.removeTabBarBadge({
-        index: 3
-      });
-    }
   },
   methods: {
     newsClick(e) {

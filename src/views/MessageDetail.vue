@@ -91,6 +91,7 @@ export default {
     clearInterval(this.timerId);
   },
   async onShow() {
+    useBadgeNumber();
     await this.fetchData(this.receiverId);
   },
   computed: {

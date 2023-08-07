@@ -136,6 +136,7 @@
     "useAsyncQueue": true,
     "useAsyncState": true,
     "useAttrs": true,
+    "useBadgeNumber": true,
     "useBase64": true,
     "useBattery": true,
     "useBluetooth": true,
