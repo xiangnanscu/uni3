@@ -93,7 +93,7 @@
     "@dcloudio/uni-mp-toutiao": "3.0.0-3080420230531001",
     "@dcloudio/uni-mp-weixin": "3.0.0-3080420230531001",
     "@dcloudio/uni-quickapp-webview": "3.0.0-3080420230531001",
-    "@dcloudio/uni-ui": "^1.4.27",
+    "@dcloudio/uni-ui": "^1.4.28",
     "@vueuse/core": "^9.6.0",
     "@vueuse/integrations": "^9.11.0",
     "@xiangnanscu/fui": "^1.9.8",

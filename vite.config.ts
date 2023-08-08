@@ -7,7 +7,6 @@ import AutoImport from "unplugin-auto-import/vite";
 import Components from "unplugin-vue-components/vite";
 import { fileURLToPath, URL } from "node:url";
 import ViteRequireContext from "@originjs/vite-plugin-require-context";
-import { nodePolyfills } from "vite-plugin-node-polyfills";
 
 const env = process.env;
 const plugins = [
