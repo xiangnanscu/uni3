@@ -5,14 +5,20 @@
       <x-subtitle style="padding: 0.5em 0.5em">
         <div>{{ utils.fromNow(record.ctime) }}</div>
       </x-subtitle>
-      <x-button @click="joinVol" :disabled="record.joined">{{
-        record.joined ? "已登记" : "我要参加"
-      }}</x-button>
+      <image
+        v-if="record.pics[0]"
+        :src="record.pics[0]"
+        mode="widthFix"
+        style="width: 100%"
+      />
       <fui-preview :previewData="previewData"></fui-preview>
       <tinymce-text :html="record.content"></tinymce-text>
       <template #actions> </template>
     </uni-card>
     <div style="height: 3em"></div>
+    <x-button @click="joinVol" :disabled="record.joined">{{
+      record.joined ? "已登记" : "我要参加"
+    }}</x-button>
     <x-bottom>
       <generic-actions
         :target="record"
@@ -34,6 +40,10 @@ export default {
       disableJoinButton: false,
       record: null
     };
+  },
+  async onLoad(query) {
+    this.query = query;
+    await this.fetchData(query);
   },
   computed: {
     previewData() {
