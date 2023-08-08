@@ -1,7 +1,16 @@
 diff --git a/node_modules/@dcloudio/uni-ui/lib/uni-list-chat/uni-list-chat.vue b/node_modules/@dcloudio/uni-ui/lib/uni-list-chat/uni-list-chat.vue
-index 27d05dd..67b1bc5 100644
+index d49fd7c..08fd277 100644
 --- a/node_modules/@dcloudio/uni-ui/lib/uni-list-chat/uni-list-chat.vue
 +++ b/node_modules/@dcloudio/uni-ui/lib/uni-list-chat/uni-list-chat.vue
+@@ -275,7 +275,7 @@
+ 	$avatar-width: 45px;
+ 	$avatar-border-radius: 5px;
+ 	$avatar-border-color: #eee;
+-	$avatar-border-width: 1px;
++	$avatar-border-width: 0px;
+ 	$title-size: 16px;
+ 	$title-color: #3b4144;
+ 	$title-weight: normal;
 @@ -427,7 +427,7 @@
  	}
  
