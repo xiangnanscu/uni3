@@ -1,22 +1,20 @@
 <template>
-  <PageLayout>
-    <uni-list v-if="messages.length" :border="false">
-      <uni-list-chat
-        v-for="e of messages"
-        clickable
-        @click="setAsRead(e)"
-        :key="e.id"
-        :title="`${e.content.creator__nickname}`"
-        :note="e.note"
-        :avatar="e.content.creator__avatar"
-        badge-positon="left"
-        :badge-text="e.readed ? '' : 'dot'"
-        :time="e.ctime"
-      >
-      </uni-list-chat>
-    </uni-list>
-    <uni-notice-bar v-else single text="没有收到任何信息" />
-  </PageLayout>
+  <uni-list v-if="messages.length" :border="false">
+    <uni-list-chat
+      v-for="e of messages"
+      clickable
+      @click="setAsRead(e)"
+      :key="e.id"
+      :title="`${e.content.creator__nickname}`"
+      :note="e.note"
+      :avatar="e.content.creator__avatar"
+      badge-positon="left"
+      :badge-text="e.readed ? '' : 'dot'"
+      :time="e.ctime"
+    >
+    </uni-list-chat>
+  </uni-list>
+  <uni-notice-bar v-else single text="没有收到任何信息" />
 </template>
 
 <script>

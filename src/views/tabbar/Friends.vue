@@ -58,68 +58,66 @@ onShow(async () => {
 </script>
 
 <template>
-  <page-layout>
-    <fui-tabs
-      :tabs="tabs"
-      center
-      @change="changeActionType"
-      :current="current"
-    ></fui-tabs>
-    <friends-message
-      v-if="ready && current === 0"
-      :messages="messages"
-    ></friends-message>
-    <uni-list v-if="ready && current === 1">
+  <fui-tabs
+    :tabs="tabs"
+    center
+    @change="changeActionType"
+    :current="current"
+  ></fui-tabs>
+  <friends-message
+    v-if="ready && current === 0"
+    :messages="messages"
+  ></friends-message>
+  <uni-list v-if="ready && current === 1" :border="false">
+    <uni-list-item
+      v-for="e in friendsData"
+      :key="e.id"
+      :title="e.title"
+      showArrow
+      link="navigateTo"
+      :to="`/views/MessageDetail?receiverId=${e.id}`"
+      thumb-size="lg"
+      :thumb="e.avatar"
+    >
+    </uni-list-item>
+  </uni-list>
+  <uni-list v-if="ready && current === 2" :border="false">
+    <x-alert v-if="!friendsData.length" title="没有记录"> </x-alert>
+    <template v-for="e in friendsData" :key="e.id">
       <uni-list-item
-        v-for="e in friendsData"
-        :key="e.id"
+        v-if="e.approvable && e.status == '待添加'"
         :title="e.title"
-        showArrow
-        link="navigateTo"
-        :to="`/views/MessageDetail?receiverId=${e.id}`"
+        :note="e.hello_message"
+        thumb-size="lg"
+        :thumb="e.avatar"
+      >
+        <template v-slot:footer>
+          <div class="slot-box">
+            <x-tagbutton
+              text="同意"
+              type="success"
+              @click="approve(e, '通过')"
+            ></x-tagbutton>
+            <x-tagbutton
+              style="margin-left: 1em"
+              text="拒绝"
+              type="warning"
+              @click="approve(e, '拒绝')"
+            ></x-tagbutton>
+          </div>
+        </template>
+      </uni-list-item>
+      <uni-list-item
+        v-else
+        :title="e.title"
+        :note="e.hello_message"
+        :right-text="e.approvable ? `已${e.status}` : `待对方处理`"
         thumb-size="lg"
         :thumb="e.avatar"
       >
       </uni-list-item>
-    </uni-list>
-    <uni-list v-if="ready && current === 2">
-      <x-alert v-if="!friendsData.length" title="没有记录"> </x-alert>
-      <template v-for="e in friendsData" :key="e.id">
-        <uni-list-item
-          v-if="e.approvable && e.status == '待添加'"
-          :title="e.title"
-          :note="e.hello_message"
-          thumb-size="lg"
-          :thumb="e.avatar"
-        >
-          <template v-slot:footer>
-            <div class="slot-box">
-              <x-tagbutton
-                text="同意"
-                type="success"
-                @click="approve(e, '通过')"
-              ></x-tagbutton>
-              <x-tagbutton
-                style="margin-left: 1em"
-                text="拒绝"
-                type="warning"
-                @click="approve(e, '拒绝')"
-              ></x-tagbutton>
-            </div>
-          </template>
-        </uni-list-item>
-        <uni-list-item
-          v-else
-          :title="e.title"
-          :note="e.hello_message"
-          :right-text="e.approvable ? `已${e.status}` : `待对方处理`"
-          thumb-size="lg"
-          :thumb="e.avatar"
-        >
-        </uni-list-item>
-      </template>
-    </uni-list>
-  </page-layout>
+    </template>
+  </uni-list>
 </template>
 
 <style scoped>

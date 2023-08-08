@@ -1,9 +1,4 @@
 <template>
-  <fui-sticky v-if="receiver" class="main-color">
-    <div class="chat-head">
-      {{ receiver.nickname }}
-    </div>
-  </fui-sticky>
   <div class="chat main-color">
     <div v-for="e in messages" :key="e.id">
       <div v-if="e.time" class="chat-time">{{ e.time }}</div>
@@ -23,6 +18,7 @@
     <x-chatbar
       v-if="showChatBar"
       v-model:modelValue="messageText"
+      :focus="false"
       @sendMessage="sendMessage"
     />
   </div>
@@ -41,6 +37,8 @@ export default {
   props: {},
   data() {
     return {
+      wxChatColor: "#95ec69",
+      wxChatBg: "#F2F2F2",
       showChatBar: true,
       showFloatPlus: false,
       messageText: "",
@@ -100,6 +98,7 @@ export default {
         get: { id: receiverId },
         select: ["id", "nickname", "avatar"]
       });
+      uni.setNavigationBarTitle({ title: this.receiver.nickname });
     },
     scrollTo() {
       this.$nextTick(() => {
@@ -144,17 +143,17 @@ export default {
 
 <style scoped>
 .main-color {
-  background-color: #eee;
+  background-color: v-bind(wxChatBg);
 }
 .chat {
-  padding: 5px 10px;
+  padding: 1em 10px;
   height: 100vh;
 }
 .chat-head {
   padding: 10px;
   text-align: center;
   font-weight: bold;
-  border-bottom: #e0e0e0 solid 1px;
+  border-bottom: v-bind(wxChatBg) solid 1px;
 }
 .chat-item {
   display: flex;
@@ -185,13 +184,13 @@ export default {
   font-size: 90%;
 }
 .chat-bubble-true {
-  background-color: #9cda62;
-  margin-right: 0.5em;
+  background-color: v-bind(wxChatColor);
+  margin-right: 0.8em;
 }
 
 .chat-bubble-false {
   background-color: white;
-  margin-left: 0.5em;
+  margin-left: 0.8em;
 }
 .chat-bubble-true::before {
   position: absolute;
@@ -199,7 +198,7 @@ export default {
   top: 15px;
   content: "";
   border: 4px solid transparent;
-  border-left-color: #9cda62;
+  border-left-color: v-bind(wxChatColor);
 }
 
 .chat-bubble-false::after {
