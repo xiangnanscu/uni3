@@ -24,7 +24,6 @@
       @sendMessage="sendMessage"
     />
   </div>
-  <view class="chat-bottom main-color"></view>
 </template>
 
 <script>
@@ -117,9 +116,9 @@ export default {
         setTimeout(() => {
           uni.pageScrollTo({
             duration: 100,
-            scrollTop: Infinity
+            scrollTop: 10 ** 10 //Infinity只在h5有效,这里改成具体的值
           });
-        }, 100);
+        }, 200);
       });
     },
     toggleButton() {
@@ -153,7 +152,7 @@ export default {
   background-color: v-bind(wxChatBg);
 }
 .chat {
-  padding: 1em 10px;
+  padding: 1em 10px 6em 10px;
   min-height: 100vh;
 }
 .chat-bottom {
