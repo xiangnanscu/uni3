@@ -41,8 +41,6 @@ export const useBadgeNumber = async (opts) => {
         index: 3
       });
     }
-  } else {
-    console.log("not tabbar..");
   }
 
   return {
