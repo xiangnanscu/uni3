@@ -40,10 +40,6 @@ export default {
 </script>
 
 <style scoped>
-:deep(.uni-list-chat__header-image) {
-  /* 修复右侧头像莫名其妙的边距,保证头像正方形展示 */
-  margin: 0;
-}
 .popup-scrollable {
   overflow-y: scroll;
   height: 500rpx;
