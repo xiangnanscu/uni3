@@ -6,6 +6,7 @@
           v-for="(post, index) in posts"
           :key="post.id"
           :id="`post-${post.id}`"
+          style="margin-left: -15px; margin-right: -15px"
         >
           <template v-slot:header>
             <view class="slot-box avatar-container">
@@ -194,9 +195,6 @@ export default {
 </script>
 
 <style scoped>
-:deep(.uni-list-item__container) {
-  padding: 1em 0;
-}
 .post-content {
   font-size: 98%;
 }
