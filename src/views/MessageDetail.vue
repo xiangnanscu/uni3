@@ -1,5 +1,5 @@
 <template>
-  <div class="chat main-color">
+  <div class="chat">
     <div v-for="e in timeHintMessages" :key="e.id">
       <div v-if="e.time" class="chat-time">
         {{ e.time }}
@@ -32,7 +32,7 @@ export default {
   data() {
     return {
       wxChatColor: "#95ec69",
-      wxChatBg: "#F2F2F2", // pages.json页面的style中可以配置微信小程序的背景色
+      wxChatBg: "#F2F2F2",
       showChatBar: true,
       showFloatPlus: false,
       messageText: "",
@@ -146,17 +146,16 @@ export default {
   }
 };
 </script>
-
-<style scoped>
+<style>
 page {
-  /* pages.json页面的style中可以配置微信小程序的背景色, 但h5无效 */
+  /* pages.json页面的style中配置微信小程序的背景色无效 */
   background-color: #f2f2f2;
 }
-.main-color {
-  /* background-color: v-bind(wxChatBg); */
-}
+</style>
+<style scoped>
 .chat {
   padding: 1em 10px 5em 10px;
+  background-color: transparent;
   /* min-height: 100vh; */
 }
 .chat-bottom {
