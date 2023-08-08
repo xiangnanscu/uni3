@@ -24,13 +24,6 @@
       @sendMessage="sendMessage"
     />
   </div>
-  <fui-fab
-    v-if="showFloatPlus"
-    :distance="30"
-    position="right"
-    :isDrag="true"
-    @click="toggleButton"
-  ></fui-fab>
   <view class="chat-bottom main-color"></view>
 </template>
 
@@ -161,14 +154,14 @@ export default {
 }
 .chat {
   padding: 1em 10px;
-  /* height: 100vh; */
+  min-height: 100vh;
 }
 .chat-bottom {
   height: 2em;
 }
 .chat-time {
   text-align: center;
-  font-size: 61.8%;
+  font-size: 68.8%;
   color: #666;
   margin: 1em 0;
 }
