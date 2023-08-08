@@ -1,43 +1,18 @@
 <template>
   <uni-list v-if="messages.length" :border="false">
-    <navigator
-      v-for="(a, index) in messages"
-      :url="`/views/MessageDetail?receiverId=${a.receiver.id}`"
-      :key="index"
+    <uni-list-chat
+      v-for="e in messages"
+      :key="e.id"
+      clickable
+      @click="clickItem(e)"
+      :title="e.receiver.nickname"
+      :note="utils.textDigest(e.content, 10)"
+      :avatar="e.receiver.avatar"
+      badge-positon="left"
+      :badge-text="selfUnread(e) ? 'dot' : ''"
+      :time="utils.fromNow(e.ctime)"
     >
-      <uni-list-item>
-        <template v-slot:header>
-          <view class="slot-box">
-            <uni-badge
-              :is-dot="true"
-              :text="a.target.id == user.id && !a.readed ? 1 : 0"
-              absolute="rightTop"
-              size="normal"
-              :offset2="[5, 5]"
-            >
-              <image
-                class="message-avatar slot-image"
-                :src="a.receiver.avatar"
-                mode="widthFix"
-              ></image>
-            </uni-badge>
-          </view>
-        </template>
-        <template v-slot:body
-          ><text class="message-body slot-box slot-text">{{
-            utils.textDigest(a.content, 10)
-          }}</text>
-        </template>
-        <template v-slot:footer>
-          <view style="text-align: right">
-            <view class="message-header">{{ a.receiver.nickname }}</view>
-            <view class="message-footer"
-              ><text>{{ fromNow(a.ctime) }}</text></view
-            >
-          </view></template
-        >
-      </uni-list-item>
-    </navigator>
+    </uni-list-chat>
   </uni-list>
   <uni-notice-bar v-else single text="没有收到任何信息" />
 </template>
@@ -47,6 +22,19 @@ export default {
   props: ["messages"],
   data() {
     return {};
+  },
+  methods: {
+    selfUnread(e) {
+      return e.target.id == this.user.id && !e.readed;
+    },
+    async clickItem(e) {
+      if (this.selfUnread(e)) {
+        await usePost("/message/clear_unread", { creator: e.receiver.id });
+      }
+      await utils.gotoPage({
+        url: `/views/MessageDetail?receiverId=${e.receiver.id}`
+      });
+    }
   }
 };
 </script>
@@ -65,8 +53,8 @@ export default {
   display: block;
   /* margin-right: 10px; */
   /* margin-left: -10px; */
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
 }
 .slot-image-right {
   display: block;

@@ -123,6 +123,10 @@ onShow(async () => {
 </template>
 
 <style scoped>
+:deep(.uni-list-item__content-title) {
+  /* 朋友tab中间字体增大 */
+  font-size: 100%;
+}
 .fui-list__item {
   flex: 1;
   width: 100%;

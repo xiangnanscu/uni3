@@ -82,7 +82,6 @@ export default {
   },
   async onLoad(query) {
     this.receiverId = Number(query.receiverId);
-    await usePost("/message/clear_unread", { creator: this.receiverId });
     this.timerId = setInterval(async () => {
       await this.fetchNewChatRecords(this.latestId);
     }, 1000);

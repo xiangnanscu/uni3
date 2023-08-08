@@ -8,7 +8,6 @@
         :key="e.id"
         :title="`${e.content.creator__nickname}`"
         :note="e.note"
-        showArrow
         :avatar="e.content.creator__avatar"
         badge-positon="left"
         :badge-text="e.readed ? '' : 'dot'"
