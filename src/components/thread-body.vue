@@ -194,6 +194,9 @@ export default {
 </script>
 
 <style scoped>
+:deep(.uni-list-item__container) {
+  padding: 1em 0;
+}
 .post-content {
   font-size: 98%;
 }

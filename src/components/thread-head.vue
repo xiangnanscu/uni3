@@ -1,36 +1,34 @@
 <template>
-  <page-layout>
-    <view>
-      <view class="thread-main">
-        <div class="slot-box avatar-container">
-          <navigator :url="`/views/Profile?id=${target.creator}`">
-            <image
-              class="post-avatar"
-              :src="target.creator__avatar"
-              mode="widthFix"
-            ></image
-          ></navigator>
-        </div>
-        <div style="padding: 2px">
-          <div class="thread-nickname">{{ target.creator__nickname }}</div>
-          <div class="thread-restinfo">{{ fromNow(target.ctime) }}</div>
-        </div>
-      </view>
-      <uni-card
-        :border="false"
-        :isFull="true"
-        :is-shadow="false"
-        padding="10px 0px"
-      >
-        <template v-slot:title
-          ><span class="thread-title">{{ target.title }}</span></template
-        >
-        <text user-select class="thread-content">{{ target.content }}</text>
-        <x-album v-if="picsUrls.length" :urls="picsUrls" :columns="1"></x-album>
-        <generic-actions :target="target" :target-model="targetModel" />
-      </uni-card>
+  <view>
+    <view class="thread-main">
+      <div class="slot-box avatar-container">
+        <navigator :url="`/views/Profile?id=${target.creator}`">
+          <image
+            class="post-avatar"
+            :src="target.creator__avatar"
+            mode="widthFix"
+          ></image
+        ></navigator>
+      </div>
+      <div style="padding: 2px">
+        <div class="thread-nickname">{{ target.creator__nickname }}</div>
+        <div class="thread-restinfo">{{ fromNow(target.ctime) }}</div>
+      </div>
     </view>
-  </page-layout>
+    <uni-card
+      :border="false"
+      :isFull="true"
+      :is-shadow="false"
+      padding="10px 0px"
+    >
+      <template v-slot:title
+        ><span class="thread-title">{{ target.title }}</span></template
+      >
+      <text user-select class="thread-content">{{ target.content }}</text>
+      <x-album v-if="picsUrls.length" :urls="picsUrls" :columns="1"></x-album>
+      <generic-actions :target="target" :target-model="targetModel" />
+    </uni-card>
+  </view>
 </template>
 
 <script setup>
