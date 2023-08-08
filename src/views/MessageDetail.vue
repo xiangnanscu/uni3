@@ -1,7 +1,9 @@
 <template>
   <div class="chat main-color">
-    <div v-for="e in messages" :key="e.id">
-      <div v-if="e.time" class="chat-time">{{ e.time }}</div>
+    <div v-for="e in timeHintMessages" :key="e.id">
+      <div v-if="e.time" class="chat-time">
+        {{ e.time }}
+      </div>
       <div :class="`chat-item chat-item-${user.id === e.creator.id}`">
         <div class="chat-avatar">
           <image
@@ -11,7 +13,7 @@
           ></image>
         </div>
         <div :class="`chat-bubble chat-bubble-${user.id === e.creator.id}`">
-          <text>{{ e.content.repeat(1) }}</text>
+          <text>{{ e.content }}</text>
         </div>
       </div>
     </div>
@@ -29,7 +31,7 @@
     :isDrag="true"
     @click="toggleButton"
   ></fui-fab>
-  <view class="bottom"></view>
+  <view class="chat-bottom main-color"></view>
 </template>
 
 <script>
@@ -48,14 +50,12 @@ export default {
       messages: []
     };
   },
-  mounted() {
-    this.scrollTo();
-  },
   async onLoad(query) {
     this.receiverId = Number(query.receiverId);
     this.timerId = setInterval(async () => {
       await this.fetchNewChatRecords(this.latestId);
     }, 1000);
+    setTimeout(this.scrollTo, 200);
   },
   onUnload() {
     clearInterval(this.timerId);
@@ -65,6 +65,25 @@ export default {
     await this.fetchData(this.receiverId);
   },
   computed: {
+    timeHintMessages() {
+      const res = [];
+      const now = new Date();
+      let lastTime = null;
+      for (const [i, e] of this.messages.entries()) {
+        if (i === 0) {
+          e.time = utils.getWeChatMessageTime(e.ctime, now);
+          lastTime = new Date(e.ctime).getTime();
+        } else {
+          const currentTime = new Date(e.ctime).getTime();
+          if (currentTime - lastTime > 60000) {
+            e.time = utils.getWeChatMessageTime(e.ctime, now);
+          }
+          lastTime = currentTime;
+        }
+        res.push(e);
+      }
+      return res;
+    },
     latestId() {
       return this.messages[this.messages.length - 1]?.id;
     },
@@ -103,15 +122,10 @@ export default {
     scrollTo() {
       this.$nextTick(() => {
         setTimeout(() => {
-          const view = uni.createSelectorQuery().in(this).select(".chat-body");
-          view
-            .boundingClientRect((res) => {
-              uni.pageScrollTo({
-                duration: 200,
-                scrollTop: res?.height || Infinity
-              });
-            })
-            .exec();
+          uni.pageScrollTo({
+            duration: 100,
+            scrollTop: Infinity
+          });
         }, 100);
       });
     },
@@ -147,7 +161,16 @@ export default {
 }
 .chat {
   padding: 1em 10px;
-  height: 100vh;
+  /* height: 100vh; */
+}
+.chat-bottom {
+  height: 2em;
+}
+.chat-time {
+  text-align: center;
+  font-size: 61.8%;
+  color: #666;
+  margin: 1em 0;
 }
 .chat-head {
   padding: 10px;

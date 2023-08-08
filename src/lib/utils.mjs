@@ -279,3 +279,51 @@ export const isLogin = () => {
   }
   return true;
 };
+
+// 格式化数字，确保为两位数
+function formatDigits(num) {
+  return num < 10 ? `0${num}` : num;
+}
+
+export function getWeChatMessageTime(messageTime, now) {
+  if (typeof messageTime == "string") {
+    messageTime = new Date(messageTime);
+  }
+  now = now || new Date();
+  const messageMonth = messageTime.getMonth();
+  const year = messageTime.getFullYear();
+  const hours = messageTime.getHours();
+  const minutes = messageTime.getMinutes();
+  const month = messageTime.getMonth() + 1;
+  const day = messageTime.getDate();
+  const period = hours < 12 ? "上午" : "下午";
+  const currentDate = now.getDate();
+  const currentMonth = now.getMonth();
+  const currentYear = now.getFullYear();
+  const hourMinutesText = `${formatDigits(hours)}:${formatDigits(minutes)}`;
+  // 检查是否为今天
+  if (
+    day === currentDate &&
+    messageMonth === currentMonth &&
+    year === currentYear
+  ) {
+    return hourMinutesText;
+  }
+  // 检查是否为昨天
+  const yesterday = new Date(now);
+  yesterday.setDate(currentDate - 1);
+  if (
+    day === yesterday.getDate() &&
+    messageMonth === yesterday.getMonth() &&
+    year === yesterday.getFullYear()
+  ) {
+    return `昨天 ${hourMinutesText}`;
+  }
+
+  // 检查是否为今年内的其他日期
+  if (year === currentYear) {
+    // 添加上午、下午信息
+    return `${month}月${day}日 ${period}${hourMinutesText}`;
+  }
+  return `${year}年${month}月${day}日 ${period}${hourMinutesText}`;
+}
