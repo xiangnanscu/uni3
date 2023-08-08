@@ -1,23 +1,20 @@
 <template>
   <PageLayout>
     <uni-list v-if="messages.length" :border="false">
-      <uni-list-item
+      <uni-list-chat
         v-for="e of messages"
         clickable
         @click="setAsRead(e)"
-        :show-badge="!e.readed"
-        :is-dot="true"
-        badge-text="1"
-        badge-type="error"
         :key="e.id"
         :title="`${e.content.creator__nickname}`"
         :note="e.note"
         showArrow
-        :thumb="e.content.creator__avatar"
-        thumb-size="lg"
-        :rightText="e.ctime"
+        :avatar="e.content.creator__avatar"
+        badge-positon="left"
+        :badge-text="e.readed ? '' : 'dot'"
+        :time="e.ctime"
       >
-      </uni-list-item>
+      </uni-list-chat>
     </uni-list>
     <uni-notice-bar v-else single text="没有收到任何信息" />
   </PageLayout>
@@ -62,7 +59,7 @@ export default {
           ? `${e.actionText}${modelMap[e.content.target_model] || ""}“${
               e.content.target_digest
             }”`
-          : `${e.actionText}“${e.content.target_digest}”：\n${e.content.content}`;
+          : `${e.actionText}“${e.content.target_digest}”：${e.content.content}`;
       return e;
     });
   },
@@ -81,6 +78,10 @@ export default {
 </script>
 
 <style scoped>
+:deep(.uni-ellipsis) {
+  /* 通知正文字数换行显示 */
+  white-space: inherit;
+}
 .popup-scrollable {
   overflow-y: scroll;
   height: 500rpx;
