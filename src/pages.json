@@ -30,7 +30,7 @@
     { "path": "views/Login", "style": { "navigationBarTitleText": "" } },
     {
       "path": "views/MessageDetail",
-      "style": { "navigationBarTitleText": "" }
+      "style": { "backgroundColor": "#F2F2F2", "navigationBarTitleText": "" }
     },
     { "path": "views/MyQrCode", "style": { "navigationBarTitleText": "" } },
     { "path": "views/NewsDetail", "style": { "navigationBarTitleText": "" } },

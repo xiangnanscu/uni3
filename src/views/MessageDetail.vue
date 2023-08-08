@@ -32,7 +32,7 @@ export default {
   data() {
     return {
       wxChatColor: "#95ec69",
-      wxChatBg: "#F2F2F2",
+      wxChatBg: "#F2F2F2", // pages.json页面的style中可以配置微信小程序的背景色
       showChatBar: true,
       showFloatPlus: false,
       messageText: "",
@@ -148,12 +148,16 @@ export default {
 </script>
 
 <style scoped>
+page {
+  /* pages.json页面的style中可以配置微信小程序的背景色, 但h5无效 */
+  background-color: #f2f2f2;
+}
 .main-color {
-  background-color: v-bind(wxChatBg);
+  /* background-color: v-bind(wxChatBg); */
 }
 .chat {
-  padding: 1em 10px 6em 10px;
-  min-height: 100vh;
+  padding: 1em 10px 5em 10px;
+  /* min-height: 100vh; */
 }
 .chat-bottom {
   height: 2em;
@@ -164,12 +168,7 @@ export default {
   color: #666;
   margin: 1em 0;
 }
-.chat-head {
-  padding: 10px;
-  text-align: center;
-  font-weight: bold;
-  border-bottom: v-bind(wxChatBg) solid 1px;
-}
+
 .chat-item {
   display: flex;
   align-items: top;
