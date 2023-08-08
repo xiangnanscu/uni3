@@ -1,58 +1,31 @@
 <template>
-  <fui-sticky v-if="receiver">
+  <fui-sticky v-if="receiver" class="main-color">
     <div class="chat-head">
       {{ receiver.nickname }}
     </div>
   </fui-sticky>
-  <page-layout>
-    <view>
-      <uni-list :border="false" class="chat-body">
-        <template v-for="(chat, i) in messages" :key="chat.id">
-          <uni-list-item v-if="chat.target.id === user.id" :border="false">
-            <template v-slot:header>
-              <view class="slot-box">
-                <image
-                  class="message-avatar slot-image"
-                  :src="chat.creator.avatar"
-                  mode="widthFix"
-                ></image>
-              </view>
-            </template>
-            <template v-slot:body
-              ><text
-                class="message-body slot-box slot-text"
-                style="display: block; text-align: left"
-                >{{ chat.content }}</text
-              >
-            </template>
-          </uni-list-item>
-          <uni-list-item v-else :border="false">
-            <template v-slot:body
-              ><text
-                class="message-body slot-box slot-text"
-                style="display: block; text-align: right"
-                >{{ chat.content }}</text
-              >
-            </template>
-            <template v-slot:footer>
-              <view class="slot-box">
-                <image
-                  class="message-avatar slot-image-right"
-                  :src="chat.creator.avatar"
-                  mode="widthFix"
-                ></image>
-              </view>
-            </template>
-          </uni-list-item>
-        </template>
-      </uni-list>
-      <x-chatbar
-        v-if="showChatBar"
-        v-model:modelValue="messageText"
-        @sendMessage="sendMessage"
-      />
-    </view>
-  </page-layout>
+  <div class="chat main-color">
+    <div v-for="e in messages" :key="e.id">
+      <div v-if="e.time" class="chat-time">{{ e.time }}</div>
+      <div :class="`chat-item chat-item-${user.id === e.creator.id}`">
+        <div class="chat-avatar">
+          <image
+            class="chat-avatar"
+            :src="e.creator.avatar"
+            mode="widthFix"
+          ></image>
+        </div>
+        <div :class="`chat-bubble chat-bubble-${user.id === e.creator.id}`">
+          <text>{{ e.content.repeat(1) }}</text>
+        </div>
+      </div>
+    </div>
+    <x-chatbar
+      v-if="showChatBar"
+      v-model:modelValue="messageText"
+      @sendMessage="sendMessage"
+    />
+  </div>
   <fui-fab
     v-if="showFloatPlus"
     :distance="30"
@@ -68,8 +41,8 @@ export default {
   props: {},
   data() {
     return {
-      showChatBar: false,
-      showFloatPlus: true,
+      showChatBar: true,
+      showFloatPlus: false,
       messageText: "",
       receiverId: 0,
       receiver: null,
@@ -162,7 +135,7 @@ export default {
       this.messages.push(data);
       this.messageText = "";
       this.scrollTo();
-      this.toggleButton();
+      // this.toggleButton();
       uni.showToast({ icon: "none", title: "发送成功" });
     }
   }
@@ -170,47 +143,71 @@ export default {
 </script>
 
 <style scoped>
+.main-color {
+  background-color: #eee;
+}
 .chat {
-  display: flex;
-  flex-direction: column;
+  padding: 5px 10px;
   height: 100vh;
 }
 .chat-head {
   padding: 10px;
   text-align: center;
   font-weight: bold;
-  border-bottom: #eee solid 1px;
-  background-color: #fff;
+  border-bottom: #e0e0e0 solid 1px;
 }
-.chat-body {
+.chat-item {
+  display: flex;
+  align-items: top;
   margin-bottom: 1em;
 }
-.slot-box {
-  display: flex;
+.chat-item-true {
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+}
+.chat-item-false {
   flex-direction: row;
+  justify-content: flex-start;
+}
+.chat-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 5px;
+}
+.chat-bubble {
+  position: relative;
+  display: flex;
   align-items: center;
-}
-.slot-image {
-  display: block;
-  margin-right: 10px;
-  width: 30px;
-  height: 30px;
-}
-.slot-image-right {
-  display: block;
-  width: 30px;
-  height: 30px;
-}
-.message-avatar {
-  border-radius: 15px;
-  width: 30px;
-}
-.slot-text {
-  flex: 1;
-  margin-right: 10px;
+  border-radius: 4px;
+  /* height: 40px; */
+  padding: 0.5em;
+  /* overflow-wrap: anywhere; */
   font-size: 90%;
 }
-.message-body {
-  padding: 2px;
+.chat-bubble-true {
+  background-color: #9cda62;
+  margin-right: 0.5em;
+}
+
+.chat-bubble-false {
+  background-color: white;
+  margin-left: 0.5em;
+}
+.chat-bubble-true::before {
+  position: absolute;
+  right: -8px;
+  top: 15px;
+  content: "";
+  border: 4px solid transparent;
+  border-left-color: #9cda62;
+}
+
+.chat-bubble-false::after {
+  position: absolute;
+  left: -8px;
+  top: 15px;
+  content: "";
+  border: 4px solid transparent;
+  border-right-color: white;
 }
 </style>
