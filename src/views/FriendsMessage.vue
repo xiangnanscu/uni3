@@ -6,7 +6,7 @@
       clickable
       @click="clickItem(e)"
       :title="e.receiver.nickname"
-      :note="utils.textDigest(e.content, 10)"
+      :note="utils.textDigest(e.content, 20)"
       :avatar="e.receiver.avatar"
       badge-positon="left"
       :badge-text="selfUnread(e) ? 'dot' : ''"

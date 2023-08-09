@@ -18,13 +18,14 @@
   <uni-notice-bar
     class="notice-bar"
     :text="props.title"
-    icon-type="info"
+    :icon-type="props.iconType"
     show-icon
   />
 </template>
 
 <script setup>
 const props = defineProps({
+  iconType: { type: String, default: "info" },
   mainColor: { type: String, default: "#ffb703" },
   title: { type: String, default: "" }
 });

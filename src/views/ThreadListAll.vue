@@ -1,27 +1,26 @@
 <template>
-  <page-layout>
-    <button type="primary" @click="showDrawer('showLeft')">
-      <text class="word-btn-white">查看所有贴吧</text>
-    </button>
-    <uni-drawer ref="showLeft" mode="left" :width="320">
-      <scroll-view style="height: 100%" scroll-y="true">
-        <uni-list>
-          <uni-list-item
-            v-for="(e, i) in forums"
-            @click="enterForum({ type: e.name })"
-            :clickable="true"
-            :key="e.name"
-            :title="e.name"
-            thumb-size="lg"
-            :thumb="e.avatar"
-            :link="currentType == e.name ? false : true"
-          >
-          </uni-list-item>
-        </uni-list>
-      </scroll-view>
-    </uni-drawer>
-    <thread-list :records="threads"></thread-list>
-  </page-layout>
+  <button type="primary" @click="showDrawer('showLeft')" class="thread-btn">
+    <text class="word-btn-white">查看所有贴吧</text>
+  </button>
+  <uni-drawer ref="showLeft" mode="left" :width="320">
+    <scroll-view style="height: 100%" scroll-y="true">
+      <uni-list>
+        <uni-list-item
+          v-for="(e, i) in forums"
+          @click="enterForum({ type: e.name })"
+          :clickable="true"
+          :key="e.name"
+          :title="e.name"
+          thumb-size="lg"
+          :thumb="e.avatar"
+          :link="currentType == e.name ? false : true"
+        >
+        </uni-list-item>
+      </uni-list>
+    </scroll-view>
+  </uni-drawer>
+  <thread-list :records="threads"></thread-list>
+
   <fui-fab
     :distance="30"
     position="right"
@@ -79,36 +78,7 @@ export default {
 </script>
 
 <style scoped>
-.slot-box {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-.slot-image {
-  display: block;
-  margin-right: 10px;
-  margin-left: -10px;
-  width: 30px;
-  height: 30px;
-}
-.thread-avatar {
-  border-radius: 15px;
-  width: 30px;
-}
-.slot-text {
-  flex: 1;
-  margin-right: 10px;
-}
-.thread-header {
-  color: #666;
-  font-size: 70%;
-}
-.thread-footer {
-  color: #666;
-  font-size: 60%;
-  padding-top: 3px;
-}
-.thread-body {
-  padding: 2px;
+.thread-btn {
+  margin: 15px;
 }
 </style>

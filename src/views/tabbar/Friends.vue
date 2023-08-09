@@ -12,7 +12,7 @@ const tabs = reactive([
 const type = computed(() => tabs[current.value]?.name);
 const ready = ref(false);
 const friendsData = ref([]);
-const messages = ref([]);
+const messageGroup = ref([]);
 
 const approve = async (e, status) => {
   await usePost(`/friends/approve/${e.id}`, { status });
@@ -21,10 +21,12 @@ const approve = async (e, status) => {
 const setRecordsByType = async (newType) => {
   if (newType == "聊天") {
     const records = await useGet(`/message/chat_panel`);
-    messages.value = records.map((e) => ({
-      ...e,
-      receiver: e.target.id === user.id ? e.creator : e.target
-    }));
+    messageGroup.value = records
+      .map((e) => ({
+        ...e,
+        receiver: e.target.id === user.id ? e.creator : e.target
+      }))
+      .sort((a, b) => b.ctime.localeCompare(a.ctime));
   } else {
     const data = await usePost("/friends/tabbar", { type: newType });
     friendsData.value = data
@@ -66,9 +68,10 @@ onShow(async () => {
   ></fui-tabs>
   <friends-message
     v-if="ready && current === 0"
-    :messages="messages"
+    :messages="messageGroup"
   ></friends-message>
   <uni-list v-if="ready && current === 1" :border="false">
+    <x-alert v-if="!friendsData.length" title="没有记录"> </x-alert>
     <uni-list-item
       v-for="e in friendsData"
       :key="e.id"

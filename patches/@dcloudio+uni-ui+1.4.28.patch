@@ -1,5 +1,5 @@
 diff --git a/node_modules/@dcloudio/uni-ui/lib/uni-list-chat/uni-list-chat.vue b/node_modules/@dcloudio/uni-ui/lib/uni-list-chat/uni-list-chat.vue
-index d49fd7c..08fd277 100644
+index 27d05dd..366aeac 100644
 --- a/node_modules/@dcloudio/uni-ui/lib/uni-list-chat/uni-list-chat.vue
 +++ b/node_modules/@dcloudio/uni-ui/lib/uni-list-chat/uni-list-chat.vue
 @@ -275,7 +275,7 @@
@@ -20,3 +20,36 @@ index d49fd7c..08fd277 100644
  		/* #ifdef APP-NVUE */
  		width: 50px;
  		height: 50px;
+diff --git a/node_modules/@dcloudio/uni-ui/lib/uni-notice-bar/uni-notice-bar.vue b/node_modules/@dcloudio/uni-ui/lib/uni-notice-bar/uni-notice-bar.vue
+index f0d2a03..311a1c8 100644
+--- a/node_modules/@dcloudio/uni-ui/lib/uni-notice-bar/uni-notice-bar.vue
++++ b/node_modules/@dcloudio/uni-ui/lib/uni-notice-bar/uni-notice-bar.vue
+@@ -1,6 +1,6 @@
+ <template>
+ 	<view v-if="show" class="uni-noticebar" :style="{ backgroundColor }" @click="onClick">
+-		<uni-icons v-if="showIcon === true || showIcon === 'true'" class="uni-noticebar-icon" type="sound"
++		<uni-icons v-if="showIcon === true || showIcon === 'true'" class="uni-noticebar-icon" :type="iconType"
+ 			:color="color" :size="fontSize * 1.5" />
+ 		<view ref="textBox" class="uni-noticebar__content-wrapper"
+ 			:class="{
+@@ -64,7 +64,8 @@
+ 	 * @property {String} moreText 设置“查看更多”的文本
+ 	 * @property {Boolean} single = [true|false] 是否单行
+ 	 * @property {Boolean} scrollable = [true|false] 是否滚动，为true时，NoticeBar为单行
+-	 * @property {Boolean} showIcon = [true|false] 是否显示左侧喇叭图标
++	 * @property {Boolean} showIcon = [true|false] 是否显示左侧图标
++   * @property {String} iconType 是否显示左侧图标
+ 	 * @property {Boolean} showClose = [true|false] 是否显示左侧关闭按钮
+ 	 * @property {Boolean} showGetMore = [true|false] 是否显示右侧查看更多图标，为true时，NoticeBar为单行
+ 	 * @event {Function} click 点击 NoticeBar 触发事件
+@@ -120,6 +121,10 @@
+ 				type: [Boolean, String],
+ 				default: false
+ 			},
++      iconType: {
++        type: String,
++        default: 'sound'
++      },
+ 			showGetMore: {
+ 				// 是否显示右侧查看更多
+ 				type: [Boolean, String],
