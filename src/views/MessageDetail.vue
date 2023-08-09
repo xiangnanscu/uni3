@@ -61,7 +61,7 @@ export default {
     setTimeout(this.scrollTo, 200);
   },
   async onPullDownRefresh() {
-    await this.fetchOldChatRecords(this.oldestId, uni.stopPullDownRefresh);
+    await this.fetchOldChatRecords(this.oldestId);
   },
   onUnload() {
     clearInterval(this.timerId);
@@ -123,7 +123,7 @@ export default {
       );
       return records.reverse();
     },
-    async fetchOldChatRecords(oldestId, cb) {
+    async fetchOldChatRecords(oldestId) {
       const records = await this.fetchChatRecords({
         query: { id: this.receiverId, limit: this.chatTrunkNumber },
         data: { id__lt: oldestId }
@@ -131,7 +131,7 @@ export default {
       if (records.length) {
         this.messages = [...records, ...this.messages];
       }
-      cb && cb();
+      uni.stopPullDownRefresh();
     },
     async fetchNewChatRecords(latestId) {
       const records = await this.fetchChatRecords({

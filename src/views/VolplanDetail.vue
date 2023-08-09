@@ -18,7 +18,7 @@
     <x-button @click="joinVol" :disabled="record.joined">{{
       record.joined ? "已登记" : "我要参加"
     }}</x-button>
-    <div style="height: 3em"></div>
+    <div style="height: 4em"></div>
     <x-bottom>
       <generic-actions
         :target="record"
