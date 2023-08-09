@@ -15,10 +15,10 @@
       <tinymce-text :html="record.content"></tinymce-text>
       <template #actions> </template>
     </uni-card>
-    <div style="height: 3em"></div>
     <x-button @click="joinVol" :disabled="record.joined">{{
       record.joined ? "已登记" : "我要参加"
     }}</x-button>
+    <div style="height: 3em"></div>
     <x-bottom>
       <generic-actions
         :target="record"

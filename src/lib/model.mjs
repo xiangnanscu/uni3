@@ -394,7 +394,9 @@ class Model {
           field.choices = fetchChoices;
         }
       }
-      if (typeof field.reference == "string") {
+      if (field.reference == field.table_name) {
+        field.reference = "self";
+      } else if (typeof field.reference == "string") {
         const modelUrl = options.isAdminMode
           ? field.reference_url_admin
           : field.reference_url || field.reference;
