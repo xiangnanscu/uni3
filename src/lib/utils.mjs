@@ -170,7 +170,7 @@ export function parseSize(t) {
   }
 }
 const UNI_HOME_PAGE = process.env.UNI_HOME_PAGE;
-const toURLSearchParams = (obj) => {
+export const toQueryString = (obj) => {
   return Object.entries(obj)
     .map(([k, v]) => `${k}=${encodeURIComponent(v)}`)
     .join("&");
@@ -222,7 +222,7 @@ export async function gotoPage(params) {
   }
   opts.url = url;
   if (opts.query) {
-    url = url + "?" + toURLSearchParams(opts.query); // % &=/@;$:+?#
+    url = url + "?" + toQueryString(opts.query); // % &=/@;$:+?#
   }
   const navParams = appendAnimationParams({ url });
   try {

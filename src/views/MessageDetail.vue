@@ -31,6 +31,7 @@ export default {
   props: {},
   data() {
     return {
+      chatTrunkNumber: 10,
       wxChatColor: "#95ec69",
       wxChatBg: "#F2F2F2",
       showChatBar: true,
@@ -49,12 +50,14 @@ export default {
     }, 1000);
     setTimeout(this.scrollTo, 200);
   },
+  async onPullDownRefresh() {
+    await this.fetchOldChatRecords(this.oldestId, uni.stopPullDownRefresh);
+  },
   onUnload() {
     clearInterval(this.timerId);
   },
   async onShow() {
-    useBadgeNumber();
-    await this.fetchData(this.receiverId);
+    await this.fetchData();
   },
   computed: {
     timeHintMessages() {
@@ -79,6 +82,9 @@ export default {
     latestId() {
       return this.messages[this.messages.length - 1]?.id;
     },
+    oldestId() {
+      return this.messages[0]?.id;
+    },
     sender() {
       return {
         id: this.user.id,
@@ -88,25 +94,40 @@ export default {
     }
   },
   methods: {
-    async fetchNewChatRecords(latestId) {
+    async fetchChatRecords({ query, data, opts }) {
       const records = await usePost(
-        `/message/chat_records?id=${this.receiverId}`,
-        {
-          id__gt: latestId
-        },
-        { disableShowLoading: true }
+        `/message/chat_records?${utils.toQueryString(query)}`,
+        data,
+        { ...opts, disableShowLoading: true }
       );
+      return records.reverse();
+    },
+    async fetchOldChatRecords(oldestId, cb) {
+      const records = await this.fetchChatRecords({
+        query: { id: this.receiverId, limit: this.chatTrunkNumber },
+        data: { id__lt: oldestId }
+      });
+      if (records.length) {
+        this.messages = [...records, ...this.messages];
+      }
+      cb && cb();
+    },
+    async fetchNewChatRecords(latestId) {
+      const records = await this.fetchChatRecords({
+        query: { id: this.receiverId },
+        data: { id__gt: latestId }
+      });
       if (records.length) {
         this.messages.push(...records);
       }
     },
-    async fetchData(receiverId) {
-      this.messages = await usePost(
-        `/message/chat_records?id=${receiverId}`,
-        {}
-      );
+    async fetchData() {
+      const records = await this.fetchChatRecords({
+        query: { id: this.receiverId, limit: this.chatTrunkNumber }
+      });
+      this.messages = records;
       this.receiver = await usePost(`/usr/query`, {
-        get: { id: receiverId },
+        get: { id: this.receiverId },
         select: ["id", "nickname", "avatar"]
       });
       uni.setNavigationBarTitle({ title: this.receiver.nickname });
