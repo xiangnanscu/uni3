@@ -1,5 +1,6 @@
 <template>
-  <page-layout class="goddess-main">
+  <page-layout>
+    <x-title>江安“新青年”</x-title>
     <uni-list :border="false">
       <navigator
         v-for="(item, index) in GoddessList"
@@ -43,8 +44,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.goddess-main {
-  padding: 15px;
-}
-</style>
+<style scoped></style>

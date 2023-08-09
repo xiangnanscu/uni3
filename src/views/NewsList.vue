@@ -1,15 +1,6 @@
 <template>
   <page-layout>
-    <div
-      style="
-        text-align: center;
-        font-size: 120%;
-        font-weight: bold;
-        padding: 1em;
-      "
-    >
-      {{ type }}
-    </div>
+    <x-title>{{ type }}</x-title>
     <div v-if="NewsRecords.length">
       <uni-list :border="false">
         <navigator

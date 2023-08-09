@@ -19,7 +19,7 @@
       </uni-list>
     </scroll-view>
   </uni-drawer>
-  <thread-list :records="threads"></thread-list>
+  <thread-list v-if="ready" :records="threads"></thread-list>
 
   <fui-fab
     :distance="30"
@@ -38,11 +38,11 @@ export default {
       threads: [],
       forums: [],
       currentType: "",
+      ready: false,
       total: 0
     };
   },
   async onLoad(query) {
-    console.log("Thread.vue onLoad", query);
     this.query = query;
     await this.fetchData(this.query);
   },
@@ -56,11 +56,6 @@ export default {
     closeDrawer() {
       this.$refs.showLeft.close();
     },
-    async enterForum({ type }) {
-      this.currentType = type;
-      await this.fetchThreads({ type });
-      this.$refs.showLeft.close();
-    },
     async fetchThreads(query) {
       const records = await usePost(`/thread/records`, {
         type: query.type,
@@ -69,9 +64,15 @@ export default {
       });
       this.threads = records;
     },
+    async enterForum({ type }) {
+      this.currentType = type;
+      await this.fetchThreads({ type });
+      this.$refs.showLeft.close();
+    },
     async fetchData(query) {
       this.forums = await usePost(`/forum/menu`);
       await this.fetchThreads(query);
+      this.ready = true;
     }
   }
 };

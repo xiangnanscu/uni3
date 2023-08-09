@@ -1,5 +1,6 @@
 <template>
-  <page-layout class="volplan-main">
+  <page-layout>
+    <x-title>志愿服务</x-title>
     <div v-if="VolplanRecords.length">
       <uni-list :border="false">
         <navigator

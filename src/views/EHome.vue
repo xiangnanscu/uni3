@@ -1,15 +1,6 @@
 <template>
   <page-layout>
-    <div
-      style="
-        text-align: center;
-        font-size: 150%;
-        font-weight: bold;
-        padding: 1em;
-      "
-    >
-      团建E家
-    </div>
+    <x-title> 团建E家 </x-title>
     <uni-grid :column="3" :show-border="false" :square="false" @change="change">
       <uni-grid-item
         v-for="(item, index) in mainKist"
@@ -71,6 +62,13 @@ const mainKist = [
     text: "团章",
     badge: "",
     pagePath: "/views/NewsList?type=团章",
+    type: "error"
+  },
+  {
+    url: "../static/img/zchb.png",
+    text: "政策汇编",
+    pagePath: "/views/NewsList?type=政策汇编",
+    badge: "",
     type: "error"
   }
 ];
