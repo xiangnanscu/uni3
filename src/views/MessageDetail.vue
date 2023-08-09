@@ -1,5 +1,6 @@
 <template>
   <div class="chat">
+    <x-alert v-if="!maxMessageQueryCnt" title="超时请重新进入页面"></x-alert>
     <div v-for="e in timeHintMessages" :key="e.id">
       <div v-if="e.time" class="chat-time">
         {{ e.time }}
@@ -31,7 +32,8 @@ export default {
   props: {},
   data() {
     return {
-      chatTrunkNumber: 10,
+      maxMessageQueryCnt: 3600,
+      chatTrunkNumber: 6,
       wxChatColor: "#95ec69",
       wxChatBg: "#F2F2F2",
       showChatBar: true,
@@ -40,13 +42,21 @@ export default {
       receiverId: 0,
       receiver: null,
       timerId: null,
+      updating: false,
       messages: []
     };
   },
   async onLoad(query) {
     this.receiverId = Number(query.receiverId);
     this.timerId = setInterval(async () => {
-      await this.fetchNewChatRecords(this.latestId);
+      if (this.maxMessageQueryCnt === 0) {
+        clearInterval(this.timerId);
+      } else if (!this.updating) {
+        this.updating = true;
+        this.maxMessageQueryCnt--;
+        await this.fetchNewChatRecords(this.latestId);
+        this.updating = false;
+      }
     }, 1000);
     setTimeout(this.scrollTo, 200);
   },
@@ -69,6 +79,7 @@ export default {
           e.time = utils.getWeChatMessageTime(e.ctime, now);
           lastTime = new Date(e.ctime).getTime();
         } else {
+          e.time = ""; // 重置,避免过多时间标记
           const currentTime = new Date(e.ctime).getTime();
           if (currentTime - lastTime > 60000) {
             e.time = utils.getWeChatMessageTime(e.ctime, now);
@@ -94,6 +105,16 @@ export default {
     }
   },
   methods: {
+    addToMessages(list) {
+      // 新消息送达和轮询之间的时间差可能会获取到重复记录
+      for (const e of list) {
+        if (!this.messages.find((f) => f.id === e.id)) {
+          this.messages.push(e);
+        } else {
+          console.log("find!!");
+        }
+      }
+    },
     async fetchChatRecords({ query, data, opts }) {
       const records = await usePost(
         `/message/chat_records?${utils.toQueryString(query)}`,
@@ -117,9 +138,7 @@ export default {
         query: { id: this.receiverId },
         data: { id__gt: latestId }
       });
-      if (records.length) {
-        this.messages.push(...records);
-      }
+      this.addToMessages(records);
     },
     async fetchData() {
       const records = await this.fetchChatRecords({
