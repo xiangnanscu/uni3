@@ -1,3 +1,18 @@
+diff --git a/node_modules/@dcloudio/uni-ui/lib/uni-data-checkbox/uni-data-checkbox.vue b/node_modules/@dcloudio/uni-ui/lib/uni-data-checkbox/uni-data-checkbox.vue
+index 341a4af..8f91f34 100644
+--- a/node_modules/@dcloudio/uni-ui/lib/uni-data-checkbox/uni-data-checkbox.vue
++++ b/node_modules/@dcloudio/uni-ui/lib/uni-data-checkbox/uni-data-checkbox.vue
+@@ -788,8 +788,10 @@
+ 							}
+ 						}
+ 						.radio__inner {
++							border-color: $uni-primary;
+ 							.radio__inner-icon {
+ 								opacity: 1;
++								background-color: $uni-primary;
+ 							}
+ 						}
+ 						.checklist-text {
 diff --git a/node_modules/@dcloudio/uni-ui/lib/uni-list-chat/uni-list-chat.vue b/node_modules/@dcloudio/uni-ui/lib/uni-list-chat/uni-list-chat.vue
 index 27d05dd..366aeac 100644
 --- a/node_modules/@dcloudio/uni-ui/lib/uni-list-chat/uni-list-chat.vue
