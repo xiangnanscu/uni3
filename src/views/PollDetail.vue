@@ -1,21 +1,39 @@
 <template>
   <page-layout v-if="record">
+    {{ answers }}
     <uni-card :isFull="true" :is-shadow="false" :border="false">
+      <template #actions> </template>
       <p class="poll-title">{{ record.title }}</p>
       <x-subtitle style="padding: 0.5em 0.5em">
         <div>{{ utils.fromNow(record.ctime) }}</div>
       </x-subtitle>
       <tinymce-text :html="record.content"></tinymce-text>
-      <template #actions> </template>
-      <uni-data-checkbox
-        multiple
-        v-model="selectedPolls"
-        :localdata="pollChoices"
-        :min="record.min_count"
-        :max="record.max_count"
-        mode="list"
-        @change="change"
-      ></uni-data-checkbox>
+      <template
+        v-for="(
+          { 题干, 类型, 选项, 最大选择数, 最小选择数, 是否必填 }, index
+        ) in record.model"
+        :key="index"
+      >
+        <p style="color: black">
+          <span>{{ index + 1 }} </span>、{{ 题干 }}
+        </p>
+        <uni-data-checkbox
+          v-if="类型 == '单选'"
+          v-model="answers[index]"
+          :localdata="选项.map((e) => ({ text: e, value: e }))"
+          mode="list"
+        ></uni-data-checkbox>
+        <uni-data-checkbox
+          v-else-if="类型 == '多选'"
+          v-model="answers[index]"
+          :localdata="选项.map((e) => ({ text: e, value: e }))"
+          :multiple="true"
+          :min2="最小选择数"
+          :max="最大选择数"
+          mode="list"
+        ></uni-data-checkbox>
+        <uni-easyinput v-else v-model="answers[index]" type="text" />
+      </template>
       <div style="height: 3em"></div>
       <x-button @click="submitPoll">提交</x-button>
     </uni-card>
@@ -39,6 +57,7 @@ export default {
   data() {
     return {
       selectedPolls: [],
+      answers: [],
       record: null
     };
   },
@@ -56,10 +75,29 @@ export default {
   },
   methods: {
     async submitPoll() {
-      const data = await usePost(
-        `/poll_log/insert`,
-        this.selectedPolls.map((e) => ({ poll_id: this.record.id, choice: e }))
-      );
+      for (const [i, e] of this.record.model.entries()) {
+        const value = this.answers[i];
+        console.log(i, e);
+        if (e.类型 == "多选") {
+          if (e.是否必填 == "是" && !value.length) {
+            throw `第${i + 1}题必填`;
+          }
+          if (e.最小选择数 > value.length) {
+            throw `第${i + 1}题至少要选${e.最小选择数}个`;
+          }
+          if (e.最大选择数 < value.length) {
+            throw `第${i + 1}题最多选${e.最大选择数}个`;
+          }
+        } else {
+          if (e.是否必填 == "是" && value == "") {
+            throw `第${i + 1}题必填`;
+          }
+        }
+      }
+      const data = await usePost(`/poll_log/create`, {
+        poll_id: this.record.id,
+        answers: this.answers
+      });
       if (data.affected_rows === this.selectedPolls.length) {
         uni.showToast({ title: "提交成功" });
         utils.gotoPage("Home");
@@ -68,6 +106,7 @@ export default {
     async fetchData(query) {
       const { data: poll } = await Http.get(`/poll/detail/${query.id}`);
       this.record = poll;
+      this.answers = poll.model.map((e) => (e.类型 == "多选" ? [] : ""));
     }
   }
 };

@@ -42,7 +42,13 @@ export function createApp() {
   setTimeout(() => {
     app.config.errorHandler = (err, instance, info) => {
       console.error("errorHandler captured...", { err, instance, info });
-      if (err.message == LOGIN_HINT) {
+      if (typeof err == "string") {
+        uni.showModal({
+          title: `错误`,
+          content: err,
+          showCancel: false
+        });
+      } else if (err.message == LOGIN_HINT) {
         utils.gotoPage({
           url: loginPage,
           query: { redirect: utils.getFullPath() },
