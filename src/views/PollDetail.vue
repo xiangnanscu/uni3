@@ -1,6 +1,5 @@
 <template>
   <page-layout v-if="record">
-    {{ answers }}
     <uni-card :isFull="true" :is-shadow="false" :border="false">
       <template #actions> </template>
       <p class="poll-title">{{ record.title }}</p>
@@ -32,7 +31,7 @@
           :max="最大选择数"
           mode="list"
         ></uni-data-checkbox>
-        <uni-easyinput v-else v-model="answers[index]" type="text" />
+        <uni-easyinput v-else v-model.trim="answers[index]" type="text" />
       </template>
       <div style="height: 3em"></div>
       <x-button @click="submitPoll">提交</x-button>
@@ -56,7 +55,6 @@ export default {
   mixins: [MixinShare],
   data() {
     return {
-      selectedPolls: [],
       answers: [],
       record: null
     };
@@ -98,10 +96,10 @@ export default {
         poll_id: this.record.id,
         answers: this.answers
       });
-      if (data.affected_rows === this.selectedPolls.length) {
-        uni.showToast({ title: "提交成功" });
-        utils.gotoPage("Home");
-      }
+      utils.gotoPage({
+        name: "SuccessPage",
+        query: { title: "提交成功,感谢参与" }
+      });
     },
     async fetchData(query) {
       const { data: poll } = await Http.get(`/poll/detail/${query.id}`);
