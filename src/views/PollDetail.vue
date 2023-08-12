@@ -10,10 +10,10 @@
       <template
         v-for="(
           { 题干, 类型, 选项, 最大选择数, 最小选择数, 是否必填 }, index
-        ) in record.model"
+        ) in record.items"
         :key="index"
       >
-        <p style="color: black">
+        <p style="color: black; margin-top: 1em">
           <span>{{ index + 1 }} </span>、{{ 题干 }}
         </p>
         <uni-data-checkbox
@@ -65,7 +65,7 @@ export default {
   },
   computed: {
     pollChoices() {
-      return this.record.model.map((e) => ({
+      return this.record.items.map((e) => ({
         value: e.选项文本,
         text: e.选项文本
       }));
@@ -73,9 +73,8 @@ export default {
   },
   methods: {
     async submitPoll() {
-      for (const [i, e] of this.record.model.entries()) {
+      for (const [i, e] of this.record.items.entries()) {
         const value = this.answers[i];
-        console.log(i, e);
         if (e.类型 == "多选") {
           if (e.是否必填 == "是" && !value.length) {
             throw `第${i + 1}题必填`;
@@ -102,9 +101,9 @@ export default {
       });
     },
     async fetchData(query) {
-      const { data: poll } = await Http.get(`/poll/detail/${query.id}`);
+      const poll = await useGet(`/poll/detail/${query.id}`);
       this.record = poll;
-      this.answers = poll.model.map((e) => (e.类型 == "多选" ? [] : ""));
+      this.answers = poll.items.map((e) => (e.类型 == "多选" ? [] : ""));
     }
   }
 };
