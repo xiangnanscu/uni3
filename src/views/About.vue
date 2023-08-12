@@ -1,7 +1,5 @@
 <template>
-  <page-layout>
-    {{ version }}
-  </page-layout>
+  <page-layout> {{ version }}11 </page-layout>
 </template>
 
 <script>
