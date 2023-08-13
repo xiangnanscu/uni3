@@ -11,15 +11,12 @@ onHide(() => {
 });
 </script>
 <style>
-/* uni.showModal 格式覆盖 */
-.uni-input-input:disabled {
-  color: #333333;
-}
+/* uni.showModal 格式覆盖,只对H5有效 */
 :deep(.uni-modal__hd) {
-  color: black;
+  color: #333;
 }
 :deep(.uni-modal__bd) {
-  color: black;
+  color: #333;
 }
 page {
   /* 行为相关颜色 */

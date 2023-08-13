@@ -1,5 +1,5 @@
 diff --git a/node_modules/@dcloudio/uni-ui/lib/uni-data-checkbox/uni-data-checkbox.vue b/node_modules/@dcloudio/uni-ui/lib/uni-data-checkbox/uni-data-checkbox.vue
-index 341a4af..8f91f34 100644
+index 341a4af..f87141c 100644
 --- a/node_modules/@dcloudio/uni-ui/lib/uni-data-checkbox/uni-data-checkbox.vue
 +++ b/node_modules/@dcloudio/uni-ui/lib/uni-data-checkbox/uni-data-checkbox.vue
 @@ -788,8 +788,10 @@
@@ -13,6 +13,19 @@ index 341a4af..8f91f34 100644
  							}
  						}
  						.checklist-text {
+diff --git a/node_modules/@dcloudio/uni-ui/lib/uni-easyinput/uni-easyinput.vue b/node_modules/@dcloudio/uni-ui/lib/uni-easyinput/uni-easyinput.vue
+index 7f5113e..2819ada 100644
+--- a/node_modules/@dcloudio/uni-ui/lib/uni-easyinput/uni-easyinput.vue
++++ b/node_modules/@dcloudio/uni-ui/lib/uni-easyinput/uni-easyinput.vue
+@@ -647,7 +647,7 @@ $uni-border-1: #dcdfe6 !default;
+ 
+ .is-disabled {
+ 	background-color: #f7f6f6;
+-	color: #d5d5d5;
++	color: #333;
+ 
+ 	.uni-easyinput__placeholder-class {
+ 		color: #d5d5d5;
 diff --git a/node_modules/@dcloudio/uni-ui/lib/uni-list-chat/uni-list-chat.vue b/node_modules/@dcloudio/uni-ui/lib/uni-list-chat/uni-list-chat.vue
 index 27d05dd..366aeac 100644
 --- a/node_modules/@dcloudio/uni-ui/lib/uni-list-chat/uni-list-chat.vue
