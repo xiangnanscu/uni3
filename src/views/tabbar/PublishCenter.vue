@@ -7,16 +7,16 @@
       mode="aspectFit"
     ></image>
     <view class="tabbar-box-wrap">
-      <!-- <view class="tabbar-box">
-        <view class="tabbar-box-item" @click="gotoPage('ForumAdd')">
+      <view class="tabbar-box">
+        <view class="tabbar-box-item" @click="gotoPage('StageList')">
           <image
             class="box-image"
             src="../../static/img/fee8.png"
             mode="aspectFit"
           ></image>
-          <text class="explain">团费</text>
+          <text class="explain">青年驿站</text>
         </view>
-      </view> -->
+      </view>
       <view class="tabbar-box">
         <view class="tabbar-box-item" @click="gotoPage('ForumAdd')">
           <image

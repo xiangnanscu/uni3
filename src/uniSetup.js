@@ -89,6 +89,7 @@ const whiteList = [
   "/views/ThreadDetail",
   "/views/GoddessDetail",
   "/views/PollDetail",
+  "/views/StageDetail",
   "/views/VolplanDetail"
 ];
 
