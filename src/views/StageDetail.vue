@@ -95,9 +95,10 @@ export default {
         });
       } else {
         await utils.gotoPage({
-          url: "/views/StageApplyForm.vue",
+          url: "/views/StageApply",
           query: {
-            name: this.record.name
+            stage_id:this.record.id,
+            stage_name: this.record.name
           },
           redirect: true
         });
