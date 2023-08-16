@@ -11,7 +11,7 @@
         <view class="tabbar-box-item" @click="gotoPage('StageList')">
           <image
             class="box-image"
-            src="../../static/img/fee8.png"
+            src="../../static/img/qnyz.png"
             mode="aspectFit"
           ></image>
           <text class="explain">青年驿站</text>

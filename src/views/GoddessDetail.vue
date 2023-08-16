@@ -18,7 +18,7 @@
         :src="record.pics[0]"
         @click="previewImage(record.pics[0])"
         mode="widthFix"
-        style="width: 100%"
+        style="width: 100%;margin:auto"
       />
       <tinymce-text :html="record.content"></tinymce-text>
       <template #actions> </template>

@@ -394,16 +394,18 @@ class Model {
           field.choices = fetchChoices;
         }
       }
-      if (field.reference == field.table_name) {
-        field.reference = "self";
-      } else if (typeof field.reference == "string") {
-        const modelUrl = options.isAdminMode
-          ? field.reference_url_admin
-          : field.reference_url || field.reference;
-        field.reference = await this.getHttpModel(
-          modelUrl,
-          options.isAdminMode
-        );
+      if (typeof field.reference == "string") {
+        if (field.reference == field.table_name) {
+          field.reference = "self";
+        } else {
+          const modelUrl = options.isAdminMode
+            ? field.reference_url_admin
+            : field.reference_url || field.reference;
+          field.reference = await this.getHttpModel(
+            modelUrl,
+            options.isAdminMode
+          );
+        }
       }
       if (field.type == "table" && !field.model?.__isModelClass__) {
         const modelKey = field.model.table_name;
@@ -416,6 +418,7 @@ class Model {
         field.model = this.httpModelCache[modelKey];
       }
     }
+    console.log(options)
     return Model.createModel(options);
   }
   static async getHttpModel(modelKey, isAdminMode) {
@@ -2019,9 +2022,8 @@ class Model {
     if (!this[innerAttr]) {
       this[innerAttr] = otherSql.statement();
     } else {
-      this[innerAttr] = `(${this[innerAttr]}) ${
-        PG_SET_MAP[innerAttr]
-      } (${otherSql.statement()})`;
+      this[innerAttr] = `(${this[innerAttr]}) ${PG_SET_MAP[innerAttr]
+        } (${otherSql.statement()})`;
     }
     this.statement = this._statementForSet;
     return this;
