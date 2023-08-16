@@ -37,7 +37,7 @@ const getFieldRules = (field) => [
     }
   }
 ];
-const formNames = props.formNames || props.model.admin.form_names || props.model.names
+const formNames = props.formNames || props.model.admin?.form_names || props.model.names
 const fieldsArray = computed(() =>
   formNames.map((name) => props.model.fields[name])
 );
