@@ -44,14 +44,26 @@
                     @click="replyPostComment({ post, comment: c })"
                     style="margin-bottom: 5px"
                   >
+                    <navigator
+                      style="display: inline-block"
+                      :url="`/views/Profile?id=${c.creator}`"
+                    >
+                      <span class="nickname-link">
+                        {{ c.creator__nickname }}
+                      </span>
+                    </navigator>
                     <template v-if="c.post_comment_id">
-                      {{ c.creator__nickname }} 回复
-                      {{ c.post_comment_id__creator__nickname }} ：
-                      {{ c.content }}
+                      回复
+                      <navigator
+                        style="display: inline-block"
+                        :url="`/views/Profile?id=${c.post_comment_id__creator__id}`"
+                      >
+                        <span class="nickname-link">
+                          {{ c.post_comment_id__creator__nickname }}
+                        </span>
+                      </navigator>
                     </template>
-                    <template v-else>
-                      {{ c.creator__nickname }}：{{ c.content }}
-                    </template>
+                    ：{{ c.content }}
                   </p>
                 </template>
               </view>
@@ -195,6 +207,9 @@ export default {
 </script>
 
 <style scoped>
+.nickname-link {
+  color: #007bff;
+}
 .post-content {
   font-size: 98%;
 }
