@@ -5,7 +5,12 @@
     :square="true"
     @change="change"
   >
-    <uni-grid-item v-for="(url, index) in urls" :index="index" :key="index">
+    <uni-grid-item
+      v-for="(url, index) in urls"
+      :index="index"
+      :key="index"
+      style="margin: auto"
+    >
       <view class="grid-item-box">
         <image
           class="grid-item-box"

@@ -15,19 +15,12 @@
         <div class="thread-restinfo">{{ fromNow(target.ctime) }}</div>
       </div>
     </view>
-    <uni-card
-      :border="false"
-      :isFull="true"
-      :is-shadow="false"
-      padding="10px 0px"
-    >
-      <template v-slot:title
-        ><span class="thread-title">{{ target.title }}</span></template
-      >
-      <text user-select class="thread-content">{{ target.content }}</text>
+    <div class="x-card">
+      <div class="thread-title">{{ target.title }}</div>
+      <x-text class="thread-content">{{ target.content }}</x-text>
       <x-album v-if="picsUrls.length" :urls="picsUrls" :columns="1"></x-album>
       <generic-actions :target="target" :target-model="targetModel" />
-    </uni-card>
+    </div>
   </view>
 </template>
 
@@ -41,35 +34,29 @@ const picsUrls = computed(() => props.target?.pics || []);
 </script>
 
 <style scoped>
-.actions {
-  width: 25px;
-  height: 25px;
-}
-.actions-container {
-  display: flex;
-  justify-content: space-around;
-}
-.textarea {
-  /* width: 100%; */
-  border: #eee 0px solid;
-  padding: 10px;
+.x-card {
+  padding: 5px 0px;
 }
 .thread-main {
   display: flex;
   flex-direction: row;
+  align-items: center;
   margin-bottom: 15px;
 }
 .thread-title {
   font-weight: bold;
-  font-size: 110%;
+  font-size: 150%;
+  margin-bottom: 1em;
 }
 .thread-content {
   color: black;
-  font-size: 110%;
+  font-size: 100%;
+  line-height: 150%;
 }
 .thread-nickname {
   color: #666;
-  font-size: 75%;
+  font-size: 90%;
+  font-weight: bold;
 }
 .thread-restinfo {
   color: #666;

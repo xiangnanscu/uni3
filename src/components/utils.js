@@ -7,7 +7,7 @@ export const get_file_ext = (name) => {
   const len = name.length;
   return {
     name: name.substring(0, last_len),
-    ext: name.substring(last_len + 1, len),
+    ext: name.substring(last_len + 1, len)
   };
 };
 
@@ -33,7 +33,7 @@ export const get_files_and_is_max = (res, _extname) => {
   if (!_extname || _extname.length === 0) {
     return {
       filePaths,
-      files,
+      files
     };
   }
   res.tempFiles.forEach((v) => {
@@ -50,13 +50,13 @@ export const get_files_and_is_max = (res, _extname) => {
         res.tempFiles.length - files.length
       } 个文件格式不正确`,
       icon: "none",
-      duration: 5000,
+      duration: 5000
     });
   }
 
   return {
     filePaths,
-    files,
+    files
   };
 };
 
@@ -73,7 +73,7 @@ export const get_file_info = (filepath) => {
       },
       fail(err) {
         reject(err);
-      },
+      }
     });
   });
 };
@@ -94,7 +94,7 @@ export const get_file_data = async (files, type = "image") => {
     size: files.size, //单位是字节
     image: {},
     path: files.path,
-    video: {},
+    video: {}
   };
   if (type === "image") {
     const imageinfo = await get_file_info(files.path);

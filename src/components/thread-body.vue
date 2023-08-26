@@ -211,13 +211,15 @@ export default {
   color: #007bff;
 }
 .post-content {
-  font-size: 98%;
+  font-size: 95%;
+  line-height: 150%;
 }
 .post-comment {
+  font-size: 90%;
+  line-height: 150%;
   background-color: #f5f5f5;
   padding: 6px;
   border-radius: 3px;
-  font-size: 90%;
 }
 .logo-text {
   font-size: 90%;
@@ -237,8 +239,9 @@ export default {
   margin-top: 1em;
 }
 .post-header {
+  font-size: 90%;
+  font-weight: bold;
   color: #666;
-  font-size: 75%;
   display: flex;
   justify-content: space-between;
   /* background-color: red; */
