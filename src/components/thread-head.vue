@@ -1,5 +1,5 @@
 <template>
-  <view>
+  <view style="padding: 0 5px">
     <view class="thread-main">
       <div class="slot-box avatar-container">
         <navigator :url="`/views/Profile?id=${target.creator}`">

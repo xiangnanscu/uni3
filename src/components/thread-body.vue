@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="padding: 0 5px">
     <scroll-view :scroll-y="true" :scroll-into-view="scrollTo">
       <uni-list>
         <uni-list-item

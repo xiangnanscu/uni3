@@ -2,7 +2,7 @@
   <page-layout v-if="record">
     <uni-card :isFull="true" :is-shadow="false" :border="false">
       <p class="goddess-title">{{ record.title }}</p>
-      <x-subtitle style="padding: 0.5em 0.5em">
+      <x-subtitle style="padding: 0.5em 0em">
         <div>浏览：{{ record.views }}</div>
         <div>{{ utils.fromNow(record.ctime) }}</div>
       </x-subtitle>
@@ -13,13 +13,15 @@
         controls
         style="width: 100%"
       ></video>
-      <image
-        v-if="record.pics[0]"
-        :src="record.pics[0]"
-        @click="previewImage(record.pics[0])"
-        mode="widthFix"
-        style="width: 100%;margin:auto"
-      />
+      <div style="width: 100%; margin: auto">
+        <image
+          v-if="record.pics[0]"
+          :src="record.pics[0]"
+          @click="previewImage(record.pics[0])"
+          mode="widthFix"
+          style="width: 100%; margin: auto"
+        />
+      </div>
       <tinymce-text :html="record.content"></tinymce-text>
       <template #actions> </template>
     </uni-card>
