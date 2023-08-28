@@ -22,7 +22,7 @@
 
 <script setup>
 const query = useQuery();
-const current = computed(() => Number(query.value.current || 0));
+const current = computed(() => Number(query.current || 0));
 const tabs = ["我参加的", "我发起的"];
 const type = computed(() => tabs[current.value]);
 const ready = ref(false);

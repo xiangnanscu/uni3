@@ -59,8 +59,7 @@ onLoad(async (opts) => {
       redirect: false
     });
   } else {
-    console.log(query.value);
-    const uid = query.value.q.split("/").pop();
+    const uid = query.q.split("/").pop();
     approver.value = await usePost(`/usr/query`, {
       get: { id: uid },
       select: ["id", "nickname", "avatar"]

@@ -24,7 +24,7 @@ const res = xml2js(
   <p class="MsoNormal">
     啊<img
     src="//lzwlkj.oss-cn-shenzhen.aliyuncs.com/jaqn/image/k9gs6rs3qnWIf7RQKGU_K.jpg"
-  >哦</p>
+  />哦</p>
 `
 );
 console.log(res);

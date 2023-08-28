@@ -2,7 +2,7 @@
 import FriendsMessage from "@/views/FriendsMessage.vue";
 const user = useUser();
 const query = useQuery();
-const current = ref(Number(query.value.current || 0));
+const current = ref(Number(query.current || 0));
 
 const tabs = reactive([
   { name: "聊天", badge: 0 },
