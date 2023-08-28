@@ -17,6 +17,17 @@
 </template>
 
 <script>
+import { xml2js } from "xml-js";
+
+const res = xml2js(
+  `
+  <p class="MsoNormal">
+    啊<img
+    src="//lzwlkj.oss-cn-shenzhen.aliyuncs.com/jaqn/image/k9gs6rs3qnWIf7RQKGU_K.jpg"
+  >哦</p>
+`
+);
+console.log(res);
 export default {
   data() {
     return {
@@ -38,7 +49,7 @@ export default {
         status: "通过"
       });
       this.GoddessList = records;
-      this.total = total;
+      // this.total = total;
     }
   }
 };

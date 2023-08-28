@@ -111,7 +111,8 @@
     "util": "^0.12.5",
     "vm-browserify": "^1.1.2",
     "vue": "3.2.47",
-    "vue-i18n": "9.2.2"
+    "vue-i18n": "9.2.2",
+    "xml-js": "^1.6.11"
   },
   "devDependencies": {
     "@dcloudio/types": "3.3.3",
