@@ -5,6 +5,7 @@
       :model="threadModel"
       :values="ThreadAddData"
       :sync-values="true"
+      label-width="7em"
       @success-post="successPost"
       action-url="/stage_apply/create"
     ></modelform-uni>
