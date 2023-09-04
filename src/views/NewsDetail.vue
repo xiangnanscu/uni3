@@ -7,6 +7,13 @@
         <div>浏览：{{ record.views }}</div>
         <div>发布于：{{ utils.fromNow(record.ctime) }}</div>
       </x-subtitle>
+      <video
+        v-if="record.video"
+        :src="'https:' + record.video"
+        :show-mute-btn="true"
+        controls
+        style="width: 100%"
+      ></video>
       <tinymce-text :html="record.content"></tinymce-text>
       <template #actions> </template>
     </uni-card>

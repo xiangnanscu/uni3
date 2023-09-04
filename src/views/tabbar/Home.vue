@@ -141,25 +141,38 @@
       :size="25"
       :descSize="26"
     >
-      <swiper
-        class="swiper"
-        circular
-        :indicator-dots="true"
-        :autoplay="true"
-        :interval="2000"
-        :duration="500"
+      <fui-card>
+        <view class="fui-list__item">
+          <swiper
+            class="swiper"
+            circular
+            :indicator-dots="true"
+            :autoplay="true"
+            :interval="2000"
+            :duration="500"
+          >
+            <swiper-item v-for="e in ads" :key="e.id">
+              <view>
+                <image
+                  @click="onAdClick(e)"
+                  style="width: 100%"
+                  :src="e.pics[0]"
+                  mode="widthFix"
+                />
+              </view>
+            </swiper-item>
+          </swiper>
+        </view>
+      </fui-card>
+      <fui-list-cell
+        arrow
+        :bottomBorder="false"
+        topBorder
+        topLeft="32"
+        @click="onAdListClick"
       >
-        <swiper-item v-for="e in ads" :key="e.id">
-          <view>
-            <image
-              @click="onAdClick(e)"
-              style="width: 100%"
-              :src="e.pics[0]"
-              mode="widthFix"
-            />
-          </view>
-        </swiper-item>
-      </swiper>
+        <text class="fui-text__link"> 查看更多</text>
+      </fui-list-cell>
     </fui-panel>
 
     <fui-panel
@@ -215,7 +228,7 @@ export default {
     return {
       panelNews: { head: "青年新闻", list: [] },
       panelVolplan: { head: "志愿服务", list: [] },
-      panelAd: { head: "", list: [] },
+      panelAd: { head: "杂文轩", list: [] },
       panelPoll: { head: "问卷调查", list: [] },
       searchValue: "",
       goddess: null,
@@ -367,6 +380,11 @@ export default {
     async onVolplanListClick() {
       utils.gotoPage({
         url: "/views/VolplanList"
+      });
+    },
+    async onAdListClick() {
+      utils.gotoPage({
+        url: "/views/AdList"
       });
     },
     async getNoticeBar() {

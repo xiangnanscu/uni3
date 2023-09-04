@@ -87,7 +87,8 @@
     { "path": "views/About", "style": { "navigationBarTitleText": "" } },
     { "path": "views/StageDetail", "style": { "navigationBarTitleText": "" } },
     { "path": "views/StageList", "style": { "navigationBarTitleText": "" } },
-    { "path": "views/StageApply", "style": { "navigationBarTitleText": "" } }
+    { "path": "views/StageApply", "style": { "navigationBarTitleText": "" } },
+    { "path": "views/AdList", "style": { "navigationBarTitleText": "" } }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",

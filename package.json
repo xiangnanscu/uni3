@@ -1,6 +1,6 @@
 {
   "name": "uni-preset-vue",
-  "version": "1.201.0",
+  "version": "1.202.0",
   "license": "ISC",
   "scripts": {
     "env": "dotenv -e .env -e .env.local --",
@@ -74,9 +74,7 @@
     "diff": "diff --exclude=node_modules --exclude=.git --exclude=logs  --exclude=dist -bur ~/xodel ~/jahy",
     "stat": "bin/goaccess-stat.sh",
     "update": "bin/update-mini.sh",
-    "postinstall": "yarn pua && patch-package",
-    "pu": "npx patch-package @dcloudio/uni-ui",
-    "pua": "npm remove @dcloudio/uni-ui && npm install @dcloudio/uni-ui",
+    "postinstall": "patch-package",
     "type-check": "vue-tsc --noEmit"
   },
   "dependencies": {
