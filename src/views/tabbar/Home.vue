@@ -261,7 +261,7 @@ export default {
           type: "error"
         },
         {
-          url: "../../static/img/e-home.png",
+          url: "../../static/gqt.png",
           text: "团建E家",
           pagePath: "/views/EHome",
           badge: "",

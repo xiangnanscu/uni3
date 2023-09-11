@@ -33,7 +33,7 @@ const mainKist = [
     url: "../static/img/party-class.png",
     text: "三会两制一课",
     badge: "",
-    pagePath: "/views/NewsList?type=三会两制一课",
+    pagePath: "/views/ShyListkMy",
     type: "error"
   },
   {

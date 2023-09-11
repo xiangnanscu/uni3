@@ -88,7 +88,9 @@
     { "path": "views/StageDetail", "style": { "navigationBarTitleText": "" } },
     { "path": "views/StageList", "style": { "navigationBarTitleText": "" } },
     { "path": "views/StageApply", "style": { "navigationBarTitleText": "" } },
-    { "path": "views/AdList", "style": { "navigationBarTitleText": "" } }
+    { "path": "views/AdList", "style": { "navigationBarTitleText": "" } },
+    { "path": "views/ShyListkMy", "style": { "navigationBarTitleText": "" } },
+    { "path": "views/ShykDetail", "style": { "navigationBarTitleText": "" } }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
