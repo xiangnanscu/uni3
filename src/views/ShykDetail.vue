@@ -7,17 +7,13 @@
       </x-subtitle>
       <fui-preview :previewData="previewData"></fui-preview>
       <div>会议附件</div>
+      <div v-for="(file, i) of record.attachments" :key="i">
+        <a :href="file.url">{{ file.name }}</a>
+      </div>
       <div style="height: 2em"></div>
       <template #actions> </template>
     </uni-card>
   </page-layout>
-  <fui-fab
-    v-if="showFloatPlus"
-    :distance="30"
-    position="right"
-    :isDrag="true"
-    @click="showChatBarReplyThread"
-  ></fui-fab>
 </template>
 
 <script>
@@ -32,6 +28,10 @@ export default {
     };
   },
   computed: {
+    status() {
+      const now = new Date();
+      return this.record.start_time;
+    },
     previewData() {
       return {
         list: [
