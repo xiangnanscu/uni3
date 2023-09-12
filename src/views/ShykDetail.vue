@@ -7,9 +7,15 @@
       </x-subtitle>
       <fui-preview :previewData="previewData"></fui-preview>
       <div>会议附件</div>
-      <div v-for="(file, i) of record.attachments" :key="i">
-        <a :href="file.url">{{ file.name }}</a>
-      </div>
+      <uni-list>
+        <a
+          class="link"
+          v-for="(file, i) of record.attachments"
+          :key="i"
+          :href="file.url"
+          >{{ i + 1 }} . {{ file.name }}</a
+        >
+      </uni-list>
       <div style="height: 2em"></div>
       <template #actions> </template>
     </uni-card>
@@ -30,14 +36,22 @@ export default {
   computed: {
     status() {
       const now = new Date();
-      return this.record.start_time;
+      const start = new Date(this.record.start_time);
+      const end = new Date(this.record.end_time);
+      if (now > end) {
+        return "已结束";
+      } else if (now > start) {
+        return "进行中";
+      } else {
+        return "待开始";
+      }
     },
     previewData() {
       return {
         list: [
           {
             label: "会议状态",
-            value: ""
+            value: this.status
           },
           {
             label: "时间",
@@ -60,6 +74,10 @@ export default {
 </script>
 
 <style scoped>
+.link {
+  margin: 8px;
+  min-width: 8em;
+}
 .news-title {
   color: black;
   text-align: center;

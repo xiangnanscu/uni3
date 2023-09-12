@@ -29,7 +29,20 @@ const ready = ref(false);
 const records = ref([]);
 
 const setRecordsByType = async (newType) => {
-  const data = await usePost("/shyk/records_my");
+  const cond = {
+    where: {},
+    select: ["id", "ctime", "title", "start_time", "end_time"]
+  };
+  const now = utils.getLocalTime();
+  if (newType == "待参加") {
+    cond.where.start_time__gt = now;
+  } else if (newType == "进行中") {
+    cond.where.start_time__lt = now;
+    cond.where.end_time__gt = now;
+  } else {
+    cond.where.end_time__lt = now;
+  }
+  const data = await usePost("/shyk/query", cond);
   records.value = data;
 };
 const changeActionType = async ({ index, name }) => {
