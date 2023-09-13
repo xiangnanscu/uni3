@@ -52,6 +52,9 @@
   // https://uniapp.dcloud.net.cn/collocation/manifest.html#mp-weixin
   "mp-weixin": {
     "appid": "wxcec88a7e2c1e81c7",
+    "requiredBackgroundModes": [
+      "subscribeMessage"
+    ],
     "setting": {
       "minified": false,
       "es6": false,
