@@ -1,7 +1,10 @@
 <template>
-  <button hover-class="button-hover" @click="subsribeReply">订阅</button>
-  <button hover-class="button-hover" @click="subsribeReplyLong">
-    长期订阅
+  <button
+    v-if="!subscribeRecord"
+    hover-class="button-hover"
+    @click="subsribeReply"
+  >
+    订阅
   </button>
   <uni-list v-if="messages.length" :border="false">
     <uni-list-chat
@@ -22,6 +25,8 @@
 </template>
 
 <script>
+// 回帖和评论的通知模板
+const SubscribeTemplateId = "xLBpBRv29raUd6H9rQWgrEs3HIiyDHWgbcV3Yy2JKko";
 const detailViewMap = {
   post: "PostDetail",
   comment: "CommentDetail",
@@ -42,12 +47,14 @@ const actionTextMap = {
 export default {
   data() {
     return {
+      subscribeRecord: null,
       messages: []
     };
   },
   async onMounted() {},
   async onShow() {
     await useBadgeNumber();
+    await this.setSubscribeStatus();
     this.messages = (await this.fetchData()).map((e) => {
       e.ctime = utils.fromNow(e.ctime);
       e.url = `/views/${
@@ -66,17 +73,33 @@ export default {
     });
   },
   methods: {
+    async setSubscribeStatus() {
+      const [record] = await usePost("/subscribe/records", {
+        template_id: SubscribeTemplateId,
+        openid: this.user.openid
+      });
+      if (!record || record.status == "禁用") {
+        this.subscribeRecord = record;
+      }
+    },
     async subsribeReply() {
       const res = await uni.requestSubscribeMessage({
-        tmplIds: [
-          "xLBpBRv29raUd6H9rQWgrEs3HIiyDHWgbcV3Yy2JKko",
-          "sd-x4lKjBXN5C0NK7vF56ZyGrdL35mUscVam8At8Wtw"
-        ]
+        tmplIds: [SubscribeTemplateId]
       });
-      if (res.xLBpBRv29raUd6H9rQWgrEs3HIiyDHWgbcV3Yy2JKko == "accept") {
-        console.log("用户同意");
+      if (res[SubscribeTemplateId] == "accept") {
+        if (this.subscribeRecord) {
+          await usePost(`/subscribe/update/${this.subscribeRecord.id}`, {
+            status: "启用"
+          });
+        } else {
+          const res = await usePost(`/subscribe/create`, {
+            template_id: SubscribeTemplateId,
+            openid: this.user.openid,
+            status: "启用"
+          });
+          this.subscribeRecord = res;
+        }
       }
-      console.log(res);
     },
     async subsribeReplyLong() {
       const res = await uni.requestSubscribeMessage({
