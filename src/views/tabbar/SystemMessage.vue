@@ -1,4 +1,5 @@
 <template>
+  <button hover-class="button-hover" @click="subsribeReply">订阅</button>
   <uni-list v-if="messages.length" :border="false">
     <uni-list-chat
       v-for="e of messages"
@@ -41,6 +42,7 @@ export default {
       messages: []
     };
   },
+  async onMounted() {},
   async onShow() {
     await useBadgeNumber();
     this.messages = (await this.fetchData()).map((e) => {
@@ -61,6 +63,15 @@ export default {
     });
   },
   methods: {
+    async subsribeReply() {
+      const res = await uni.requestSubscribeMessage({
+        tmplIds: ["xLBpBRv29raUd6H9rQWgrEs3HIiyDHWgbcV3Yy2JKko"]
+      });
+      if (res.xLBpBRv29raUd6H9rQWgrEs3HIiyDHWgbcV3Yy2JKko == "accept") {
+        console.log("用户同意");
+      }
+      console.log(res);
+    },
     async setAsRead(e) {
       await useGet(`/system_message/readed/${e.id}`);
       await utils.gotoPage({ url: e.url });
