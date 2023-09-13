@@ -1,5 +1,8 @@
 <template>
   <button hover-class="button-hover" @click="subsribeReply">订阅</button>
+  <button hover-class="button-hover" @click="subsribeReplyLong">
+    长期订阅
+  </button>
   <uni-list v-if="messages.length" :border="false">
     <uni-list-chat
       v-for="e of messages"
@@ -65,7 +68,19 @@ export default {
   methods: {
     async subsribeReply() {
       const res = await uni.requestSubscribeMessage({
-        tmplIds: ["xLBpBRv29raUd6H9rQWgrEs3HIiyDHWgbcV3Yy2JKko"]
+        tmplIds: [
+          "xLBpBRv29raUd6H9rQWgrEs3HIiyDHWgbcV3Yy2JKko",
+          "sd-x4lKjBXN5C0NK7vF56ZyGrdL35mUscVam8At8Wtw"
+        ]
+      });
+      if (res.xLBpBRv29raUd6H9rQWgrEs3HIiyDHWgbcV3Yy2JKko == "accept") {
+        console.log("用户同意");
+      }
+      console.log(res);
+    },
+    async subsribeReplyLong() {
+      const res = await uni.requestSubscribeMessage({
+        tmplIds: ["sd-x4lKjBXN5C0NK7vF56ZyGrdL35mUscVam8At8Wtw"]
       });
       if (res.xLBpBRv29raUd6H9rQWgrEs3HIiyDHWgbcV3Yy2JKko == "accept") {
         console.log("用户同意");
