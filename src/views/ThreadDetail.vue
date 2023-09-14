@@ -8,6 +8,7 @@
       ></thread-head>
       <thread-body
         class="chat-body"
+        :target="record"
         :posts="posts"
         :scroll-id="query.scrollId"
         target-model="thread"
@@ -55,6 +56,11 @@ export default {
     return {
       target_model: "thread"
     };
+  },
+  computed: {
+    notify_click_page() {
+      return "views/ThreadDetail?id=" + this.query.id;
+    }
   },
   methods: {}
 };

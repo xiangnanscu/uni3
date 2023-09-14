@@ -33,23 +33,26 @@ export default {
       }
     },
     async sendPost(content) {
-      const newPost = await usePost("/post/create", {
+      const newPost = await usePost(`/post/create`, {
         content,
         target_model: this.target_model,
         target_id: this.record.id
       });
-      if (this.record.creator && this.record.creator !== this.user.id) {
+      if (this.record.creator && this.record.creator === this.user.id) {
         newPost.creator__nickname = this.user.nickname;
         newPost.creator__avatar = this.user.avatar;
         newPost.target_digest = utils.textDigest(
           this.record.title,
           messageDigestNumber
         );
-        await usePost("/system_message/create", {
-          type: "reply_thread",
-          target_usr: this.record.creator,
-          content: newPost
-        });
+        await usePost(
+          `/system_message/create?notify_openid=${this.record.creator__openid}&post_nickname=${this.user.nickname}&page=${this.notify_click_page}&title=${this.record.title}`,
+          {
+            type: "reply_thread",
+            target_usr: this.record.creator,
+            content: newPost
+          }
+        );
       }
       this.posts.push({
         id: newPost.id,

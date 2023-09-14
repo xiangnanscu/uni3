@@ -133,6 +133,7 @@
 <script>
 export default {
   props: {
+    target: { type: Object },
     scrollId: { type: String },
     targetModel: { type: String },
     posts: { type: Array }
