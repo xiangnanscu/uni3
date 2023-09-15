@@ -9,28 +9,38 @@
       <tinymce-text :html="record.content"></tinymce-text>
       <template
         v-for="(
-          { 题干, 类型, 选项, 最大选择数, 最小选择数, 是否必填 }, index
+          { 题干, 类型, 选项, 选项图, 最大选择数, 最小选择数, 是否必填 }, index
         ) in record.items"
         :key="index"
       >
         <p style="color: black; margin-top: 1em">
           <span>{{ index + 1 }} </span>、{{ 题干 }}
         </p>
+        <uni-row class="row">
+          <uni-col></uni-col>
+          <uni-col> </uni-col>
+        </uni-row>
         <uni-data-checkbox
           v-if="类型 == '单选'"
           v-model="answers[index]"
           :localdata="选项.map((e) => ({ text: e, value: e }))"
           mode="list"
         ></uni-data-checkbox>
-        <uni-data-checkbox
+        <x-checkbox
           v-else-if="类型 == '多选'"
           v-model="answers[index]"
-          :localdata="选项.map((e) => ({ text: e, value: e }))"
-          :multiple="true"
+          :choices="
+            选项.map((e, i) => ({
+              name: e,
+              value: e,
+              checked: false,
+              image: 选项图[i]
+            }))
+          "
           :min2="最小选择数"
           :max="最大选择数"
           mode="list"
-        ></uni-data-checkbox>
+        ></x-checkbox>
         <uni-easyinput v-else v-model.trim="answers[index]" type="text" />
       </template>
       <div style="height: 3em"></div>
