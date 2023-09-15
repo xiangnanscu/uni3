@@ -111,14 +111,13 @@ export default {
     );
     if (utils.getLocalTime(now) > this.record.endtime) {
       this.pollEnd = true;
+      this.showResult = true; // 投票结束直接显示结果, 无需投票
+    } else {
+      this.showResult = await usePost(`/poll_log/voted`, {
+        poll_id: this.query.id,
+        creator: this.user.id
+      });
     }
-    const logs = await usePost(`/poll_log/records`, {
-      poll_id: this.query.id,
-      creator: this.user.id,
-      ctime__gte: startOfDay,
-      ctime__lte: endOfDay
-    });
-    this.showResult = logs.length > 0;
     this.loaded = true;
   },
   watch: {
@@ -127,10 +126,6 @@ export default {
         this.pollLogs = await usePost(`/poll_log/records`, {
           poll_id: this.query.id
         });
-        // uni.pageScrollTo({
-        //   scrollTop: 0,
-        //   duration: 300
-        // });
       }
     }
   },
