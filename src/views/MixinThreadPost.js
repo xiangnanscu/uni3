@@ -1,5 +1,4 @@
-const messageDigestNumber = 31;
-
+const wxNoticeDigestNumber = 10;
 export default {
   data() {
     return {
@@ -17,6 +16,11 @@ export default {
   async onLoad(query) {
     this.query = query;
     await this.fetchData(query);
+  },
+  computed: {
+    threadTitleDigest() {
+      return utils.textDigest(this.record.title, wxNoticeDigestNumber);
+    }
   },
   methods: {
     async fetchData(query) {
@@ -41,25 +45,19 @@ export default {
       if (this.record.creator && this.record.creator !== this.user.id) {
         newPost.creator__nickname = this.user.nickname;
         newPost.creator__avatar = this.user.avatar;
-        newPost.target_digest = utils.textDigest(
-          this.record.title,
-          messageDigestNumber
-        );
-        await usePost(
-          `/system_message/create?notify_openid=${
-            this.record.creator__openid
-          }&post_nickname=${this.user.nickname}&page=${
-            this.notify_click_page
-          }&title=${this.record.title}&content=${utils.textDigest(
-            newPost.content,
-            5
-          )}`,
-          {
-            type: "reply_thread",
-            target_usr: this.record.creator,
-            content: newPost
-          }
-        );
+        newPost.target_digest = this.threadTitleDigest;
+        await usePost(`/system_message/create`, {
+          type: "reply_thread",
+          target_usr: this.record.creator,
+          content: newPost
+        });
+        await usePost(`/wx/broadcast?type=thread`, {
+          page: this.notify_click_page,
+          openid: this.record.creator__openid,
+          title: this.threadTitleDigest,
+          content: utils.textDigest(newPost.content, wxNoticeDigestNumber),
+          nickname: this.user.nickname
+        });
       }
       this.posts.push({
         id: newPost.id,
@@ -74,6 +72,7 @@ export default {
       uni.showToast({ icon: "none", title: "回帖成功" });
     },
     async sendComment(content) {
+      const commentDigest = utils.textDigest(content, wxNoticeDigestNumber);
       const newComment = await usePost("/post_comment/create", {
         content,
         post_id: this.post.id,
@@ -83,10 +82,17 @@ export default {
       newComment.creator__avatar = this.user.avatar;
       newComment.url_model = this.target_model;
       newComment.url_id = this.record.id;
+      // 评论需要通知1.帖主 2. 楼主 3. 评论对象
       const notices = [];
+      const wxNotices = [];
       const alreadyNoticed = {}; // 避免重复通知
+      // 通知评论对象
       if (this.comment && this.comment.creator !== this.user.id) {
         alreadyNoticed[this.comment.creator] = true;
+        const targetCommentDigest = utils.textDigest(
+          this.comment.content,
+          wxNoticeDigestNumber
+        );
         notices.push({
           type: "reply_post_comment",
           target_usr: this.comment.creator,
@@ -94,19 +100,27 @@ export default {
             ...newComment,
             target_model: "comment",
             target_id: this.comment.id,
-            target_digest: utils.textDigest(
-              this.comment.content,
-              messageDigestNumber
-            )
+            target_digest: targetCommentDigest
           }
         });
+        wxNotices.push({
+          page: this.notify_click_page,
+          openid: this.comment.creator__openid,
+          title: targetCommentDigest,
+          content: commentDigest,
+          nickname: this.user.nickname
+        });
       }
+      // 通知楼主
       if (
         !alreadyNoticed[this.post.creator] &&
         this.post.creator !== this.user.id
       ) {
-        // 评论自己的帖子不用通知
         alreadyNoticed[this.post.creator] = true;
+        const postDigest = utils.textDigest(
+          this.post.content,
+          wxNoticeDigestNumber
+        );
         notices.push({
           type: "reply_post",
           target_usr: this.post.creator,
@@ -114,13 +128,18 @@ export default {
             ...newComment,
             target_model: "post",
             target_id: this.post.id,
-            target_digest: utils.textDigest(
-              this.post.content,
-              messageDigestNumber
-            )
+            target_digest: postDigest
           }
         });
+        wxNotices.push({
+          page: this.notify_click_page,
+          openid: this.post.creator__openid,
+          title: postDigest,
+          content: commentDigest,
+          nickname: this.user.nickname
+        });
       }
+      // 通知帖主
       if (
         this.record.creator &&
         !alreadyNoticed[this.record.creator] &&
@@ -134,15 +153,20 @@ export default {
             ...newComment,
             target_model: this.target_model,
             target_id: this.record.id,
-            target_digest: utils.textDigest(
-              this.record.title,
-              messageDigestNumber
-            )
+            target_digest: this.threadTitleDigest
           }
+        });
+        wxNotices.push({
+          page: this.notify_click_page,
+          openid: this.record.creator__openid,
+          title: this.threadTitleDigest,
+          content: commentDigest,
+          nickname: this.user.nickname
         });
       }
       if (notices.length) {
         await usePost("/system_message/insert", notices);
+        await usePost(`/wx/broadcast?type=thread`, wxNotices);
       }
       if (!this.post.comments) {
         this.post.comments = [];
