@@ -7,6 +7,9 @@
         <div>{{ utils.fromNow(record.ctime) }}</div>
       </x-subtitle>
       <tinymce-text :html="record.content"></tinymce-text>
+      <div v-if="timelineShareMode" class="tigan center">
+        请点击下方“前往小程序”进行投票
+      </div>
       <div v-if="pollEnd" class="tigan center">投票已结束</div>
       <template v-if="loaded && (pollEnd || showResult)">
         <template
@@ -91,6 +94,7 @@ export default {
   mixins: [MixinShare],
   data() {
     return {
+      timelineShareMode: false,
       pollEnd: false,
       loaded: false,
       showResult: false,
@@ -100,6 +104,12 @@ export default {
     };
   },
   async onLoad(query) {
+    const scene = wx?.getLaunchOptionsSync().scene;
+    console.log({ scene });
+    if (scene === 1154) {
+      this.timelineShareMode = true;
+      return;
+    }
     this.query = query;
     await this.fetchData(query);
     const now = new Date();
@@ -123,7 +133,7 @@ export default {
   watch: {
     async showResult(show) {
       if (show) {
-        this.pollLogs = await usePost(`/poll_log/records`, {
+        this.pollLogs = await usePost(`/poll_log/records?_q=${typeof show}`, {
           poll_id: this.query.id
         });
       }
