@@ -104,15 +104,14 @@ export default {
     };
   },
   async onLoad(query) {
+    this.query = query;
     const scene = wx?.getLaunchOptionsSync().scene;
-    console.log({ scene });
+    await this.fetchData(query);
+    const now = new Date();
     if (scene === 1154) {
       this.timelineShareMode = true;
       return;
     }
-    this.query = query;
-    await this.fetchData(query);
-    const now = new Date();
     const startOfDay = utils.getLocalTime(
       new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0)
     );
