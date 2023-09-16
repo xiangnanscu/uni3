@@ -1,6 +1,6 @@
 <template>
   <button
-    v-if="!subscribeRecord"
+    v-if="!subscribeRecord || subscribeRecord.status == '禁用'"
     hover-class="button-hover"
     @click="subsribeReply"
   >
@@ -74,13 +74,14 @@ export default {
   },
   methods: {
     async setSubscribeStatus() {
-      const [record] = await usePost("/subscribe/records", {
-        template_id: SubscribeTemplateId,
-        openid: this.user.openid
-      });
-      if (!record || record.status == "禁用") {
-        this.subscribeRecord = record;
-      }
+      const [record] = await usePost(
+        `/subscribe/records?select=status&select=id`,
+        {
+          template_id: SubscribeTemplateId,
+          openid: this.user.openid
+        }
+      );
+      this.subscribeRecord = record;
     },
     async subsribeReply() {
       const res = await uni.requestSubscribeMessage({
