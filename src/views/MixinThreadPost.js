@@ -1,4 +1,6 @@
-const wxNoticeDigestNumber = 10;
+// 各字段长度限制thing:20, name:10
+// https://developers.weixin.qq.com/miniprogram/dev/OpenApiDoc/mp-message-management/subscribe-message/sendMessage.html
+const wxNoticeDigestNumber = 17;
 export default {
   data() {
     return {
