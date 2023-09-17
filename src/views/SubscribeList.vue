@@ -63,7 +63,7 @@ export default defineComponent({
       }
     }
   },
-  async onLoad(opts) {
+  async onLoad2(opts) {
     const templates = await useGet(`/wx/get_template_list`);
     const subscribeLogs = await usePost(
       `/subscribe/records?select=status&select=id&select=template_id`,
