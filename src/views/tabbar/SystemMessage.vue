@@ -81,7 +81,6 @@ export default {
           openid: this.user.openid
         }
       );
-      console.log({ records });
       this.subscribeRecord = records[0];
     },
     async subsribeReply() {

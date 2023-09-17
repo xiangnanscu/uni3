@@ -90,7 +90,8 @@
     { "path": "views/StageApply", "style": { "navigationBarTitleText": "" } },
     { "path": "views/AdList", "style": { "navigationBarTitleText": "" } },
     { "path": "views/ShyListkMy", "style": { "navigationBarTitleText": "" } },
-    { "path": "views/ShykDetail", "style": { "navigationBarTitleText": "" } }
+    { "path": "views/ShykDetail", "style": { "navigationBarTitleText": "" } },
+    { "path": "views/SubscribeList", "style": { "navigationBarTitleText": "" } }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",

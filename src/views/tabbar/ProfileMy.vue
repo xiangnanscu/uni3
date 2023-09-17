@@ -23,11 +23,35 @@
     </uni-list>
     <uni-list>
       <uni-list-item
+        title="个人信息"
+        link="navigateTo"
+        to="/views/ProfileForm"
+        :show-extra-icon="true"
+        :extra-icon="{ color: '#666', size: '32', type: 'person-filled' }"
+      >
+      </uni-list-item>
+      <uni-list-item
+        title="实名认证"
+        link="navigateTo"
+        to="/views/RealNameCert"
+        :show-extra-icon="true"
+        :extra-icon="{ color: '#666', size: '32', type: 'contact-filled' }"
+      >
+      </uni-list-item>
+      <uni-list-item
         title="我的帖子"
         link="navigateTo"
         to="/views/ThreadListMy"
         :show-extra-icon="true"
         :extra-icon="{ color: '#666', size: '32', type: 'chatboxes-filled' }"
+      >
+      </uni-list-item>
+      <uni-list-item
+        title="订阅通知"
+        link="navigateTo"
+        to="/views/SubscribeList"
+        :show-extra-icon="true"
+        :extra-icon="{ color: '#666', size: '32', type: 'sound-filled' }"
       >
       </uni-list-item>
       <uni-list-item
@@ -60,22 +84,6 @@
         to="/views/VolplanListMy?current=0"
         :show-extra-icon="true"
         :extra-icon="{ color: '#666', size: '32', type: 'heart-filled' }"
-      >
-      </uni-list-item>
-      <uni-list-item
-        title="个人信息"
-        link="navigateTo"
-        to="/views/ProfileForm"
-        :show-extra-icon="true"
-        :extra-icon="{ color: '#666', size: '32', type: 'person-filled' }"
-      >
-      </uni-list-item>
-      <uni-list-item
-        title="实名认证"
-        link="navigateTo"
-        to="/views/RealNameCert"
-        :show-extra-icon="true"
-        :extra-icon="{ color: '#666', size: '32', type: 'contact-filled' }"
       >
       </uni-list-item>
       <uni-list-item
