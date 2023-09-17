@@ -39,9 +39,7 @@ onLoad(async (opts) => {
   // for (const t of templates) {
   //   t.checked = enabledIds.includes(t.priTmplId) ? true : false;
   // }
-  subscribeItems.value = templates.filter(
-    (e) => !excludeTitles.includes(e.title)
-  );
+  subscribeItems.value = templates;
 });
 async function onSubsribeChange(item, selected) {
   const priTmplId = item.priTmplId;
