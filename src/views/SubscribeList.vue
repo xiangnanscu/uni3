@@ -57,19 +57,20 @@ async function onSubsribeChange(item, selected) {
       item.checked = true;
       uni.showToast({
         title: "订阅成功",
-        icon: "success",
-        mask: true
+        icon: "success"
       });
     } else {
       item.checked = false;
       uni.showToast({
-        title: "未订阅"
+        title: "订阅失败",
+        icon: "error"
       });
     }
   } else {
     item.checked = false;
     uni.showToast({
-      title: "未订阅"
+      title: "订阅失败",
+      icon: "error"
     });
   }
 }
