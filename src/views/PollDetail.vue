@@ -189,14 +189,11 @@ export default {
       }
       const data = await usePost(`/poll_log/create`, {
         poll_id: this.record.id,
-        creator: this.user.id,
+        // creator: this.user.id,
         answers: this.answers
       });
       this.showResult = true;
-      // utils.gotoPage({
-      //   name: "SuccessPage",
-      //   query: { title: "提交成功,感谢参与" }
-      // });
+      uni.showToast({ title: "提交成功" });
     },
     async fetchData(query) {
       const poll = await useGet(`/poll/detail/${query.id}`);

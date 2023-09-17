@@ -60,7 +60,7 @@ export default {
 :deep(.tinymce-p) {
   color: black;
   margin-bottom: 1em;
-  font-size: 12pt;
+  font-size: 14pt;
   line-height: 1.3;
 }
 
