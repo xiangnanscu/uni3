@@ -3,7 +3,9 @@ import { onLaunch, onShow, onHide } from "@dcloudio/uni-app";
 onLaunch(() => {
   console.log("App Launch");
 });
-onShow(() => {
+onShow(async () => {
+  const res = await useGet("/test");
+  console.log(res.filter((e) => e));
   console.log("App Show");
 });
 onHide(() => {
