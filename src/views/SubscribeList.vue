@@ -32,6 +32,7 @@ onLoad(async (opts) => {
       openid: user.openid
     }
   );
+  console.log(subscribeLogs);
   const enabledIds = subscribeLogs
     .filter((e) => e.status == "启用")
     .map((e) => e.template_id);
