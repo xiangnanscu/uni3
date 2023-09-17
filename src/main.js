@@ -41,7 +41,7 @@ export function createApp() {
   });
   setTimeout(() => {
     app.config.errorHandler = (err, instance, info) => {
-      console.error("errorHandler captured...", { err, instance, info });
+      console.error("errorHandler captured...", err, { instance, info });
       if (typeof err == "string") {
         uni.showModal({
           title: `错误`,
