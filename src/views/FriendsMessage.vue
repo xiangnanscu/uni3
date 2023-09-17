@@ -32,7 +32,7 @@ export default {
         await usePost("/message/clear_unread", { creator: e.receiver.id });
       }
       await utils.gotoPage({
-        url: `/views/MessageDetail?receiverId=${e.receiver.id}`
+        url: `/views/FriendsMessageDetail?receiverId=${e.receiver.id}`
       });
     }
   }

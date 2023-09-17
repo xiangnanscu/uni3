@@ -28,6 +28,7 @@
 </template>
 
 <script>
+const wxNoticeDigestNumber = 17;
 export default {
   props: {},
   data() {
@@ -147,7 +148,7 @@ export default {
       this.messages = records;
       this.receiver = await usePost(`/usr/query`, {
         get: { id: this.receiverId },
-        select: ["id", "nickname", "avatar"]
+        select: ["id", "nickname", "avatar", "openid"]
       });
       uni.setNavigationBarTitle({ title: this.receiver.nickname });
     },
@@ -170,9 +171,15 @@ export default {
         uni.showToast({ title: "请输入内容", icon: "error" });
         return;
       }
-      const { data } = await Http.post(`/message/create`, {
+      const data = await usePost(`/message/create`, {
         target: this.receiverId,
         content
+      });
+      await usePost(`/wx/broadcast?type=chat`, {
+        page: `views/FriendsMessageDetail?receiverId=${this.user.id}`,
+        openid: this.receiver.openid,
+        content: utils.textDigest(content, wxNoticeDigestNumber),
+        nickname: this.user.nickname
       });
       data.creator = this.sender;
       data.target = this.receiver;

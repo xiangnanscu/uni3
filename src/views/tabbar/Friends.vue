@@ -78,7 +78,7 @@ onShow(async () => {
       :title="e.title"
       showArrow
       link="navigateTo"
-      :to="`/views/MessageDetail?receiverId=${e.id}`"
+      :to="`/views/FriendsMessageDetail?receiverId=${e.id}`"
       thumb-size="lg"
       :thumb="e.avatar"
     >

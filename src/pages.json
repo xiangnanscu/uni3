@@ -29,7 +29,7 @@
     { "path": "views/GoddessList", "style": { "navigationBarTitleText": "" } },
     { "path": "views/Login", "style": { "navigationBarTitleText": "" } },
     {
-      "path": "views/MessageDetail",
+      "path": "views/FriendsMessageDetail",
       "style": {
         "backgroundColor": "#F2F2F2",
         "enablePullDownRefresh": true,

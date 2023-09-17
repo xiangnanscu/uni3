@@ -6,12 +6,13 @@
         <view v-for="(item, index) in subscribeItems" :key="index">
           <div class="uni-list-cell">
             <view style="flex: auto">{{ item.title }}</view>
-            <switch
+            <!-- <switch
               :checked="item.checked"
               @change="onSubsribeChange(item, $event.detail.value)"
-            />
+            /> -->
+            <x-button @click="onSubsribeChange(item, true)"> 订阅 </x-button>
           </div>
-          <pre>{{ item.example }} </pre>
+          <!-- <pre>{{ item.example }} </pre> -->
         </view>
       </uni-list>
     </div>
@@ -36,11 +37,12 @@ export default defineComponent({
           tmplIds: [priTmplId]
         });
         if (res?.[priTmplId] == "accept") {
-          await usePost(`/subscribe/create`, {
+          const subsRes = await usePost(`/subscribe/create`, {
             template_id: priTmplId,
             openid: this.user.openid,
             status: "启用"
           });
+          console.log({ subsRes });
           item.checked = true;
           uni.showToast({
             title: "订阅成功",
@@ -84,13 +86,14 @@ export default defineComponent({
 
 <style scoped>
 .uni-list-box {
-  padding: 15px;
+  padding: 2em;
 }
 .uni-list-cell {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  margin-bottom: 1em;
+  padding: 0 2em;
+  margin-bottom: 2em;
 }
 </style>
