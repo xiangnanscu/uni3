@@ -184,7 +184,7 @@ export default {
       data.creator = this.sender;
       data.target = this.receiver;
       // console.log(this.messages.slice(-1), this.sender);
-      this.messages.push(data);
+      this.addToMessages([data]);
       this.messageText = "";
       this.scrollTo();
       // this.toggleButton();
