@@ -14,5 +14,6 @@
   flex-direction: row;
   color: #666;
   font-size: 80%;
+  margin-bottom: 1em;
 }
 </style>

@@ -2,14 +2,14 @@
   <page-layout v-if="record">
     <uni-card :isFull="true" :is-shadow="false" :border="false">
       <p class="volplan-title">{{ record.title }}</p>
-      <x-subtitle style="padding: 0.5em 0.5em">
+      <x-subtitle>
         <div>{{ utils.fromNow(record.ctime) }}</div>
       </x-subtitle>
       <image
         v-if="record.pics[0]"
         :src="record.pics[0]"
         mode="widthFix"
-        style="width: 100%"
+        style="width: 100%; margin: auto"
       />
       <fui-preview :previewData="previewData"></fui-preview>
       <tinymce-text :html="record.content"></tinymce-text>
