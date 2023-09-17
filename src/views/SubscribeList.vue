@@ -64,9 +64,7 @@ export default defineComponent({
     }
   },
   async onLoad(opts) {
-    const templates = (await useGet(`/wx/get_template_list`)).filter(
-      (e) => !excludeTitles.includes(e.title)
-    );
+    const templates = await useGet(`/wx/get_template_list`);
     const subscribeLogs = await usePost(
       `/subscribe/records?select=status&select=id&select=template_id`,
       {
@@ -79,7 +77,9 @@ export default defineComponent({
     for (const t of templates) {
       t.checked = enabledIds.includes(t.priTmplId) ? true : false;
     }
-    this.subscribeItems = templates;
+    this.subscribeItems = templates.filter(
+      (e) => !excludeTitles.includes(e.title)
+    );
   }
 });
 </script>
