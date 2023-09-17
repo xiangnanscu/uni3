@@ -74,14 +74,15 @@ export default {
   },
   methods: {
     async setSubscribeStatus() {
-      const [record] = await usePost(
+      const records = await usePost(
         `/subscribe/records?select=status&select=id`,
         {
           template_id: SubscribeTemplateId,
           openid: this.user.openid
         }
       );
-      this.subscribeRecord = record;
+      console.log({ records });
+      this.subscribeRecord = records[0];
     },
     async subsribeReply() {
       const res = await uni.requestSubscribeMessage({
