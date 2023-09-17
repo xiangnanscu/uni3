@@ -3,17 +3,7 @@ import { onLaunch, onShow, onHide } from "@dcloudio/uni-app";
 onLaunch(() => {
   console.log("App Launch");
 });
-onShow(async () => {
-  const templates = await useGet(`/wx/get_template_list`);
-  const subscribeLogs = await usePost(
-    `/subscribe/records?select=status&select=id&select=template_id`
-  );
-  const enabledIds = subscribeLogs
-    .filter((e) => e.status == "启用")
-    .map((e) => e.template_id);
-  for (const t of templates) {
-    t.checked = enabledIds.includes(t.priTmplId) ? true : false;
-  }
+onShow(() => {
   console.log("App Show");
 });
 onHide(() => {

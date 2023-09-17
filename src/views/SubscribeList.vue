@@ -20,68 +20,59 @@
   </page-layout>
 </template>
 
-<script>
+<script setup>
 const excludeTitles = ["社区通知"];
-export default defineComponent({
-  data() {
-    return {
-      subscribeItems: []
-    };
-  },
-  methods: {
-    async onSubsribeChange(item, selected) {
-      const priTmplId = item.priTmplId;
-      console.log({ priTmplId, selected });
-      if (selected) {
-        const res = await uni.requestSubscribeMessage?.({
-          tmplIds: [priTmplId]
-        });
-        if (res?.[priTmplId] == "accept") {
-          const subsRes = await usePost(`/subscribe/create`, {
-            template_id: priTmplId,
-            openid: this.user.openid,
-            status: "启用"
-          });
-          console.log({ subsRes });
-          item.checked = true;
-          uni.showToast({
-            title: "订阅成功",
-            icon: "success",
-            mask: true
-          });
-        } else {
-          item.checked = false;
-          uni.showToast({
-            title: "未订阅"
-          });
-        }
-      } else {
-        item.checked = false;
-        uni.showToast({
-          title: "未订阅"
-        });
-      }
+const subscribeItems = ref([]);
+const user = useUser();
+onLoad(async (opts) => {
+  const templates = await useGet(`/wx/get_template_list`);
+  const subscribeLogs = await usePost(
+    `/subscribe/records?select=status&select=id&select=template_id`,
+    {
+      openid: user.openid
     }
-  },
-  async onLoad2(opts) {
-    const templates = await useGet(`/wx/get_template_list`);
-    const subscribeLogs = await usePost(
-      `/subscribe/records?select=status&select=id&select=template_id`,
-      {
-        openid: this.user.openid
-      }
-    );
-    const enabledIds = subscribeLogs
-      .filter((e) => e.status == "启用")
-      .map((e) => e.template_id);
-    for (const t of templates) {
-      t.checked = enabledIds.includes(t.priTmplId) ? true : false;
-    }
-    this.subscribeItems = templates.filter(
-      (e) => !excludeTitles.includes(e.title)
-    );
+  );
+  const enabledIds = subscribeLogs
+    .filter((e) => e.status == "启用")
+    .map((e) => e.template_id);
+  for (const t of templates) {
+    t.checked = enabledIds.includes(t.priTmplId) ? true : false;
   }
+  subscribeItems.value = templates.filter(
+    (e) => !excludeTitles.includes(e.title)
+  );
 });
+async function onSubsribeChange(item, selected) {
+  const priTmplId = item.priTmplId;
+  if (selected) {
+    const res = await uni.requestSubscribeMessage?.({
+      tmplIds: [priTmplId]
+    });
+    if (res?.[priTmplId] == "accept") {
+      const subsRes = await usePost(`/subscribe/create`, {
+        template_id: priTmplId,
+        openid: user.openid,
+        status: "启用"
+      });
+      item.checked = true;
+      uni.showToast({
+        title: "订阅成功",
+        icon: "success",
+        mask: true
+      });
+    } else {
+      item.checked = false;
+      uni.showToast({
+        title: "未订阅"
+      });
+    }
+  } else {
+    item.checked = false;
+    uni.showToast({
+      title: "未订阅"
+    });
+  }
+}
 </script>
 
 <style scoped>
