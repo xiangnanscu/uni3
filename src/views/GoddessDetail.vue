@@ -13,7 +13,7 @@
         controls
         style="width: 100%"
       ></video>
-      <div style="width: 100%; margin: auto">
+      <div style="width: 100%; margin: auto; margin-bottom: 1em">
         <image
           v-if="record.pics[0]"
           :src="record.pics[0]"

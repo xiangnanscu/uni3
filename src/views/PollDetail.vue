@@ -6,6 +6,17 @@
       <x-subtitle style="padding: 0.5em 0.5em">
         <div>{{ utils.fromNow(record.ctime) }}</div>
       </x-subtitle>
+      <div
+        v-if="record.pics[0]"
+        style="width: 100%; margin: auto; margin-bottom: 1em"
+      >
+        <image
+          :src="record.pics[0]"
+          @click="previewImage(record.pics[0])"
+          mode="widthFix"
+          style="width: 100%; margin: auto"
+        />
+      </div>
       <tinymce-text :html="record.content"></tinymce-text>
       <div v-if="timelineShareMode" class="tigan center">
         请点击下方“前往小程序”进行投票
