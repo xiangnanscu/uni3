@@ -24,8 +24,10 @@
 const excludeTitles = ["社区通知"];
 const subscribeItems = ref([]);
 const user = useUser();
-onLoad(async (opts) => {
-  const { data: templates } = Http.get(`/wx/get_template_list`);
+onLoad((opts) => {
+  useGet(`/wx/get_template_list`).then((templates) => {
+    subscribeItems.value = templates;
+  });
   // const subscribeLogs = await usePost(
   //   `/subscribe/records?select=status&select=id&select=template_id`,
   //   {
@@ -39,7 +41,7 @@ onLoad(async (opts) => {
   // for (const t of templates) {
   //   t.checked = enabledIds.includes(t.priTmplId) ? true : false;
   // }
-  subscribeItems.value = templates;
+  // subscribeItems.value = templates;
 });
 async function onSubsribeChange(item, selected) {
   const priTmplId = item.priTmplId;
