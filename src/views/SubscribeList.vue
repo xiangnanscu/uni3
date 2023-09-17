@@ -65,19 +65,18 @@ export default defineComponent({
   },
   async onLoad(opts) {
     const templates = await useGet(`/wx/get_template_list`);
-    const subscribeLogs = await usePost(
-      `/subscribe/records?select=status&select=id&select=template_id`,
-      {
-        openid: this.user.openid
-      }
-    );
-    const enabledIds = subscribeLogs
-      .filter((e) => e.status == "启用")
-      .map((e) => e.template_id);
-    for (const t of templates) {
-      t.checked = enabledIds.includes(t.priTmplId) ? true : false;
-    }
-    this.subscribeItems = templates;
+    // const subscribeLogs = await usePost(
+    //   `/subscribe/records?select=status&select=id&select=template_id`,
+    //   {
+    //     openid: this.user.openid
+    //   }
+    // );
+    // const enabledIds = subscribeLogs
+    //   .filter((e) => e.status == "启用")
+    //   .map((e) => e.template_id);
+    // for (const t of templates) {
+    //   t.checked = enabledIds.includes(t.priTmplId) ? true : false;
+    // }
     // this.subscribeItems = templates.filter(
     //   (e) => !excludeTitles.includes(e.title)
     // );
