@@ -1,19 +1,19 @@
 <template>
-  <page-layout v-if="record">
+  <page-layout v-if="poll">
     <uni-card :isFull="true" :is-shadow="false" :border="false">
       <template #actions> </template>
-      <p class="poll-title">{{ record.title }}</p>
+      <p class="poll-title">{{ poll.title }}</p>
       <x-subtitle>
-        <div>{{ utils.fromNow(record.ctime) }}</div>
+        <div>{{ utils.fromNow(poll.ctime) }}</div>
       </x-subtitle>
       <image
-        v-if="record.pics[0]"
-        :src="record.pics[0]"
-        @click="previewImage(record.pics[0])"
+        v-if="poll.pics[0]"
+        :src="poll.pics[0]"
+        @click="previewImage(poll.pics[0])"
         mode="widthFix"
         style="width: 100%; margin: auto; margin-bottom: 1em"
       />
-      <tinymce-text :html="record.content"></tinymce-text>
+      <tinymce-text :html="poll.content"></tinymce-text>
       <div v-if="timelineShareMode" class="tigan center">
         请点击下方“前往小程序”进行投票
       </div>
@@ -21,9 +21,18 @@
       <template v-if="loaded && (pollEnd || showResult)">
         <template
           v-for="(
-            { 题干, 类型, 选项, 选项图, 最大选择数, 最小选择数, 是否必填 },
+            {
+              题干,
+              类型,
+              选中,
+              选项,
+              选项图,
+              最大选择数,
+              最小选择数,
+              是否必填
+            },
             itemIndex
-          ) in record.items"
+          ) in poll.items"
           :key="itemIndex"
         >
           <div :class="{ tigan: true, center: onlyOne }" style="width: 100%">
@@ -31,23 +40,31 @@
           </div>
           <div v-for="(c, i) in 选项" :key="i">
             <div class="uni-list-cell">
-              <div v-if="选项图[i]">
+              <div v-if="选项图[i]" style="width: 75px">
                 <image
                   style="width: 75px; height: 75px"
                   :src="选项图[i]"
                   mode="aspectFit"
                 />
               </div>
-              <div style="flex: auto">
+              <div style="flex: auto; padding: 0 5px">
                 <p>
                   {{ c }}
-                  {{ count(itemIndex, c) }}
+                  <span style="font-weight: bold">{{
+                    选中[i] ? "（已选）" : ""
+                  }}</span>
+                  {{ count(itemIndex, c) }}票
                 </p>
-                <progress
-                  :percent="percent(itemIndex, c)"
-                  show-info
-                  style="width: 100%"
-                />
+                <uni-row>
+                  <uni-col :span="24">
+                    <progress
+                      :percent="percent(itemIndex, c)"
+                      show-info
+                      style="width: 100%"
+                    />
+                  </uni-col>
+                  <uni-col> </uni-col>
+                </uni-row>
               </div>
             </div>
           </div>
@@ -58,7 +75,7 @@
           v-for="(
             { 题干, 类型, 选项, 选项图, 最大选择数, 最小选择数, 是否必填 },
             index
-          ) in record.items"
+          ) in poll.items"
           :key="index"
         >
           <div :class="{ tigan: true, center: onlyOne }" style="width: 100%">
@@ -113,7 +130,7 @@ export default {
       showResult: false,
       answers: [],
       pollLogs: [],
-      record: null
+      poll: null
     };
   },
   async onLoad(query) {
@@ -131,7 +148,7 @@ export default {
     const endOfDay = utils.getLocalTime(
       new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59)
     );
-    if (utils.getLocalTime(now) > this.record.endtime) {
+    if (utils.getLocalTime(now) > this.poll.endtime) {
       this.pollEnd = true;
       this.showResult = true; // 投票结束直接显示结果, 无需投票
     } else {
@@ -145,18 +162,29 @@ export default {
   watch: {
     async showResult(show) {
       if (show) {
-        this.pollLogs = await usePost(`/poll_log/records?_q=${typeof show}`, {
+        this.pollLogs = await usePost(`/poll_log/records`, {
           poll_id: this.query.id
         });
+        const myVote = this.pollLogs.find((e) => e.creator === this.user.id);
+        if (myVote) {
+          for (const [i, answer] of myVote.answers.entries()) {
+            const item = this.poll.items[i]; // 题目
+            item.选中 = item.选项.map((choice) =>
+              Array.isArray(answer)
+                ? answer.includes(choice)
+                : choice === answer
+            );
+          }
+        }
       }
     }
   },
   computed: {
     onlyOne() {
-      return this.record.items.length === 1;
+      return this.poll.items.length === 1;
     },
     pollChoices() {
-      return this.record.items.map((e) => ({
+      return this.poll.items.map((e) => ({
         value: e.选项文本,
         text: e.选项文本
       }));
@@ -168,7 +196,7 @@ export default {
   methods: {
     count(itemIndex, key) {
       let n = 0;
-      const config = this.record.items[itemIndex];
+      const config = this.poll.items[itemIndex];
       if (config.类型 == "多选") {
         for (const log of this.pollLogs) {
           n += log.answers[itemIndex].reduce((x, y) => x + y.includes(key), 0);
@@ -189,7 +217,7 @@ export default {
       );
     },
     async submitPoll() {
-      for (const [i, e] of this.record.items.entries()) {
+      for (const [i, e] of this.poll.items.entries()) {
         const value = this.answers[i];
         if (e.类型 == "多选") {
           if (e.是否必填 == "是" && !value.length) {
@@ -208,7 +236,7 @@ export default {
         }
       }
       const data = await usePost(`/poll_log/create`, {
-        poll_id: this.record.id,
+        poll_id: this.poll.id,
         // creator: this.user.id,
         answers: this.answers
       });
@@ -217,8 +245,12 @@ export default {
     },
     async fetchData(query) {
       const poll = await useGet(`/poll/detail/${query.id}`);
-      this.record = poll;
+      this.poll = poll;
+      // 初始化
       this.answers = poll.items.map((e) => (e.类型 == "多选" ? [] : ""));
+      this.poll.items.forEach((item) => {
+        item.选中 = item.选项.map(() => false);
+      });
     }
   }
 };
