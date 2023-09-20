@@ -22,12 +22,12 @@
         <template
           v-for="(
             { 题干, 类型, 选项, 选项图, 最大选择数, 最小选择数, 是否必填 },
-            index
+            itemIndex
           ) in record.items"
-          :key="index"
+          :key="itemIndex"
         >
           <div :class="{ tigan: true, center: onlyOne }" style="width: 100%">
-            <span v-if="!onlyOne"> {{ index + 1 }} 、 </span>{{ 题干 }}
+            <span v-if="!onlyOne"> {{ itemIndex + 1 }} 、 </span>{{ 题干 }}
           </div>
           <div v-for="(c, i) in 选项" :key="i">
             <div class="uni-list-cell">
@@ -41,10 +41,10 @@
               <div style="flex: auto">
                 <p>
                   {{ c }}
-                  {{ count(index, c) }}
+                  {{ count(itemIndex, c) }}
                 </p>
                 <progress
-                  :percent="percent(index, c)"
+                  :percent="percent(itemIndex, c)"
                   show-info
                   style="width: 100%"
                 />
@@ -64,12 +64,18 @@
           <div :class="{ tigan: true, center: onlyOne }" style="width: 100%">
             <span v-if="!onlyOne"> {{ index + 1 }} 、 </span>{{ 题干 }}
           </div>
-          <uni-data-checkbox
+          <x-radio
             v-if="类型 == '单选'"
             v-model="answers[index]"
-            :localdata="选项.map((e) => ({ text: e, value: e }))"
-            mode="list"
-          ></uni-data-checkbox>
+            :choices="
+              选项.map((e, i) => ({
+                name: e,
+                value: e,
+                checked: false,
+                image: 选项图[i]
+              }))
+            "
+          ></x-radio>
           <x-checkbox
             v-else-if="类型 == '多选'"
             v-model="answers[index]"
@@ -162,8 +168,15 @@ export default {
   methods: {
     count(itemIndex, key) {
       let n = 0;
-      for (const log of this.pollLogs) {
-        n += log.answers[itemIndex].reduce((x, y) => x + y.includes(key), 0);
+      const config = this.record.items[itemIndex];
+      if (config.类型 == "多选") {
+        for (const log of this.pollLogs) {
+          n += log.answers[itemIndex].reduce((x, y) => x + y.includes(key), 0);
+        }
+      } else if (config.类型 == "单选") {
+        for (const log of this.pollLogs) {
+          if (log.answers[itemIndex] == key) n += 1;
+        }
       }
       return n;
     },
