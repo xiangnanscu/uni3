@@ -128,7 +128,8 @@ const submit = async () => {
         Object.assign(errors, realData.errors);
         const messages = Object.entries(realData.errors)
           .map(
-            ([name, message]) => `${props.model.nameToLabel[name]}: ${message}`
+            ([name, message]) =>
+              `${props.model.name_to_label[name]}: ${message}`
           )
           .join("\n");
         uni.showModal({

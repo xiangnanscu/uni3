@@ -15,12 +15,14 @@ const props = defineProps({
 const adminModel = props.field.model;
 
 const tableColumns = computed(() =>
-  (adminModel.admin?.list_names || adminModel.names).map((name, index) => ({
-    index,
-    name,
-    label: adminModel.nameToLabel[name],
-    field: adminModel.fields[name]
-  }))
+  (props.field.columns || adminModel.admin?.list_names || adminModel.names).map(
+    (name, index) => ({
+      index,
+      name,
+      label: adminModel.name_to_label[name],
+      field: adminModel.fields[name]
+    })
+  )
 );
 
 const findDuplicates = (rows) => {

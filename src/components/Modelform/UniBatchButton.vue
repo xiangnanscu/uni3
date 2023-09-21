@@ -16,7 +16,7 @@ const props = defineProps({
   // field_names: { type: Array, default: () => [] },
   // fields: { type: Object, default: () => ({}) },
   // labelToName: { type: Object, default: () => ({}) },
-  // nameToLabel: { type: Object, default: () => ({}) },
+  // name_to_label: { type: Object, default: () => ({}) },
 });
 // console.log("props.model.__isModelClass__", props.model.__isModelClass__);
 const batchModel = !props.model.__isModelClass__
@@ -42,7 +42,7 @@ const ensureUnique = (rows) => {
 const prepareForDb = (row) => {
   const dbRow = {};
   for (const name of names) {
-    const label = batchModel.nameToLabel[name];
+    const label = batchModel.name_to_label[name];
     const value = row[label];
     if (value === undefined) {
       continue;
@@ -88,7 +88,7 @@ const downloadRows = async () => {
   Xlsx.arrayToFile({
     filename: `${batchModel.label}-${new Date().getTime()}`,
     data: [
-      ["#", ...names.map((k) => batchModel.nameToLabel[k])],
+      ["#", ...names.map((k) => batchModel.name_to_label[k])],
       ...data.map((row, index) => [index + 1, ...names.map((k) => row[k])])
     ]
   });
