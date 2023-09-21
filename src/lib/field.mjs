@@ -750,6 +750,13 @@ class TableField extends BaseArrayField {
     }
     return rows;
   }
+  toFormValue(value) {
+    if (!value || value.length === 0) {
+      return [{}];
+    } else {
+      return value;
+    }
+  }
 }
 
 const datetimeOptionNames = [

@@ -88,50 +88,63 @@ const tagColorArray = [
 ];
 </script>
 <template>
-  <uni-popup ref="createFormRef" type="bottom" background-color="#fff">
-    <modelform-uni
-      v-if="showCreateForm"
-      @sendData="onSuccessCreate"
-      :model="adminModel"
-      :values="adminModel.getDefaults()"
-      style="padding: 1em"
-    ></modelform-uni>
+  <uni-popup
+    ref="createFormRef"
+    :is-mask-click="false"
+    type="bottom"
+    background-color="#fff"
+  >
+    <div style="padding: 1em">
+      <modelform-uni
+        v-if="showCreateForm"
+        @sendData="onSuccessCreate"
+        :model="adminModel"
+        :values="adminModel.getDefaults()"
+      ></modelform-uni>
+    </div>
   </uni-popup>
-  <uni-popup ref="updateFormRef" type="bottom" background-color="#fff">
-    <modelform-uni
-      v-if="showUpdateForm"
-      @sendData="onSuccessUpdate"
-      :model="adminModel"
-      :values="currentRow"
-      style="padding: 1em"
-    ></modelform-uni>
+  <uni-popup
+    ref="updateFormRef"
+    :is-mask-click="false"
+    type="bottom"
+    background-color="#fff"
+  >
+    <div style="padding: 1em">
+      <modelform-uni
+        v-if="showUpdateForm"
+        @sendData="onSuccessUpdate"
+        :model="adminModel"
+        :values="currentRow"
+        style="padding: 1em"
+      ></modelform-uni>
+    </div>
   </uni-popup>
   <x-button size="mini" @click="openCreateForm">
     <uni-icons type="plusempty" style="color: #fff"></uni-icons>
     添加{{ field.label }}
   </x-button>
-  <uni-table
+  <table
     v-if="props.modelValue.length"
-    class="uni-table"
+    class="x-table"
     stripe
     emptyText="点击上方添加按钮"
     style="width: 100%"
   >
-    <uni-tr>
-      <uni-th class="compact-td">#</uni-th>
-      <uni-th
-        class="compact-td"
+    <tr class="x-tr">
+      <th class="x-th compact-td">#</th>
+      <th
+        class="x-th compact-td"
         v-for="col in tableColumns"
         :key="col.index"
         align="center"
       >
         {{ col.label }}
-      </uni-th>
-      <uni-th class="compact-td">操作</uni-th>
-    </uni-tr>
-    <uni-tr v-for="(row, index) in props.modelValue" :key="index">
-      <uni-td class="compact-td">{{ index + 1 }}</uni-td>
-      <uni-td
+      </th>
+      <th class="x-th compact-td">操作</th>
+    </tr>
+    <tr class="x-tr" v-for="(row, index) in props.modelValue" :key="index">
+      <td class="compact-td">{{ index + 1 }}</td>
+      <td
         class="compact-td"
         v-for="col in tableColumns"
         :key="col.index"
@@ -168,8 +181,8 @@ const tagColorArray = [
         <template v-else>
           {{ row[col.name] }}
         </template>
-      </uni-td>
-      <uni-td class="compact-td">
+      </td>
+      <td class="compact-td">
         <span>
           <modelform-uni-mini-button
             style="margin-right: 2px"
@@ -184,9 +197,9 @@ const tagColorArray = [
             删除
           </modelform-uni-mini-button>
         </span>
-      </uni-td>
-    </uni-tr>
-  </uni-table>
+      </td>
+    </tr>
+  </table>
 </template>
 
 <style scoped lang="scss">
