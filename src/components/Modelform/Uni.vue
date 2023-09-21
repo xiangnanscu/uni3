@@ -17,7 +17,7 @@ const props = defineProps({
   errShowType: { type: String, default: "undertext" },
   showModal: { type: Boolean, default: false },
   labelPosition: { type: String, default: "left" }, // top
-  labelWidth: { type: [String, Number], default: "5em" },
+  labelWidth: { type: [String, Number], default: "7em" },
   labelAlign: { type: String, default: "right" }, //center, right
   trigger: { type: String, default: "blur" }
 });
@@ -37,7 +37,8 @@ const getFieldRules = (field) => [
     }
   }
 ];
-const formNames = props.formNames || props.model.admin?.form_names || props.model.names
+const formNames =
+  props.formNames || props.model.admin?.form_names || props.model.names;
 const fieldsArray = computed(() =>
   formNames.map((name) => props.model.fields[name])
 );

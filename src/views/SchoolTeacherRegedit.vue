@@ -2,35 +2,57 @@
   <page-layout>
     <x-alert title="红云智慧校园"> </x-alert>
     <uni-card title="温馨提示">
-      <p>此处填写教师基本信息，请确保正确，提交之后将不可修改。</p>
-      <p>如果实名认证信息有误，需要联系团县委管理员核实修改。</p>
+      <p>此处填写教师基本信息</p>
     </uni-card>
     <modelform-uni
       v-if="loaded"
       :model="profileModel"
-      :values="userData"
+      :values="postData"
       :sync-values="true"
       label-width="6em"
       @success-post="successPost"
-      action-url="/update_profile?update_session=1"
+      :action-url="actionUrl"
     ></modelform-uni>
   </page-layout>
 </template>
 <script setup>
 const { session } = useSession();
+const user = session.user;
 const loginUser = useLogin();
-const query = useQuery();
-const userData = ref({ id: session.user.id, xm: "", username: "", avatar: "" });
+const postData = ref({
+  openid: user.openid,
+  xm: "",
+  sfzh: "",
+  avatar: "",
+  class: "",
+  grade: ""
+});
 const loaded = ref(false);
+const updateId = ref();
 let profileModel;
 onLoad(async () => {
   const modelJson = await useGet(`/teacher/json`);
   profileModel = Model.createModel(modelJson);
-  const data = await usePost(`/teacher/detail`);
+  let teacherQuery = { sfzh: user.username };
+  // #ifdef MP-WEIXIN
+  teacherQuery = { openid: user.openid };
+  // #endif
+  const [teacherData] = await usePost(`/teacher/records`, teacherQuery);
+  if (teacherData) {
+    Object.assign(postData.value, teacherData);
+    updateId.value = teacherData.id;
+  }
+  loaded.value = true;
 });
-
+const actionUrl = computed(() =>
+  updateId.value ? `/teacher/update/${updateId.value}` : `/teacher/create`
+);
 const successPost = async (user) => {
-  const newUser = { ...userData.value, ...user };
-  await loginUser(newUser);
+  // const newUser = { ...postData.value, ...user };
+  // await loginUser(newUser);
+  utils.gotoPage({
+    name: "SuccessPage",
+    query: { title: "提交成功,感谢参与" }
+  });
 };
 </script>

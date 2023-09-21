@@ -42,7 +42,6 @@ const profileModel = Model.createModel({
 
 const successPost = async (user) => {
   const newUser = { ...userData.value, ...user };
-  console.log({ newUser });
   await loginUser(newUser);
 };
 onLoad(async () => {

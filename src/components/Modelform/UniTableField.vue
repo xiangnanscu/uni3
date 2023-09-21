@@ -92,7 +92,7 @@ const tagColorArray = [
       @sendData="onSuccessCreate"
       :model="adminModel"
       :values="adminModel.getDefaults()"
-      style="padding: 1em 3px"
+      style="padding: 1em"
     ></modelform-uni>
   </uni-popup>
   <uni-popup ref="updateFormRef" type="bottom" background-color="#fff">
@@ -101,7 +101,7 @@ const tagColorArray = [
       @sendData="onSuccessUpdate"
       :model="adminModel"
       :values="currentRow"
-      style="padding: 1em 3px"
+      style="padding: 1em"
     ></modelform-uni>
   </uni-popup>
   <x-button size="mini" @click="openCreateForm">

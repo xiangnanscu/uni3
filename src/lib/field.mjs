@@ -1,5 +1,6 @@
 import * as Validator from "./validator";
 import { Http } from "@/globals/Http";
+import { Model } from "@/lib/model.mjs";
 import { parseSize } from "@/lib/utils.mjs";
 
 const TABLE_MAX_ROWS = 1;
@@ -694,7 +695,8 @@ class TableField extends BaseArrayField {
   constructor(options) {
     super(options);
     if (!this.model?.__isModelClass__) {
-      throw new Error("please define model for a table field: " + this.name);
+      // throw new Error("please define model for a table field: " + this.name);
+      this.model = Model.createModel(this.model);
     }
     if (!this.default || this.default === "") {
       this.default = makeEmptyArray;

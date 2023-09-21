@@ -91,7 +91,18 @@
     { "path": "views/AdList", "style": { "navigationBarTitleText": "" } },
     { "path": "views/ShyListkMy", "style": { "navigationBarTitleText": "" } },
     { "path": "views/ShykDetail", "style": { "navigationBarTitleText": "" } },
-    { "path": "views/SubscribeList", "style": { "navigationBarTitleText": "" } }
+    {
+      "path": "views/SubscribeList",
+      "style": { "navigationBarTitleText": "" }
+    },
+    {
+      "path": "views/SchoolParentChildRegedit",
+      "style": { "navigationBarTitleText": "" }
+    },
+    {
+      "path": "views/SchoolTeacherRegedit",
+      "style": { "navigationBarTitleText": "" }
+    }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
