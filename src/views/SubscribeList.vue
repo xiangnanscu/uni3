@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-const excludeTitles = ["社区通知"];
+const excludeTitles = [];
 const subscribeItems = ref([]);
 const user = useUser();
 onLoad(async (opts) => {

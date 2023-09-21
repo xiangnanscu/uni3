@@ -56,7 +56,7 @@ const successPost = async (user) => {
   // const newUser = { ...postData.value, ...user };
   // await loginUser(newUser);
   utils.gotoPage({
-    name: "SuccessPage",
+    name: "SchoolSuccessPage",
     query: { title: "提交成功,感谢参与" }
   });
 };

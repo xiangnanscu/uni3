@@ -102,6 +102,10 @@
     {
       "path": "views/SchoolTeacherRegedit",
       "style": { "navigationBarTitleText": "" }
+    },
+    {
+      "path": "views/SchoolSuccessPage",
+      "style": { "navigationBarTitleText": "" }
     }
   ],
   "globalStyle": {

@@ -90,7 +90,7 @@ const tagColorArray = [
 <template>
   <uni-popup
     ref="createFormRef"
-    :is-mask-click="false"
+    :is-mask-click="true"
     type="bottom"
     background-color="#fff"
   >
@@ -105,7 +105,7 @@ const tagColorArray = [
   </uni-popup>
   <uni-popup
     ref="updateFormRef"
-    :is-mask-click="false"
+    :is-mask-click="true"
     type="bottom"
     background-color="#fff"
   >
@@ -143,9 +143,9 @@ const tagColorArray = [
       <th class="x-th compact-td">操作</th>
     </tr>
     <tr class="x-tr" v-for="(row, index) in props.modelValue" :key="index">
-      <td class="compact-td">{{ index + 1 }}</td>
+      <td class="x-td compact-td">{{ index + 1 }}</td>
       <td
-        class="compact-td"
+        class="x-td compact-td"
         v-for="col in tableColumns"
         :key="col.index"
         align="center"
@@ -158,13 +158,14 @@ const tagColorArray = [
           }}
         </template>
         <template v-else-if="col.field.type === 'aliossImage'">
-          <img
+          <image
             :src="
               row[col.name] instanceof Array
                 ? row[col.name][0].ossUrl
                 : row[col.name]
             "
-            style="width: 50px"
+            mode="aspectFit"
+            style="width: 50px; height: 50px"
           />
         </template>
         <template v-else-if="col.field.type === 'array'">
@@ -182,20 +183,22 @@ const tagColorArray = [
           {{ row[col.name] }}
         </template>
       </td>
-      <td class="compact-td">
+      <td class="x-td compact-td">
         <span>
-          <modelform-uni-mini-button
-            style="margin-right: 2px"
+          <x-button
+            styleString="padding: 2px 5px; font-size: 80%;"
+            size="mini"
             @click="onClickEdit(index)"
           >
             编辑
-          </modelform-uni-mini-button>
-          <modelform-uni-mini-button
-            style="color: red"
+          </x-button>
+          <x-button
+            styleString="padding: 2px 5px; font-size: 80%; color: red; border-color:red"
+            size="mini"
             @click.prevent="deleteRecord(index)"
           >
             删除
-          </modelform-uni-mini-button>
+          </x-button>
         </span>
       </td>
     </tr>
@@ -203,6 +206,29 @@ const tagColorArray = [
 </template>
 
 <style scoped lang="scss">
+.x-table {
+  width: 100%;
+  border-radius: 8rpx;
+  display: table;
+  border-collapse: collapse;
+
+  .x-th {
+    text-align: center;
+    padding: 20rpx 0;
+    display: table-cell;
+  }
+
+  .x-td {
+    text-align: center;
+    background: #ffffff;
+    padding: 20rpx 0;
+    display: table-cell;
+  }
+
+  .x-tr {
+    display: table-row;
+  }
+}
 :deep(.compact-td) {
   padding: 0;
   margin: 0;

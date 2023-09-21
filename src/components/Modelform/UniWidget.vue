@@ -199,8 +199,8 @@ const onFuiSelectConfirm = ({ index, options }) => {
           style="
             text-align: center;
             width: 100%;
-            font-size: 120%;
-            font-weight: bold;
+            font-size2: 120%;
+            font-weight2: bold;
           "
         >
           {{ props.modelValue }}
