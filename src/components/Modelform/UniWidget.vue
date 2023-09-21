@@ -125,6 +125,19 @@ field.attrs.wxPhone = false;
 field.attrs.wxAvatar = false;
 // #endif
 const placeholder = field.attrs?.placeholder || field.hint;
+const fuiChoices = field.choices?.map((e) => ({
+  text: e.text,
+  value: e.value,
+  checked: e.value === props.modelValue
+}));
+const fuiSelectShow = ref();
+const onFuiSelectConfirm = ({ index, options }) => {
+  if (index === -1) {
+    return;
+  }
+  sendValue(options.value);
+  fuiSelectShow.value = false;
+};
 </script>
 <template>
   <template v-if="field.autocomplete">
@@ -180,6 +193,36 @@ const placeholder = field.attrs?.placeholder || field.hint;
       :min="field.min || 0"
       :mode="isArrayField ? 'list' : 'tag'"
     ></uni-data-checkbox>
+    <div v-else-if="field.attrs.fui">
+      <div style="display: flex; align-items: center">
+        <div
+          style="
+            text-align: center;
+            width: 100%;
+            font-size: 120%;
+            font-weight: bold;
+          "
+        >
+          {{ props.modelValue }}
+        </div>
+        <div style="width: 100%">
+          <x-button size="mini" @click="fuiSelectShow = true"
+            >点击选择</x-button
+          >
+        </div>
+      </div>
+      <fui-select
+        :show="fuiSelectShow"
+        :options="fuiChoices"
+        :multiple="isArrayField"
+        checkboxColor2="#FFC529"
+        btnBackground2="#FFC529"
+        btnColor2="#1A1D26"
+        closeColor="#6D758A"
+        @close="fuiSelectShow = false"
+        @confirm="onFuiSelectConfirm"
+      ></fui-select>
+    </div>
     <uni-data-select
       v-else
       @update:modelValue="sendValue"
