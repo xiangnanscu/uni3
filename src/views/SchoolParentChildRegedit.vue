@@ -53,11 +53,9 @@ const actionUrl = computed(() =>
     : `/parent_student_relation/regedit_create`
 );
 const successPost = async (user) => {
-  // const newUser = { ...postData.value, ...user };
-  // await loginUser(newUser);
   utils.gotoPage({
-    name: "SchoolSuccessPage",
-    query: { title: "提交成功,感谢参与" }
+    name: updateId.value ? "SuccessPage" : "SchoolSuccessPage",
+    query: { title: updateId.value ? "修改成功" : "登记成功" }
   });
 };
 </script>

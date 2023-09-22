@@ -752,7 +752,7 @@ class TableField extends BaseArrayField {
   }
   toFormValue(value) {
     if (!value || value.length === 0) {
-      return [{}];
+      return [];
     } else {
       return value;
     }

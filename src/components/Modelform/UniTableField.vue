@@ -193,7 +193,7 @@ const tagColorArray = [
             编辑
           </x-button>
           <x-button
-            styleString="padding: 2px 5px; font-size: 80%; color: red; border-color:red"
+            styleString="margin-left:2px;padding: 2px 5px; font-size: 80%; color: red; border-color:red"
             size="mini"
             @click.prevent="deleteRecord(index)"
           >
