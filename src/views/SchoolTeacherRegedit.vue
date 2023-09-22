@@ -16,6 +16,13 @@
   </page-layout>
 </template>
 <script setup>
+// onShareTimeline
+// onShareAppMessage
+useWxShare({
+  title: "红云智慧校园教师登记",
+  imageUrl: "../static/jahy.jpg",
+  desc: ""
+});
 const { session } = useSession();
 const user = session.user;
 const loginUser = useLogin();

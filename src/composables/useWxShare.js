@@ -1,4 +1,5 @@
 export function useWxShare({ title, imageUrl, desc }) {
+  // console.log("useWxShare", { title, imageUrl, desc });
   onShareTimeline((options) => {
     return {
       title,
