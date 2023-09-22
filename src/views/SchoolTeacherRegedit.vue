@@ -19,8 +19,7 @@
 // onShareTimeline
 // onShareAppMessage
 useWxShare({
-  title: "红云智慧校园教师登记",
-  imageUrl: "../static/jahy.jpg",
+  title: "智慧校园教师登记",
   desc: ""
 });
 const { session } = useSession();

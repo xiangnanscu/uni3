@@ -5,7 +5,7 @@ export function useWxShare({ title, imageUrl, desc }) {
       title,
       desc,
       path: utils.getFullPath(),
-      imageUrl
+      imageUrl: imageUrl || "../static/jax.jpg"
     };
   });
   onShareAppMessage((options) => {
@@ -13,7 +13,7 @@ export function useWxShare({ title, imageUrl, desc }) {
       title,
       desc,
       path: utils.getFullPath(),
-      imageUrl
+      imageUrl: imageUrl || "../static/jax.jpg"
     };
   });
 }
