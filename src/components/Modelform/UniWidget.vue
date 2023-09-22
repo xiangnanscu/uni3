@@ -11,8 +11,7 @@ const props = defineProps({
 });
 // const uniFormItem = inject("uniFormItem", null);
 const field = props.field;
-const fieldType =
-  props.field.type == "array" ? field.array_type || "string" : props.field.type;
+const fieldType = props.field.type;
 const mediaType =
   field.media_type == "video"
     ? "video"
@@ -77,11 +76,15 @@ const filePickerSelectHanlder = async ({ tempFiles, tempFilePaths }) => {
     }
   }
 };
-const filePickerDelete = ({ index }) => {
-  sendValue([
-    ...props.modelValue.slice(0, index),
-    ...props.modelValue.slice(index + 1)
-  ]);
+const filePickerDelete = ({ tempFile, tempFiles }) => {
+  const index = props.modelValue.findIndex(
+    (file) => file.uuid === tempFile.uuid
+  );
+  if (index !== -1)
+    sendValue([
+      ...props.modelValue.slice(0, index),
+      ...props.modelValue.slice(index + 1)
+    ]);
 };
 // 以下三个都是uniCloud专用的
 const filePickerFail = ({ tempFiles, tempFilePaths }) => {};
@@ -299,6 +302,7 @@ const onFuiSelectConfirm = ({ index, options }) => {
     <uni-file-picker
       v-else
       ref="filePickerRef"
+      :del-icon="true"
       :modelValue="props.modelValue"
       @update:modelValue="sendValue"
       :file-mediatype="mediaType"
