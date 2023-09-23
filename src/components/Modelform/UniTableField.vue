@@ -211,7 +211,7 @@ const tagColorArray = ["geekblue", "orange", "green", "cyan", "red", "blue", "pu
     background-color="#fff"
   >
     <uni-popup-dialog
-      style="margin: auto"
+      style="width: 100%"
       mode="base"
       :title="`确定删除第${deleteIndex + 1}条吗?`"
       confirmText="删除"
