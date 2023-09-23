@@ -1,6 +1,5 @@
 /* eslint-env node */
 require("@rushstack/eslint-patch/modern-module-resolution");
-
 module.exports = {
   root: true,
   globals: {
@@ -10,44 +9,48 @@ module.exports = {
     uniCloud: "readonly",
     uni: "readonly",
     wx: "readonly",
-    getApp: "readonly"
+    getApp: "readonly",
   },
   env: {
     node: true,
-    amd: true
+    amd: true,
   },
   extends: [
     "./src/unplugin/.eslintrc-auto-import.json",
     "plugin:vue/vue3-essential",
     "eslint:recommended",
     "@vue/eslint-config-typescript",
-    "@vue/eslint-config-prettier/skip-formatting"
+    "@vue/eslint-config-prettier/skip-formatting",
   ],
   parserOptions: {
-    ecmaVersion: "latest"
+    ecmaVersion: "latest",
   },
   rules: {
-    "max-len": [
+    "prettier/prettier": [
       "warn",
-      { code: 120, ignoreComments: true, ignoreStrings: false }
+      {
+        trailingComma: "all", // 使用rvest.vs-code-prettier-eslint时, 这里需要配置
+        printWidth: 90,
+      },
     ],
+    "max-len": ["warn", { code: 90, ignoreComments: true, ignoreStrings: true }],
     "prefer-const": [
       "error",
       {
         destructuring: "all",
-        ignoreReadBeforeAssign: false
-      }
+        ignoreReadBeforeAssign: false,
+      },
     ],
     "vue/no-unused-vars": [
       "warn",
       {
-        ignorePattern: "^_"
-      }
+        ignorePattern: "^_",
+      },
     ],
     "no-unused-vars": [
       "warn",
-      { vars: "all", args: "after-used", argsIgnorePattern: "^_" }
+      { vars: "all", args: "after-used", argsIgnorePattern: "^_" },
     ],
-    "vue/multi-word-component-names": "off"
-  }
+    "vue/multi-word-component-names": "off",
+  },
 };

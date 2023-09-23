@@ -150,11 +150,7 @@ class basefield {
       this.label = this.name;
     }
     if (this.null === undefined) {
-      if (
-        this.required ||
-        this.db_type === "varchar" ||
-        this.db_type === "text"
-      ) {
+      if (this.required || this.db_type === "varchar" || this.db_type === "text") {
         this.null = false;
       } else {
         this.null = true;
@@ -176,9 +172,7 @@ class basefield {
   }
   get_validators(validators) {
     if (this.required) {
-      validators.unshift(
-        Validator.required(this.get_error_message("required"))
-      );
+      validators.unshift(Validator.required(this.get_error_message("required")));
     } else {
       validators.unshift(Validator.not_required);
     }
@@ -186,7 +180,7 @@ class basefield {
       const dynamic_choices_validator = async (val) => {
         let message = this.get_error_message("choices");
         const data = await basefield.Http[this.choices_url_method || "get"](
-          this.choices_url
+          this.choices_url,
         ).data;
         const choices = get_choices(data);
         for (const c of choices) {
@@ -207,7 +201,7 @@ class basefield {
       (this.strict === undefined || this.strict)
     ) {
       validators.push(
-        get_choices_validator(this.choices, this.get_error_message("choices"))
+        get_choices_validator(this.choices, this.get_error_message("choices")),
       );
     }
     return validators;
@@ -236,11 +230,7 @@ class basefield {
       delete res.choices;
     }
     if (!res.tag) {
-      if (
-        Array.isArray(res.choices) &&
-        res.choices.length > 0 &&
-        !res.autocomplete
-      ) {
+      if (Array.isArray(res.choices) && res.choices.length > 0 && !res.autocomplete) {
         res.tag = "select";
       } else {
         res.tag = "input";
@@ -249,10 +239,7 @@ class basefield {
     if (res.tag === "input" && res.lazy === undefined) {
       res.lazy = true;
     }
-    if (
-      res.preload === undefined &&
-      (res.choices_url || res.choices_url_admin)
-    ) {
+    if (res.preload === undefined && (res.choices_url || res.choices_url_admin)) {
       res.preload = false;
     }
     return res;
@@ -350,7 +337,7 @@ class string extends basefield {
   constructor(options) {
     if (!options.choices && !options.length && !options.maxlength) {
       throw new Error(
-        `field '${options.name}' must define maxlength or choices or length`
+        `field '${options.name}' must define maxlength or choices or length`,
       );
     }
     super({
@@ -367,8 +354,7 @@ class string extends basefield {
       const n = get_max_choice_length(this.choices);
       assert(
         n > 0,
-        "invalid string choices(empty choices or zero length value):" +
-          this.name
+        "invalid string choices(empty choices or zero length value):" + this.name,
       );
       const m = this.length || this.maxlength;
       if (!m || n > m) {
@@ -461,9 +447,7 @@ class year_month extends string {
 function add_min_or_max_validators(self, validators) {
   for (const name of ["min", "max"]) {
     if (self[name]) {
-      validators.unshift(
-        Validator[name](self[name], self.get_error_message(name))
-      );
+      validators.unshift(Validator[name](self[name], self.get_error_message(name)));
     }
   }
 }
@@ -682,7 +666,7 @@ class foreignkey extends basefield {
   setup_with_fk_model(fk_model) {
     assert(
       fk_model.__is_model_class__,
-      `a foreignkey must define a reference model. not ${fk_model}(type: ${typeof fk_model})`
+      `a foreignkey must define a reference model. not ${fk_model}(type: ${typeof fk_model})`,
     );
     const rc =
       this.reference_column ||
@@ -694,7 +678,7 @@ class foreignkey extends basefield {
       fk,
       `invalid foreignkey name ${rc} for foreign model ${
         fk_model.table_name || "[TABLE NAME NOT DEFINED YET]"
-      }`
+      }`,
     );
     this.reference_column = rc;
     const rlc = this.reference_label_column || rc;
@@ -702,17 +686,14 @@ class foreignkey extends basefield {
       fk_model.fields[rlc],
       `invalid foreignkey label name ${rlc} for foreign model ${
         fk_model.table_name || "[TABLE NAME NOT DEFINED YET]"
-      }`
+      }`,
     );
     this.reference_label_column = rlc;
     this.convert = assert(
       VALID_FOREIGN_KEY_TYPES[fk.type],
-      `invalid foreignkey (name:${fk.name}, type:${fk.type})`
+      `invalid foreignkey (name:${fk.name}, type:${fk.type})`,
     );
-    assert(
-      fk.primary_key || fk.unique,
-      "foreignkey must be a primary key or unique key"
-    );
+    assert(fk.primary_key || fk.unique, "foreignkey must be a primary key or unique key");
     if (this.db_type === FK_TYPE_NOT_DEFIEND) {
       this.db_type = fk.db_type || fk.type;
     }
@@ -822,9 +803,7 @@ class basearray extends json {
   }
   get_validators(validators) {
     if (this.required) {
-      validators.unshift(
-        non_empty_array_required(this.get_error_message("required"))
-      );
+      validators.unshift(non_empty_array_required(this.get_error_message("required")));
     }
     validators.unshift(check_array_type);
     validators.unshift(skip_validate_when_string);
@@ -850,7 +829,7 @@ class array extends basearray {
     super({ type: "array", ...options });
     assert(
       typeof this.field === "object",
-      `array field "${this.name}" must define field`
+      `array field "${this.name}" must define field`,
     );
     if (!this.field.name) {
       // 为了解决validateFunction内array field覆盖paren值的问题
@@ -962,10 +941,7 @@ class table extends basearray {
   get_validators(validators) {
     const validate_by_each_field = (rows) => {
       for (let [i, row] of rows.entries()) {
-        assert(
-          typeof row === "object",
-          "elements of table field must be object"
-        );
+        assert(typeof row === "object", "elements of table field must be object");
         try {
           row = this.model.validate_create(row);
         } catch (err) {

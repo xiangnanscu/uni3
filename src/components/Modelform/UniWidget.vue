@@ -1,23 +1,15 @@
 <script setup>
-const emit = defineEmits([
-  "update:modelValue",
-  "update:error",
-  "blur:validate"
-]);
+const emit = defineEmits(["update:modelValue", "update:error", "blur:validate"]);
 const props = defineProps({
   field: { type: Object, required: true },
   modelValue: { required: true },
-  error: { type: String, default: "" }
+  error: { type: String, default: "" },
 });
 // const uniFormItem = inject("uniFormItem", null);
 const field = props.field;
 const fieldType = props.field.type;
 const mediaType =
-  field.media_type == "video"
-    ? "video"
-    : fieldType.includes("Image")
-    ? "image"
-    : "all";
+  field.media_type == "video" ? "video" : fieldType.includes("image") ? "image" : "all";
 const filePickerRef = ref(null);
 const autocompletePopupRef = ref(null);
 const autocompleteSearchText = ref("");
@@ -50,9 +42,7 @@ const filePickerSelectHanlder = async ({ tempFiles, tempFilePaths }) => {
     if (file.size > field.size) {
       emit(
         "update:error",
-        `文件过大(当前${Math.round(file.size / 1024 / 1024)}MB,上限${
-          field.size_arg
-        })`
+        `文件过大(当前${Math.round(file.size / 1024 / 1024)}MB,上限${field.size_arg})`,
       );
       files.splice(uniFileIndex, 1);
       continue;
@@ -61,7 +51,7 @@ const filePickerSelectHanlder = async ({ tempFiles, tempFilePaths }) => {
       const url = await Alioss.uploadUni({
         file,
         size: field.size,
-        prefix: "img"
+        prefix: "img",
       });
       const fileObj = { ...file, ossUrl: url, url };
       if (fileLimit === 1) {
@@ -77,13 +67,11 @@ const filePickerSelectHanlder = async ({ tempFiles, tempFilePaths }) => {
   }
 };
 const filePickerDelete = ({ tempFile, tempFiles }) => {
-  const index = props.modelValue.findIndex(
-    (file) => file.uuid === tempFile.uuid
-  );
+  const index = props.modelValue.findIndex((file) => file.uuid === tempFile.uuid);
   if (index !== -1)
     sendValue([
       ...props.modelValue.slice(0, index),
-      ...props.modelValue.slice(index + 1)
+      ...props.modelValue.slice(index + 1),
     ]);
 };
 // 以下三个都是uniCloud专用的
@@ -94,7 +82,7 @@ const filePickerProgress = ({
   index,
   tempFile,
   tempFiles,
-  tempFilePaths
+  tempFilePaths,
 }) => {};
 const blurValidate = () => {
   emit("update:error", ""); // 先清除老错误
@@ -107,10 +95,10 @@ const easyInputTypeMap = {
   password: "password",
   nickname: "nickname",
   textarea: "textarea",
-  text: "textarea"
+  text: "textarea",
 };
 const easyType = computed(
-  () => easyInputTypeMap[field.type] || easyInputTypeMap[field.input_type]
+  () => easyInputTypeMap[field.type] || easyInputTypeMap[field.input_type],
 );
 const getPhoneNumber = async (event) => {
   // 用户允许: e.detail = {errMsg: "getPhoneNumber:ok", code: "??", encryptedData: "??", iv: "??"}
@@ -130,12 +118,12 @@ field.attrs.wxAvatar = false;
 const placeholder = field.attrs?.placeholder || field.hint;
 const fieldChoices = field.choices?.map((e) => ({
   text: e.label,
-  value: e.value
+  value: e.value,
 }));
 const fuiChoices = field.choices?.map((e) => ({
   text: e.label,
   value: e.value,
-  checked: e.value === props.modelValue
+  checked: e.value === props.modelValue,
 }));
 const fuiSelectShow = ref();
 const onFuiSelectConfirm = ({ index, options }) => {
@@ -170,9 +158,7 @@ const onFuiSelectConfirm = ({ index, options }) => {
           <uni-list>
             <uni-list-item
               v-for="(c, i) in autocompleteSearchText
-                ? fieldChoices.filter((e) =>
-                    e.value.includes(autocompleteSearchText)
-                  )
+                ? fieldChoices.filter((e) => e.value.includes(autocompleteSearchText))
                 : []"
               clickable
               @click="
@@ -203,19 +189,12 @@ const onFuiSelectConfirm = ({ index, options }) => {
     <div v-else-if="field.attrs.fui">
       <div style="display: flex; align-items: center">
         <div
-          style="
-            text-align: center;
-            width: 100%;
-            font-size2: 120%;
-            font-weight2: bold;
-          "
+          style="text-align: center; width: 100%; font-size2: 120%; font-weight2: bold"
         >
           {{ props.modelValue }}
         </div>
         <div style="width: 100%">
-          <x-button size="mini" @click="fuiSelectShow = true"
-            >点击选择</x-button
-          >
+          <x-button size="mini" @click="fuiSelectShow = true">点击选择</x-button>
         </div>
       </div>
       <fui-select
