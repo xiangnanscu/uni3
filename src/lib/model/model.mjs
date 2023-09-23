@@ -12,7 +12,7 @@ import {
   Query,
   getenv,
   ngx_localtime,
-  IS_PG_KEYWORDS
+  IS_PG_KEYWORDS,
 } from "./utils.mjs";
 function p() {
   console.log.apply(this, arguments);
@@ -27,7 +27,7 @@ const MODEL_MERGE_NAMES = {
   abstract: true,
   auto_primary_key: true,
   primary_key: true,
-  unique_together: true
+  unique_together: true,
 };
 class ValidateError extends Error {
   constructor({ name, message, label, index }) {
@@ -50,8 +50,8 @@ const base_model = {
   fields: {
     [DEFAULT_PRIMARY_KEY]: { type: "integer", primary_key: true, serial: true },
     ctime: { label: "创建时间", type: "datetime", auto_now_add: true },
-    utime: { label: "更新时间", type: "datetime", auto_now: true }
-  }
+    utime: { label: "更新时间", type: "datetime", auto_now: true },
+  },
 };
 
 function check_reserved(name) {
@@ -243,7 +243,7 @@ ModelSql.prototype._register_join_model = function (join_args, join_type) {
       alias: join_args.alias || table_name,
       fk_model,
       fk_column,
-      fk_alias: join_args.fk_alias || "T" + this._get_join_number()
+      fk_alias: join_args.fk_alias || "T" + this._get_join_number(),
     };
     const join_table = `${fk_model.table_name} ${join_obj.fk_alias}`;
     const join_cond = `${join_obj.alias}.${join_obj.column} = ${join_obj.fk_alias}.${join_obj.fk_column}`;
@@ -266,7 +266,7 @@ ModelSql.prototype._find_field_model = function (col) {
       return [
         fk_field,
         join_obj.fk_model,
-        join_obj.fk_alias || join_obj.fk_model.table_name
+        join_obj.fk_alias || join_obj.fk_model.table_name,
       ];
     }
   }
@@ -331,7 +331,7 @@ ModelSql.prototype._parse_column = function (
             "prefix in _parse_column should never be falsy"
           ),
           fk_model,
-          fk_column: rc
+          fk_column: rc,
         });
         field = fk_model_field;
         model = fk_model;
@@ -391,7 +391,7 @@ ModelSql.prototype._base_join = function (join_type, join_args, key, op, val) {
         column: join_args,
         fk_model: fk.reference,
         fk_column: fk.reference_column,
-        fk_alias: fk.reference.table_name
+        fk_alias: fk.reference.table_name,
       },
       join_type
     );
@@ -625,7 +625,7 @@ ModelSql.prototype.load_fk = function (fk_name, select_names, ...varargs) {
     join_key,
     column: fk_name,
     fk_model,
-    fk_column: fk.reference_column
+    fk_column: fk.reference_column,
   });
   if (!this._load_fk) {
     this._load_fk = {};
@@ -678,7 +678,7 @@ function make_record_meta(model) {
     }
   }
   Object.defineProperty(RecordClass, "name", {
-    value: `${model.name}Record`
+    value: `${model.name}Record`,
   });
   RecordClass.prototype.delete = async function (key) {
     key = model.check_unique_key(key || model.primary_key);
@@ -745,7 +745,7 @@ function create_model_proxy(Xodel) {
     set(obj, prop, value) {
       obj[prop] = value;
       return true;
-    }
+    },
   });
 }
 
@@ -764,7 +764,7 @@ class Xodel {
 }
 Xodel.set_class_name = function (table_name) {
   Object.defineProperty(this, "name", {
-    value: `${capitalize(table_name)}Model`
+    value: `${capitalize(table_name)}Model`,
   });
 };
 Xodel.get_defaults = function () {
@@ -827,7 +827,7 @@ Xodel.create_model_async = async function (options) {
       if (!this.http_model_cache[model_key]) {
         this.http_model_cache[model_key] = await Xodel.create_model_async({
           ...field.model,
-          is_admin_mode: options.is_admin_mode
+          is_admin_mode: options.is_admin_mode,
         });
       }
       field.model = this.http_model_cache[model_key];
@@ -845,7 +845,7 @@ Xodel.get_http_model = async function (model_key, is_admin_mode) {
     // is_admin_mode具有传染性
     this.http_model_cache[model_key] = await Xodel.create_model_async({
       ...data,
-      is_admin_mode
+      is_admin_mode,
     });
   } else {
     console.log("cached:" + model_key);
@@ -898,7 +898,7 @@ Xodel._make_model_class = function (opts) {
       PORT: getenv("PGPORT") || 5432,
       DATABASE: getenv("PGDATABASE") || "postgres",
       USER: getenv("PGUSER") || "postgres",
-      PASSWORD: getenv("PGPASSWORD") || "postgres"
+      PASSWORD: getenv("PGPASSWORD") || "postgres",
     });
     query = default_query;
   }
@@ -960,7 +960,7 @@ Xodel._make_model_class = function (opts) {
   ModelClass.__is_model_class__ = true;
   if (ModelClass.table_name) {
     ModelClass.materialize_with_table_name({
-      table_name: ModelClass.table_name
+      table_name: ModelClass.table_name,
     });
   } else {
     ModelClass.set_class_name("Abstract");
@@ -979,7 +979,7 @@ Xodel.normalize = function (options) {
     admin: clone(options.admin || {}),
     table_name:
       options.table_name || (_extends && _extends.table_name) || undefined,
-    label: options.label || (_extends && _extends.label) || undefined
+    label: options.label || (_extends && _extends.label) || undefined,
   };
   const opts_fields = {};
   const opts_field_names = [];
@@ -1029,7 +1029,7 @@ Xodel.normalize = function (options) {
           abstract: true,
           extends: pfield.model,
           fields: field.model.fields,
-          field_names: field.model.field_names
+          field_names: field.model.field_names,
         });
       }
     }
@@ -1115,7 +1115,7 @@ Xodel.materialize_with_table_name = function (opts) {
     this.fields[pk_name] = Fields.integer.create_field({
       name: pk_name,
       primary_key: true,
-      serial: true
+      serial: true,
     });
     this.field_names.unshift(pk_name);
   }
@@ -1206,7 +1206,7 @@ Xodel.to_json = function () {
       this.field_names.map(function (name) {
         return [name, this.fields[name].json()];
       })
-    )
+    ),
   };
 };
 Xodel.all = async function () {
@@ -1323,7 +1323,7 @@ Xodel.prepare_for_db = function (data, columns, is_update) {
       } catch (error) {
         return this.make_field_error({
           name,
-          message: error.message
+          message: error.message,
         });
       }
     } else {
@@ -1358,7 +1358,7 @@ Xodel.validate_create = function (input, names) {
       return this.make_field_error({
         name,
         message: error.message,
-        index: error.index
+        index: error.index,
       });
     }
     if (field.default && (value === undefined || value === "")) {
@@ -1371,7 +1371,7 @@ Xodel.validate_create = function (input, names) {
           return this.make_field_error({
             name,
             message: error.message,
-            index: error.index
+            index: error.index,
           });
         }
       }
@@ -1407,7 +1407,7 @@ Xodel.validate_update = function (input, names) {
         return this.make_field_error({
           name,
           message: error.message,
-          index: error.index
+          index: error.index,
         });
       }
     }
@@ -1427,7 +1427,7 @@ Xodel.check_upsert_key = function (rows, key) {
           return this.make_field_error({
             name: key,
             message: key + "不能为空",
-            batch_index: i
+            batch_index: i,
           });
         }
       }
@@ -1438,7 +1438,7 @@ Xodel.check_upsert_key = function (rows, key) {
             return this.make_field_error({
               name: k,
               message: k + "不能为空",
-              batch_index: i
+              batch_index: i,
             });
           }
         }
@@ -1507,7 +1507,7 @@ Xodel.validate_create_data = function (rows, columns) {
           return this.make_field_error({
             ...error,
             message: error.message,
-            batch_index: index
+            batch_index: index,
           });
         } else {
           throw error;
@@ -1532,7 +1532,7 @@ Xodel.validate_update_data = function (rows, columns) {
           return this.make_field_error({
             ...error,
             message: error.message,
-            batch_index: index
+            batch_index: index,
           });
         } else {
           throw error;
@@ -1579,7 +1579,7 @@ Xodel.prepare_db_rows = function (rows, columns, is_update) {
           return this.make_field_error({
             ...error,
             message: error.message,
-            batch_index: i
+            batch_index: i,
           });
         } else {
           throw error;
@@ -1618,7 +1618,7 @@ const whitelist = {
   as_literal: true,
   __call: true,
   new: true,
-  token: true
+  token: true,
 };
 for (const [k, v] of Object.entries(ModelSql)) {
   if (typeof v === "function" && !whitelist[k]) {

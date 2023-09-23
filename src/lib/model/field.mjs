@@ -1,5 +1,12 @@
 // get_options 和后端不同, attrs必存在
-import { clone, assert, NULL, FK_TYPE_NOT_DEFIEND, get_localtime, parse_size } from "./utils.mjs";
+import {
+  clone,
+  assert,
+  NULL,
+  FK_TYPE_NOT_DEFIEND,
+  get_localtime,
+  parse_size,
+} from "./utils.mjs";
 import * as Validator from "./validator.mjs";
 import { Model } from "./model.mjs";
 
@@ -10,7 +17,7 @@ const PRIMITIVE_TYPES = {
   string: true,
   number: true,
   boolean: true,
-  bigint: true
+  bigint: true,
 };
 
 function clean_choice(c) {
@@ -109,7 +116,7 @@ const base_option_names = [
   "preload",
   "lazy",
   "tag",
-  "attrs"
+  "attrs",
 ];
 class basefield {
   static option_names = [];
@@ -143,7 +150,11 @@ class basefield {
       this.label = this.name;
     }
     if (this.null === undefined) {
-      if (this.required || this.db_type === "varchar" || this.db_type === "text") {
+      if (
+        this.required ||
+        this.db_type === "varchar" ||
+        this.db_type === "text"
+      ) {
         this.null = false;
       } else {
         this.null = true;
@@ -165,14 +176,18 @@ class basefield {
   }
   get_validators(validators) {
     if (this.required) {
-      validators.unshift(Validator.required(this.get_error_message("required")));
+      validators.unshift(
+        Validator.required(this.get_error_message("required"))
+      );
     } else {
       validators.unshift(Validator.not_required);
     }
     if (typeof this.choices_url === "string" && this.strict) {
       const dynamic_choices_validator = async (val) => {
         let message = this.get_error_message("choices");
-        const data = await basefield.Http[this.choices_url_method || "get"](this.choices_url).data;
+        const data = await basefield.Http[this.choices_url_method || "get"](
+          this.choices_url
+        ).data;
         const choices = get_choices(data);
         for (const c of choices) {
           if (val === c.value) {
@@ -186,8 +201,14 @@ class basefield {
       };
       validators.push(dynamic_choices_validator);
     }
-    if (Array.isArray(this.choices) && this.choices.length && (this.strict === undefined || this.strict)) {
-      validators.push(get_choices_validator(this.choices, this.get_error_message("choices")));
+    if (
+      Array.isArray(this.choices) &&
+      this.choices.length &&
+      (this.strict === undefined || this.strict)
+    ) {
+      validators.push(
+        get_choices_validator(this.choices, this.get_error_message("choices"))
+      );
     }
     return validators;
   }
@@ -215,7 +236,11 @@ class basefield {
       delete res.choices;
     }
     if (!res.tag) {
-      if (Array.isArray(res.choices) && res.choices.length > 0 && !res.autocomplete) {
+      if (
+        Array.isArray(res.choices) &&
+        res.choices.length > 0 &&
+        !res.autocomplete
+      ) {
         res.tag = "select";
       } else {
         res.tag = "input";
@@ -224,7 +249,10 @@ class basefield {
     if (res.tag === "input" && res.lazy === undefined) {
       res.lazy = true;
     }
-    if (res.preload === undefined && (res.choices_url || res.choices_url_admin)) {
+    if (
+      res.preload === undefined &&
+      (res.choices_url || res.choices_url_admin)
+    ) {
       res.preload = false;
     }
     return res;
@@ -262,7 +290,7 @@ class basefield {
       message,
       index,
       name: this.name,
-      label: this.label
+      label: this.label,
     };
   }
   to_form_value(value) {
@@ -275,7 +303,7 @@ class basefield {
   }
   get_antd_rule() {
     const rule = {
-      whitespace: true
+      whitespace: true,
     };
     rule.validator = async (_rule, value) => {
       try {
@@ -310,24 +338,38 @@ function get_max_choice_length(choices) {
 }
 
 class string extends basefield {
-  static option_names = ["compact", "trim", "pattern", "length", "minlength", "maxlength", "input_type"];
+  static option_names = [
+    "compact",
+    "trim",
+    "pattern",
+    "length",
+    "minlength",
+    "maxlength",
+    "input_type",
+  ];
   constructor(options) {
     if (!options.choices && !options.length && !options.maxlength) {
-      throw new Error(`field '${options.name}' must define maxlength or choices or length`);
+      throw new Error(
+        `field '${options.name}' must define maxlength or choices or length`
+      );
     }
     super({
       type: "string",
       db_type: "varchar",
       compact: true,
       trim: true,
-      ...options
+      ...options,
     });
     if (this.default === undefined && !this.primary_key && !this.unique) {
       this.default = "";
     }
     if (Array.isArray(this.choices) && this.choices.length > 0) {
       const n = get_max_choice_length(this.choices);
-      assert(n > 0, "invalid string choices(empty choices or zero length value):" + this.name);
+      assert(
+        n > 0,
+        "invalid string choices(empty choices or zero length value):" +
+          this.name
+      );
       const m = this.length || this.maxlength;
       if (!m || n > m) {
         this.maxlength = n;
@@ -353,7 +395,7 @@ class string extends basefield {
     return {
       ...basefield.prototype.widget_attrs.call(this),
       ...attrs,
-      ...extra_attrs
+      ...extra_attrs,
     };
   }
   to_form_value(value) {
@@ -419,7 +461,9 @@ class year_month extends string {
 function add_min_or_max_validators(self, validators) {
   for (const name of ["min", "max"]) {
     if (self[name]) {
-      validators.unshift(Validator[name](self[name], self.get_error_message(name)));
+      validators.unshift(
+        Validator[name](self[name], self.get_error_message(name))
+      );
     }
   }
 }
@@ -457,7 +501,7 @@ class year extends integer {
       db_type: "integer",
       min: 1000,
       max: 9999,
-      ...options
+      ...options,
     });
   }
 }
@@ -489,7 +533,7 @@ class float extends basefield {
 
 const DEFAULT_BOOLEAN_CHOICES = [
   { label: "是", value: "true", text: "是" },
-  { label: "否", value: "false", text: "否" }
+  { label: "否", value: "false", text: "否" },
 ];
 class boolean extends basefield {
   static option_names = ["cn"];
@@ -525,7 +569,7 @@ class datetime extends basefield {
       db_type: "timestamp",
       precision: 0,
       timezone: true,
-      ...options
+      ...options,
     });
     if (this.auto_now_add) {
       this.default = get_localtime;
@@ -597,7 +641,7 @@ const VALID_FOREIGN_KEY_TYPES = {
   float: Validator.float,
   datetime: Validator.datetime,
   date: Validator.date,
-  time: Validator.time
+  time: Validator.time,
 };
 
 class foreignkey extends basefield {
@@ -613,7 +657,7 @@ class foreignkey extends basefield {
     "admin_url_name",
     "models_url_name",
     "keyword_query_name",
-    "limit_query_name"
+    "limit_query_name",
   ];
   constructor(options) {
     super({
@@ -627,7 +671,7 @@ class foreignkey extends basefield {
       keyword_query_name: "keyword",
       limit_query_name: "limit",
       convert: String,
-      ...options
+      ...options,
     });
     const fk_model = this.reference;
     if (fk_model === "self") {
@@ -640,21 +684,35 @@ class foreignkey extends basefield {
       fk_model.__is_model_class__,
       `a foreignkey must define a reference model. not ${fk_model}(type: ${typeof fk_model})`
     );
-    const rc = this.reference_column || fk_model.primary_key || fk_model.DEFAULT_PRIMARY_KEY || "id";
+    const rc =
+      this.reference_column ||
+      fk_model.primary_key ||
+      fk_model.DEFAULT_PRIMARY_KEY ||
+      "id";
     const fk = fk_model.fields[rc];
     assert(
       fk,
-      `invalid foreignkey name ${rc} for foreign model ${fk_model.table_name || "[TABLE NAME NOT DEFINED YET]"}`
+      `invalid foreignkey name ${rc} for foreign model ${
+        fk_model.table_name || "[TABLE NAME NOT DEFINED YET]"
+      }`
     );
     this.reference_column = rc;
     const rlc = this.reference_label_column || rc;
     assert(
       fk_model.fields[rlc],
-      `invalid foreignkey label name ${rlc} for foreign model ${fk_model.table_name || "[TABLE NAME NOT DEFINED YET]"}`
+      `invalid foreignkey label name ${rlc} for foreign model ${
+        fk_model.table_name || "[TABLE NAME NOT DEFINED YET]"
+      }`
     );
     this.reference_label_column = rlc;
-    this.convert = assert(VALID_FOREIGN_KEY_TYPES[fk.type], `invalid foreignkey (name:${fk.name}, type:${fk.type})`);
-    assert(fk.primary_key || fk.unique, "foreignkey must be a primary key or unique key");
+    this.convert = assert(
+      VALID_FOREIGN_KEY_TYPES[fk.type],
+      `invalid foreignkey (name:${fk.name}, type:${fk.type})`
+    );
+    assert(
+      fk.primary_key || fk.unique,
+      "foreignkey must be a primary key or unique key"
+    );
     if (this.db_type === FK_TYPE_NOT_DEFIEND) {
       this.db_type = fk.db_type || fk.type;
     }
@@ -764,7 +822,9 @@ class basearray extends json {
   }
   get_validators(validators) {
     if (this.required) {
-      validators.unshift(non_empty_array_required(this.get_error_message("required")));
+      validators.unshift(
+        non_empty_array_required(this.get_error_message("required"))
+      );
     }
     validators.unshift(check_array_type);
     validators.unshift(skip_validate_when_string);
@@ -788,7 +848,10 @@ class array extends basearray {
   static option_names = ["field"];
   constructor(options) {
     super({ type: "array", ...options });
-    assert(typeof this.field === "object", `array field "${this.name}" must define field`);
+    assert(
+      typeof this.field === "object",
+      `array field "${this.name}" must define field`
+    );
     if (!this.field.name) {
       // 为了解决validateFunction内array field覆盖paren值的问题
       this.field.name = this.name;
@@ -814,7 +877,7 @@ class array extends basearray {
       foreignkey,
       boolean,
       alioss,
-      alioss_image
+      alioss_image,
       // alioss_list: alioss_list,
       // alioss_image_list: alioss_image_list,
     };
@@ -892,14 +955,17 @@ class table extends basearray {
     if (!this.model.table_name) {
       this.model.materialize_with_table_name({
         table_name: this.name,
-        label: this.label
+        label: this.label,
       });
     }
   }
   get_validators(validators) {
     const validate_by_each_field = (rows) => {
       for (let [i, row] of rows.entries()) {
-        assert(typeof row === "object", "elements of table field must be object");
+        assert(
+          typeof row === "object",
+          "elements of table field must be object"
+        );
         try {
           row = this.model.validate_create(row);
         } catch (err) {
@@ -919,7 +985,7 @@ class table extends basearray {
       field_names: [],
       fields: {},
       table_name: this.model.table_name,
-      label: this.model.label
+      label: this.model.label,
     };
     for (const name of this.model.field_names) {
       const field = this.model.fields[name];
@@ -953,7 +1019,7 @@ const map_to_antd_file_value = (url = "") => {
         status: "done",
         url,
         extname: name.split(".")[1], // uni
-        ossUrl: url
+        ossUrl: url,
       };
 };
 class alioss extends string {
@@ -974,7 +1040,7 @@ class alioss extends string {
     "payload_url",
     "input_type",
     "limit",
-    "media_type"
+    "media_type",
   ];
   constructor(options) {
     super({ type: "alioss", db_type: "varchar", maxlength: 255, ...options });
@@ -987,7 +1053,9 @@ class alioss extends string {
     this.size_arg = size;
     this.size = parse_size(size);
     this.lifetime = options.lifetime || ALIOSS_LIFETIME;
-    this.upload_url = `//${options.bucket || ALIOSS_BUCKET}.${options.region || ALIOSS_REGION}.aliyuncs.com/`;
+    this.upload_url = `//${options.bucket || ALIOSS_BUCKET}.${
+      options.region || ALIOSS_REGION
+    }.aliyuncs.com/`;
   }
   get_options() {
     const ret = super.get_options();
@@ -1002,7 +1070,7 @@ class alioss extends string {
     const { data } = await basefield.Http.post(this.payload_url, {
       ...options,
       size: options.size || this.size,
-      lifetime: options.lifetime || this.lifetime
+      lifetime: options.lifetime || this.lifetime,
     });
     return data;
   }
@@ -1049,7 +1117,7 @@ class alioss_image extends alioss {
       db_type: "varchar",
       media_type: "image",
       image: true,
-      ...options
+      ...options,
     });
   }
 }
@@ -1059,7 +1127,7 @@ class alioss_list extends basearray {
     super({
       type: "alioss_list",
       db_type: "jsonb",
-      ...options
+      ...options,
     });
     alioss.prototype.setup.call(this, options);
   }
@@ -1094,7 +1162,7 @@ class alioss_image_list extends alioss_list {
       type: "alioss_image_list",
       // media_type: "image",
       // image: true,
-      ...options
+      ...options,
     });
   }
 }
@@ -1122,5 +1190,5 @@ export {
   alioss,
   alioss_image,
   alioss_list,
-  alioss_image_list
+  alioss_image_list,
 };

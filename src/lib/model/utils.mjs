@@ -121,7 +121,7 @@ export const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 export const unique = (arr) => {
   return arr.filter((e, i) => arr.indexOf(e) === i);
 };
-export const getenv = (key) => process.env[key];
+export const getenv = (key) => "";
 export const clone = (o) => (Array.isArray(o) ? [...o] : { ...o });
 export const string_format = (s, ...varargs) => {
   let status = 0;
