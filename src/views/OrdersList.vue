@@ -7,7 +7,7 @@
         :title="extractOrderInfo(item)"
         :showArrow="false"
         :pageSize="pageSize"
-        :rightText="fromNow(item.success_time)"
+        :rightText="utils.fromNow(item.success_time)"
       >
       </uni-list-item>
     </uni-list>

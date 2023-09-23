@@ -7,7 +7,7 @@
       :avatar="e.creator.avatar"
       :thumb="e.creator.avatar"
       thumb-size="lg"
-      :right-text="fromNow(e.ctime)"
+      :right-text="utils.fromNow(e.ctime)"
       :title="e.title"
       :note="e.creator.nickname"
       :avatar-circle="true"

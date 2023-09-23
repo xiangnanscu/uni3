@@ -35,7 +35,7 @@
               </view>
               <view class="post-footer"
                 ><text
-                  >第{{ index + 1 }}楼 {{ fromNow(post.ctime) }}</text
+                  >第{{ index + 1 }}楼 {{ utils.fromNow(post.ctime) }}</text
                 ></view
               >
               <view class="post-comment" v-if="post.comments?.length">

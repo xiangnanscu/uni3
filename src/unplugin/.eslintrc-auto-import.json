@@ -32,7 +32,7 @@
     "eagerComputed": true,
     "effectScope": true,
     "extendRef": true,
-    "fromNow": true,
+    "utils.fromNow": true,
     "getActivePinia": true,
     "getCurrentInstance": true,
     "getCurrentScope": true,
@@ -310,6 +310,7 @@
     "Ref": true,
     "VNode": true,
     "WritableComputedRef": true,
-    "toValue": true
+    "toValue": true,
+    "fromNow": true
   }
 }

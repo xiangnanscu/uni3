@@ -24,7 +24,7 @@
         :key="index"
         :to="`/views/ThreadDetail?id=${item.id}`"
         :title="item.title"
-        :rightText="fromNow(item.ctime)"
+        :rightText="utils.fromNow(item.ctime)"
         :ellipsis="1"
         :showArrow="false"
       />

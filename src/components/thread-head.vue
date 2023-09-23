@@ -12,7 +12,7 @@
       </div>
       <div style="padding: 2px">
         <div class="thread-nickname">{{ target.creator__nickname }}</div>
-        <div class="thread-restinfo">{{ fromNow(target.ctime) }}</div>
+        <div class="thread-restinfo">{{ utils.fromNow(target.ctime) }}</div>
       </div>
     </view>
     <div class="x-card">

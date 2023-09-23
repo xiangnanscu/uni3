@@ -6,7 +6,7 @@
       :isFull="true"
       :is-shadow="false"
       :border="false"
-      :extra="fromNow({{tableName}}.ctime)"
+      :extra="utils.fromNow({{tableName}}.ctime)"
     >
       <text class="uni-body">\{{ {{tableName}}.content }}</text>
       <template v-slot:actions>

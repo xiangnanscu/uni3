@@ -11,7 +11,7 @@
           <uni-list-item
             :title="item.title"
             :showArrow="false"
-            :rightText="fromNow(item.ctime)"
+            :rightText="utils.fromNow(item.ctime)"
         /></navigator>
       </uni-list>
     </div>
