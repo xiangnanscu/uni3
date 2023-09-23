@@ -1,6 +1,7 @@
 // get_options 和后端不同, attrs必存在
 import { clone, assert, NULL, FK_TYPE_NOT_DEFIEND, get_localtime, parse_size } from "./utils.mjs";
 import * as Validator from "./validator.mjs";
+import { Model } from "./model.mjs";
 
 const TABLE_MAX_ROWS = 1;
 const CHOICES_ERROR_DISPLAY_COUNT = 30;
@@ -882,7 +883,8 @@ class table extends basearray {
   constructor(options) {
     super({ type: "table", max_rows: TABLE_MAX_ROWS, ...options });
     if (!this.model?.__is_model_class__) {
-      throw new Error("please define model for a table field: " + this.name);
+      this.model = Model.create_model(this.model);
+      // throw new Error("please define model for a table field: " + this.name);
     }
     if (!this.default || this.default === "") {
       this.default = make_empty_array;

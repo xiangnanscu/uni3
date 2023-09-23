@@ -1124,6 +1124,9 @@ Sql.prototype.right_join = function (join_args, key, op, val) {
 Sql.prototype.full_join = function (join_args, key, op, val) {
   return this._base_join("FULL", join_args, key, op, val);
 };
+Sql.prototype.cross_join = function (join_args, key, op, val) {
+  return this._base_join("CROSS", join_args, key, op, val);
+};
 Sql.prototype.limit = function (n) {
   this._limit = n;
   return this;

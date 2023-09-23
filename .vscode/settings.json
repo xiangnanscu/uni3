@@ -1,4 +1,20 @@
 {
+  "files.associations": {
+    "*.json": "jsonc"
+  },
+  "search.exclude": {
+    "package-lock.json": true,
+    "auto_generated": true,
+    "public/**": true
+  },
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "Prettier-SQL.SQLFlavourOverride": "postgresql",
+  "[sql]": {
+    "editor.defaultFormatter": "inferrinizzard.prettier-sql-vscode"
+  },
   "Lua.runtime.version": "LuaJIT",
   "Lua.diagnostics.globals": [
     "ngx",
@@ -12,57 +28,39 @@
     "${3rd}/busted/library",
     "${3rd}/OpenResty/library"
   ],
-  "html.format.wrapAttributesIndentSize": 2,
-  "html.format.wrapAttributes": "force-expand-multiline", //volar格式化template的选项
-  "html.format.wrapLineLength": 80,
   "Lua.runtime.unicodeName": true,
   "Lua.typeFormat.config": {
     "format_line": "false",
     "auto_complete_end": "false",
     "auto_complete_table_sep": "false"
   },
-  "[conf]": {
-    "editor.formatOnSave": false
-  },
   "Lua.workspace.checkThirdParty": false,
-  "files.associations": {
-    "*.json": "jsonc"
+  "Lua.completion.autoRequire": false,
+  "html.format.wrapAttributesIndentSize": 2,
+  "html.format.wrapAttributes": "force-expand-multiline", //volar格式化template的选项
+  "html.format.wrapLineLength": 80,
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "editor.codeActionsOnSave": {
-    "source.fixAll": true,
-    "source.fixAll.eslint": true,
-    "source.fixAll.stylelint": true
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "eslint.probe": [
-    "html",
-    "vue",
-    "javascript",
-    "javascriptreact",
-    "typescript"
-  ],
-  "editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
-  // "editor.detectIndentation": false,
-  // "editor.insertSpaces": false, // 加了这个会导致ts文件的空格在save时被转换为tab
-  "editor.tabSize": 2,
-  "editor.wordWrapColumn": 120,
-  "editor.formatOnPaste": false, // required
-  "editor.formatOnType": false, // required
-  "editor.formatOnSave": true, // optional
-  "editor.formatOnSaveMode": "file", // required to format on save
-  "files.autoSave": "onFocusChange", // optional but recommended
-  "vs-code-prettier-eslint.prettierLast": false,
-  "[vue]": {
-    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
-    // "editor.defaultFormatter": "Vue.volar"
-  },
-  "[typescript]": {
-    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
+  "[scss]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[javascript]": {
-    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
-  }, // optional but recommended
-  "json.schemaDownload.enable": true,
-  "yaml.schemas": {
-    ".vscode/github-workflow.json": "busted.yml"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[vue]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
   }
 }
