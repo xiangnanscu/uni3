@@ -221,10 +221,7 @@ function time(v) {
   }
 }
 function datetime(v) {
-  v =
-    /^(\d{4})([^\d])(\d\d?)(\2)(\d\d?) (\d\d?):(\d\d?):(\d\d?)(\+\d\d?)?$/.exec(
-      v
-    );
+  v = /^(\d{4})([^\d])(\d\d?)(\2)(\d\d?) (\d\d?):(\d\d?):(\d\d?)(\+\d\d?)?$/.exec(v);
   if (v) {
     valid_date(Number(v[1]), Number(v[3]), Number(v[5]));
     const hour = Number(v[6]);
@@ -301,11 +298,7 @@ function sfzh(v) {
     throw new Error("身份证号前17位必须为数字，第18位必须为数字或大写字母X");
   }
   try {
-    valid_date(
-      Number(v.slice(6, 10)),
-      Number(v.slice(10, 12)),
-      Number(v.slice(12, 14))
-    );
+    valid_date(Number(v.slice(6, 10)), Number(v.slice(10, 12)), Number(v.slice(12, 14)));
   } catch (error) {
     throw new Error("身份证号日期部分错误:" + error.message);
   }

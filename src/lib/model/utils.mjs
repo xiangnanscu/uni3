@@ -212,7 +212,7 @@ export const is_empty_object = (obj) => {
 export function Query(options) {
   const postgres = () => [];
   options = Object.fromEntries(
-    Object.entries(options).map(([k, v]) => [k.toLowerCase(), v])
+    Object.entries(options).map(([k, v]) => [k.toLowerCase(), v]),
   );
   // console.log({ options });
   const sql_query = postgres({
