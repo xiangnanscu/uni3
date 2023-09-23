@@ -126,4 +126,4 @@ class Alioss {
   };
 }
 
-export { Alioss };
+export default Alioss;

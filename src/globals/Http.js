@@ -64,4 +64,4 @@ class Http {
   }
 }
 
-export { Http };
+export default Http;

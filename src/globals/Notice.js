@@ -4,20 +4,20 @@ class Notice {
   }
   static success(message) {
     notification.success({
-      message,
+      message
     });
   }
   static error(message) {
     notification.error({
       duration: 0,
-      message,
+      message
     });
   }
   static info(message) {
     notification.info({
-      message,
+      message
     });
   }
 }
 
-export { Notice };
+export default Notice;

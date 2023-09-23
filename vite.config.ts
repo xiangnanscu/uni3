@@ -20,6 +20,7 @@ const plugins = [
   }),
   AutoImport({
     //https://github.com/antfu/unplugin-auto-import#configuration
+    defaultExportByFilename: true,
     eslintrc: {
       enabled: true, // Default `false`
       filepath: "./src/unplugin/.eslintrc-auto-import.json", // Default `./.eslintrc-auto-import.json`
