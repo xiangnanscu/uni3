@@ -9,7 +9,7 @@ const uniFormItem = inject("uniFormItem", null);
 const props = defineProps({
   field: { type: Object, required: true },
   modelValue: { required: true },
-  error: {}
+  error: {},
 });
 
 const adminModel = props.field.model;
@@ -20,9 +20,9 @@ const tableColumns = computed(() =>
       index,
       name,
       label: adminModel.name_to_label[name],
-      field: adminModel.fields[name]
-    })
-  )
+      field: adminModel.fields[name],
+    }),
+  ),
 );
 
 const findDuplicates = (rows) => {
@@ -32,11 +32,13 @@ const findDuplicates = (rows) => {
 const currentRow = ref(null);
 const createFormRef = ref(null);
 const updateFormRef = ref(null);
+const deleteConfirmRef = ref(null);
 const showCreateForm = ref(false);
 const showUpdateForm = ref(false);
+const deleteIndex = ref(null);
 
 const uniqueKey = computed(
-  () => Object.values(adminModel.fields).find((f) => f.unique)?.name
+  () => Object.values(adminModel.fields).find((f) => f.unique)?.name,
 );
 const reportValue = (newRows) => {
   emit("update:modelValue", newRows);
@@ -44,7 +46,7 @@ const reportValue = (newRows) => {
 const deleteRecord = (splitIndex) => {
   const newRows = [
     ...props.modelValue.slice(0, splitIndex),
-    ...props.modelValue.slice(splitIndex + 1)
+    ...props.modelValue.slice(splitIndex + 1),
   ];
   reportValue(newRows);
 };
@@ -56,6 +58,15 @@ const openUpdateForm = () => {
   updateFormRef.value.open();
   showUpdateForm.value = true;
 };
+const openDeletePrompt = (index) => {
+  deleteConfirmRef.value.open();
+  deleteIndex.value = index;
+};
+const onDeleteConfirm = () => {
+  deleteRecord(deleteIndex.value);
+  deleteIndex.value = -1;
+  deleteConfirmRef.value.close();
+};
 const onSuccessCreate = (data) => {
   reportValue([...props.modelValue, data]);
   createFormRef.value.close();
@@ -66,7 +77,7 @@ const onSuccessUpdate = (data) => {
   const newRows = [
     ...props.modelValue.slice(0, splitIndex),
     data,
-    ...props.modelValue.slice(splitIndex + 1)
+    ...props.modelValue.slice(splitIndex + 1),
   ];
   reportValue(newRows);
   updateFormRef.value.close();
@@ -77,48 +88,9 @@ const onClickEdit = (index) => {
   currentRow.value = props.modelValue.find((e, i) => i === index);
   openUpdateForm();
 };
-const tagColorArray = [
-  "geekblue",
-  "orange",
-  "green",
-  "cyan",
-  "red",
-  "blue",
-  "purple"
-];
+const tagColorArray = ["geekblue", "orange", "green", "cyan", "red", "blue", "purple"];
 </script>
 <template>
-  <uni-popup
-    ref="createFormRef"
-    :is-mask-click="true"
-    type="bottom"
-    background-color="#fff"
-  >
-    <div style="padding: 1em">
-      <modelform-uni
-        v-if="showCreateForm"
-        @sendData="onSuccessCreate"
-        :model="adminModel"
-        :values="adminModel.get_defaults()"
-      ></modelform-uni>
-    </div>
-  </uni-popup>
-  <uni-popup
-    ref="updateFormRef"
-    :is-mask-click="true"
-    type="bottom"
-    background-color="#fff"
-  >
-    <div style="padding: 1em">
-      <modelform-uni
-        v-if="showUpdateForm"
-        @sendData="onSuccessUpdate"
-        :model="adminModel"
-        :values="currentRow"
-        style="padding: 1em"
-      ></modelform-uni>
-    </div>
-  </uni-popup>
   <x-button size="mini" @click="openCreateForm">
     <uni-icons type="plusempty" style="color: #fff"></uni-icons>
     添加{{ field.label }}
@@ -160,20 +132,14 @@ const tagColorArray = [
         <template v-else-if="col.field.type === 'alioss_image'">
           <image
             :src="
-              row[col.name] instanceof Array
-                ? row[col.name][0].ossUrl
-                : row[col.name]
+              row[col.name] instanceof Array ? row[col.name][0].ossUrl : row[col.name]
             "
             mode="aspectFit"
             style="width: 50px; height: 50px"
           />
         </template>
         <template v-else-if="col.field.type === 'array'">
-          <div
-            v-for="(e, i) in row[col.name]"
-            :key="i"
-            style="margin-bottom: 2px"
-          >
+          <div v-for="(e, i) in row[col.name]" :key="i" style="margin-bottom: 2px">
             <uni-tag :color="tagColorArray[i % tagColorArray.length]">
               {{ `${i + 1}. ` + e }}
             </uni-tag>
@@ -198,7 +164,7 @@ const tagColorArray = [
             <x-button
               styleString="padding: 0px 5px; font-size: 80%; color: red; border-color:red"
               size="mini"
-              @click.prevent="deleteRecord(index)"
+              @click="openDeletePrompt(index)"
             >
               删除
             </x-button>
@@ -207,6 +173,55 @@ const tagColorArray = [
       </td>
     </tr>
   </table>
+  <uni-popup
+    ref="createFormRef"
+    :is-mask-click="true"
+    type="bottom"
+    background-color="#fff"
+  >
+    <div style="padding: 1em">
+      <modelform-uni
+        v-if="showCreateForm"
+        @sendData="onSuccessCreate"
+        :model="adminModel"
+        :values="adminModel.get_defaults()"
+      ></modelform-uni>
+    </div>
+  </uni-popup>
+  <uni-popup
+    ref="updateFormRef"
+    :is-mask-click="true"
+    type="bottom"
+    background-color="#fff"
+  >
+    <div style="padding: 1em">
+      <modelform-uni
+        v-if="showUpdateForm"
+        @sendData="onSuccessUpdate"
+        :model="adminModel"
+        :values="currentRow"
+        style="padding: 1em"
+      ></modelform-uni>
+    </div>
+  </uni-popup>
+  <uni-popup
+    ref="deleteConfirmRef"
+    :is-mask-click="true"
+    type="bottom"
+    background-color="#fff"
+  >
+    <uni-popup-dialog
+      style="margin: auto"
+      mode="base"
+      :title="`确定删除第${deleteIndex + 1}条吗?`"
+      confirmText="删除"
+      :duration="2000"
+      :before-close="true"
+      @close="deleteConfirmRef.close()"
+      @confirm="onDeleteConfirm"
+    >
+    </uni-popup-dialog>
+  </uni-popup>
 </template>
 
 <style scoped lang="scss">
