@@ -128,8 +128,12 @@ field.attrs.wxPhone = false;
 field.attrs.wxAvatar = false;
 // #endif
 const placeholder = field.attrs?.placeholder || field.hint;
+const fieldChoices = field.choices?.map((e) => ({
+  text: e.label,
+  value: e.value
+}));
 const fuiChoices = field.choices?.map((e) => ({
-  text: e.text,
+  text: e.label,
   value: e.value,
   checked: e.value === props.modelValue
 }));
@@ -166,7 +170,7 @@ const onFuiSelectConfirm = ({ index, options }) => {
           <uni-list>
             <uni-list-item
               v-for="(c, i) in autocompleteSearchText
-                ? field.choices.filter((e) =>
+                ? fieldChoices.filter((e) =>
                     e.value.includes(autocompleteSearchText)
                   )
                 : []"
@@ -184,13 +188,13 @@ const onFuiSelectConfirm = ({ index, options }) => {
       </div>
     </uni-popup>
   </template>
-  <template v-else-if="field.choices">
+  <template v-else-if="fieldChoices">
     <uni-data-checkbox
       v-if="isArrayField || field.tag == 'radio'"
       @update:modelValue="sendValue"
       :modelValue="props.modelValue"
       :disabled="field.disabled"
-      :localdata="field.choices"
+      :localdata="fieldChoices"
       :multiple="isArrayField ? true : false"
       :max="isArrayField ? field.max || Infinity : 1"
       :min="field.min || 0"
@@ -231,7 +235,7 @@ const onFuiSelectConfirm = ({ index, options }) => {
       @update:modelValue="sendValue"
       :modelValue="props.modelValue"
       :disabled="field.disabled"
-      :localdata="field.choices"
+      :localdata="fieldChoices"
     ></uni-data-select>
   </template>
   <slider
@@ -262,7 +266,7 @@ const onFuiSelectConfirm = ({ index, options }) => {
     :placeholder="placeholder"
   />
   <picker
-    v-else-if="fieldType == 'yearMonth'"
+    v-else-if="fieldType == 'year_month'"
     @change="sendValue($event.detail.value)"
     :value="props.modelValue"
     mode="date"

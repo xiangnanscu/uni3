@@ -40,7 +40,7 @@ const successPostH5 = async (user) => {
   await loginUser(user);
 };
 
-const loginModel = Model.createModel({
+const loginModel = Model.create_model({
   field_names: ["username", "password"],
   fields: {
     username: { label: "用户名", hint: "昵称/手机号/身份证号" },
@@ -54,12 +54,12 @@ const successPostWX = async (user) => {
   await loginUser({ ...userData.value, ...user });
 };
 
-const profileModel = Model.createModel({
+const profileModel = Model.create_model({
   field_names: ["avatar", "nickname"],
   fields: {
     avatar: {
       label: "头像",
-      type: "aliossImage",
+      type: "alioss_image",
       required: true,
       size: avatarSize,
       attrs: { wxAvatar: true }

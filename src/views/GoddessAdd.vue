@@ -15,7 +15,7 @@
 // onShareTimeline
 // onShareAppMessage
 useWxShare({ title: "江安“新青年”邀请你！", imageUrl: "" });
-const GoddessAddModel = Model.createModel({
+const GoddessAddModel = Model.create_model({
   field_names: ["xm", "sex", "sfzh", "title", "pics"],
   fields: {
     xm: { label: "姓名", required: true, minlength: 2 },
@@ -24,7 +24,7 @@ const GoddessAddModel = Model.createModel({
     title: { label: "标题", required: true, minlength: 5 },
     pics: {
       label: "封面图",
-      type: "aliossImageList",
+      type: "alioss_image_list",
       required: true,
       size: process.env.ALIOSS_AVATAR_SIZE || "2M",
       limit: 1

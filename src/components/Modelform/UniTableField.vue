@@ -99,7 +99,7 @@ const tagColorArray = [
         v-if="showCreateForm"
         @sendData="onSuccessCreate"
         :model="adminModel"
-        :values="adminModel.getDefaults()"
+        :values="adminModel.get_defaults()"
       ></modelform-uni>
     </div>
   </uni-popup>
@@ -157,7 +157,7 @@ const tagColorArray = [
               : row[col.name]
           }}
         </template>
-        <template v-else-if="col.field.type === 'aliossImage'">
+        <template v-else-if="col.field.type === 'alioss_image'">
           <image
             :src="
               row[col.name] instanceof Array
@@ -185,20 +185,24 @@ const tagColorArray = [
       </td>
       <td class="x-td compact-td">
         <span>
-          <x-button
-            styleString="padding: 2px 5px; font-size: 80%;"
-            size="mini"
-            @click="onClickEdit(index)"
-          >
-            编辑
-          </x-button>
-          <x-button
-            styleString="margin-left:2px;padding: 2px 5px; font-size: 80%; color: red; border-color:red"
-            size="mini"
-            @click.prevent="deleteRecord(index)"
-          >
-            删除
-          </x-button>
+          <div>
+            <x-button
+              styleString="padding: 0px 5px; font-size: 80%;"
+              size="mini"
+              @click="onClickEdit(index)"
+            >
+              编辑
+            </x-button>
+          </div>
+          <div>
+            <x-button
+              styleString="padding: 0px 5px; font-size: 80%; color: red; border-color:red"
+              size="mini"
+              @click.prevent="deleteRecord(index)"
+            >
+              删除
+            </x-button>
+          </div>
         </span>
       </td>
     </tr>

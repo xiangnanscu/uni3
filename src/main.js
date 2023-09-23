@@ -8,6 +8,7 @@ import { isLogin } from "@/lib/utils";
 const pinia = createPinia();
 const LOGIN_HINT = "login required";
 const loginPage = process.env.UNI_LOGIN_PAGE;
+globalThis.log = console.log;
 // https://pinia.vuejs.org/core-concepts/plugins.html#adding-new-external-properties
 // pinia.use(({ store }) => {
 //   store.router = markRaw(router);

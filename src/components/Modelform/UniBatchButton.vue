@@ -1,6 +1,6 @@
 <script setup>
 import { findDups } from "@/lib/utils.mjs";
-import { Model } from "@/lib/model.mjs";
+import { Model } from "@/lib/model/model.mjs";
 
 const store = useStore();
 const emit = defineEmits(["findDuplicates", "uploadRows", "successPost"]);
@@ -10,17 +10,10 @@ const props = defineProps({
   uploadUrl: { type: String },
   downloadUrl: { type: String },
   uniqueKey: { type: [String, Array] },
-  // tableName: { type: String },
-  // primaryKey: { type: String },
   names: { type: Array }
-  // field_names: { type: Array, default: () => [] },
-  // fields: { type: Object, default: () => ({}) },
-  // labelToName: { type: Object, default: () => ({}) },
-  // name_to_label: { type: Object, default: () => ({}) },
 });
-// console.log("props.model.__isModelClass__", props.model.__isModelClass__);
-const batchModel = !props.model.__isModelClass__
-  ? Model.createModel({ disableAutoPrimaryKey: true, ...props.model })
+const batchModel = !props.model.__is_model_class__
+  ? Model.create_model({ ...props.model })
   : props.model;
 
 const names = props.names || batchModel.names;
@@ -56,7 +49,7 @@ const onXlsxRead = async ({ ok, message, rows }) => {
     Notice.error(message);
   } else {
     try {
-      const [cleanedRows, columns] = batchModel.validateCreateData(
+      const [cleanedRows, columns] = batchModel.validate_create_data(
         ensureUnique(rows.map(prepareForDb))
       );
       emit("uploadRows", cleanedRows);

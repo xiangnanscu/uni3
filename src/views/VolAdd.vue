@@ -14,7 +14,7 @@
 <script setup>
 const formData = ref({ title: "", content: "", pics: [] });
 
-const volplanModel = Model.createModel({
+const volplanModel = Model.create_model({
   field_names: [
     "title",
     "xm",
@@ -47,7 +47,7 @@ const volplanModel = Model.createModel({
     plan_endtime: { label: "志愿结束时间", type: "datetime", required: true },
     pics: {
       label: "封面图",
-      type: "aliossImageList",
+      type: "alioss_image_list",
       required: false,
       size: process.env.ALIOSS_AVATAR_SIZE || "2M",
       limit: 1

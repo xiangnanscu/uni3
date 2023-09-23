@@ -38,7 +38,7 @@ const updateId = ref();
 let regeditModel;
 onLoad(async () => {
   const modelJson = await useGet(`/parent_student_relation/json`);
-  regeditModel = Model.createModel(modelJson);
+  regeditModel = Model.create_model(modelJson);
   let regeditQuery = { sfzh: user.username };
   // #ifdef MP-WEIXIN
   regeditQuery = { openid: user.openid };

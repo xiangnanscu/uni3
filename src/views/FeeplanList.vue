@@ -64,7 +64,7 @@
 </template>
 
 <script setup>
-const PayForOther = Model.createModel({
+const PayForOther = Model.create_model({
   fields: {
     sfzh: { label: "身份证号", type: "sfzh" }
   }

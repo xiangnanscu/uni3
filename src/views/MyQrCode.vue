@@ -46,7 +46,7 @@ const query = useQuery();
 const approver = ref();
 const ready = ref();
 const waiting = ref();
-const applyModel = Model.createModel({
+const applyModel = Model.create_model({
   fields: {
     hello_message: { label: "", hint: "附加消息, 选填", maxlength: 50 }
   }

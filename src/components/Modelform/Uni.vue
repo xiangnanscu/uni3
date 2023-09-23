@@ -22,26 +22,22 @@ const props = defineProps({
   trigger: { type: String, default: "blur" }
 });
 const deepcopy = (o) => JSON.parse(JSON.stringify(o));
-const values = props.syncValues
-  ? reactive(props.values)
-  : reactive(deepcopy(props.values));
-Object.assign(values, props.model.toFormValue(values, props.model.names));
+const values = props.syncValues ? reactive(props.values) : reactive(deepcopy(props.values));
+Object.assign(values, props.model.to_form_value(values, props.model.names));
 const errors = reactive(props.errors);
 const formRef = ref();
-const getFieldRules = (field) => [
+const getFieldRules = (field, index) => [
   { required: field.required, errorMessage: `必须填写${field.label}` },
   {
     validateFunction: function (rule, value, data, callback) {
-      data[field.name] = field.validate(value, data);
+      const name = index === undefined ? field.name : field.name + "_" + index;
+      data[name] = field.validate(value, data);
       return true;
     }
   }
 ];
-const formNames =
-  props.formNames || props.model.admin?.form_names || props.model.names;
-const fieldsArray = computed(() =>
-  formNames.map((name) => props.model.fields[name])
-);
+const formNames = props.formNames || props.model.admin?.form_names || props.model.names;
+const fieldsArray = computed(() => formNames.map((name) => props.model.fields[name]));
 const formsItemRefs = {};
 const rules = {};
 const resetErrors = () => {
@@ -76,7 +72,7 @@ const submit = async () => {
   resetErrors();
   formRef.value.clearValidate();
   const cleanedData = await formRef.value.validate();
-  const formdata = props.model.toPostValue(cleanedData, props.model.names);
+  const formdata = props.model.to_post_value(cleanedData, props.model.names);
   // if (vm.vnode.props.onSendData) {
   //   // 不知为何微信小程序突然props不包含onXXX属性和H5端不一致
   //   emit("sendData", formdata);
@@ -91,8 +87,7 @@ const submit = async () => {
       ...values,
       ...formdata
     });
-    const realData =
-      response.data.type == "uni_error" ? response.data.data : response.data;
+    const realData = response.data.type == "uni_error" ? response.data.data : response.data;
     const successStuff = async () => {
       emit("successPost", realData);
       if (props.successUrl) {
@@ -127,10 +122,7 @@ const submit = async () => {
       } else if (dataType == "model_errors") {
         Object.assign(errors, realData.errors);
         const messages = Object.entries(realData.errors)
-          .map(
-            ([name, message]) =>
-              `${props.model.name_to_label[name]}: ${message}`
-          )
+          .map(([name, message]) => `${props.model.name_to_label[name]}: ${message}`)
           .join("\n");
         uni.showModal({
           title: `错误`,
@@ -171,7 +163,7 @@ const submit = async () => {
     :label-width="props.labelWidth"
     @validate="emit('validate', $event)"
   >
-    <template v-for="(field, index) in fieldsArray" :key="index">
+    <template v-for="(field, fieldIndex) in fieldsArray" :key="fieldIndex">
       <template v-if="field.type == 'array' && !field.choices">
         <template v-for="(value, index) in values[field.name]" :key="index">
           <uni-forms-item
@@ -180,43 +172,29 @@ const submit = async () => {
             :required="field.required"
             :name="[field.name, index]"
             :error-message="errors[field.name][index]"
-            :rules="getFieldRules(field.arrayField)"
+            :rules="getFieldRules(field.field, index)"
             style2="margin-bottom: 2px"
           >
-            <div
-              style="display: flex; flex-direction: row; align-items: center"
-            >
+            <div style="display: flex; flex-direction: row; align-items: center">
               <div style="flex: auto; width: 80%">
                 <modelform-uni-widget
                   v-model="values[field.name][index]"
                   v-model:error="errors[field.name][index]"
-                  @blur:validate="
-                    formsItemRefs[field.name + index].onFieldChange($event)
-                  "
-                  :field="field.arrayField"
+                  @blur:validate="formsItemRefs[field.name + index].onFieldChange($event)"
+                  :field="field.field"
                 />
               </div>
               <uni-icons
                 @click="values[field.name].splice(index, 1)"
-                style="
-                  flex: auto;
-                  cursor: pointer;
-                  text-align: center;
-                  color: red;
-                "
+                style="flex: auto; cursor: pointer; text-align: center; color: red"
                 type="closeempty"
                 style2="color: red"
               ></uni-icons>
             </div>
           </uni-forms-item>
         </template>
-        <uni-forms-item
-          :label="values[field.name]?.length > 0 ? '' : field.label"
-        >
-          <x-button
-            size="mini"
-            @click="values[field.name].push(field.getDefault())"
-          >
+        <uni-forms-item :label="values[field.name]?.length > 0 ? '' : field.label">
+          <x-button size="mini" @click="values[field.name].push(field.get_default())">
             <uni-icons type="plusempty" style="color: #fff"></uni-icons>
             添加{{ field.label }}
           </x-button>
@@ -247,11 +225,7 @@ const submit = async () => {
         :label="field.label"
         :required="field.required"
         :name="field.name"
-        :error-message="
-          field.type == 'array'
-            ? errors[field.name].join('')
-            : errors[field.name]
-        "
+        :error-message="field.type == 'array' ? errors[field.name].join('') : errors[field.name]"
       >
         <modelform-uni-widget
           :modelValue="values[field.name]"
@@ -262,11 +236,7 @@ const submit = async () => {
         />
       </uni-forms-item>
     </template>
-    <x-button
-      v-if="!props.hideSubmitButton"
-      :disabled="submiting"
-      @click="submit"
-    >
+    <x-button v-if="!props.hideSubmitButton" :disabled="submiting" @click="submit">
       {{ props.submitButtonText }}
     </x-button>
   </uni-forms>

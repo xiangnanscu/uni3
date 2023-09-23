@@ -1,12 +1,5 @@
 // get_options 和后端不同, attrs必存在
-import {
-  clone,
-  assert,
-  NULL,
-  FK_TYPE_NOT_DEFIEND,
-  get_localtime,
-  parse_size
-} from "./utils.mjs";
+import { clone, assert, NULL, FK_TYPE_NOT_DEFIEND, get_localtime, parse_size } from "./utils.mjs";
 import * as Validator from "./validator.mjs";
 
 const TABLE_MAX_ROWS = 1;
@@ -149,11 +142,7 @@ class basefield {
       this.label = this.name;
     }
     if (this.null === undefined) {
-      if (
-        this.required ||
-        this.db_type === "varchar" ||
-        this.db_type === "text"
-      ) {
+      if (this.required || this.db_type === "varchar" || this.db_type === "text") {
         this.null = false;
       } else {
         this.null = true;
@@ -175,18 +164,14 @@ class basefield {
   }
   get_validators(validators) {
     if (this.required) {
-      validators.unshift(
-        Validator.required(this.get_error_message("required"))
-      );
+      validators.unshift(Validator.required(this.get_error_message("required")));
     } else {
       validators.unshift(Validator.not_required);
     }
     if (typeof this.choices_url === "string" && this.strict) {
       const dynamic_choices_validator = async (val) => {
         let message = this.get_error_message("choices");
-        const data = await basefield.Http[this.choices_url_method || "get"](
-          this.choices_url
-        ).data;
+        const data = await basefield.Http[this.choices_url_method || "get"](this.choices_url).data;
         const choices = get_choices(data);
         for (const c of choices) {
           if (val === c.value) {
@@ -200,14 +185,8 @@ class basefield {
       };
       validators.push(dynamic_choices_validator);
     }
-    if (
-      Array.isArray(this.choices) &&
-      this.choices.length &&
-      (this.strict === undefined || this.strict)
-    ) {
-      validators.push(
-        get_choices_validator(this.choices, this.get_error_message("choices"))
-      );
+    if (Array.isArray(this.choices) && this.choices.length && (this.strict === undefined || this.strict)) {
+      validators.push(get_choices_validator(this.choices, this.get_error_message("choices")));
     }
     return validators;
   }
@@ -235,11 +214,7 @@ class basefield {
       delete res.choices;
     }
     if (!res.tag) {
-      if (
-        Array.isArray(res.choices) &&
-        res.choices.length > 0 &&
-        !res.autocomplete
-      ) {
+      if (Array.isArray(res.choices) && res.choices.length > 0 && !res.autocomplete) {
         res.tag = "select";
       } else {
         res.tag = "input";
@@ -248,10 +223,7 @@ class basefield {
     if (res.tag === "input" && res.lazy === undefined) {
       res.lazy = true;
     }
-    if (
-      res.preload === undefined &&
-      (res.choices_url || res.choices_url_admin)
-    ) {
+    if (res.preload === undefined && (res.choices_url || res.choices_url_admin)) {
       res.preload = false;
     }
     return res;
@@ -337,20 +309,10 @@ function get_max_choice_length(choices) {
 }
 
 class string extends basefield {
-  static option_names = [
-    "compact",
-    "trim",
-    "pattern",
-    "length",
-    "minlength",
-    "maxlength",
-    "input_type"
-  ];
+  static option_names = ["compact", "trim", "pattern", "length", "minlength", "maxlength", "input_type"];
   constructor(options) {
     if (!options.choices && !options.length && !options.maxlength) {
-      throw new Error(
-        `field '${options.name}' must define maxlength or choices or length`
-      );
+      throw new Error(`field '${options.name}' must define maxlength or choices or length`);
     }
     super({
       type: "string",
@@ -364,11 +326,7 @@ class string extends basefield {
     }
     if (Array.isArray(this.choices) && this.choices.length > 0) {
       const n = get_max_choice_length(this.choices);
-      assert(
-        n > 0,
-        "invalid string choices(empty choices or zero length value):" +
-          this.name
-      );
+      assert(n > 0, "invalid string choices(empty choices or zero length value):" + this.name);
       const m = this.length || this.maxlength;
       if (!m || n > m) {
         this.maxlength = n;
@@ -460,9 +418,7 @@ class year_month extends string {
 function add_min_or_max_validators(self, validators) {
   for (const name of ["min", "max"]) {
     if (self[name]) {
-      validators.unshift(
-        Validator[name](self[name], self.get_error_message(name))
-      );
+      validators.unshift(Validator[name](self[name], self.get_error_message(name)));
     }
   }
 }
@@ -683,35 +639,21 @@ class foreignkey extends basefield {
       fk_model.__is_model_class__,
       `a foreignkey must define a reference model. not ${fk_model}(type: ${typeof fk_model})`
     );
-    const rc =
-      this.reference_column ||
-      fk_model.primary_key ||
-      fk_model.DEFAULT_PRIMARY_KEY ||
-      "id";
+    const rc = this.reference_column || fk_model.primary_key || fk_model.DEFAULT_PRIMARY_KEY || "id";
     const fk = fk_model.fields[rc];
     assert(
       fk,
-      `invalid foreignkey name ${rc} for foreign model ${
-        fk_model.table_name || "[TABLE NAME NOT DEFINED YET]"
-      }`
+      `invalid foreignkey name ${rc} for foreign model ${fk_model.table_name || "[TABLE NAME NOT DEFINED YET]"}`
     );
     this.reference_column = rc;
     const rlc = this.reference_label_column || rc;
     assert(
       fk_model.fields[rlc],
-      `invalid foreignkey label name ${rlc} for foreign model ${
-        fk_model.table_name || "[TABLE NAME NOT DEFINED YET]"
-      }`
+      `invalid foreignkey label name ${rlc} for foreign model ${fk_model.table_name || "[TABLE NAME NOT DEFINED YET]"}`
     );
     this.reference_label_column = rlc;
-    this.convert = assert(
-      VALID_FOREIGN_KEY_TYPES[fk.type],
-      `invalid foreignkey (name:${fk.name}, type:${fk.type})`
-    );
-    assert(
-      fk.primary_key || fk.unique,
-      "foreignkey must be a primary key or unique key"
-    );
+    this.convert = assert(VALID_FOREIGN_KEY_TYPES[fk.type], `invalid foreignkey (name:${fk.name}, type:${fk.type})`);
+    assert(fk.primary_key || fk.unique, "foreignkey must be a primary key or unique key");
     if (this.db_type === FK_TYPE_NOT_DEFIEND) {
       this.db_type = fk.db_type || fk.type;
     }
@@ -821,9 +763,7 @@ class basearray extends json {
   }
   get_validators(validators) {
     if (this.required) {
-      validators.unshift(
-        non_empty_array_required(this.get_error_message("required"))
-      );
+      validators.unshift(non_empty_array_required(this.get_error_message("required")));
     }
     validators.unshift(check_array_type);
     validators.unshift(skip_validate_when_string);
@@ -847,10 +787,11 @@ class array extends basearray {
   static option_names = ["field"];
   constructor(options) {
     super({ type: "array", ...options });
-    assert(
-      typeof this.field === "object",
-      `array field "${this.name}" must define field`
-    );
+    assert(typeof this.field === "object", `array field "${this.name}" must define field`);
+    if (!this.field.name) {
+      // 为了解决validateFunction内array field覆盖paren值的问题
+      this.field.name = this.name;
+    }
     const fields = {
       // basefield,
       string,
@@ -917,8 +858,10 @@ class array extends basearray {
     if (Array.isArray(value)) {
       // 拷贝, 避免弹出表格修改了值但没有提交
       return [...value.map((e) => this.field.to_post_value(e))];
+    } else if (value === undefined) {
+      return [];
     } else {
-      throw new Error(`ArrayField的值必须是数组`);
+      throw new Error(`${this.name}的值必须是数组(${typeof value}))`);
     }
   }
   to_form_value(value) {
@@ -954,10 +897,7 @@ class table extends basearray {
   get_validators(validators) {
     const validate_by_each_field = (rows) => {
       for (let [i, row] of rows.entries()) {
-        assert(
-          typeof row === "object",
-          "elements of table field must be object"
-        );
+        assert(typeof row === "object", "elements of table field must be object");
         try {
           row = this.model.validate_create(row);
         } catch (err) {
@@ -1045,9 +985,7 @@ class alioss extends string {
     this.size_arg = size;
     this.size = parse_size(size);
     this.lifetime = options.lifetime || ALIOSS_LIFETIME;
-    this.upload_url = `//${options.bucket || ALIOSS_BUCKET}.${
-      options.region || ALIOSS_REGION
-    }.aliyuncs.com/`;
+    this.upload_url = `//${options.bucket || ALIOSS_BUCKET}.${options.region || ALIOSS_REGION}.aliyuncs.com/`;
   }
   get_options() {
     const ret = super.get_options();

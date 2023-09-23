@@ -18,12 +18,12 @@ let wxAvatar = true;
 wxAvatar = false;
 // #endif
 const userData = ref({ id: session.user.id });
-const profileModel = Model.createModel({
+const profileModel = Model.create_model({
   field_names: ["avatar", "nickname", "intro"],
   fields: {
     avatar: {
       label: "头像",
-      type: "aliossImage",
+      type: "alioss_image",
       required: true,
       size: process.env.ALIOSS_AVATAR_SIZE || "2M",
       attrs: { wxAvatar }

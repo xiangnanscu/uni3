@@ -1,4 +1,4 @@
-import { Http } from "@/globals/Http";
+import Http from "@/globals/Http";
 
 const ALIOSS_PAYLOAD_URL = process.env.ALIOSS_PAYLOAD_URL;
 const ALIOSS_SIZE = process.env.ALIOSS_SIZE;
@@ -88,7 +88,7 @@ class Alioss {
   }
   static async uploadUni({ file, url, size, prefix }) {
     const ossKey = Alioss.getOssKey(file, prefix);
-    const uploadUrl = url ||  ALIOSS_URL;
+    const uploadUrl = url || ALIOSS_URL;
     const { statusCode } = await uni.uploadFile({
       url: uploadUrl,
       filePath: file.path,

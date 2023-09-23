@@ -31,7 +31,7 @@ onLoad(async () => {
       },
       pics: {
         label: "图片",
-        type: "aliossImageList",
+        type: "alioss_image_list",
         required: false,
         size: process.env.ALIOSS_AVATAR_SIZE || "2M"
       },

@@ -216,7 +216,7 @@ for i, field in ipairs(model_fields) do
         @click="values.%s.splice(index, 1)"
       />
     ]], name, name, name))
-  elseif field.type == 'aliossImage' then
+  elseif field.type == 'alioss_image' then
     antdDataCallback = true
     form_field_token:push(format([[
       <a-upload
@@ -232,7 +232,7 @@ for i, field in ipairs(model_fields) do
           <div>{{ fields.%s.attrs?.button_text || "上传图片" }}</div>
         </div>
       </a-upload>]], name, name, name))
-  elseif field.type == 'aliossImageList' then
+  elseif field.type == 'alioss_image_list' then
     antdDataCallback = true
     form_field_token:push(format([[
       <a-upload
@@ -263,7 +263,7 @@ for i, field in ipairs(model_fields) do
         </a-button>
       </a-upload>
     ]], name, name, name))
-  elseif field.type == 'aliossList' then
+  elseif field.type == 'alioss_list' then
     antdDataCallback = true
     form_field_token:push(format([[
       <a-upload

@@ -8,9 +8,9 @@
 <script setup>
 import { onBeforeMount, computed, ref, reactive } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { Model } from "@/lib/model.mjs";
+import { Model } from "@/lib/model/model.mjs";
 import { PlusOutlined, UploadOutlined } from "@ant-design/icons-vue";
-import { Http } from "@/globals/Http";
+import Http from "@/globals/Http";
 
 const props = defineProps({
   layout: { type: String, default: "horizontal" },
@@ -63,9 +63,9 @@ onBeforeMount(async () => {
   }
   if ({*model_name*}Id) {
     const { data: {*model_name*}Data } = await Http.get(`/{*table_name*}/detail/` + {*model_name*}Id);
-    values.value = {*component_name*}.toFormValue({*model_name*}Data);
+    values.value = {*component_name*}.to_form_value({*model_name*}Data);
   } else {
-    values.value = {*component_name*}.toFormValue({});
+    values.value = {*component_name*}.to_form_value({});
   }
 });
 
@@ -73,7 +73,7 @@ const onFinish = async (values) => {
   clearBackendErrors();
   submiting.value = true;
   try {
-    const postData = {*component_name*}.toPostValue(values);
+    const postData = {*component_name*}.to_post_value(values);
     await Http.post(actionUrl, postData);
     router.push({ name: "{*form_route_name*}List" });
   } catch (error) {

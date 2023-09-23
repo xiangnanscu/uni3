@@ -14,7 +14,7 @@
 <script setup>
 const formData = ref({});
 const ready = ref(false);
-const forumModel = Model.createModel({
+const forumModel = Model.create_model({
   field_names: ["xm", "sfzh", "lxdh", "name", "avatar"],
   fields: {
     xm: { label: "创建人", required: true },
@@ -23,7 +23,7 @@ const forumModel = Model.createModel({
     name: { label: "吧名", required: true },
     avatar: {
       label: "吧头像",
-      type: "aliossImage",
+      type: "alioss_image",
       required: true,
       size: process.env.ALIOSS_AVATAR_SIZE || "2M"
     }

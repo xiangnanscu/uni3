@@ -1,25 +1,24 @@
 <template>
   <page-layout>
-    <modelform-uni :model="testModel" @sendData="submit" actionUrl="/test">
+    <modelform-uni :model="testModel" @sendData="sendData" actionUrl="/test">
     </modelform-uni>
   </page-layout>
 </template>
 
 <script setup>
-const submit = (data) => {
-  console.log("submit", data);
+const sendData = (data) => {
+  console.log("sendData", data);
 };
 onMounted(async () => {
   console.log("Uform onMounted");
   const { header } = await uni.request({ url: "/h1" });
-  console.log({ header });
 });
-const testModel = Model.createModel({
+const testModel = Model.create_model({
   fields: {
     tx: {
       label: "头像",
       size: "1M",
-      type: "aliossImage"
+      type: "alioss_image"
     },
     xm: {
       label: "姓名",
@@ -34,31 +33,28 @@ const testModel = Model.createModel({
     ah: {
       label: "爱好",
       type: "array",
-      max: 3,
-      min: 1,
-      choices: ["阅读", "吃", "游泳", "其他"]
+      field: { max: 3, min: 1, choices: ["阅读", "吃", "游泳", "其他"] }
     },
     grjl: {
       label: "个人简历",
       type: "table",
-      model: Model.createModel({
+      model: Model.create_model({
         fields: {
-          // ksny: { label: "开始年月", type: "yearMonth" },
-          // jsny: { label: "结束年月", type: "yearMonth" },
+          // ksny: { label: "开始年月", type: "year_month" },
+          // jsny: { label: "结束年月", type: "year_month" },
           xq: { label: "详情", maxlength: 3 }
         }
       })
     },
     family: {
       label: "家人姓名",
-      maxlength: 2,
-      // array_type: "boolean"
+      field: { maxlength: 2 },
       type: "array"
     },
     xz: {
       label: "写真",
       required: false,
-      type: "aliossImageList"
+      type: "alioss_image_list"
     },
 
     shsp: {
@@ -102,7 +98,7 @@ const testModel = Model.createModel({
     },
     rxny: {
       label: "入学年月",
-      type: "yearMonth"
+      type: "year_month"
     },
     bynf: {
       label: "毕业年份",

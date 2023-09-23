@@ -38,7 +38,7 @@ const updateId = ref();
 let profileModel;
 onLoad(async () => {
   const modelJson = await useGet(`/teacher/json`);
-  profileModel = Model.createModel(modelJson);
+  profileModel = Model.create_model(modelJson);
   let teacherQuery = { sfzh: user.username };
   // #ifdef MP-WEIXIN
   teacherQuery = { openid: user.openid };

@@ -26,7 +26,7 @@ let wxPhone = true;
 wxPhone = false;
 // #endif
 const userData = ref({ id: session.user.id, xm: "", username: "", phone: "" });
-const profileModel = Model.createModel({
+const profileModel = Model.create_model({
   field_names: ["xm", "username", "phone"],
   fields: {
     xm: { label: "姓名", required: true },
