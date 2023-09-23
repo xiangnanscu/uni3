@@ -19,10 +19,12 @@ const props = defineProps({
   labelPosition: { type: String, default: "left" }, // top
   labelWidth: { type: [String, Number], default: "7em" },
   labelAlign: { type: String, default: "right" }, //center, right
-  trigger: { type: String, default: "blur" }
+  trigger: { type: String, default: "blur" },
 });
 const deepcopy = (o) => JSON.parse(JSON.stringify(o));
-const values = props.syncValues ? reactive(props.values) : reactive(deepcopy(props.values));
+const values = props.syncValues
+  ? reactive(props.values)
+  : reactive(deepcopy(props.values));
 Object.assign(values, props.model.to_form_value(values, props.model.names));
 const errors = reactive(props.errors);
 const formRef = ref();
@@ -33,8 +35,8 @@ const getFieldRules = (field, index) => [
       const name = index === undefined ? field.name : field.name + "_" + index;
       data[name] = field.validate(value, data);
       return true;
-    }
-  }
+    },
+  },
 ];
 const formNames = props.formNames || props.model.admin?.form_names || props.model.names;
 const fieldsArray = computed(() => formNames.map((name) => props.model.fields[name]));
@@ -49,7 +51,7 @@ resetErrors();
 for (const field of fieldsArray.value) {
   formsItemRefs[field.name] = ref(null);
   rules[field.name] = {
-    rules: getFieldRules(field)
+    rules: getFieldRules(field),
   };
 }
 
@@ -85,15 +87,16 @@ const submit = async () => {
   try {
     const response = await Http.post(props.actionUrl, {
       ...values,
-      ...formdata
+      ...formdata,
     });
-    const realData = response.data.type == "uni_error" ? response.data.data : response.data;
+    const realData =
+      response.data.type == "uni_error" ? response.data.data : response.data;
     const successStuff = async () => {
       emit("successPost", realData);
       if (props.successUrl) {
         await utils.gotoPage({
           url: props.successUrl,
-          redirect: props.successUseRedirect
+          redirect: props.successUseRedirect,
         });
         if (props.successMessage) {
           await uni.showToast({ title: props.successMessage });
@@ -107,7 +110,7 @@ const submit = async () => {
         if (props.showModal && props.errShowType !== "modal") {
           uni.showModal({
             title: `“${realData.label}”:${realData.message}`,
-            showCancel: false
+            showCancel: false,
           });
         }
       } else if (dataType == "field_error_batch") {
@@ -116,7 +119,7 @@ const submit = async () => {
           uni.showModal({
             title: `“${realData.label}”第${realData.index}行错误`,
             content: realData.message,
-            showCancel: false
+            showCancel: false,
           });
         }
       } else if (dataType == "model_errors") {
@@ -127,7 +130,7 @@ const submit = async () => {
         uni.showModal({
           title: `错误`,
           content: messages,
-          showCancel: false
+          showCancel: false,
         });
       } else {
         await successStuff();
@@ -136,7 +139,7 @@ const submit = async () => {
       uni.showModal({
         title: "发生错误",
         content: realData,
-        showCancel: false
+        showCancel: false,
       });
     } else {
       await successStuff();
@@ -146,7 +149,7 @@ const submit = async () => {
     uni.showModal({
       title: "错误",
       content: error.errMsg || error.message,
-      showCancel: false
+      showCancel: false,
     });
   } finally {
     submiting.value = false;
@@ -225,7 +228,9 @@ const submit = async () => {
         :label="field.label"
         :required="field.required"
         :name="field.name"
-        :error-message="field.type == 'array' ? errors[field.name].join('') : errors[field.name]"
+        :error-message="
+          field.type == 'array' ? errors[field.name].join('') : errors[field.name]
+        "
       >
         <modelform-uni-widget
           :modelValue="values[field.name]"
