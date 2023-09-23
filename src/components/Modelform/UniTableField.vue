@@ -206,16 +206,13 @@ const tagColorArray = ["geekblue", "orange", "green", "cyan", "red", "blue", "pu
   </uni-popup>
   <uni-popup
     ref="deleteConfirmRef"
-    :is-mask-click="true"
-    type="bottom"
-    background-color="#fff"
+    type="dialog"
   >
     <uni-popup-dialog
-      style="width: 100%"
       mode="base"
       :title="`确定删除第${deleteIndex + 1}条吗?`"
       confirmText="删除"
-      :duration="2000"
+      :duration="1000"
       :before-close="true"
       @close="deleteConfirmRef.close()"
       @confirm="onDeleteConfirm"
