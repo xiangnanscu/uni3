@@ -54,7 +54,7 @@ const clearBackendErrors = () => {
 };
 onBeforeMount(async () => {
   const { data } = await Http.get(`/{*table_name*}/json`);
-  {*component_name*} = await Model.createModelAsync(data);
+  {*component_name*} = await Model.create_model_async(data);
   modelLoaded.value = true;
   for (const name of {*component_name*}.field_names) {
     const field = {*component_name*}.fields[name];

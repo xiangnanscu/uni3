@@ -20,7 +20,7 @@ const successPost = async (data) => {
 const threadModel = ref(null);
 const ready = ref(false);
 onLoad(async () => {
-  threadModel.value = await Model.createModelAsync({
+  threadModel.value = await Model.create_model_async({
     field_names: ["type", "title", "content", "pics"],
     fields: {
       type: {

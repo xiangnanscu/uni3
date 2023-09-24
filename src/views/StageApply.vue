@@ -34,7 +34,7 @@ onLoad(async () => {
     label: "驿站名称",
     choices: [{ label: query.stage_name, value: query.stage_id }]
   };
-  threadModel.value = await Model.createModelAsync(data);
+  threadModel.value = await Model.create_model_async(data);
   ThreadAddData.value.stage = query.stage_id;
   ready.value = true;
 });

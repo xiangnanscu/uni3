@@ -28,7 +28,7 @@ const adminModel = shallowRef(null);
 
 const setModel = async () => {
   const { data } = await Http.get(`/{*table_name*}/json`);
-  const model = await Model.createModelAsync(data);
+  const model = await Model.create_model_async(data);
   adminModel.value = model;
 };
 onMounted(async () => {
