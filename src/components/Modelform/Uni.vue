@@ -17,7 +17,7 @@ const props = defineProps({
   errShowType: { type: String, default: "undertext" },
   showModal: { type: Boolean, default: false },
   labelPosition: { type: String, default: "left" }, // top
-  labelWidth: { type: [String, Number], default: "7em" },
+  labelWidth: { type: [String, Number], default: "8em" },
   labelAlign: { type: String, default: "right" }, //center, right
   trigger: { type: String, default: "blur" },
 });

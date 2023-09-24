@@ -9,7 +9,7 @@
       :model="regeditModel"
       :values="postData"
       :sync-values="true"
-      label-width="6em"
+      label-width="8em"
       @success-post="successPost"
       :action-url="actionUrl"
     ></modelform-uni>
