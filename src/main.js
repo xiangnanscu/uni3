@@ -4,7 +4,12 @@ import App from "./App.vue";
 import { createPinia } from "pinia";
 import uniSetup from "./uniSetup";
 import { isLogin } from "@/lib/utils";
+import { Model } from "@/lib/model/model.mjs";
+import { basefield } from "@/lib/model/field.mjs";
+import Http from "@/globals/Http.js";
 
+Model.Http = Http;
+basefield.Http = Http;
 const pinia = createPinia();
 const LOGIN_HINT = "login required";
 const loginPage = process.env.UNI_LOGIN_PAGE;
@@ -22,7 +27,7 @@ export function createApp() {
       user() {
         const { session } = useSession();
         return session.user;
-      }
+      },
     },
     methods: {
       checkLogin() {
@@ -37,8 +42,8 @@ export function createApp() {
           url = `https:${url.slice(5)}`;
         }
         uni.previewImage({ urls: [url], current: 0 });
-      }
-    }
+      },
+    },
   });
   setTimeout(() => {
     app.config.errorHandler = (err, instance, info) => {
@@ -47,19 +52,19 @@ export function createApp() {
         uni.showModal({
           title: `错误`,
           content: err,
-          showCancel: false
+          showCancel: false,
         });
       } else if (err.message == LOGIN_HINT) {
         utils.gotoPage({
           url: loginPage,
           query: { redirect: utils.getFullPath() },
-          redirect: true
+          redirect: true,
         });
       } else if (err.type == "uni_error") {
         uni.showModal({
           title: `错误`,
           content: err.message,
-          showCancel: false
+          showCancel: false,
         });
       } else {
         console.error(err);
@@ -67,6 +72,6 @@ export function createApp() {
     };
   });
   return {
-    app
+    app,
   };
 }
