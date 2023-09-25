@@ -9,7 +9,6 @@
       :model="profileModel"
       :values="postData"
       :sync-values="true"
-      label-width="6em"
       @success-post="successPost"
       :action-url="actionUrl"
     ></modelform-uni>
@@ -20,7 +19,7 @@
 // onShareAppMessage
 useWxShare({
   title: "智慧校园教师登记",
-  desc: ""
+  desc: "",
 });
 const { session } = useSession();
 const user = session.user;
@@ -31,7 +30,7 @@ const postData = ref({
   sfzh: "",
   avatar: "",
   class: "",
-  grade: ""
+  grade: "",
 });
 const loaded = ref(false);
 const updateId = ref();
@@ -51,14 +50,14 @@ onLoad(async () => {
   loaded.value = true;
 });
 const actionUrl = computed(() =>
-  updateId.value ? `/teacher/update/${updateId.value}` : `/teacher/create`
+  updateId.value ? `/teacher/update/${updateId.value}` : `/teacher/create`,
 );
 const successPost = async (user) => {
   // const newUser = { ...postData.value, ...user };
   // await loginUser(newUser);
   utils.gotoPage({
     name: "SuccessPage",
-    query: { title: "提交成功,感谢参与" }
+    query: { title: "提交成功,感谢参与" },
   });
 };
 </script>

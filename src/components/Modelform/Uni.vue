@@ -17,9 +17,19 @@ const props = defineProps({
   errShowType: { type: String, default: "undertext" },
   showModal: { type: Boolean, default: false },
   labelPosition: { type: String, default: "left" }, // top
-  labelWidth: { type: [String, Number], default: "8em" },
+  labelWidth: { type: [String, Number] },
   labelAlign: { type: String, default: "right" }, //center, right
   trigger: { type: String, default: "blur" },
+});
+const smartLabelWidth = computed(() => {
+  if (props.labelWidth) {
+    return props.labelWidth;
+  } else {
+    const maxLabelLength = Object.values(props.model.fields)
+      .map((f) => f.label.length)
+      .reduce((max, current) => Math.max(max, current));
+    return `${maxLabelLength + 2}em`;
+  }
 });
 const deepcopy = (o) => JSON.parse(JSON.stringify(o));
 const values = props.syncValues
@@ -163,7 +173,7 @@ const submit = async () => {
     :err-show-type="props.errShowType"
     :label-align="props.labelAlign"
     :label-position="props.labelPosition"
-    :label-width="props.labelWidth"
+    :label-width="smartLabelWidth"
     @validate="emit('validate', $event)"
   >
     <template v-for="(field, fieldIndex) in fieldsArray" :key="fieldIndex">

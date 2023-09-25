@@ -9,7 +9,6 @@
       :model="regeditModel"
       :values="postData"
       :sync-values="true"
-      label-width="8em"
       @success-post="successPost"
       :action-url="actionUrl"
     ></modelform-uni>
@@ -20,7 +19,7 @@
 // onShareAppMessage
 useWxShare({
   title: "智慧校园亲子登记",
-  desc: ""
+  desc: "",
 });
 const { session } = useSession();
 const user = session.user;
@@ -28,7 +27,7 @@ const loginUser = useLogin();
 const postData = ref({
   openid: user.openid,
   xm: "",
-  sfzh: ""
+  sfzh: "",
   // avatar: ""
   // class: "",
   // grade: ""
@@ -45,7 +44,7 @@ onLoad(async () => {
   // #endif
   const [regeditData] = await usePost(
     `/parent_student_relation/regedit_records`,
-    regeditQuery
+    regeditQuery,
   );
   if (regeditData) {
     Object.assign(postData.value, regeditData);
@@ -56,12 +55,12 @@ onLoad(async () => {
 const actionUrl = computed(() =>
   updateId.value
     ? `/parent_student_relation/regedit_update/${updateId.value}`
-    : `/parent_student_relation/regedit_create`
+    : `/parent_student_relation/regedit_create`,
 );
 const successPost = async (user) => {
   utils.gotoPage({
     name: updateId.value ? "SuccessPage" : "SchoolSuccessPage",
-    query: { title: updateId.value ? "修改成功" : "登记成功" }
+    query: { title: updateId.value ? "修改成功" : "登记成功" },
   });
 };
 </script>
