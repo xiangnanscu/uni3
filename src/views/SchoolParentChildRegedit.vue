@@ -37,6 +37,9 @@ const updateId = ref();
 let regeditModel;
 onLoad(async () => {
   const modelJson = await useGet(`/parent_student_relation/json`);
+  modelJson.fields.children.model.admin = {
+    form_names: ["xm", "sfzh", "avatar", "grade", "class"],
+  };
   regeditModel = Model.create_model(modelJson);
   let regeditQuery = { sfzh: user.username };
   // #ifdef MP-WEIXIN
@@ -59,6 +62,7 @@ const actionUrl = computed(() =>
 );
 const successPost = async (user) => {
   utils.gotoPage({
+    redirect: true, // 为了防止在成功页面点击返回到亲子登记form再提交的行为(此时仍然按create提交,但实际上应为update)
     name: updateId.value ? "SuccessPage" : "SchoolSuccessPage",
     query: { title: updateId.value ? "修改成功" : "登记成功" },
   });
