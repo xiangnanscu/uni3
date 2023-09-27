@@ -18,6 +18,12 @@
 </template>
 
 <script>
+// onShareTimeline
+// onShareAppMessage
+useWxShare({
+  title: "设置密码",
+  desc: "",
+});
 export default {
   data() {
     return {
@@ -28,7 +34,7 @@ export default {
           rules: [
             {
               required: true,
-              errorMessage: "密码不能为空"
+              errorMessage: "密码不能为空",
             },
             {
               validateFunction: function (rule, value, data, callback) {
@@ -36,11 +42,11 @@ export default {
                   callback("密码不能超过50个字符");
                 }
                 return true;
-              }
-            }
-          ]
-        }
-      }
+              },
+            },
+          ],
+        },
+      },
     };
   },
   onReady() {
@@ -50,17 +56,14 @@ export default {
     async fetchData(params) {},
     async submit(ref) {
       await this.$refs[ref].validate();
-      const { data } = await Http.post(
-        `/usr/set_password`,
-        this.PasswordSetData
-      );
+      const { data } = await Http.post(`/usr/set_password`, this.PasswordSetData);
       await utils.tryGotoPage();
       uni.showToast({
         icon: "success",
         title: "修改成功",
-        duration: 2000
+        duration: 2000,
       });
-    }
-  }
+    },
+  },
 };
 </script>

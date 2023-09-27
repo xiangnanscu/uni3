@@ -111,22 +111,6 @@
       >
       </uni-list-item>
       <uni-list-item
-        title="教师登记"
-        link="navigateTo"
-        to="/views/SchoolTeacherRegedit"
-        :show-extra-icon="true"
-        :extra-icon="{ color: '#666', size: '32', type: 'compose' }"
-      >
-      </uni-list-item>
-      <uni-list-item
-        title="亲子登记"
-        link="navigateTo"
-        to="/views/SchoolParentChildRegedit"
-        :show-extra-icon="true"
-        :extra-icon="{ color: '#666', size: '32', type: 'compose' }"
-      >
-      </uni-list-item>
-      <uni-list-item
         title="关于"
         link="navigateTo"
         to="/views/About"
@@ -174,7 +158,7 @@ export default {
       UNI_LOGIN_PAGE: process.env.UNI_LOGIN_PAGE,
       UNI_HOME_PAGE: process.env.UNI_HOME_PAGE,
       title: "Hello",
-      profile: null
+      profile: null,
     };
   },
   onLoad(options) {
@@ -198,7 +182,7 @@ export default {
     },
     intro() {
       return this.isLogin ? this.profile?.intro : "";
-    }
+    },
   },
   methods: {
     logoutToHomePage(event) {
@@ -207,8 +191,8 @@ export default {
     },
     toCertPage(event) {
       console.log("toCertPage:", event);
-    }
-  }
+    },
+  },
 };
 </script>
 

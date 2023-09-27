@@ -16,18 +16,19 @@
       :text="noticeText"
     />
     <uni-grid :column="4" :show-border="false" :square="false" @change="change">
-      <uni-grid-item
-        v-for="(item, index) in mainKist"
-        :index="index"
-        :key="index"
-      >
+      <uni-grid-item v-for="(item, index) in mainKist" :index="index" :key="index">
         <view class="grid-item-box" style="text-align: center">
           <navigator
             :url="item.pagePath"
             hover-class="navigator-hover"
             open-type="navigate"
           >
-            <image class="banner-image" :src="item.url" mode="widthFix" />
+            <image
+              class="banner-image"
+              :src="item.url"
+              mode="widthFix"
+              style="width: 64px; height: 64px"
+            />
             <view>
               <text class="logo-text">{{ item.text }}</text>
             </view>
@@ -222,7 +223,7 @@ useWxShare({ title: "江安youth home!" });
 // },
 export default {
   watch: {
-    imageList(res) {}
+    imageList(res) {},
   },
   data() {
     return {
@@ -244,29 +245,29 @@ export default {
           text: "志愿者",
           badge: "",
           pagePath: "/views/VolplanList",
-          type: "error"
+          type: "error",
         },
         {
           url: "../../static/img/chat.png",
           text: "论坛",
           pagePath: "/views/ThreadListAll",
           badge: "",
-          type: "error"
+          type: "error",
         },
         {
-          url: "../../static/img/files3.png",
-          text: "资讯",
-          pagePath: "/views/NewsList",
+          url: "../../static/img/school.png",
+          text: "智慧校园",
+          pagePath: "/views/SchoolHome",
           badge: "",
-          type: "error"
+          type: "error",
         },
         {
           url: "../../static/gqt.png",
           text: "团建E家",
           pagePath: "/views/EHome",
           badge: "",
-          type: "error"
-        }
+          type: "error",
+        },
         // {
         //   url: "../../static/img/fee8.png",
         //   text: "缴费",
@@ -281,7 +282,7 @@ export default {
       avatarUrl: "",
       nickname: "",
       phone: "",
-      authSetting: ""
+      authSetting: "",
     };
   },
   async onLoad() {
@@ -302,12 +303,12 @@ export default {
   computed: {
     panelData4() {
       return { head: `江安“新青年”`, list: [] };
-    }
+    },
   },
   async onShow() {
     await useBadgeNumber();
     const { noticeText, goddess, volplan, ads, polls, news } = await usePost(
-      `/home_data`
+      `/home_data`,
     );
     this.noticeText = noticeText;
     this.goddess = goddess[0];
@@ -318,7 +319,7 @@ export default {
       id: e.id,
       title: e.title,
       src: e.pics[0],
-      desc1: e.content.slice(0, 50)
+      desc1: e.content.slice(0, 50),
     }));
   },
   methods: {
@@ -339,7 +340,7 @@ export default {
               // 新的版本已经下载好，调用 applyUpdate 应用新版本并重启
               updateManager.applyUpdate();
             }
-          }
+          },
         });
       });
 
@@ -357,34 +358,34 @@ export default {
     async onVolplanClick() {
       utils.gotoPage({
         url: "/views/VolplanDetail",
-        query: { id: this.volplan.id }
+        query: { id: this.volplan.id },
       });
     },
     async onAdClick(e) {
       utils.gotoPage({
         url: "/views/AdDetail",
-        query: { id: e.id }
+        query: { id: e.id },
       });
     },
     async onGoddessClick() {
       utils.gotoPage({
         url: "/views/GoddessDetail",
-        query: { id: this.goddess.id }
+        query: { id: this.goddess.id },
       });
     },
     async onGoddessListClick() {
       utils.gotoPage({
-        url: "/views/GoddessList"
+        url: "/views/GoddessList",
       });
     },
     async onVolplanListClick() {
       utils.gotoPage({
-        url: "/views/VolplanList"
+        url: "/views/VolplanList",
       });
     },
     async onAdListClick() {
       utils.gotoPage({
-        url: "/views/AdList"
+        url: "/views/AdList",
       });
     },
     async getNoticeBar() {
@@ -393,7 +394,7 @@ export default {
     },
     async getAds() {
       const data = await usePost("/ad/records", {
-        hide: false
+        hide: false,
       });
       return data;
     },
@@ -411,7 +412,7 @@ export default {
         id: e.id,
         title: e.title,
         src: e.pics[0],
-        desc1: e.content.slice(0, 50)
+        desc1: e.content.slice(0, 50),
       }));
     },
     change(event) {
@@ -430,7 +431,7 @@ export default {
           //   "scope.userInfo": true,
           //   "scope.userLocation": true
           // }
-        }
+        },
       });
     },
     // https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/getPhoneNumber.html
@@ -449,8 +450,8 @@ export default {
     getAvatar(e) {
       console.log("头像：", e);
       this.avatarUrl = e.detail?.avatarUrl;
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -106,7 +106,9 @@
     {
       "path": "views/SchoolSuccessPage",
       "style": { "navigationBarTitleText": "" }
-    }
+    },
+    { "path": "views/SchoolHome", "style": { "navigationBarTitleText": "" } },
+    { "path": "views/SchoolLeave", "style": { "navigationBarTitleText": "" } }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
