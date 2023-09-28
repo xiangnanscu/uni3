@@ -108,7 +108,8 @@
       "style": { "navigationBarTitleText": "" }
     },
     { "path": "views/SchoolHome", "style": { "navigationBarTitleText": "" } },
-    { "path": "views/SchoolLeave", "style": { "navigationBarTitleText": "" } }
+    { "path": "views/SchoolLeave", "style": { "navigationBarTitleText": "" } },
+    { "path": "views/Todo", "style": { "navigationBarTitleText": "" } }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
