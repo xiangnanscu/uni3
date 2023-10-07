@@ -13,10 +13,7 @@
     <!-- #endif -->
     <!-- #ifdef MP-WEIXIN -->
     <div v-if="needCompleteProfile">
-      <uni-notice-bar
-        text="首次登陆，请完善头像和昵称"
-        style="text-align: center"
-      />
+      <uni-notice-bar text="首次登陆，请完善头像和昵称" style="text-align: center" />
       <modelform-uni
         :model="profileModel"
         :values="userData"
@@ -44,8 +41,8 @@ const loginModel = Model.create_model({
   field_names: ["username", "password"],
   fields: {
     username: { label: "用户名", hint: "昵称/手机号/身份证号" },
-    password: { label: "密码", type: "password" }
-  }
+    password: { label: "密码", type: "password" },
+  },
 });
 // #endif
 
@@ -62,10 +59,10 @@ const profileModel = Model.create_model({
       type: "alioss_image",
       required: true,
       size: avatarSize,
-      attrs: { wxAvatar: true }
+      attrs: { wx_avatar: true },
     },
-    nickname: { label: "昵称", required: true, input_type: "nickname" }
-  }
+    nickname: { label: "昵称", required: true, input_type: "nickname" },
+  },
 });
 const needCompleteProfile = ref(false);
 const userData = ref({
@@ -76,7 +73,7 @@ const userData = ref({
   avatar: "",
   permission: "",
   phone: "",
-  openid: ""
+  openid: "",
 });
 
 async function getWxUser() {
@@ -85,7 +82,7 @@ async function getWxUser() {
     throw new Error(errMsg);
   }
   const user = await usePost("/wx_login", {
-    code
+    code,
   });
   return user;
 }

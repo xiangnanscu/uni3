@@ -113,7 +113,7 @@ let wxPhoneDisabled = field.disabled === undefined ? false : field.disabled;
 // #ifdef H5
 wxPhoneDisabled = false;
 field.attrs.wxPhone = false;
-field.attrs.wxAvatar = false;
+field.attrs.wx_avatar = false;
 // #endif
 const placeholder = field.attrs?.placeholder || field.hint;
 const fieldChoices = field.choices?.map((e) => ({
@@ -276,7 +276,7 @@ const onFuiSelectConfirm = ({ index, options }) => {
   </picker>
   <template v-else-if="fieldType.startsWith('alioss')">
     <wx-avatar
-      v-if="field.attrs.wxAvatar"
+      v-if="field.attrs.wx_avatar"
       @update:modelValue="sendValue"
       @update:error="emit('update:error', $event)"
       :modelValue="{ url: props.modelValue, errMsg: props.error }"

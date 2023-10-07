@@ -3,6 +3,9 @@
     <x-alert title="红云智慧校园"> </x-alert>
     <uni-card title="温馨提示">
       <p>此处填写家长和子女的信息，子女头像用于刷脸出入校园</p>
+      <p style="color: red; font-weight: bold">
+        子女头像请务必上传标准清晰头像，随意上传可能导致您的孩子进不了校园
+      </p>
     </uni-card>
     <modelform-uni
       v-if="loaded"

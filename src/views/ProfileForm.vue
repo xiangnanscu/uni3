@@ -13,9 +13,9 @@
 <script setup>
 const { session } = useSession();
 const loginUser = useLogin();
-let wxAvatar = true;
+let wx_avatar = true;
 // #ifdef H5
-wxAvatar = false;
+wx_avatar = false;
 // #endif
 const userData = ref({ id: session.user.id });
 const profileModel = Model.create_model({
@@ -26,11 +26,11 @@ const profileModel = Model.create_model({
       type: "alioss_image",
       required: true,
       size: process.env.ALIOSS_AVATAR_SIZE || "2M",
-      attrs: { wxAvatar }
+      attrs: { wx_avatar },
     },
     nickname: { label: "昵称", required: true, input_type: "nickname" },
-    intro: { label: "简介", input_type: "textarea" }
-  }
+    intro: { label: "简介", input_type: "textarea" },
+  },
 });
 
 const successPostWX = async (user) => {
