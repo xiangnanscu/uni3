@@ -113,6 +113,14 @@
     {
       "path": "views/SchoolStudentStat",
       "style": { "navigationBarTitleText": "" }
+    },
+    {
+      "path": "views/SchoolStudentList",
+      "style": { "navigationBarTitleText": "" }
+    },
+    {
+      "path": "views/SchoolStudentForm",
+      "style": { "navigationBarTitleText": "" }
     }
   ],
   "globalStyle": {

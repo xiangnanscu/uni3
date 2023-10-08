@@ -57,7 +57,7 @@ const mainKist = [
     type: "error",
   },
   {
-    url: "../static/img/parent-child.png",
+    url: "../static/img/stat.png",
     text: "登记情况",
     badge: "",
     pagePath: "/views/SchoolStudentStat",
@@ -65,8 +65,9 @@ const mainKist = [
     permission: 1,
   },
 ];
+
 const permissionMenu = computed(() =>
-  mainKist.filter((e) => !e.permission || e.permission >= user.permission),
+  mainKist.filter((e) => !e.permission || user.permission >= e.permission),
 );
 </script>
 
