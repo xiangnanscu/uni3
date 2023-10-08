@@ -109,7 +109,11 @@
     },
     { "path": "views/SchoolHome", "style": { "navigationBarTitleText": "" } },
     { "path": "views/SchoolLeave", "style": { "navigationBarTitleText": "" } },
-    { "path": "views/Todo", "style": { "navigationBarTitleText": "" } }
+    { "path": "views/Todo", "style": { "navigationBarTitleText": "" } },
+    {
+      "path": "views/SchoolStudentStat",
+      "style": { "navigationBarTitleText": "" }
+    }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
