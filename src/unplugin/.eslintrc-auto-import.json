@@ -310,6 +310,9 @@
     "WritableComputedRef": true,
     "toValue": true,
     "utils": true,
-    "validator": true
+    "validator": true,
+    "ExtractDefaultPropTypes": true,
+    "ExtractPropTypes": true,
+    "ExtractPublicPropTypes": true
   }
 }

@@ -1,10 +1,10 @@
 <template>
   <page-layout>
     <x-title>学生信息编辑</x-title>
-    <div v-if="student && DetailModel">
+    <div v-if="ready">
       <x-title>{{ `${student.grade}年级${student.class}班${student.xm}` }}</x-title>
       <modelform-uni
-        :model="DetailModel"
+        :model="FormModel"
         :values="student"
         :sync-values="false"
         :success-url="query.redirect"
@@ -17,15 +17,19 @@
 
 <script setup>
 const student = ref();
-const DetailModel = ref();
+const FormModel = ref();
 const query = useQuery();
+const ready = ref();
 const actionUrl = computed(
   () =>
     `/student/update/${query.id}?sync_to_hik=${process.env.NODE_ENV === "production"}`,
 );
 onLoad(async () => {
-  DetailModel.value = Model.create_model(await useGet(`/student/json`));
+  const modelJson = await useGet(`/student/json`);
+  FormModel.value = Model.create_model(modelJson);
   student.value = await useGet(`/student/detail/${query.id}`);
+  ready.value = true;
+  console.log({ actionUrl });
 });
 </script>
 

@@ -1,4 +1,6 @@
 {
+  "editor.quickSuggestionsDelay": 200,
+  "editor.suggest.snippetsPreventQuickSuggestions": true,
   "files.associations": {
     "*.json": "jsonc"
   },
