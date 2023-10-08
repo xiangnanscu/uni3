@@ -31,10 +31,7 @@ const toStudentForm = async (std) => {
   });
 };
 onLoad(async () => {
-  students.value = await usePost(
-    `/student/records?select=grade&select=class&select=xm&select=avatar`,
-    query,
-  );
+  students.value = await usePost(`/student/records?select=xm&select=avatar`, query);
 });
 </script>
 
