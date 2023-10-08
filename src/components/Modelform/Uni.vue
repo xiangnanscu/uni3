@@ -108,9 +108,9 @@ const submit = async () => {
           url: props.successUrl,
           redirect: props.successUseRedirect,
         });
-        if (props.successMessage) {
-          await uni.showToast({ title: props.successMessage });
-        }
+      }
+      if (props.successMessage) {
+        await uni.showToast({ title: props.successMessage });
       }
     };
     if (typeof realData == "object") {

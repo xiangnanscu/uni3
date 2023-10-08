@@ -85,7 +85,7 @@ const onSuccessUpdate = (data) => {
   currentRow.value = null;
 };
 const onClickEdit = (index) => {
-  currentRow.value = props.modelValue.find((e, i) => i === index);
+  currentRow.value = props.modelValue[index];
   openUpdateForm();
 };
 const tagColorArray = ["geekblue", "orange", "green", "cyan", "red", "blue", "purple"];
@@ -204,10 +204,7 @@ const tagColorArray = ["geekblue", "orange", "green", "cyan", "red", "blue", "pu
       ></modelform-uni>
     </div>
   </uni-popup>
-  <uni-popup
-    ref="deleteConfirmRef"
-    type="dialog"
-  >
+  <uni-popup ref="deleteConfirmRef" type="dialog">
     <uni-popup-dialog
       mode="base"
       :title="`确定删除第${deleteIndex + 1}条吗?`"

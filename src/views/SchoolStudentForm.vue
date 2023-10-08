@@ -8,6 +8,7 @@
         :values="student"
         :sync-values="false"
         :success-url="query.redirect"
+        :success-use-redirect="true"
         :action-url="actionUrl"
       ></modelform-uni>
     </div>

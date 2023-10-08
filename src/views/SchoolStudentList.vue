@@ -26,6 +26,7 @@ const query = useQuery();
 const page = usePage();
 const toStudentForm = async (std) => {
   await utils.gotoPage({
+    redirect: true,
     url: `/views/SchoolStudentForm`,
     query: { id: std.id, redirect: page.value.$page.fullPath },
   });
