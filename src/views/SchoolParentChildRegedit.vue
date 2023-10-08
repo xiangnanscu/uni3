@@ -13,11 +13,6 @@
     </uni-card>
     <template v-if="parent.id">
       <uni-card title="子女" :border="false" :is-shadow="false">
-        <x-button styleString="display:block;" @click="openCreateForm">
-          添加子女
-        </x-button>
-      </uni-card>
-      <template v-if="students.length">
         <uni-group v-for="(s, sindex) in students" :key="s.id" mode="card">
           <div class="x-row">
             <div class="x-row">
@@ -42,7 +37,10 @@
             </div>
           </div>
         </uni-group>
-      </template>
+        <x-button styleString="display:block;" @click="openCreateForm">
+          添加子女
+        </x-button>
+      </uni-card>
     </template>
     <uni-popup
       ref="createFormRef"
