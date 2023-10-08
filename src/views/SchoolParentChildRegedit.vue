@@ -1,7 +1,7 @@
 <template>
   <page-layout v-if="loaded">
     <x-alert title="红云智慧校园"> </x-alert>
-    <uni-card title="家长" :border="false" :is-shadow="false">
+    <uni-card title="家长" :border="false" :is-shadow="false" :is-full="true">
       <modelform-uni
         :model="ParentModel"
         :values="parent"
@@ -12,7 +12,7 @@
       ></modelform-uni>
     </uni-card>
     <template v-if="parent.id">
-      <uni-card title="子女" :border="false" :is-shadow="false">
+      <uni-card title="子女" :border="false" :is-shadow="false" :is-full="true">
         <uni-group v-for="(s, sindex) in students" :key="s.id" mode="card">
           <div class="x-row">
             <div class="x-row">
