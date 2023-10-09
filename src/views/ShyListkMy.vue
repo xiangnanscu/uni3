@@ -22,6 +22,7 @@
 
 <script setup>
 const query = useQuery();
+const user = useUser();
 const current = computed(() => Number(query.current || 0));
 const tabs = ["待参加", "进行中", "已结束"];
 const type = computed(() => tabs[current.value]);
@@ -30,7 +31,7 @@ const records = ref([]);
 
 const setRecordsByType = async (newType) => {
   const cond = {
-    where: {},
+    where: { chry__sfzh: user.username },
     select: ["id", "ctime", "title", "start_time", "end_time"],
   };
   const now = utils.getLocalTime();
@@ -42,7 +43,7 @@ const setRecordsByType = async (newType) => {
   } else {
     cond.where.end_time__lt = now;
   }
-  const data = await usePost("/shyk/query_my", cond);
+  const data = await usePost("/shyk/query", cond);
   records.value = data;
 };
 const changeActionType = async ({ index, name }) => {

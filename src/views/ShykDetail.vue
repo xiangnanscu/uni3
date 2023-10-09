@@ -113,7 +113,7 @@ export default {
           usr_id: this.user.id,
           shyk_id: this.record.id,
         });
-        uni.showToast({ title: "成功登记" });
+        uni.showToast({ title: "成功签到" });
         this.record.joined = true;
       }
     },
