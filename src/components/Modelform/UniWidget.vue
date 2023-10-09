@@ -294,6 +294,7 @@ const onFuiSelectConfirm = ({ index, options }) => {
       :title="' '"
       mode="grid"
       :disable-preview="true"
+      :image-styles="field.attrs.image_styles"
       return-type="array"
       @select="filePickerSelectHanlder"
       @success="filePickerSuccess"
@@ -301,6 +302,9 @@ const onFuiSelectConfirm = ({ index, options }) => {
       @fail="filePickerFail"
       @delete="filePickerDelete"
     />
+    <div v-if="field.hint" class="field-hint" :style="field.attrs.hint_styles">
+      {{ field.hint }}
+    </div>
   </template>
   <template v-else-if="field.attrs.wxPhone">
     <uni-easyinput
@@ -333,4 +337,8 @@ const onFuiSelectConfirm = ({ index, options }) => {
     :type="easyType || 'text'"
   />
 </template>
-<style scoped></style>
+<style scoped>
+.field-hint {
+  padding: 4px 0;
+}
+</style>
