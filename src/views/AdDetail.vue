@@ -5,16 +5,20 @@
       <x-subtitle style="padding: 0.5em 0.5em">
         <div>{{ utils.fromNow(record.ctime) }}</div>
       </x-subtitle>
-      <div
-        v-if="record.pics[0]"
-        style="width: 100%; margin: auto; margin-bottom: 1em"
-      >
+      <div v-if="record.pics[0]" style="width: 100%; margin: auto; margin-bottom: 1em">
         <image
           :src="record.pics[0]"
           @click="previewImage(record.pics[0])"
           mode="widthFix"
           style="width: 100%; margin: auto"
         />
+        <video
+          v-if="record.video"
+          :src="'https:' + record.video"
+          :show-mute-btn="true"
+          controls
+          style="width: 100%"
+        ></video>
       </div>
       <tinymce-text :html="record.content"></tinymce-text>
       <template #actions> </template>
@@ -33,7 +37,7 @@ export default {
   mixins: [MixinShare],
   data() {
     return {
-      record: null
+      record: null,
     };
   },
   async onLoad(query) {
@@ -44,8 +48,8 @@ export default {
     async fetchData(query) {
       const { data: ad } = await Http.get(`/ad/detail/${query.id}`);
       this.record = ad;
-    }
-  }
+    },
+  },
 };
 </script>
 

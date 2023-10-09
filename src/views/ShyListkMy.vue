@@ -11,7 +11,7 @@
         v-for="e in records"
         :key="e.id"
         :title="e.title"
-        :to="`/views/ShykDetail?id=${1}`"
+        :to="`/views/ShykDetail?id=${e.id}`"
         :rightText="utils.fromNow(e.ctime)"
         link="navigateTo"
       >
@@ -31,7 +31,7 @@ const records = ref([]);
 const setRecordsByType = async (newType) => {
   const cond = {
     where: {},
-    select: ["id", "ctime", "title", "start_time", "end_time"]
+    select: ["id", "ctime", "title", "start_time", "end_time"],
   };
   const now = utils.getLocalTime();
   if (newType == "待参加") {
@@ -42,7 +42,7 @@ const setRecordsByType = async (newType) => {
   } else {
     cond.where.end_time__lt = now;
   }
-  const data = await usePost("/shyk/query", cond);
+  const data = await usePost("/shyk/query_my", cond);
   records.value = data;
 };
 const changeActionType = async ({ index, name }) => {

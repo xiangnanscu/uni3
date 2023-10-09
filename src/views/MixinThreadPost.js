@@ -12,24 +12,23 @@ export default {
       comment: null,
       target_model: "",
       scrollId: null,
-      posts: []
+      posts: [],
     };
   },
   async onLoad(query) {
+    console.log("mixin thread post onload");
     this.query = query;
     await this.fetchData(query);
   },
   computed: {
     threadTitleDigest() {
       return utils.textDigest(this.record.title, wxNoticeDigestNumber);
-    }
+    },
   },
   methods: {
     async fetchData(query) {
       this.record = await useGet(`/${this.target_model}/detail/${query.id}`);
-      this.posts = await useGet(
-        `/post/target/${this.target_model}/${this.record.id}`
-      );
+      this.posts = await useGet(`/post/target/${this.target_model}/${this.record.id}`);
     },
     async deletePost({ id }) {
       const { affected_rows } = await usePost(`/post/delete_self/${id}`);
@@ -42,7 +41,7 @@ export default {
       const newPost = await usePost(`/post/create`, {
         content,
         target_model: this.target_model,
-        target_id: this.record.id
+        target_id: this.record.id,
       });
       if (this.record.creator && this.record.creator !== this.user.id) {
         newPost.creator__nickname = this.user.nickname;
@@ -51,14 +50,14 @@ export default {
         await usePost(`/system_message/create`, {
           type: "reply_thread",
           target_usr: this.record.creator,
-          content: newPost
+          content: newPost,
         });
         await usePost(`/wx/broadcast?type=thread`, {
           page: this.notify_click_page,
           openid: this.record.creator__openid,
           title: this.threadTitleDigest,
           content: utils.textDigest(newPost.content, wxNoticeDigestNumber),
-          nickname: this.user.nickname
+          nickname: this.user.nickname,
         });
       }
       this.posts.push({
@@ -67,7 +66,7 @@ export default {
         creator: this.user.id,
         creator__nickname: this.user.nickname,
         creator__avatar: this.user.avatar,
-        ctime: newPost.ctime
+        ctime: newPost.ctime,
       });
       this.resetChatBar();
       this.scrollTo();
@@ -78,7 +77,7 @@ export default {
       const newComment = await usePost("/post_comment/create", {
         content,
         post_id: this.post.id,
-        post_comment_id: this.comment?.id
+        post_comment_id: this.comment?.id,
       });
       newComment.creator__nickname = this.user.nickname;
       newComment.creator__avatar = this.user.avatar;
@@ -93,7 +92,7 @@ export default {
         alreadyNoticed[this.comment.creator] = true;
         const targetCommentDigest = utils.textDigest(
           this.comment.content,
-          wxNoticeDigestNumber
+          wxNoticeDigestNumber,
         );
         notices.push({
           type: "reply_post_comment",
@@ -102,27 +101,21 @@ export default {
             ...newComment,
             target_model: "comment",
             target_id: this.comment.id,
-            target_digest: targetCommentDigest
-          }
+            target_digest: targetCommentDigest,
+          },
         });
         wxNotices.push({
           page: this.notify_click_page,
           openid: this.comment.creator__openid,
           title: targetCommentDigest,
           content: commentDigest,
-          nickname: this.user.nickname
+          nickname: this.user.nickname,
         });
       }
       // 通知楼主
-      if (
-        !alreadyNoticed[this.post.creator] &&
-        this.post.creator !== this.user.id
-      ) {
+      if (!alreadyNoticed[this.post.creator] && this.post.creator !== this.user.id) {
         alreadyNoticed[this.post.creator] = true;
-        const postDigest = utils.textDigest(
-          this.post.content,
-          wxNoticeDigestNumber
-        );
+        const postDigest = utils.textDigest(this.post.content, wxNoticeDigestNumber);
         notices.push({
           type: "reply_post",
           target_usr: this.post.creator,
@@ -130,15 +123,15 @@ export default {
             ...newComment,
             target_model: "post",
             target_id: this.post.id,
-            target_digest: postDigest
-          }
+            target_digest: postDigest,
+          },
         });
         wxNotices.push({
           page: this.notify_click_page,
           openid: this.post.creator__openid,
           title: postDigest,
           content: commentDigest,
-          nickname: this.user.nickname
+          nickname: this.user.nickname,
         });
       }
       // 通知帖主
@@ -155,15 +148,15 @@ export default {
             ...newComment,
             target_model: this.target_model,
             target_id: this.record.id,
-            target_digest: this.threadTitleDigest
-          }
+            target_digest: this.threadTitleDigest,
+          },
         });
         wxNotices.push({
           page: this.notify_click_page,
           openid: this.record.creator__openid,
           title: this.threadTitleDigest,
           content: commentDigest,
-          nickname: this.user.nickname
+          nickname: this.user.nickname,
         });
       }
       if (notices.length) {
@@ -181,7 +174,7 @@ export default {
         creator: this.user.id,
         creator__nickname: this.user.nickname,
         post_comment_id__creator__nickname: this.comment?.creator__nickname,
-        ctime: newComment.ctime
+        ctime: newComment.ctime,
       });
       this.resetChatBar();
       uni.showToast({ icon: "none", title: "评论成功" });
@@ -232,12 +225,12 @@ export default {
               console.log("res?.height", res?.height);
               uni.pageScrollTo({
                 duration: 200,
-                scrollTop: Infinity
+                scrollTop: Infinity,
               });
             })
             .exec();
         }, 100);
       });
-    }
-  }
+    },
+  },
 };
