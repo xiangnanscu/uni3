@@ -58,7 +58,15 @@ const mainKist = [
   },
   {
     url: "../static/img/stat.png",
-    text: "登记情况",
+    text: "学生管理",
+    badge: "",
+    pagePath: "/views/SchoolStudentStat",
+    type: "error",
+    permission: 1,
+  },
+  {
+    url: "../static/img/stat.png",
+    text: "管理员申请",
     badge: "",
     pagePath: "/views/SchoolStudentStat",
     type: "error",
