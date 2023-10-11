@@ -7,9 +7,7 @@ const viteEnv = import.meta.env;
 
 let baseURL;
 if (process.env.NODE_ENV == "production") {
-  baseURL = `${viteEnv.VITE_HTTPS == "on" ? "https" : "http"}://${
-    viteEnv.VITE_HOST
-  }`;
+  baseURL = `${viteEnv.VITE_HTTPS == "on" ? "https" : "http"}://${viteEnv.VITE_HOST}`;
 } else {
   // #ifdef H5
   baseURL = `http://localhost:${viteEnv.VITE_APP_PORT}${viteEnv.VITE_PROXY_PREFIX}`;
@@ -73,12 +71,13 @@ const setupRequest = () => {
           }
         }
       }
-    }
+    },
   });
 };
 
 const navHandlerList = ["navigateTo", "redirectTo", "switchTab"];
 const loginPage = process.env.UNI_LOGIN_PAGE;
+const realNameCertPage = "/views/RealNameCert";
 const whiteList = [
   "/",
   process.env.UNI_HOME_PAGE,
@@ -90,7 +89,17 @@ const whiteList = [
   "/views/GoddessDetail",
   // "/views/PollDetail",
   "/views/StageDetail",
-  "/views/VolplanDetail"
+  "/views/VolplanDetail",
+];
+const realNameCertList = [
+  "/views/SchoolTeacherRegedit",
+  "/views/FeeplanList",
+  "/views/ShykDetail",
+  "/views/ForumAdd",
+  "/views/GoddessAdd",
+  "/views/StageDetail",
+  "/views/VolAdd",
+  "/views/VolplanDetail",
 ];
 
 const navStack = [];
@@ -98,7 +107,7 @@ const setupNav = () => {
   navHandlerList.forEach((handler) => {
     uni.addInterceptor(handler, {
       invoke(opts) {
-        // console.log("路由拦截", handler, opts);
+        console.log("路由拦截", handler, opts);
         navStack.push(new Date().getTime());
         const { message, error } = storeToRefs(useStore());
         message.value = "";
@@ -108,13 +117,23 @@ const setupNav = () => {
           // console.log("路由拦截-白名单", url, JSON.stringify(opts));
           return opts;
         }
-        if (isLogin()) {
+        const user = useUser();
+        // 首先检测是否需要实名认证
+        if (!user.username && realNameCertList.includes(url)) {
+          utils.gotoPage({
+            url: realNameCertPage,
+            query: { redirect: opts.url, message: "此操作需要先实名认证" },
+            redirect: false,
+          });
+          return false;
+        }
+        if (user.id) {
           return opts;
         }
         utils.gotoPage({
           url: loginPage,
           query: { redirect: opts.url },
-          redirect: false
+          redirect: false,
         });
         return false;
       },
@@ -125,7 +144,7 @@ const setupNav = () => {
       fail(err) {
         // 失败回调拦截
         console.error("路由拦截失败", err);
-      }
+      },
     });
   });
 };

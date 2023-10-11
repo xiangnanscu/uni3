@@ -20,11 +20,7 @@
     }}</x-button>
     <div style="height: 4em"></div>
     <x-bottom>
-      <generic-actions
-        :target="record"
-        target-model="volplan"
-        style="width: 100%"
-      />
+      <generic-actions :target="record" target-model="volplan" style="width: 100%" />
     </x-bottom>
   </page-layout>
 </template>
@@ -38,7 +34,7 @@ export default {
   data() {
     return {
       disableJoinButton: false,
-      record: null
+      record: null,
     };
   },
   async onLoad(query) {
@@ -51,31 +47,31 @@ export default {
         list: [
           {
             label: "召集人",
-            value: this.record.xm
+            value: this.record.xm,
           },
           {
             label: "联系方式",
-            value: this.record.lxdh
+            value: this.record.lxdh,
           },
           {
             label: "召集人数",
-            value: this.record.amount
+            value: this.record.amount,
           },
           {
             label: "报名结束时间",
-            value: this.record.call_endtime?.slice(0, 16)
+            value: this.record.call_endtime?.slice(0, 16),
           },
           {
             label: "志愿活动开始时间",
-            value: this.record.plan_starttime?.slice(0, 16)
+            value: this.record.plan_starttime?.slice(0, 16),
           },
           {
             label: "志愿活动结束时间",
-            value: this.record.plan_endtime?.slice(0, 16)
-          }
-        ]
+            value: this.record.plan_endtime?.slice(0, 16),
+          },
+        ],
       };
-    }
+    },
   },
   methods: {
     async fetchData(query) {
@@ -84,39 +80,19 @@ export default {
       if (this.user.id) {
         const [joinLog] = await usePost(`/volreg/records`, {
           usr_id: this.user.id,
-          volplan_id: volplan.id
+          volplan_id: volplan.id,
         });
         this.record.joined = joinLog ? joinLog.enabled : false;
       }
     },
     async joinVol() {
-      if (!this.user.id) {
-        await utils.gotoPage({
-          url: "/views/Login",
-          query: {
-            redirect: `/views/VolplanDetail?id=${this.query.id}`,
-            message: "参加志愿活动需要先登录"
-          },
-          redirect: true
-        });
-      } else if (!this.user.username) {
-        await utils.gotoPage({
-          url: "/views/RealNameCert",
-          query: {
-            redirect: `/views/VolplanDetail?id=${this.query.id}`,
-            message: "参加志愿活动需要进行实名认证"
-          },
-          redirect: true
-        });
-      } else {
-        await usePost(`/volreg/get_or_create`, {
-          volplan_id: this.record.id
-        });
-        uni.showToast({ title: "成功登记" });
-        this.record.joined = true;
-      }
-    }
-  }
+      await usePost(`/volreg/get_or_create`, {
+        volplan_id: this.record.id,
+      });
+      uni.showToast({ title: "成功登记" });
+      this.record.joined = true;
+    },
+  },
 };
 </script>
 

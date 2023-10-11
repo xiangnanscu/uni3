@@ -1,10 +1,5 @@
 <template>
-  <fui-tabs
-    :tabs="tabs"
-    center
-    @change="changeActionType"
-    :current="current"
-  ></fui-tabs>
+  <fui-tabs :tabs="tabs" center @change="changeActionType" :current="current"></fui-tabs>
   <uni-card>
     <modelform-uni
       v-if="current == 1"
@@ -18,8 +13,8 @@
         :previewData="{
           list: [
             { label: '支部名称', value: branch_name },
-            { label: '姓名', value: member.xm }
-          ]
+            { label: '姓名', value: member.xm },
+          ],
         }"
       ></fui-preview>
       <x-alert
@@ -32,10 +27,9 @@
           v-for="(feeItem, index) in fees"
           :key="index"
           :showArrow="false"
-          :title="`${feeItem.year}年${String(feeItem.month).padStart(
-            2,
-            '0'
-          )}月团费${feeItem.amount}元`"
+          :title="`${feeItem.year}年${String(feeItem.month).padStart(2, '0')}月团费${
+            feeItem.amount
+          }元`"
         >
           <template #footer>
             <x-button
@@ -66,8 +60,8 @@
 <script setup>
 const PayForOther = Model.create_model({
   fields: {
-    sfzh: { label: "身份证号", type: "sfzh" }
-  }
+    sfzh: { label: "身份证号", type: "sfzh" },
+  },
 });
 </script>
 
@@ -81,22 +75,11 @@ export default {
       branch_name: "",
       current: 0,
       tabs: ["本人交费", "代人交费"],
-      fees: []
+      fees: [],
     };
   },
   async onLoad() {
-    if (!this.user.username) {
-      await utils.gotoPage({
-        url: "/views/RealNameCert",
-        query: {
-          redirect: "/views/FeeplanList",
-          message: "缴纳团费请先实名认证"
-        },
-        redirect: true
-      });
-    } else {
-      await this.fetchData({ sfzh: this.user.username });
-    }
+    await this.fetchData({ sfzh: this.user.username });
   },
   methods: {
     async changeActionType({ index }) {
@@ -116,26 +99,23 @@ export default {
         this.ready = true;
       } else {
         const { data: records } = await Http.post(`/youth_fee/by_sfzh`, {
-          sfzh
+          sfzh,
         });
         this.ready = true;
         this.fees = records;
         this.member = members[0];
-        this.branch_name = this.member.branch_name.replace(
-          "四川省宜宾市江安县",
-          ""
-        );
+        this.branch_name = this.member.branch_name.replace("四川省宜宾市江安县", "");
       }
     },
     async payFee(feeItem) {
       const planId = feeItem.feeplan_id;
       const { data: payed } = await Http.post(`/orders/check`, {
-        youth_fee_id: feeItem.id
+        youth_fee_id: feeItem.id,
       });
       if (payed) {
         return uni.showToast({
           title: `您已缴费, 无需重复`,
-          icon: "none"
+          icon: "none",
         });
       }
       this.disabled = true;
@@ -147,13 +127,13 @@ export default {
         code,
         timestamp: new Date().getTime().toString(),
         youth_fee_id: feeItem.id,
-        feeplan_id: planId
+        feeplan_id: planId,
       });
       const {
         signature: paySign,
         prepay_id,
         timestamp: timeStamp,
-        nonce_str: nonceStr
+        nonce_str: nonceStr,
       } = data;
       const self = this;
       const opts = {
@@ -172,12 +152,12 @@ export default {
         fail(res) {
           self.disabled = false;
           console.log("wx.requestPayment fail:", res);
-        }
+        },
       };
       wx.requestPayment(opts);
       // await utils.tryGotoPage();
-    }
-  }
+    },
+  },
 };
 </script>
 

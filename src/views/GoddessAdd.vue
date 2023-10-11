@@ -27,9 +27,9 @@ const GoddessAddModel = Model.create_model({
       type: "alioss_image_list",
       required: true,
       size: process.env.ALIOSS_AVATAR_SIZE || "2M",
-      limit: 1
-    }
-  }
+      limit: 1,
+    },
+  },
 });
 const values = ref({});
 const user = useUser();
@@ -37,25 +37,14 @@ const ready = ref();
 const successPost = async (data) => {
   await utils.gotoPage({
     name: "SuccessPage",
-    query: { type: "success", title: "操作成功", descr: "请等待后台审核通过" }
+    query: { type: "success", title: "操作成功", descr: "请等待后台审核通过" },
   });
 };
 onLoad(async () => {
   console.log("GODDESS-ADD:user", user);
-  if (!user.username) {
-    await utils.gotoPage({
-      url: "/views/RealNameCert",
-      query: {
-        redirect: "/views/GoddessAdd",
-        message: "请先实名认证"
-      },
-      redirect: true
-    });
-  } else {
-    values.value.xm = user.xm;
-    values.value.sfzh = user.username;
-    values.value.sex = user.username[16] % 2 === 0 ? "女" : "男";
-  }
+  values.value.xm = user.xm;
+  values.value.sfzh = user.username;
+  values.value.sex = user.username[16] % 2 === 0 ? "女" : "男";
   ready.value = true;
 });
 </script>

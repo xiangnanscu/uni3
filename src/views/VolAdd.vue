@@ -25,7 +25,7 @@ const volplanModel = Model.create_model({
     "plan_endtime",
     "pics",
     "amount",
-    "content"
+    "content",
   ],
   fields: {
     title: { label: "志愿主题", required: true },
@@ -34,13 +34,13 @@ const volplanModel = Model.create_model({
       label: "召集人身份证",
       type: "sfzh",
       required: true,
-      disabled: false
+      disabled: false,
     },
     lxdh: {
       label: "联系电话",
       required: true,
       disabled: false,
-      attrs: { wxPhone: true }
+      attrs: { wxPhone: true },
     },
     call_endtime: { label: "召集截止时间", type: "datetime", required: true },
     plan_starttime: { label: "志愿开始时间", type: "datetime", required: true },
@@ -50,30 +50,18 @@ const volplanModel = Model.create_model({
       type: "alioss_image_list",
       required: false,
       size: process.env.ALIOSS_AVATAR_SIZE || "2M",
-      limit: 1
+      limit: 1,
     },
     amount: { label: "召集人数", required: true, type: "integer" },
-    content: { label: "正文", required: true, input_type: "textarea" }
-  }
+    content: { label: "正文", required: true, input_type: "textarea" },
+  },
 });
 
 onLoad(async (query) => {
   const user = useUser();
-  if (!user.username) {
-    await utils.gotoPage({
-      url: "/views/RealNameCert",
-      query: {
-        redirect: "/views/VolAdd",
-        message: "发起志愿请先实名认证"
-      },
-      redirect: true
-    });
-  } else {
-    console.log(user);
-    formData.value.xm = user.xm;
-    formData.value.lxdh = user.phone;
-    formData.value.sfzh = user.username;
-  }
+  formData.value.xm = user.xm;
+  formData.value.lxdh = user.phone;
+  formData.value.sfzh = user.username;
 });
 
 const successPost = async (data) => {

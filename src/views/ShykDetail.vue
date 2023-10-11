@@ -90,32 +90,12 @@ export default {
   },
   methods: {
     async joinVol() {
-      if (!this.user.id) {
-        await utils.gotoPage({
-          url: "/views/Login",
-          query: {
-            redirect: `/views/ShykDetail?id=${this.query.id}`,
-            message: "签到需要先登录",
-          },
-          redirect: true,
-        });
-      } else if (!this.user.username) {
-        await utils.gotoPage({
-          url: "/views/RealNameCert",
-          query: {
-            redirect: `/views/ShykDetail?id=${this.query.id}`,
-            message: "签到需要实名认证",
-          },
-          redirect: true,
-        });
-      } else {
-        await usePost(`/shyk_reg/get_or_create`, {
-          usr_id: this.user.id,
-          shyk_id: this.record.id,
-        });
-        uni.showToast({ title: "成功签到" });
-        this.record.joined = true;
-      }
+      await usePost(`/shyk_reg/get_or_create`, {
+        usr_id: this.user.id,
+        shyk_id: this.record.id,
+      });
+      uni.showToast({ title: "成功签到" });
+      this.record.joined = true;
     },
   },
 };

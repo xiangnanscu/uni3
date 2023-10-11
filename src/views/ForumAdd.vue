@@ -25,27 +25,15 @@ const forumModel = Model.create_model({
       label: "吧头像",
       type: "alioss_image",
       required: true,
-      size: process.env.ALIOSS_AVATAR_SIZE || "2M"
-    }
-  }
+      size: process.env.ALIOSS_AVATAR_SIZE || "2M",
+    },
+  },
 });
 onLoad(async (query) => {
   const user = useUser();
-  if (!user.username) {
-    await utils.gotoPage({
-      url: "/views/RealNameCert",
-      query: {
-        redirect: "/views/ForumAdd",
-        message: "创建贴吧先实名认证"
-      },
-      redirect: true
-    });
-  } else {
-    console.log(user);
-    formData.value.xm = user.xm;
-    formData.value.lxdh = user.phone;
-    formData.value.sfzh = user.username;
-  }
+  formData.value.xm = user.xm;
+  formData.value.lxdh = user.phone;
+  formData.value.sfzh = user.username;
   ready.value = true;
 });
 

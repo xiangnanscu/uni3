@@ -12,20 +12,13 @@
         style="width: 100%"
       />
       <fui-preview :previewData="previewData"></fui-preview>
-      <tinymce-text
-        :html="record.content"
-        style="margin-top: 1em"
-      ></tinymce-text>
+      <tinymce-text :html="record.content" style="margin-top: 1em"></tinymce-text>
       <template #actions> </template>
     </uni-card>
     <x-button @click="joinVol">申请入住</x-button>
     <div style="height: 4em"></div>
     <x-bottom>
-      <generic-actions
-        :target="record"
-        target-model="stage"
-        style="width: 100%"
-      />
+      <generic-actions :target="record" target-model="stage" style="width: 100%" />
     </x-bottom>
   </page-layout>
 </template>
@@ -39,7 +32,7 @@ export default {
   data() {
     return {
       disableJoinButton: false,
-      record: null
+      record: null,
     };
   },
   async onLoad(query) {
@@ -52,59 +45,39 @@ export default {
         list: [
           {
             label: "驿站地址",
-            value: this.record.address
+            value: this.record.address,
           },
           {
             label: "联系方式",
-            value: this.record.lxdh
+            value: this.record.lxdh,
           },
           {
             label: "剩余床位男",
-            value: this.record.male_count
+            value: this.record.male_count,
           },
           {
             label: "剩余床位女",
-            value: this.record.female_count
-          }
-        ]
+            value: this.record.female_count,
+          },
+        ],
       };
-    }
+    },
   },
   methods: {
     async fetchData(query) {
       this.record = await useGet(`/stage/detail/${query.id}`);
     },
     async joinVol() {
-      if (!this.user.id) {
-        await utils.gotoPage({
-          url: "/views/Login",
-          query: {
-            redirect: `/views/stageDetail?id=${this.query.id}`,
-            message: "申请入住需要先登录"
-          },
-          redirect: true
-        });
-      } else if (!this.user.username) {
-        await utils.gotoPage({
-          url: "/views/RealNameCert",
-          query: {
-            redirect: `/views/stageDetail?id=${this.query.id}`,
-            message: "申请入住需要进行实名认证"
-          },
-          redirect: true
-        });
-      } else {
-        await utils.gotoPage({
-          url: "/views/StageApply",
-          query: {
-            stage_id:this.record.id,
-            stage_name: this.record.name
-          },
-          redirect: true
-        });
-      }
-    }
-  }
+      await utils.gotoPage({
+        url: "/views/StageApply",
+        query: {
+          stage_id: this.record.id,
+          stage_name: this.record.name,
+        },
+        redirect: true,
+      });
+    },
+  },
 };
 </script>
 

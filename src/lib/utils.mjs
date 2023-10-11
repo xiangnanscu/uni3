@@ -27,14 +27,9 @@ export function chunk(elements, n = 1) {
 
 export const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 export const encodeBase64 = (s) =>
-  Buffer.from(s, "utf-8")
-    .toString("base64")
-    .replace(/\//g, "_")
-    .replace(/\+/g, "-");
+  Buffer.from(s, "utf-8").toString("base64").replace(/\//g, "_").replace(/\+/g, "-");
 export const decodeBase64 = (s) =>
-  Buffer.from(s.replace(/_/g, "/").replace(/-/g, "+"), "base64").toString(
-    "utf-8"
-  );
+  Buffer.from(s.replace(/_/g, "/").replace(/-/g, "+"), "base64").toString("utf-8");
 export const repr = (s) => {
   const res = JSON.stringify(s);
   console.log(res);
@@ -77,9 +72,7 @@ export const fromNow = (value) => {
 export function uuid() {
   let timestamp = new Date().getTime();
   let perforNow =
-    (typeof performance !== "undefined" &&
-      performance.now &&
-      performance.now() * 1000) ||
+    (typeof performance !== "undefined" && performance.now && performance.now() * 1000) ||
     0;
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
     let random = Math.random() * 16;
@@ -152,7 +145,7 @@ const sizeTable = {
   g: 1024 * 1024 * 1024,
   kb: 1024,
   mb: 1024 * 1024,
-  gb: 1024 * 1024 * 1024
+  gb: 1024 * 1024 * 1024,
 };
 export function parseSize(t) {
   if (typeof t === "string") {
@@ -194,7 +187,7 @@ export function getLastPageUrl() {
 
 const tabbarPages = pagesJson.tabBar?.list;
 const tabbarPagesMap = Object.fromEntries(
-  tabbarPages.map((e) => [`/${e.pagePath}`, true])
+  tabbarPages.map((e) => [`/${e.pagePath}`, true]),
 );
 export const isTabbarPage = (url) => {
   if (!url) {
@@ -244,12 +237,12 @@ export async function tryGotoPage(opts) {
   if (!opts?.url) {
     if (opts?.redirect) {
       return await gotoPage({
-        url: opts.redirect
+        url: opts.redirect,
       });
     }
     const lastUrl = getLastPageUrl();
     return await gotoPage({
-      url: lastUrl
+      url: lastUrl,
     });
   }
   await gotoPage(opts);
@@ -302,11 +295,7 @@ export function getWeChatMessageTime(messageTime, now) {
   const currentYear = now.getFullYear();
   const hourMinutesText = `${formatDigits(hours)}:${formatDigits(minutes)}`;
   // 检查是否为今天
-  if (
-    day === currentDate &&
-    messageMonth === currentMonth &&
-    year === currentYear
-  ) {
+  if (day === currentDate && messageMonth === currentMonth && year === currentYear) {
     return hourMinutesText;
   }
   // 检查是否为昨天
