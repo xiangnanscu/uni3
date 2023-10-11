@@ -2,10 +2,8 @@
   <page-layout>
     <x-alert v-if="query.message" :title="query.message"> </x-alert>
     <uni-card title="温馨提示">
-      <p>
-        此处填写需要缴纳团费的团员姓名和身份证号，请确保正确，提交之后将不可修改。
-      </p>
-      <p>如果实名认证信息有误，需要联系团县委管理员核实修改。</p>
+      <p>此处填写小程序用户的实名信息，请确保正确，提交之后将不可修改。</p>
+      <p>如果实名认证信息有误，请联系小程序管理员核实修改。</p>
     </uni-card>
     <modelform-uni
       :model="profileModel"
@@ -35,9 +33,9 @@ const profileModel = Model.create_model({
       label: "手机号",
       required: true,
       attrs: { wxPhone },
-      disabled: false
-    }
-  }
+      disabled: false,
+    },
+  },
 });
 
 const successPost = async (user) => {
