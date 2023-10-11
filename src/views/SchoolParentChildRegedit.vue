@@ -1,6 +1,6 @@
 <template>
   <page-layout v-if="loaded">
-    <x-alert title="红云智慧校园"> </x-alert>
+    <x-alert title="智慧校园"> </x-alert>
     <uni-card title="家长" :border="false" :is-shadow="false" :is-full="true">
       <modelform-uni
         :model="ParentModel"

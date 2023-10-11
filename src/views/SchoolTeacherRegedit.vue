@@ -1,6 +1,6 @@
 <template>
   <page-layout>
-    <x-alert title="红云智慧校园"> </x-alert>
+    <x-alert title="智慧校园"> </x-alert>
     <uni-card title="温馨提示">
       <p>此处填写教师基本信息</p>
     </uni-card>
