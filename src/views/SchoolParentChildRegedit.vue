@@ -54,6 +54,7 @@
           :action-url="studentCreateUrl"
           @successPost="onSuccessStudentCreate"
           :model="StudentModel"
+          submit-button-text="保存"
           :values="StudentModel.get_defaults()"
         ></modelform-uni>
       </div>
@@ -70,6 +71,7 @@
           :action-url="studentUpdateUrl"
           @successPost="onSuccessUpdate"
           :model="StudentModel"
+          submit-button-text="保存"
           :values="currentStudent"
         ></modelform-uni>
       </div>
@@ -125,12 +127,22 @@ const onSuccessStudentCreate = (data) => {
   students.value.push(data);
   createFormRef.value.close();
   showCreateForm.value = false;
+  uni.showToast({
+    title: "已保存",
+    icon: "success",
+    mask: true,
+  });
 };
 const onSuccessUpdate = (data) => {
   Object.assign(currentStudent.value, data);
   updateFormRef.value.close();
   showUpdateForm.value = false;
   studentIndex.value = null;
+  uni.showToast({
+    title: "已保存",
+    icon: "success",
+    mask: true,
+  });
 };
 const onClickEdit = async (sindex) => {
   studentIndex.value = sindex;
