@@ -65,7 +65,7 @@ const mainKist = [
     permission: 1,
   },
   {
-    url: "../static/img/stat.png",
+    url: "../static/img/adminor.png",
     text: "管理员申请",
     badge: "",
     pagePath: "/views/SchoolStudentStat",
