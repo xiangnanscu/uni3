@@ -165,8 +165,8 @@ const onDeleteConfirm = async () => {
 let ParentModel;
 let StudentModel;
 onLoad(async () => {
-  ParentModel = Model.create_model(await useGet(`/parent/json`));
-  StudentModel = Model.create_model(await useGet(`/student/json`));
+  ParentModel = await Model.create_model_async(await useGet(`/parent/json`));
+  StudentModel = await Model.create_model_async(await useGet(`/student/json`));
   let parentCond = { sfzh: user.username };
   // #ifdef MP-WEIXIN
   parentCond = { openid: user.openid };
