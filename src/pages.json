@@ -121,6 +121,14 @@
     {
       "path": "views/SchoolStudentForm",
       "style": { "navigationBarTitleText": "" }
+    },
+    {
+      "path": "views/SchoolStudentAccessLog",
+      "style": { "navigationBarTitleText": "" }
+    },
+    {
+      "path": "views/SchoolStudentAccessLogDetail",
+      "style": { "navigationBarTitleText": "" }
     }
   ],
   "globalStyle": {

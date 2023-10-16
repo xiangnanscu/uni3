@@ -31,7 +31,7 @@ const mainKist = [
   {
     url: "../static/img/in-out.png",
     text: "校园进出",
-    pagePath: "/views/Todo",
+    pagePath: "/views/SchoolStudentAccessLog",
     badge: "",
     type: "error",
   },
