@@ -18,9 +18,14 @@
       ></video>
       <div>会议附件</div>
       <uni-list>
-        <a class="link" v-for="(file, i) of record.attachments" :key="i" :href="file.url"
-          >{{ i + 1 }} . {{ file.name }}</a
+        <div
+          class="link"
+          v-for="(file, i) of record.attachments"
+          :key="i"
+          @tap="downloadAttachments(file)"
         >
+          {{ i + 1 }} . {{ file.name }}
+        </div>
       </uni-list>
       <div style="height: 2em"></div>
       <template #actions> </template>
@@ -89,6 +94,17 @@ export default {
     },
   },
   methods: {
+    async downloadAttachments(file) {
+      uni.showLoading({
+        title: "下载中",
+      });
+      try {
+        await uni.downloadFile({ url: file.url });
+      } finally {
+        uni.hideLoading();
+      }
+      return file;
+    },
     async joinVol() {
       await usePost(`/shyk_reg/get_or_create`, {
         usr_id: this.user.id,
