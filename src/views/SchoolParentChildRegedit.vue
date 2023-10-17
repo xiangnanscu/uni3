@@ -114,7 +114,7 @@ const currentStudent = computed(() =>
   studentIndex.value !== null ? students.value[studentIndex.value] : null,
 );
 const studentCreateUrl = computed(
-  () => `/student/create?sync_to_hik=${isProd}&parent_id=${parent.value.id}`,
+  () => `/student/register?sync_to_hik=${isProd}&parent_id=${parent.value.id}`,
 );
 const studentUpdateUrl = computed(
   () => `/student/update/${currentStudent.value.id}?sync_to_hik=${isProd}`,
@@ -123,7 +123,35 @@ const studentDeleteUrl = computed(
   () =>
     `/parent_student_relation/delete_by_both_ids?sync_to_hik=${isProd}&parent_id=${parent.value.id}&student_id=${currentStudent.value.id}`,
 );
-const onSuccessStudentCreate = (data) => {
+let ParentModel;
+let StudentModel;
+onLoad(async () => {
+  ParentModel = await Model.create_model_async(await useGet(`/parent/json`));
+  StudentModel = await Model.create_model_async(await useGet(`/student/json`));
+  let parentCond = { sfzh: user.username };
+  // #ifdef MP-WEIXIN
+  parentCond = { openid: user.openid };
+  // #endif
+  const [parentData] = await usePost(`/parent/records`, parentCond);
+  if (parentData) {
+    parentData.openid = user.openid;
+    parent.value = parentData;
+    const children = await usePost(`/parent_student_relation/query`, {
+      where: { parent_id: parent.value.id },
+      select: ["id"],
+      load_fk_array: ["student_id", "*"],
+    });
+    students.value = children.map((c) => c.student_id);
+  } else {
+    parent.value = { openid: user.openid };
+  }
+  loaded.value = true;
+});
+const onSuccessStudentCreate = async (data) => {
+  const insertRelations = await usePost(
+    `/parent_student_relation/merge?key=parent_id&key=student_id`,
+    [{ parent_id: parent.value.id, student_id: data.id }],
+  );
   students.value.push(data);
   createFormRef.value.close();
   showCreateForm.value = false;
@@ -174,30 +202,6 @@ const onDeleteConfirm = async () => {
     uni.showToast({ title: "删除失败" });
   }
 };
-let ParentModel;
-let StudentModel;
-onLoad(async () => {
-  ParentModel = await Model.create_model_async(await useGet(`/parent/json`));
-  StudentModel = await Model.create_model_async(await useGet(`/student/json`));
-  let parentCond = { sfzh: user.username };
-  // #ifdef MP-WEIXIN
-  parentCond = { openid: user.openid };
-  // #endif
-  const [parentData] = await usePost(`/parent/records`, parentCond);
-  if (parentData) {
-    parentData.openid = user.openid;
-    parent.value = parentData;
-    const children = await usePost(`/parent_student_relation/query`, {
-      where: { parent_id: parent.value.id },
-      select: ["id"],
-      load_fk_array: ["student_id", "*"],
-    });
-    students.value = children.map((c) => c.student_id);
-  } else {
-    parent.value = { openid: user.openid };
-  }
-  loaded.value = true;
-});
 const actionUrlParent = computed(() =>
   parent.value.id ? `/parent/update/${parent.value.id}` : `/parent/create`,
 );
