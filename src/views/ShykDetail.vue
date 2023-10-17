@@ -100,7 +100,8 @@ export default {
       });
       console.log(file);
       try {
-        await uni.downloadFile({ url: `https:${file.url}` });
+        const res = await uni.downloadFile({ url: `https:${file.url}` });
+        console.log({ res });
       } finally {
         uni.hideLoading();
       }
