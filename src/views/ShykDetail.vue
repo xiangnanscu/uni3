@@ -102,7 +102,8 @@ export default {
       try {
         const res = await uni.downloadFile({ url: `https:${file.url}` });
         const saveRes = await uni.saveFile({ tempFilePath: res.tempFilePath });
-        console.log({ saveRes });
+        const openRes = uni.openDocument({ filePath: saveRes.savedFilePath, menu: true });
+        console.log({ saveRes, openRes });
       } finally {
         uni.hideLoading();
       }
