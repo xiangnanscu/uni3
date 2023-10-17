@@ -98,8 +98,9 @@ export default {
       uni.showLoading({
         title: "下载中",
       });
+      console.log(file);
       try {
-        await uni.downloadFile({ url: file.url });
+        await uni.downloadFile({ url: `https:${file.url}` });
       } finally {
         uni.hideLoading();
       }
