@@ -72,6 +72,14 @@ const mainKist = [
     type: "error",
     permission: 1,
   },
+  // {
+  //   url: "../static/img/stat.png",
+  //   text: "管理员申请",
+  //   badge: "",
+  //   pagePath: "/views/Uform",
+  //   type: "error",
+  //   permission: 1,
+  // },
 ];
 
 const permissionMenu = computed(() =>

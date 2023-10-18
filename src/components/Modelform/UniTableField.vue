@@ -84,6 +84,12 @@ const onSuccessUpdate = (data) => {
   showUpdateForm.value = false;
   currentRow.value = null;
 };
+const createMaskClick = () => {
+  showCreateForm.value = false;
+};
+const updateMaskClick = () => {
+  showUpdateForm.value = false;
+};
 const onClickEdit = (index) => {
   currentRow.value = props.modelValue[index];
   openUpdateForm();
@@ -178,6 +184,7 @@ const tagColorArray = ["geekblue", "orange", "green", "cyan", "red", "blue", "pu
     :is-mask-click="true"
     type="bottom"
     background-color="#fff"
+    @maskClick="createMaskClick"
   >
     <div style="padding: 1em">
       <modelform-uni
@@ -193,6 +200,7 @@ const tagColorArray = ["geekblue", "orange", "green", "cyan", "red", "blue", "pu
     :is-mask-click="true"
     type="bottom"
     background-color="#fff"
+    @maskClick="updateMaskClick"
   >
     <div style="padding: 1em">
       <modelform-uni

@@ -47,6 +47,7 @@
       :is-mask-click="true"
       type="bottom"
       background-color="#fff"
+      @maskClick="createMaskClick"
     >
       <div style="padding: 1em">
         <modelform-uni
@@ -64,6 +65,7 @@
       :is-mask-click="true"
       type="bottom"
       background-color="#fff"
+      @maskClick="updateMaskClick"
     >
       <div style="padding: 1em">
         <modelform-uni
@@ -171,6 +173,12 @@ const onSuccessUpdate = (data) => {
     icon: "success",
     mask: true,
   });
+};
+const createMaskClick = () => {
+  showCreateForm.value = false;
+};
+const updateMaskClick = () => {
+  showUpdateForm.value = false;
 };
 const onClickEdit = async (sindex) => {
   studentIndex.value = sindex;
