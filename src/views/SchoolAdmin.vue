@@ -4,8 +4,14 @@
     <div v-if="access_logs.length">
       <uni-list :border="false">
         <uni-list-item
+          title="录入学生"
+          thumb-size="lg"
+          link
+          to="/views/SchoolStudentRegedit"
+          :showArrow="false"
+        />
+        <uni-list-item
           title="设定校领导"
-          :thumb="log.avatar"
           thumb-size="lg"
           link
           to="/views/SchoolHome"
@@ -13,7 +19,6 @@
         />
         <uni-list-item
           title="设定年级主任"
-          :thumb="log.avatar"
           thumb-size="lg"
           link
           to="/views/SchoolHome"
@@ -21,7 +26,6 @@
         />
         <uni-list-item
           title="设定班主任"
-          :thumb="log.avatar"
           thumb-size="lg"
           link
           to="/views/SchoolHome"
@@ -29,7 +33,6 @@
         />
         <uni-list-item
           title="设定门卫"
-          :thumb="log.avatar"
           thumb-size="lg"
           link
           to="/views/SchoolHome"

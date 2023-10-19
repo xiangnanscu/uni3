@@ -135,6 +135,14 @@
     {
       "path": "views/SchoolNoticeDetail",
       "style": { "navigationBarTitleText": "" }
+    },
+    {
+      "path": "views/SchoolStudentRegedit",
+      "style": { "navigationBarTitleText": "" }
+    },
+    {
+      "path": "views/SchoolStudentRegeditSuccess",
+      "style": { "navigationBarTitleText": "" }
     }
   ],
   "globalStyle": {
