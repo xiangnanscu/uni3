@@ -43,10 +43,10 @@ const mainKist = [
     type: "error",
   },
   {
-    url: "../static/img/homework.png",
-    text: "家庭作业",
-    pagePath: "/views/Todo",
+    url: "../static/img/notice.png",
+    text: "通知事项",
     badge: "",
+    pagePath: "/views/SchoolNotice",
     type: "error",
   },
   {
@@ -54,6 +54,27 @@ const mainKist = [
     text: "亲子登记",
     badge: "",
     pagePath: "/views/SchoolParentChildRegedit",
+    type: "error",
+  },
+  {
+    url: "../static/img/score.png",
+    text: "成绩管理",
+    pagePath: "/views/Todo",
+    badge: "",
+    type: "error",
+  },
+  {
+    url: "../static/img/homework.png",
+    text: "家庭作业",
+    pagePath: "/views/Todo",
+    badge: "",
+    type: "error",
+  },
+  {
+    url: "../static/img/tableware.png",
+    text: "食堂餐饮",
+    badge: "",
+    pagePath: "/views/Todo",
     type: "error",
   },
   {
@@ -66,9 +87,9 @@ const mainKist = [
   },
   {
     url: "../static/img/adminor.png",
-    text: "管理员申请",
+    text: "校方管理",
     badge: "",
-    pagePath: "/views/SchoolStudentStat",
+    pagePath: "/views/SchoolAdmin",
     type: "error",
     permission: 1,
   },

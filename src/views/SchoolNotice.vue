@@ -17,7 +17,7 @@
         v-for="e in records"
         :key="e.id"
         :title="e.title"
-        :to="`/views/ShykDetail?id=${e.id}`"
+        :to="`/views/SchoolNoticeDetail?id=${e.id}`"
         :rightText="utils.fromNow(e.ctime)"
         link="navigateTo"
       >
@@ -30,26 +30,17 @@
 const query = useQuery();
 const user = useUser();
 const current = computed(() => Number(query.current || 0));
-const tabs = ["待参加", "进行中", "已结束"];
+const tabs = ["待查看", "已查看"];
 const type = computed(() => tabs[current.value]);
 const ready = ref(false);
 const records = ref([]);
 
 const setRecordsByType = async (newType) => {
   const cond = {
-    where: { chry__sfzh: user.username },
-    select: ["id", "ctime", "title", "start_time", "end_time"],
+    where: {},
+    select: ["id", "ctime", "title"],
   };
-  const now = utils.getLocalTime();
-  if (newType == "待参加") {
-    cond.where.start_time__gt = now;
-  } else if (newType == "进行中") {
-    cond.where.start_time__lt = now;
-    cond.where.end_time__gt = now;
-  } else {
-    cond.where.end_time__lt = now;
-  }
-  const data = await usePost("/shyk/query", cond);
+  const data = await usePost("/school_notice/query", cond);
   records.value = data;
 };
 const changeActionType = async ({ index, name }) => {
