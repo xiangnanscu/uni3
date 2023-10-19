@@ -16,7 +16,7 @@ const plugins = [
     extensions: ["vue", "jsx"],
     dts: "./src/unplugin/components.d.ts",
     directoryAsNamespace: true,
-    resolvers: []
+    resolvers: [],
   }),
   AutoImport({
     //https://github.com/antfu/unplugin-auto-import#configuration
@@ -24,7 +24,7 @@ const plugins = [
     eslintrc: {
       enabled: true, // Default `false`
       filepath: "./src/unplugin/.eslintrc-auto-import.json", // Default `./.eslintrc-auto-import.json`
-      globalsPropValue: true // Default `true`, (true | false | 'readonly' | 'readable' | 'writable' | 'writeable')
+      globalsPropValue: true, // Default `true`, (true | false | 'readonly' | 'readable' | 'writable' | 'writeable')
     },
     imports: [
       "vue",
@@ -39,10 +39,11 @@ const plugins = [
           "onUnload",
           "onShareTimeline",
           "onAddToFavorites",
-          "onShareAppMessage"
+          "onReachBottom",
+          "onShareAppMessage",
         ],
-        "regenerator-runtime": [["default", "regeneratorRuntime"]]
-      }
+        "regenerator-runtime": [["default", "regeneratorRuntime"]],
+      },
     ],
     dts: "./src/unplugin/auto-imports.d.ts",
     vueTemplate: true,
@@ -50,8 +51,8 @@ const plugins = [
     dirs: [
       "./src/globals",
       "./src/composables", // only root modules
-      "./src/store/**" // all nested modules
-    ]
+      "./src/store/**", // all nested modules
+    ],
   }),
   // https://docs.sheetjs.com/docs/demos/static/vitejs
   {
@@ -63,7 +64,7 @@ const plugins = [
       const path = id.replace(/\?b64/, "");
       const data = readFileSync(path, "base64");
       return `export default '${data}'`;
-    }
+    },
   },
   {
     // https://stackoverflow.com/questions/21797299/convert-base64-string-to-arraybuffer
@@ -73,27 +74,24 @@ const plugins = [
       const path = id;
       const data = readFileSync(path, "base64");
       return `export default Uint8Array.from(atob('${data}'), (c) => c.charCodeAt(0))`;
-    }
+    },
   },
   ViteRequireContext(),
   uni({
     vueOptions: {},
-    vueJsxOptions: {}
-  })
+    vueJsxOptions: {},
+  }),
 ];
 const toLiteral = (s) => `"${s.replaceAll(/"/g, '\\"')}"`;
 const { parsed: exposedEnvs } = expand({
   ...dotenv.config({
     override: false,
-    path: ".env"
+    path: ".env",
   }),
-  ignoreProcessEnv: true
+  ignoreProcessEnv: true,
 });
 const envKeys = Object.fromEntries(
-  Object.entries(exposedEnvs).map(([k, v]) => [
-    `process.env.${k}`,
-    toLiteral(v)
-  ])
+  Object.entries(exposedEnvs).map(([k, v]) => [`process.env.${k}`, toLiteral(v)]),
 );
 const VITE_PROXY_PREFIX = process.env.VITE_PROXY_PREFIX || "/proxy";
 const VITE_PROXY_PREFIX_REGEX = new RegExp("^" + VITE_PROXY_PREFIX);
@@ -108,17 +106,17 @@ export default defineConfig({
   resolve: {
     alias: {
       "@/": fileURLToPath(new URL("./src", import.meta.url)) + "/",
-      stream: "stream-browserify"
+      stream: "stream-browserify",
       // vm: "vm-browserify",
       // Buffer: "buffer/",
-    }
+    },
   },
   css: {
     preprocessorOptions: {
       less: {
-        javascriptEnabled: true
-      }
-    }
+        javascriptEnabled: true,
+      },
+    },
   },
   // #ifdef H5
   server: {
@@ -130,9 +128,9 @@ export default defineConfig({
       [VITE_PROXY_PREFIX]: {
         target: `http://${env.NGINX_server_name}:${env.NGINX_listen}`,
         changeOrigin: true,
-        rewrite: (path) => path.replace(VITE_PROXY_PREFIX_REGEX, "")
-      }
-    }
-  }
+        rewrite: (path) => path.replace(VITE_PROXY_PREFIX_REGEX, ""),
+      },
+    },
+  },
   // #endif
 });

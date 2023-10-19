@@ -313,6 +313,7 @@
     "validator": true,
     "ExtractDefaultPropTypes": true,
     "ExtractPropTypes": true,
-    "ExtractPublicPropTypes": true
+    "ExtractPublicPropTypes": true,
+    "onReachBottom": true
   }
 }
