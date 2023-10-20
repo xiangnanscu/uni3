@@ -113,6 +113,8 @@ const base_option_names = [
   "choices_url_admin",
   "choices_url_method",
   "autocomplete",
+  "max_display_count", //前端autocomplete.choices最大展示数
+  "max_choices_count", // 前端autocomplete.choices最大数
   "preload",
   "lazy",
   "tag",
@@ -158,6 +160,10 @@ class basefield {
     }
     if (Array.isArray(this.choices) || typeof this.choices === "string") {
       this.choices = get_choices(this.choices);
+    }
+    if (this.autocomplete) {
+      this.max_choices_count ??= process.env.MAX_CHOICES_COUNT || 100;
+      this.max_display_count ??= process.env.MAX_DISPLAY_COUNT || 50;
     }
     return this;
   }
@@ -643,8 +649,6 @@ class foreignkey extends basefield {
     "models_url_name",
     "keyword_query_name",
     "limit_query_name",
-    "max_display_count", //前端autocomplete.choices最大展示数
-    "max_choices_count", // 前端autocomplete.choices最大数
   ];
   constructor(options) {
     super({
@@ -657,8 +661,6 @@ class foreignkey extends basefield {
       models_url_name: "model",
       keyword_query_name: "keyword",
       limit_query_name: "limit",
-      max_choices_count: 100,
-      max_display_count: 50,
       convert: String,
       ...options,
     });
