@@ -176,25 +176,26 @@ class basefield {
     } else {
       validators.unshift(Validators.not_required);
     }
-    if (typeof this.choices_url === "string" && this.strict) {
-      const dynamic_choices_validator = async (val) => {
-        let message = this.get_error_message("choices");
-        const data = await basefield.Http[this.choices_url_method || "get"](
-          this.choices_url,
-        ).data;
-        const choices = get_choices(data);
-        for (const c of choices) {
-          if (val === c.value) {
-            return val;
-          }
-        }
-        if (choices.length <= CHOICES_ERROR_DISPLAY_COUNT) {
-          message = `${message}，${get_choices_error_message(choices)}`;
-        }
-        throw new Error(message);
-      };
-      validators.push(dynamic_choices_validator);
-    }
+    // if (typeof this.choices_url === "string" && this.strict) {
+    //   const dynamic_choices_validator = async (val) => {
+    //     // console.log("call dd dynamic_choices_validator");
+    //     let message = this.get_error_message("choices");
+    //     const data = await basefield.Http[this.choices_url_method || "get"](
+    //       this.choices_url,
+    //     ).data;
+    //     const choices = get_choices(data);
+    //     for (const c of choices) {
+    //       if (val === c.value) {
+    //         return val;
+    //       }
+    //     }
+    //     if (choices.length <= CHOICES_ERROR_DISPLAY_COUNT) {
+    //       message = `${message}，${get_choices_error_message(choices)}`;
+    //     }
+    //     throw new Error(message);
+    //   };
+    //   validators.push(dynamic_choices_validator);
+    // }
     if (
       Array.isArray(this.choices) &&
       this.choices.length &&
@@ -642,6 +643,8 @@ class foreignkey extends basefield {
     "models_url_name",
     "keyword_query_name",
     "limit_query_name",
+    "max_display_count", //前端autocomplete.choices最大展示数
+    "max_choices_count", // 前端autocomplete.choices最大数
   ];
   constructor(options) {
     super({
@@ -654,6 +657,8 @@ class foreignkey extends basefield {
       models_url_name: "model",
       keyword_query_name: "keyword",
       limit_query_name: "limit",
+      max_choices_count: 100,
+      max_display_count: 50,
       convert: String,
       ...options,
     });
@@ -707,34 +712,31 @@ class foreignkey extends basefield {
     }
   }
   get_validators(validators) {
-    const fk_name = this.reference_column;
     const foreignkey_validator = (v) => {
-      console.log("foreignkey_validator", v);
-      if (typeof v === "object") {
-        v = v[fk_name];
+      if (this._postValue === null) {
+        throw new Error(`无效的值，请在下拉列表中选择`);
       }
-      v = this.convert(v);
       return v;
     };
     validators.unshift(foreignkey_validator);
-    const foreignkey_autocomplete_validator = (v) => {
-      console.log("foreignkey_autocomplete_validator", v);
-      if (this.autocomplete && Array.isArray(this.choices)) {
-        // 前端,需要进行双检查
-        const matchedChoice = this.choices.find((e) => e.label === v);
-        console.log("this.choices", this.choices, matchedChoice);
-        if (matchedChoice) {
-          return matchedChoice.value;
-        }
-        if (this.choices.some((e) => e.value === v)) {
-          return v;
-        }
-        throw new Error("输入错误，请输入关键字然后在下拉列表中选取");
-      } else {
-        return v;
-      }
-    };
-    validators.unshift(foreignkey_autocomplete_validator);
+    // const foreignkey_autocomplete_validator = (v) => {
+    //   console.log("foreignkey_autocomplete_validator", v);
+    //   if (this.autocomplete && Array.isArray(this.choices)) {
+    //     // 前端,需要进行双检查
+    //     const matchedChoice = this.choices.find((e) => e.label === v);
+    //     console.log("this.choices", this.choices, matchedChoice);
+    //     if (matchedChoice) {
+    //       return matchedChoice.value;
+    //     }
+    //     if (this.choices.some((e) => e.value === v)) {
+    //       return v;
+    //     }
+    //     throw new Error("输入错误，请输入关键字然后在下拉列表中选取");
+    //   } else {
+    //     return v;
+    //   }
+    // };
+    // validators.unshift(foreignkey_autocomplete_validator);
     return super.get_validators(validators);
   }
   load(value) {
@@ -764,12 +766,15 @@ class foreignkey extends basefield {
       return value;
     }
   }
-  to_form_value(value) {
+  to_post_value(value, values) {
+    return this._postValue ?? value;
+  }
+  to_form_value(value, values) {
     if (typeof value == "object") {
-      return value[this.reference_column];
-    } else {
-      return value;
+      return value[this.reference_label_column] ?? value[this.reference_column];
     }
+    // 后端按raw():get()输出
+    return values[`${this.name}__${this.reference_label_column}`] ?? value;
   }
 }
 

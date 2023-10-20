@@ -790,6 +790,10 @@ Sql.prototype._get_expr_token = function (value, key, op) {
     return `${key} LIKE '${value.replaceAll("'", "''")}%'`;
   } else if (op === "endswith") {
     return `${key} LIKE '%${value.replaceAll("'", "''")}'`;
+  } else if (op === "regex" || op === "regex_sensitive") {
+    return `${key} ~ '%${value.replaceAll("'", "''")}'`;
+  } else if (op === "regex_insensitive") {
+    return `${key} ~* '%${value.replaceAll("'", "''")}'`;
   } else if (op === "null") {
     if (value) {
       return `${key} IS NULL`;
@@ -1154,9 +1158,13 @@ Sql.prototype.from = function (a, ...varargs) {
   return this;
 };
 Sql.prototype.get_table = function () {
-  return (
-    (this._as === undefined && this.table_name) || this.table_name + (" AS " + this._as)
-  );
+  if (this.table_name === undefined) {
+    return undefined;
+  } else if (this._as !== undefined) {
+    return this.table_name + (" AS " + this._as);
+  } else {
+    return this.table_name;
+  }
 };
 Sql.prototype.join = function (join_args, key, op, val) {
   return this._base_join("INNER", join_args, key, op, val);

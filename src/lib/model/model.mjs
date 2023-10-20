@@ -28,19 +28,20 @@ const MODEL_MERGE_NAMES = {
   auto_primary_key: true,
   primary_key: true,
   unique_together: true,
+  referenced_label_column: true,
 };
 class ValidateError extends Error {
-  constructor({ name, message, label, index }) {
+  constructor({ name, message, label, index, value }) {
     super(message);
-    Object.assign(this, { name, label, index });
+    Object.assign(this, { name, label, index, value });
   }
   toString() {
     return `MODEL FIELD ERROR: ${this.name}(${this.label})+${this.message}`;
   }
 }
 class ValidateBatchError extends ValidateError {
-  constructor({ name, message, label, index, batch_index }) {
-    super({ name, message, label, index });
+  constructor({ name, message, label, index, batch_index, value }) {
+    super({ name, message, label, index, value });
     Object.assign(this, { batch_index });
   }
 }
@@ -251,7 +252,7 @@ ModelSql.prototype._find_field_model = function (col) {
 ModelSql.prototype._parse_column = function (key, as_select, strict, disable_alias) {
   let a = key.indexOf("__");
   if (a === -1) {
-    return [this._get_column(key, strict), "eq"];
+    return [this._get_column(key, strict), "eq", key];
   }
   let token = key.slice(0, a);
   let [field, model, prefix] = this._find_field_model(token);
@@ -313,9 +314,9 @@ ModelSql.prototype._parse_column = function (key, as_select, strict, disable_ali
   const final_key = prefix + ("." + field_name);
   if (as_select && is_fk && !disable_alias) {
     assert(op === undefined, `invalid field name: ${op}`);
-    return [final_key + (" AS " + key), op];
+    return [final_key + (" AS " + key)];
   } else {
-    return [final_key, op || "eq"];
+    return [final_key, op || "eq", field_name];
   }
 };
 ModelSql.prototype._get_column = function (key, strict) {
@@ -366,6 +367,22 @@ ModelSql.prototype._base_join = function (join_type, join_args, key, op, val) {
   }
   return Sql.prototype._base_join.call(this, join_type, join_args, key, op, val);
 };
+const string_db_types = { varchar: true, text: true, char: true, bpchar: true };
+const string_operators = {
+  contains: true,
+  startswith: true,
+  endswith: true,
+  regex: true,
+  regex_insensitive: true,
+  regex_sensitive: true,
+};
+ModelSql.prototype._get_expr_token = function (value, key, op, raw_key) {
+  const field = this.model.fields[raw_key];
+  if (field && !string_db_types[field.db_type] && string_operators[op]) {
+    key = key + "::varchar";
+  }
+  return Sql.prototype._get_expr_token.call(this, value, key, op);
+};
 ModelSql.prototype.insert = function (rows, columns) {
   if (!(rows instanceof ModelSql)) {
     if (!this._skip_validate) {
@@ -386,10 +403,44 @@ ModelSql.prototype.update = function (row, columns) {
   }
   return Sql.prototype._base_update.call(this, row, columns);
 };
-ModelSql.prototype.merge = function (rows, key, columns) {
+ModelSql.prototype._get_bulk_key = function (columns) {
+  const pk = this.model.primary_key;
+  if (columns.includes(pk)) {
+    return pk;
+  }
+  for (const name of columns) {
+    const f = this.model.fields[name];
+    if (f.unique) {
+      return name;
+    }
+  }
+  return pk;
+};
+ModelSql.prototype._clean_bulk_params = function (rows, key, columns) {
   if (rows.length === 0) {
     throw new Error("empty rows passed to merge");
   }
+  if (columns === undefined) {
+    columns = utils.keys(rows[0]);
+  }
+  if (key === undefined) {
+    key = this._get_bulk_key(columns);
+  }
+  if (typeof key === "string") {
+    if (!columns.includes(key)) {
+      columns = [key, ...columns];
+    }
+  } else if (typeof key === "object") {
+    for (const k of key) {
+      if (!columns.includes(k)) {
+        columns = [k, ...columns];
+      }
+    }
+  }
+  return [rows, key, columns];
+};
+ModelSql.prototype.merge = function (rows, key, columns) {
+  [rows, key, columns] = this._clean_bulk_params(rows, key, columns);
   if (!this._skip_validate) {
     [rows, key, columns] = this.model.validate_create_rows(rows, key, columns);
   }
@@ -397,9 +448,7 @@ ModelSql.prototype.merge = function (rows, key, columns) {
   return Sql.prototype._base_merge.call(this, rows, key, columns);
 };
 ModelSql.prototype.upsert = function (rows, key, columns) {
-  if (rows.length === 0) {
-    throw new Error("empty rows passed to merge");
-  }
+  [rows, key, columns] = this._clean_bulk_params(rows, key, columns);
   if (!this._skip_validate) {
     [rows, key, columns] = this.model.validate_create_rows(rows, key, columns);
   }
@@ -407,9 +456,7 @@ ModelSql.prototype.upsert = function (rows, key, columns) {
   return Sql.prototype._base_upsert.call(this, rows, key, columns);
 };
 ModelSql.prototype.updates = function (rows, key, columns) {
-  if (rows.length === 0) {
-    throw new Error("empty rows passed to merge");
-  }
+  [rows, key, columns] = this._clean_bulk_params(rows, key, columns);
   if (!this._skip_validate) {
     [rows, key, columns] = this.model.validate_update_rows(rows, key, columns);
   }
@@ -718,7 +765,7 @@ Xodel.to_form_value = function (values, names) {
   const res = {};
   for (const name of names || this.field_names) {
     const field = this.fields[name];
-    const value = field.to_form_value(values[name]);
+    const value = field.to_form_value(values[name], values);
     res[name] = value;
   }
   return res;
@@ -727,7 +774,7 @@ Xodel.to_post_value = function (values, names) {
   const data = {};
   for (const name of names || this.field_names) {
     const field = this.fields[name];
-    data[name] = field.to_post_value(values[name]);
+    data[name] = field.to_post_value(values[name], values);
   }
   return data;
 };
@@ -745,10 +792,18 @@ Xodel.create_model_async = async function (options) {
         const res = options.choices_callback
           ? options.choices_callback(choices, field)
           : choices;
+        if (field.autocomplete && field.type == "foreignkey") {
+          for (const [i, c] of res.entries()) {
+            c._value = c.value;
+            c.value = c.label;
+            c.index = i;
+          }
+        }
         return res;
       };
       if (field.preload) {
         field.choices = await fetch_choices();
+        console.log("??", field.choices);
       } else {
         field.choices = fetch_choices;
       }
@@ -855,6 +910,7 @@ Xodel._make_model_class = function (opts) {
     static unique_together = opts.unique_together;
     static auto_primary_key =
       opts.auto_primary_key == undefined ? false : Xodel.auto_primary_key;
+    static referenced_label_column = opts.referenced_label_column;
     constructor(data) {
       super(data);
       return ModelClass.create_record(data);
@@ -913,9 +969,17 @@ Xodel.normalize = function (options) {
   const _extends = options.extends;
   const model = {
     admin: clone(options.admin || {}),
-    table_name: options.table_name || (_extends && _extends.table_name) || undefined,
-    label: options.label || (_extends && _extends.label) || undefined,
   };
+
+  for (const extend_attr of ["table_name", "label", "referenced_label_column"]) {
+    if (options[extend_attr] === undefined) {
+      if (options._extends) {
+        model[extend_attr] = options._extends[extend_attr];
+      }
+    } else {
+      model[extend_attr] = options[extend_attr];
+    }
+  }
   const opts_fields = {};
   const opts_field_names = [];
   for (let [key, field] of Object.entries(options.fields || {})) {
@@ -1286,6 +1350,7 @@ Xodel.validate_create = function (input, names) {
     } catch (error) {
       return this.make_field_error({
         name,
+        value: input[name],
         message: error.message,
         index: error.index,
       });
@@ -1333,6 +1398,7 @@ Xodel.validate_update = function (input, names) {
       } catch (error) {
         return this.make_field_error({
           name,
+          value: input[name],
           message: error.message,
           index: error.index,
         });
@@ -1384,9 +1450,10 @@ Xodel.check_upsert_key = function (rows, key) {
   }
   return [rows, key];
 };
-Xodel.make_field_error = function ({ name, message, index, batch_index }) {
+Xodel.make_field_error = function ({ name, message, index, batch_index, value }) {
   const field = assert(this.fields[name], "invalid feild name: " + name);
   const err = field.make_error(message, index);
+  err.value = value;
   if (batch_index !== undefined) {
     err.batch_index = batch_index;
     throw new ValidateBatchError(err);
@@ -1472,10 +1539,7 @@ Xodel.validate_update_data = function (rows, columns) {
   return [cleaned, columns];
 };
 Xodel.validate_create_rows = function (rows, key, columns) {
-  const [checked_rows, checked_key] = this.check_upsert_key(
-    rows,
-    key || this.primary_key,
-  );
+  const [checked_rows, checked_key] = this.check_upsert_key(rows, key);
   const [cleaned_rows, cleaned_columns] = this.validate_create_data(
     checked_rows,
     columns,
@@ -1483,10 +1547,7 @@ Xodel.validate_create_rows = function (rows, key, columns) {
   return [cleaned_rows, checked_key, cleaned_columns];
 };
 Xodel.validate_update_rows = function (rows, key, columns) {
-  const [checked_rows, checked_key] = this.check_upsert_key(
-    rows,
-    key || this.primary_key,
-  );
+  const [checked_rows, checked_key] = this.check_upsert_key(rows, key);
   const [cleaned_rows, cleaned_columns] = this.validate_update_data(
     checked_rows,
     columns,
@@ -1553,3 +1614,4 @@ for (const [k, v] of Object.entries(ModelSql)) {
   }
 }
 export const Model = Xodel;
+export default Xodel;
