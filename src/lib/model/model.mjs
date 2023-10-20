@@ -792,18 +792,10 @@ Xodel.create_model_async = async function (options) {
         const res = options.choices_callback
           ? options.choices_callback(choices, field)
           : choices;
-        if (field.autocomplete && field.type == "foreignkey") {
-          for (const [i, c] of res.entries()) {
-            c._value = c.value;
-            c.value = c.label;
-            c.index = i;
-          }
-        }
         return res;
       };
       if (field.preload) {
         field.choices = await fetch_choices();
-        console.log("??", field.choices);
       } else {
         field.choices = fetch_choices;
       }

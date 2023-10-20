@@ -12,7 +12,7 @@ const mediaType =
   field.media_type == "video" ? "video" : fieldType.includes("image") ? "image" : "all";
 const filePickerRef = ref(null);
 const autocompletePopupRef = ref(null);
-const autocompleteSearchText = ref("");
+const searchText = ref("");
 // const uniFile = {
 //   cloudPath: "1684568038130_0.png",
 //   extname: "png",
@@ -128,20 +128,34 @@ let fieldChoices, fuiChoices;
 onLoad(async () => {
   if (typeof field.choices == "function") {
     field.choices = await field.choices();
-    console.log("field.choices", field.choices);
+    if (field.type == "foreignkey") {
+      field.prepare_choices();
+    }
   }
   if (Array.isArray(field.choices)) {
     fieldChoices = field.choices.map((e) => ({
+      _value: e._value,
       text: e.label,
       value: e.value,
     }));
     fuiChoices = field.choices.map((e) => ({
+      _value: e._value,
       text: e.label,
       value: e.value,
       checked: e.value === props.modelValue,
     }));
   }
 });
+const showChoicesWhenSmall = (field) => {
+  if (
+    field.choices.length <
+    (field.max_display_count || process.env.MAX_DISPLAY_COUNT || 20)
+  ) {
+    return fieldChoices.slice();
+  } else {
+    return [];
+  }
+};
 </script>
 <template>
   <template v-if="field.autocomplete">
@@ -158,26 +172,30 @@ onLoad(async () => {
         <div style="text-align: center; margin-bottom: 1em">
           {{ field.label }}
         </div>
-        <input
-          v-model="autocompleteSearchText"
-          :placeholder="field.hint || '输入关键字查找'"
-          focus
-        />
+        <input v-model="searchText" :placeholder="field.hint || '输入关键字查找'" focus />
         <scroll-view :scroll-y="true" style="height: 31em">
           <uni-list>
             <uni-list-item
-              v-for="(c, i) in autocompleteSearchText
+              v-for="(c, i) in searchText
                 ? fieldChoices.filter((e) => {
                     if (typeof e.text == 'string') {
-                      return e.text.includes(autocompleteSearchText);
+                      return e.text.includes(searchText);
                     } else {
                       return true;
                     }
                   })
-                : []"
+                : showChoicesWhenSmall(field)"
               clickable
               @click="
-                sendValue(c.text);
+                sendValue(c.value);
+                if (field.type == 'foreignkey' && Array.isArray(field.choices)) {
+                  const matched = field.choices.find((e) => e.value === c.value);
+                  if (matched) {
+                    field._postValue = matched._value;
+                  } else {
+                    field._postValue = null;
+                  }
+                }
                 autocompletePopupRef.close();
               "
               :key="i"

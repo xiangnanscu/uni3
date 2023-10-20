@@ -710,6 +710,17 @@ class foreignkey extends basefield {
     if (this.db_type === FK_TYPE_NOT_DEFIEND) {
       this.db_type = fk.db_type || fk.type;
     }
+    this.prepare_choices();
+  }
+  prepare_choices() {
+    if (Array.isArray(this.choices)) {
+      for (const [_, c] of this.choices.entries()) {
+        if (c._value === undefined) {
+          c._value = c.value;
+          c.value = c.label;
+        }
+      }
+    }
   }
   get_validators(validators) {
     const foreignkey_validator = (v) => {
@@ -767,7 +778,7 @@ class foreignkey extends basefield {
     }
   }
   to_post_value(value, values) {
-    return this._postValue ?? value;
+    return this._postValue;
   }
   to_form_value(value, values) {
     if (typeof value == "object") {
