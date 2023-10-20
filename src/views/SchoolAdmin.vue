@@ -10,7 +10,7 @@
           to="/views/SchoolStudentRegedit"
           :showArrow="false"
         />
-        <uni-list-item
+        <!-- <uni-list-item
           title="设定校领导"
           thumb-size="lg"
           link
@@ -23,12 +23,12 @@
           link
           to="/views/SchoolHome"
           :showArrow="false"
-        />
+        /> -->
         <uni-list-item
           title="设定班主任"
           thumb-size="lg"
           link
-          to="/views/SchoolHome"
+          to="/views/SchoolTeacherRegedit"
           :showArrow="false"
         />
         <uni-list-item

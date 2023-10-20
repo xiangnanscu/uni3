@@ -60,7 +60,7 @@
 <script setup>
 const PayForOther = Model.create_model({
   fields: {
-    sfzh: { label: "身份证号", type: "sfzh" },
+    sfzh: { label: "身份证号", type: "sfzh", required: true },
   },
 });
 </script>

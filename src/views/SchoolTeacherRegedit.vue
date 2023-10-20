@@ -2,8 +2,9 @@
   <page-layout>
     <x-alert title="智慧校园"> </x-alert>
     <uni-card title="温馨提示">
-      <p>此处填写教师基本信息</p>
+      <p>此处进行班主任登记</p>
     </uni-card>
+    <fui-preview :previewData="previewData"></fui-preview>
     <modelform-uni
       v-if="loaded"
       :model="profileModel"
@@ -23,7 +24,23 @@ useWxShare({
 });
 const { session } = useSession();
 const user = session.user;
-const loginUser = useLogin();
+const query = useQuery();
+const previewData = {
+  list: [
+    {
+      label: "姓名",
+      value: user.xm,
+    },
+    {
+      label: "身份证号",
+      value: user.username,
+    },
+    {
+      label: "手机号",
+      value: user.phone,
+    },
+  ],
+};
 const postData = ref({
   openid: user.openid,
   xm: "",
@@ -36,13 +53,12 @@ const loaded = ref(false);
 const updateId = ref();
 let profileModel;
 onLoad(async () => {
-  const modelJson = await useGet(`/teacher/json`);
-  profileModel = Model.create_model(modelJson);
-  let teacherQuery = { sfzh: user.username };
-  // #ifdef MP-WEIXIN
-  teacherQuery = { openid: user.openid };
-  // #endif
-  const [teacherData] = await usePost(`/teacher/records`, teacherQuery);
+  const [teacherData] = await usePost(`/teacher/records`, { usr_id: user.id });
+  const SchoolJson = await useGet(`/teacher/json`);
+  SchoolJson.field_names = ["school_id"];
+  SchoolJson.admin.form_names = ["school_id"];
+  profileModel = await Model.create_model_async(SchoolJson);
+  console.log({ profileModel });
   if (teacherData) {
     Object.assign(postData.value, teacherData);
     updateId.value = teacherData.id;

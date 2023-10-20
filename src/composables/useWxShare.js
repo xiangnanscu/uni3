@@ -1,19 +1,19 @@
-export function useWxShare({ title, imageUrl, desc }) {
+export function useWxShare({ title, imageUrl, desc, path }) {
   // console.log("useWxShare", { title, imageUrl, desc });
   onShareTimeline((options) => {
     return {
       title,
       desc,
-      path: utils.getFullPath(),
-      imageUrl: imageUrl || "../static/jax.png"
+      path: path || utils.getFullPath(),
+      imageUrl: imageUrl || "../static/jax.png",
     };
   });
   onShareAppMessage((options) => {
     return {
       title,
       desc,
-      path: utils.getFullPath(),
-      imageUrl: imageUrl || "../static/jax.png"
+      path: path || utils.getFullPath(),
+      imageUrl: imageUrl || "../static/jax.png",
     };
   });
 }

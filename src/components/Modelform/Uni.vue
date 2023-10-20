@@ -84,7 +84,9 @@ const submit = async () => {
   resetErrors();
   formRef.value.clearValidate();
   const cleanedData = await formRef.value.validate();
-  const formdata = props.model.to_post_value(cleanedData, props.model.names);
+  // 因为foreignkey autocomplete的缘故,需要将label还原为value, 所以要再调用一次validate
+  const modelData = props.model.validate_create(cleanedData);
+  const formdata = props.model.to_post_value(modelData, props.model.names);
   // if (vm.vnode.props.onSendData) {
   //   // 不知为何微信小程序突然props不包含onXXX属性和H5端不一致
   //   emit("sendData", formdata);

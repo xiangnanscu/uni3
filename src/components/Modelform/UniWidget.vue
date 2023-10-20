@@ -116,15 +116,6 @@ field.attrs.wxPhone = false;
 field.attrs.wx_avatar = false;
 // #endif
 const placeholder = field.attrs?.placeholder || field.hint;
-const fieldChoices = field.choices?.map((e) => ({
-  text: e.label,
-  value: e.value,
-}));
-const fuiChoices = field.choices?.map((e) => ({
-  text: e.label,
-  value: e.value,
-  checked: e.value === props.modelValue,
-}));
 const fuiSelectShow = ref();
 const onFuiSelectConfirm = ({ index, options }) => {
   if (index === -1) {
@@ -133,6 +124,24 @@ const onFuiSelectConfirm = ({ index, options }) => {
   sendValue(options.value);
   fuiSelectShow.value = false;
 };
+let fieldChoices, fuiChoices;
+onLoad(async () => {
+  if (typeof field.choices == "function") {
+    field.choices = await field.choices();
+    console.log("field.choices", field.choices);
+  }
+  if (Array.isArray(field.choices)) {
+    fieldChoices = field.choices.map((e) => ({
+      text: e.label,
+      value: e.value,
+    }));
+    fuiChoices = field.choices.map((e) => ({
+      text: e.label,
+      value: e.value,
+      checked: e.value === props.modelValue,
+    }));
+  }
+});
 </script>
 <template>
   <template v-if="field.autocomplete">
@@ -158,15 +167,21 @@ const onFuiSelectConfirm = ({ index, options }) => {
           <uni-list>
             <uni-list-item
               v-for="(c, i) in autocompleteSearchText
-                ? fieldChoices.filter((e) => e.value.includes(autocompleteSearchText))
+                ? fieldChoices.filter((e) => {
+                    if (typeof e.text == 'string') {
+                      return e.text.includes(autocompleteSearchText);
+                    } else {
+                      return true;
+                    }
+                  })
                 : []"
               clickable
               @click="
-                sendValue(c.value);
+                sendValue(c.text);
                 autocompletePopupRef.close();
               "
               :key="i"
-              :title="c.value"
+              :title="c.text"
               :rightText="c.hint"
             />
           </uni-list>

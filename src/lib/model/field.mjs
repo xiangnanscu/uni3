@@ -7,7 +7,7 @@ import {
   get_localtime,
   parse_size,
 } from "./utils.mjs";
-import * as Validator from "./validator.mjs";
+import * as Validators from "./validator.mjs";
 import { Model } from "./model.mjs";
 
 const TABLE_MAX_ROWS = 1;
@@ -172,9 +172,9 @@ class basefield {
   }
   get_validators(validators) {
     if (this.required) {
-      validators.unshift(Validator.required(this.get_error_message("required")));
+      validators.unshift(Validators.required(this.get_error_message("required")));
     } else {
-      validators.unshift(Validator.not_required);
+      validators.unshift(Validators.not_required);
     }
     if (typeof this.choices_url === "string" && this.strict) {
       const dynamic_choices_validator = async (val) => {
@@ -255,7 +255,7 @@ class basefield {
       try {
         value = validator(value, ctx);
       } catch (error) {
-        if (error instanceof Validator.SkipValidateError) {
+        if (error instanceof Validators.SkipValidateError) {
           return value;
         } else {
           throw error;
@@ -365,15 +365,15 @@ class string extends basefield {
   get_validators(validators) {
     for (const e of ["pattern", "length", "minlength", "maxlength"]) {
       if (this[e]) {
-        validators.unshift(Validator[e](this[e], this.get_error_message(e)));
+        validators.unshift(Validators[e](this[e], this.get_error_message(e)));
       }
     }
     if (this.compact) {
-      validators.unshift(Validator.delete_spaces);
+      validators.unshift(Validators.delete_spaces);
     } else if (this.trim) {
-      validators.unshift(Validator.trim);
+      validators.unshift(Validators.trim);
     }
-    validators.unshift(Validator.string);
+    validators.unshift(Validators.string);
     return super.get_validators(validators);
   }
   widget_attrs(extra_attrs) {
@@ -413,7 +413,7 @@ class sfzh extends string {
     super({ type: "sfzh", db_type: "varchar", length: 18, ...options });
   }
   get_validators(validators) {
-    validators.unshift(Validator.sfzh);
+    validators.unshift(Validators.sfzh);
     return super.get_validators(validators);
   }
 }
@@ -423,7 +423,7 @@ class email extends string {
     super({ type: "email", db_type: "varchar", maxlength: 255, ...options });
   }
   get_validators(validators) {
-    validators.unshift(Validator.email);
+    validators.unshift(Validators.email);
     return super.get_validators(validators);
   }
 }
@@ -439,7 +439,7 @@ class year_month extends string {
     super({ type: "year_month", db_type: "varchar", length: 7, ...options });
   }
   get_validators(validators) {
-    validators.unshift(Validator.year_month);
+    validators.unshift(Validators.year_month);
     return super.get_validators(validators);
   }
 }
@@ -447,7 +447,7 @@ class year_month extends string {
 function add_min_or_max_validators(self, validators) {
   for (const name of ["min", "max"]) {
     if (self[name]) {
-      validators.unshift(Validator[name](self[name], self.get_error_message(name)));
+      validators.unshift(Validators[name](self[name], self.get_error_message(name)));
     }
   }
 }
@@ -459,7 +459,7 @@ class integer extends basefield {
   }
   get_validators(validators) {
     add_min_or_max_validators(this, validators);
-    validators.unshift(Validator.integer);
+    validators.unshift(Validators.integer);
     return super.get_validators(validators);
   }
   json() {
@@ -503,7 +503,7 @@ class float extends basefield {
   }
   get_validators(validators) {
     add_min_or_max_validators(this, validators);
-    validators.unshift(Validator.number);
+    validators.unshift(Validators.number);
     return super.get_validators(validators);
   }
   prepare_for_db(value) {
@@ -530,9 +530,9 @@ class boolean extends basefield {
   }
   get_validators(validators) {
     if (this.cn) {
-      validators.unshift(Validator.boolean_cn);
+      validators.unshift(Validators.boolean_cn);
     } else {
-      validators.unshift(Validator.boolean);
+      validators.unshift(Validators.boolean);
     }
     return super.get_validators(validators);
   }
@@ -561,7 +561,7 @@ class datetime extends basefield {
     return this;
   }
   get_validators(validators) {
-    validators.unshift(Validator.datetime);
+    validators.unshift(Validators.datetime);
     return super.get_validators(validators);
   }
   json() {
@@ -587,7 +587,7 @@ class date extends basefield {
     super({ type: "date", ...options });
   }
   get_validators(validators) {
-    validators.unshift(Validator.date);
+    validators.unshift(Validators.date);
     return super.get_validators(validators);
   }
   prepare_for_db(value) {
@@ -605,7 +605,7 @@ class time extends basefield {
     super({ type: "time", precision: 0, timezone: true, ...options });
   }
   get_validators(validators) {
-    validators.unshift(Validator.time);
+    validators.unshift(Validators.time);
     return super.get_validators(validators);
   }
   prepare_for_db(value) {
@@ -621,11 +621,11 @@ const VALID_FOREIGN_KEY_TYPES = {
   foreignkey: String,
   string: String,
   sfzh: String,
-  integer: Validator.integer,
-  float: Validator.float,
-  datetime: Validator.datetime,
-  date: Validator.date,
-  time: Validator.time,
+  integer: Validators.integer,
+  float: Validators.float,
+  datetime: Validators.datetime,
+  date: Validators.date,
+  time: Validators.time,
 };
 
 class foreignkey extends basefield {
@@ -681,10 +681,18 @@ class foreignkey extends basefield {
       }`,
     );
     this.reference_column = rc;
-    const rlc = this.reference_label_column || rc;
+    const rlc = this.reference_label_column || fk_model.referenced_label_column || rc;
+    let _fk;
+    let _fk_of_fk;
+    const matches = rlc.match(/(\w+)__(\w+)/);
+    if (matches) {
+      _fk = matches[1];
+      _fk_of_fk = matches[2];
+    }
+    const check_key = _fk || rlc;
     assert(
-      fk_model.fields[rlc],
-      `invalid foreignkey label name ${rlc} for foreign model ${
+      fk_model.fields[check_key],
+      `invalid foreignkey label name ${check_key} for foreign model ${
         fk_model.table_name || "[TABLE NAME NOT DEFINED YET]"
       }`,
     );
@@ -701,17 +709,32 @@ class foreignkey extends basefield {
   get_validators(validators) {
     const fk_name = this.reference_column;
     const foreignkey_validator = (v) => {
+      console.log("foreignkey_validator", v);
       if (typeof v === "object") {
         v = v[fk_name];
       }
-      try {
-        v = this.convert(v);
-      } catch (error) {
-        throw new Error("error when converting foreign key:" + error.message);
-      }
+      v = this.convert(v);
       return v;
     };
     validators.unshift(foreignkey_validator);
+    const foreignkey_autocomplete_validator = (v) => {
+      console.log("foreignkey_autocomplete_validator", v);
+      if (this.autocomplete && Array.isArray(this.choices)) {
+        // 前端,需要进行双检查
+        const matchedChoice = this.choices.find((e) => e.label === v);
+        console.log("this.choices", this.choices, matchedChoice);
+        if (matchedChoice) {
+          return matchedChoice.value;
+        }
+        if (this.choices.some((e) => e.value === v)) {
+          return v;
+        }
+        throw new Error("输入错误，请输入关键字然后在下拉列表中选取");
+      } else {
+        return v;
+      }
+    };
+    validators.unshift(foreignkey_autocomplete_validator);
     return super.get_validators(validators);
   }
   load(value) {
@@ -763,14 +786,14 @@ class json extends basefield {
     if (value === "" || value === undefined) {
       return NULL;
     } else {
-      return Validator.encode(value);
+      return Validators.encode(value);
     }
   }
 }
 
 function skip_validate_when_string(v) {
   if (typeof v === "string") {
-    throw new Validator.SkipValidateError();
+    throw new Validators.SkipValidateError();
   } else {
     return v;
   }
@@ -807,7 +830,7 @@ class basearray extends json {
     }
     validators.unshift(check_array_type);
     validators.unshift(skip_validate_when_string);
-    // validators.push(Validator.encode_as_array);
+    // validators.push(Validators.encode_as_array);
     return super.get_validators(validators);
   }
   get_empty_value_to_update() {
