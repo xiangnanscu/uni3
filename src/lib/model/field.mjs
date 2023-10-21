@@ -162,8 +162,8 @@ class basefield {
       this.choices = get_choices(this.choices);
     }
     if (this.autocomplete) {
-      this.max_choices_count ||= process.env.MAX_CHOICES_COUNT || 100;
-      this.max_display_count ||= process.env.MAX_DISPLAY_COUNT || 50;
+      this.max_choices_count ??= process.env.MAX_CHOICES_COUNT || 100;
+      this.max_display_count ??= process.env.MAX_DISPLAY_COUNT || 50;
     }
     return this;
   }
@@ -784,14 +784,10 @@ class foreignkey extends basefield {
   }
   to_form_value(value, values) {
     if (typeof value == "object") {
-      return value[this.reference_label_column] === undefined ||
-        value[this.reference_label_column] === null
-        ? value[this.reference_column]
-        : value[this.reference_label_column];
+      return value[this.reference_label_column] ?? value[this.reference_column];
     }
     // 后端按raw():get()输出
-    const readable = values[`${this.name}__${this.reference_label_column}`];
-    return readable === undefined || readable === null ? value : readable;
+    return values[`${this.name}__${this.reference_label_column}`] ?? value;
   }
 }
 
