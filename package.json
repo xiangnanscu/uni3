@@ -1,13 +1,13 @@
 {
   "name": "uni-preset-vue",
-  "version": "1.313.0",
+  "version": "1.318.0",
   "license": "ISC",
   "scripts": {
     "env": "dotenv -e .env -e .env.local --",
     "cli": "C:/Users/Admin/Documents/HBuilderX/cli.exe",
     "preuni": "node bin/views-checker.js",
     "uni": "yarn env uni",
-    "uni:build": "vue-tsc --noEmit && npm --no-git-tag-version version minor && yarn uni build --manifest",
+    "uni:build": "vue-tsc --noEmit && npm --no-git-tag-version version minor && yarn uni build",
     "dev": "yarn uni",
     "devw": "bash bin/wx-dev.sh",
     "build": "yarn uni:build",
