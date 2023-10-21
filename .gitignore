@@ -20,7 +20,7 @@ node_modules
 
 .npmrc
 # Editor directories and files
-conf/nginx.conf
+conf/*.key
 settings.json
 **/dist/*
 !**/dist/*.html
