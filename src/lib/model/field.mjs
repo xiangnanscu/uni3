@@ -162,8 +162,8 @@ class basefield {
       this.choices = get_choices(this.choices);
     }
     if (this.autocomplete) {
-      this.max_choices_count ||= process.env.MAX_CHOICES_COUNT || 100;
-      this.max_display_count ||= process.env.MAX_DISPLAY_COUNT || 50;
+      this.max_choices_count ||= Number(process.env.MAX_CHOICES_COUNT) || 100;
+      this.max_display_count ||= Number(process.env.MAX_DISPLAY_COUNT) || 50;
     }
     return this;
   }

@@ -149,7 +149,7 @@ onLoad(async () => {
 const showChoicesWhenSmall = (field) => {
   if (
     field.choices.length <
-    (field.max_display_count || process.env.MAX_DISPLAY_COUNT || 20)
+    (field.max_display_count || Number(process.env.MAX_DISPLAY_COUNT) || 20)
   ) {
     return fieldChoices.slice();
   } else {
