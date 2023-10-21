@@ -50,6 +50,7 @@
   "quickapp": {},
   /* 小程序特有相关 */
   // https://uniapp.dcloud.net.cn/collocation/manifest.html#mp-weixin
+  // https://uniapp.dcloud.net.cn/collocation/manifest.html#setting
   "mp-weixin": {
     "appid": "wxcec88a7e2c1e81c7",
     "requiredBackgroundModes": [
