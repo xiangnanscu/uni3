@@ -57,7 +57,7 @@
       "subscribeMessage"
     ],
     "setting": {
-      "minified": false,
+      "minified": true,
       "es6": true,
       "es7": true,
       "urlCheck": false
