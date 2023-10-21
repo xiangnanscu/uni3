@@ -58,8 +58,8 @@
     ],
     "setting": {
       "minified": false,
-      "es6": true,
-      "es7": true,
+      "es6": false,
+      "es7": false,
       "urlCheck": false
     },
     "usingComponents": true
