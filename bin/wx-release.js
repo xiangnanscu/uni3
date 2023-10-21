@@ -5,7 +5,18 @@ const os = require("os");
 const ci = require("miniprogram-ci");
 var path = require("path");
 var { version } = require("../package.json");
+const dotenv = require("dotenv");
+const { expand } = require("dotenv-expand");
 
+const { parsed: exposedEnvs } = expand({
+  ...dotenv.config({
+    override: false,
+    path: ".env",
+  }),
+  ignoreProcessEnv: true,
+});
+
+// console.log({ exposedEnvs });
 // var keypath = path
 //   .resolve("./conf/private.wxcec88a7e2c1e81c7.key")
 //   .replaceAll("\\", "/");
@@ -19,11 +30,11 @@ var { version } = require("../package.json");
 
 const desc = process.argv[2] || "update";
 const project = new ci.Project({
-  appid: "wxcec88a7e2c1e81c7",
+  appid: exposedEnvs.WX_MINI_APPID,
   type: "miniProgram",
   projectPath: "./dist/build/mp-weixin",
-  privateKeyPath: "./conf/private.wxcec88a7e2c1e81c7.key",
-  ignores: ["node_modules/**/*"]
+  privateKeyPath: `./conf/private.${exposedEnvs.WX_MINI_APPID}.key`,
+  ignores: ["node_modules/**/*"],
 });
 
 ci.upload({
@@ -33,8 +44,8 @@ ci.upload({
   setting: {
     es6: false,
     es7: false,
-    minify: false
-  }
+    minify: false,
+  },
 }).then((res) => {
   // eslint-disable-next-line no-undef
   console.log("upload success:\n", res);
@@ -42,7 +53,7 @@ ci.upload({
     if (err) {
       console.log("seems err:", err, {
         stdout,
-        stderr
+        stderr,
       });
       throw new Error(err);
     }
