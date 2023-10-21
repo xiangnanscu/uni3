@@ -29,7 +29,7 @@ ci.upload({
   desc,
   setting: {
     es6: false,
-    es7: true,
+    es7: false,
     minify: true,
   },
 }).then((res) => {
