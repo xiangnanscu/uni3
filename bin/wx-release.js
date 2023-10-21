@@ -28,7 +28,7 @@ ci.upload({
   version: version,
   desc,
   setting: {
-    es6: true,
+    es6: false,
     es7: true,
     minify: true,
   },
