@@ -28,6 +28,7 @@ ci.upload({
   version: version,
   desc,
   setting: {
+    // 经过一下午的反复实验,终于确定要设置为false
     es6: false,
     es7: false,
     minify: true,
