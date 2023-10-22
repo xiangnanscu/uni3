@@ -98,7 +98,7 @@ onLoad(async (options) => {
       JSON.stringify(options),
     );
     await utils.gotoPage({
-      url: redirectUrl.value,
+      url: options.redirect || redirectUrl.value, // redirectUrl.value,
       redirect: true,
     });
   }
