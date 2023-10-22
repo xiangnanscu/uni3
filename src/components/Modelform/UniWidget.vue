@@ -151,7 +151,7 @@ const showChoicesWhenSmall = (field) => {
     field.choices.length <
     (field.max_display_count || Number(process.env.MAX_DISPLAY_COUNT) || 20)
   ) {
-    return fieldChoices.slice();
+    return fieldChoices?.slice() || [];
   } else {
     return [];
   }

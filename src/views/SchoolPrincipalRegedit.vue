@@ -11,6 +11,7 @@
           :values="postData"
           :sync-values="true"
           @send-data="successPost"
+          submit-button-open-type="share"
           submitButtonText="邀请校方管理员"
         ></modelform-uni>
         <!-- <x-button @click="invitePrincipal">邀请校方管理员</x-button> -->
@@ -28,10 +29,6 @@
 <script setup>
 // onShareTimeline
 // onShareAppMessage
-useWxShare({
-  title: "智慧校园教师登记",
-  desc: "",
-});
 const { session } = useSession();
 const ready = ref(false);
 const user = session.user;
@@ -40,6 +37,14 @@ const godRole = ref(user.permission >= process.env.GOD_PERMISSION ? user : null)
 const principalRole = ref();
 const sysadminRole = ref();
 const postData = { school_id: "" };
+useWxShare({
+  title: "智慧校园校方管理员登记",
+  desc: "",
+  path: (options) => {
+    console.log({ options });
+    return `${utils.getFullPath()}?school_id=${postData.school_id}`;
+  },
+});
 const previewData = {
   list: [
     {

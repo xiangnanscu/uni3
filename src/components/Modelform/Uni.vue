@@ -14,6 +14,7 @@ const props = defineProps({
   method: { type: String, default: "POST" }, // get
   hideSubmitButton: { type: Boolean, default: false },
   submitButtonText: { type: String, default: "提交" },
+  submitButtonOpenType: { type: String, default: "" },
   errShowType: { type: String, default: "undertext" },
   showModal: { type: Boolean, default: false },
   labelPosition: { type: String, default: "left" }, // top
@@ -251,7 +252,12 @@ const submit = async () => {
         />
       </uni-forms-item>
     </template>
-    <x-button v-if="!props.hideSubmitButton" :disabled="submiting" @click="submit">
+    <x-button
+      v-if="!props.hideSubmitButton"
+      :disabled="submiting"
+      @click="submit"
+      :open-type="props.submitButtonOpenType"
+    >
       {{ props.submitButtonText }}
     </x-button>
   </uni-forms>
