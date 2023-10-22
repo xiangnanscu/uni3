@@ -161,7 +161,12 @@ const setupNav = () => {
           });
           return false;
         }
-        return opts;
+        if (opts.url.includes("?")) {
+          opts.url = getSafeRedirect(opts.url);
+          return opts;
+        } else {
+          return opts;
+        }
       },
       complete(res) {
         // console.log("路由拦截结束", res);
