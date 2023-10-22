@@ -109,11 +109,14 @@ const getSafeRedirect = (url) => {
     // 两个问号说明是redirect中包含问号的情况,需要encode
     const res = {};
     for (const token of qs.join("?").split("&")) {
+      console.log({ token });
       const m = token.match(/^(\w+?)=(.+)/);
       if (m) {
         res[m[1]] = encodeURIComponent(m[2]);
+        console.log({ res });
       }
     }
+    console.log("safe:", `${path}?${res.join("&")}`);
     return `${path}?${res.join("&")}`;
   } else {
     return url;
