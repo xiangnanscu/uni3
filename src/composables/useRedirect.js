@@ -8,7 +8,7 @@ export function useRedirect() {
         // 所以这里不能绕过登录页面
         // redirectUrl = process.env.UNI_HOME_PAGE;
       }
-      return decodeURIComponent; // decodeURIComponent(redirectUrl);
+      return decodeURIComponent(redirectUrl);
     } else {
       return process.env.UNI_HOME_PAGE;
     }
