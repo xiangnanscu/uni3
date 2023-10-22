@@ -75,7 +75,17 @@ const regeditPrincipal = async () => {
 };
 let schoolModel;
 onLoad(async () => {
-  useRealNameCert();
+  if (!user.username) {
+    console.log(
+      "****useRealNameCert 未实名, 需要实名认证, 当前页面:",
+      utils.getFullPath(),
+    );
+    return utils.gotoPage({
+      url: "/views/RealNameCert",
+      query: { message: "此操作需要先实名认证", redirect: utils.getFullPath() },
+      redirect: true,
+    });
+  }
   if (query.school_id) {
     const school = await useGet(`/school/detail/${query.school_id}`);
     previewData.list[3].value = school.name;
