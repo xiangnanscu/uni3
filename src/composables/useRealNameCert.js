@@ -1,6 +1,5 @@
 export function useRealNameCert() {
   const user = useUser();
-  console.log("useRealNameCert redirect", utils.getFullPath());
   if (!user.username) {
     return utils.gotoPage({
       url: "/views/RealNameCert",
