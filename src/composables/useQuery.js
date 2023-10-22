@@ -1,8 +1,8 @@
 export function useQuery() {
-  const query = reactive({});
+  const query = ref({});
   onLoad((options) => {
     for (const [name, value] of Object.entries(options)) {
-      query[name] = decodeURIComponent(value);
+      query.value[name] = decodeURIComponent(value);
     }
   });
   return query;

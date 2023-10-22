@@ -66,7 +66,7 @@ const previewData = {
 const regeditPrincipal = async () => {
   await usePost(`/principal/get_or_create`, {
     usr_id: user.id,
-    school_id: query.school_id,
+    school_id: query.value.school_id,
   });
   uni.showToast({
     title: "已登记",
@@ -75,8 +75,8 @@ const regeditPrincipal = async () => {
 let schoolModel;
 onLoad(async () => {
   useRealNameCert();
-  if (query.school_id) {
-    const school = await useGet(`/school/detail/${query.school_id}`);
+  if (query.value.school_id) {
+    const school = await useGet(`/school/detail/${query.value.school_id}`);
     previewData.list[3].value = school.name;
   }
   sysadminRole.value = (await usePost(`/sys_admin/records`, { usr_id: user.id }))[0];
