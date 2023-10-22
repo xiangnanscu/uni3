@@ -106,6 +106,7 @@ onLoad(async (options) => {
       await loginUser(userData.value);
     } else {
       //有时候已经登录了也会重定向到此页面,则不用再调用了
+      console.log("已经登录直接重定向");
       await utils.gotoPage({
         url: redirectUrl.value,
         redirect: true,
