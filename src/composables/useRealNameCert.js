@@ -7,7 +7,7 @@ export function useRealNameCert() {
     );
     return utils.gotoPage({
       url: "/views/RealNameCert",
-      query: { redirect: utils.getFullPath(), message: "此操作需要先实名认证" },
+      query: { message: "此操作需要先实名认证", redirect: utils.getFullPath() },
       redirect: false,
     });
   }
