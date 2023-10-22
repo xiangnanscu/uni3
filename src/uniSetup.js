@@ -107,13 +107,13 @@ const getSafeRedirect = (url) => {
   const [path, ...qs] = url.split("?");
   if (qs.length > 1) {
     // 两个问号说明是redirect中包含问号的情况,需要encode
-    const res = {};
+    const res = [];
     for (const token of qs.join("?").split("&")) {
-      console.log({ token });
+      // console.log({ token });
       const m = token.match(/^(\w+?)=(.+)/);
       if (m) {
-        res[m[1]] = encodeURIComponent(m[2]);
-        console.log({ res });
+        // res[m[1]] = encodeURIComponent(m[2]);
+        res.push(`${m[1]}=${encodeURIComponent(m[2])}`);
       }
     }
     console.log("safe:", `${path}?${res.join("&")}`);
