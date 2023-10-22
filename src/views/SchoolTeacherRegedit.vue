@@ -67,7 +67,7 @@ onLoad(async () => {
   SchoolJson.field_names = ["school_id"];
   SchoolJson.admin.form_names = ["school_id"];
   profileModel = await Model.create_model_async(SchoolJson);
-  console.log({ profileModel });
+
   if (teacher) {
     Object.assign(postData.value, teacher);
     updateId.value = teacher.id;

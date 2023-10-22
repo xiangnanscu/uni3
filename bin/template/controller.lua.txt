@@ -99,8 +99,8 @@ local {*table_name*}_choices = view:class {
 }
 function {*table_name*}_choices:post(request)
   local query = request.get_uri_args()
-  local s_value = request.format("%s as value", query.value)
-  local s_label = request.format("%s as label", query.label or query.value)
+  local s_value = request.format("%s as value", query)
+  local s_label = request.format("%s as label", query.label or query)
   return {*component_name*}:select(s_value, s_label):execr()
 end
 
