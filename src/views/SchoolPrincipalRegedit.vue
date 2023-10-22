@@ -4,22 +4,21 @@
     <div v-if="ready">
       <div v-if="godRole || sysadminRole">
         <uni-card title="温馨提示">
-          <p>管理员选好学校后点击“邀请校方管理员”把当前页面发送给校方管理员</p>
+          <p>管理员选好学校后点击“邀请学校管理员”把当前页面发送给学校管理员</p>
         </uni-card>
         <modelform-uni
           :model="schoolModel"
           @send-data="successPost"
           submit-button-open-type="share"
-          submitButtonText="邀请校方管理员"
+          submitButtonText="邀请学校管理员"
         ></modelform-uni>
-        <!-- <x-button @click="invitePrincipal">邀请校方管理员</x-button> -->
       </div>
       <div v-else>
         <uni-card title="温馨提示">
           <p>此处进行学校管理员登记</p>
         </uni-card>
         <fui-preview :previewData="previewData"></fui-preview>
-        <x-button @click="dispatcher">{{ buttonText }}</x-button>
+        <x-button @click="regeditPrincipal">登记</x-button>
       </div>
     </div>
   </page-layout>
@@ -39,7 +38,7 @@ const successPost = (data) => {
   schoolId.value = data.school_id;
 };
 useWxShare({
-  title: "智慧校园校方管理员登记",
+  title: "智慧校园学校管理员登记",
   desc: "",
   path: (currentPath) => {
     return `${currentPath}?school_id=${schoolId.value}`;
@@ -65,9 +64,21 @@ const previewData = {
     },
   ],
 };
+const regeditPrincipal = async () => {
+  await usePost(`/principal/get_or_create`, {
+    usr_id: user.id,
+    school_id: query.school_id,
+  });
+  uni.showToast({
+    title: "已登记",
+  });
+};
 let schoolModel;
 onLoad(async () => {
-  previewData.list[3].value = query.name;
+  if (query.school_id) {
+    const school = await useGet(`/school/detail/${query.school_id}`);
+    previewData.list[3].value = school.name;
+  }
   sysadminRole.value = (await usePost(`/sys_admin/records`, { usr_id: user.id }))[0];
   principalRole.value = (await usePost(`/principal/records`, { usr_id: user.id }))[0];
   const SchoolJson = await useGet(`/principal/json`);
