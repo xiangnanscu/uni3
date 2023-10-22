@@ -68,10 +68,11 @@ const regeditPrincipal = async () => {
     usr_id: user.id,
     school_id: query.school_id,
   });
-  utils.gotoPage("Home");
   uni.showToast({
     title: "已登记,请等待审核",
+    duration: 1000,
   });
+  utils.gotoPage("Home");
 };
 let schoolModel;
 onLoad(async () => {
