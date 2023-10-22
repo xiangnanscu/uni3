@@ -32,7 +32,7 @@ const redirectUrl = useRedirect();
 const store = useStore();
 store.message = "请先登录";
 const avatarSize = process.env.ALIOSS_AVATAR_SIZE || "2M";
-const loginUser = useLogin();
+const loginUser = useLogin({ redirectUrl });
 // #ifdef H5
 const successPostH5 = async (user) => {
   await loginUser(user);

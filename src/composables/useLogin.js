@@ -1,6 +1,5 @@
-export function useLogin() {
+export function useLogin({ redirectUrl }) {
   const { login } = useSession();
-  const redirectUrl = useRedirect();
   return async (user) => {
     login(user);
     console.log("登录用户, 重定向至:", redirectUrl.value);

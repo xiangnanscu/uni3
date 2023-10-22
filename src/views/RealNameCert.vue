@@ -16,8 +16,9 @@
   </page-layout>
 </template>
 <script setup>
+const redirectUrl = useRedirect();
 const { session } = useSession();
-const loginUser = useLogin();
+const loginUser = useLogin({ redirectUrl });
 const query = useQuery();
 let wxPhone = true;
 // #ifdef H5
