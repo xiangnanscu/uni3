@@ -50,6 +50,7 @@ const loginModel = Model.create_model({
 const successPostWX = async (user) => {
   console.log("fullPath:", utils.getFullPath());
   console.log("redirect:", useRedirect().value);
+  console.log("redirect2:", useRedirect().value);
   await loginUser({ ...userData.value, ...user }, useRedirect().value);
 };
 
