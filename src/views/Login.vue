@@ -28,7 +28,8 @@
 </template>
 
 <script setup>
-const redirectUrl = useRedirect();
+const query = useQuery();
+const redirectUrl = useRedirect(query);
 const store = useStore();
 store.message = "请先登录";
 const avatarSize = process.env.ALIOSS_AVATAR_SIZE || "2M";

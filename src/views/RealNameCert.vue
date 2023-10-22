@@ -16,10 +16,10 @@
   </page-layout>
 </template>
 <script setup>
-const redirectUrl = useRedirect();
+const query = useQuery();
+const redirectUrl = useRedirect(query);
 const { session } = useSession();
 const loginUser = useLogin({ redirectUrl });
-const query = useQuery();
 let wxPhone = true;
 // #ifdef H5
 wxPhone = false;

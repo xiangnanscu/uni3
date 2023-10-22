@@ -1,5 +1,4 @@
-export function useRedirect() {
-  const query = useQuery();
+export function useRedirect(query) {
   const redirect = computed(() => {
     if (query.redirect) {
       const redirectUrl = query.redirect;
