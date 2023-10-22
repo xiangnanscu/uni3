@@ -26,7 +26,6 @@
 <script setup>
 // onShareTimeline
 // onShareAppMessage
-useRealNameCert();
 const user = useUser();
 const ready = ref(false);
 const query = useQuery();
@@ -75,6 +74,7 @@ const regeditPrincipal = async () => {
 };
 let schoolModel;
 onLoad(async () => {
+  useRealNameCert();
   if (query.school_id) {
     const school = await useGet(`/school/detail/${query.school_id}`);
     previewData.list[3].value = school.name;
