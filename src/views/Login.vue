@@ -28,6 +28,7 @@
 </template>
 
 <script setup>
+const redirectUrl = useRedirect();
 const store = useStore();
 store.message = "请先登录";
 const avatarSize = process.env.ALIOSS_AVATAR_SIZE || "2M";
@@ -100,7 +101,16 @@ onLoad(async (options) => {
   } else {
     userData.value.nickname = user.nickname;
     userData.value.avatar = user.avatar;
-    await loginUser(userData.value);
+    const sessionUser = useUser();
+    if (!sessionUser.id) {
+      await loginUser(userData.value);
+    } else {
+      //有时候已经登录了也会重定向到此页面,则不用再调用了
+      await utils.gotoPage({
+        url: redirectUrl.value,
+        redirect: true,
+      });
+    }
   }
 });
 
