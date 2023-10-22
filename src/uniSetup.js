@@ -120,7 +120,16 @@ const setupNav = () => {
           return opts;
         }
         const user = useUser();
-        // 首先检测是否需要实名认证
+        // 首先检测是否需要登录
+        if (!user.id) {
+          utils.gotoPage({
+            url: loginPage,
+            query: { redirect: opts.url },
+            redirect: false,
+          });
+          return false;
+        }
+        // 再检测是否需要实名
         if (!user.username && realNameCertList.includes(url)) {
           utils.gotoPage({
             url: realNameCertPage,
@@ -129,15 +138,7 @@ const setupNav = () => {
           });
           return false;
         }
-        if (user.id) {
-          return opts;
-        }
-        utils.gotoPage({
-          url: loginPage,
-          query: { redirect: opts.url },
-          redirect: false,
-        });
-        return false;
+        return opts;
       },
       complete(res) {
         // console.log("路由拦截结束", res);
