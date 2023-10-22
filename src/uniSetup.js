@@ -114,7 +114,7 @@ const setupNav = () => {
         const { message, error } = storeToRefs(useStore());
         message.value = "";
         error.value = "";
-        const [url, qs] = opts.url.split("?");
+        const [url, ...qs] = opts.url.split("?");
         console.log("nav split:", { url, qs });
         if (whiteList.includes(url)) {
           // console.log("路由拦截-白名单", url, JSON.stringify(opts));
