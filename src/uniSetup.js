@@ -109,7 +109,7 @@ const setupNav = () => {
   navHandlerList.forEach((handler) => {
     uni.addInterceptor(handler, {
       invoke(opts) {
-        console.log("路由拦截", handler, opts);
+        console.log("路由拦截", handler, opts.url);
         navStack.push(new Date().getTime());
         const { message, error } = storeToRefs(useStore());
         message.value = "";
