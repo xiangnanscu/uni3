@@ -48,7 +48,9 @@ const loginModel = Model.create_model({
 
 // #ifdef MP-WEIXIN
 const successPostWX = async (user) => {
-  await loginUser({ ...userData.value, ...user });
+  console.log("fullPath:", utils.getFullPath());
+  console.log("redirect:", useRedirect().value);
+  await loginUser({ ...userData.value, ...user }, useRedirect().value);
 };
 
 const profileModel = Model.create_model({
