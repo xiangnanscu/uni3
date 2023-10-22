@@ -8,8 +8,6 @@
         </uni-card>
         <modelform-uni
           :model="schoolModel"
-          :values="postData"
-          :sync-values="true"
           @send-data="successPost"
           submit-button-open-type="share"
           submitButtonText="邀请校方管理员"
@@ -36,13 +34,15 @@ const query = useQuery();
 const godRole = ref(user.permission >= process.env.GOD_PERMISSION ? user : null);
 const principalRole = ref();
 const sysadminRole = ref();
-const postData = { school_id: "" };
+const schoolId = ref();
+const successPost = (data) => {
+  schoolId.value = data.school_id;
+};
 useWxShare({
   title: "智慧校园校方管理员登记",
   desc: "",
-  path: (options) => {
-    console.log({ options });
-    return `${utils.getFullPath()}?school_id=${postData.school_id}`;
+  path: (currentPath) => {
+    return `${currentPath}?school_id=${schoolId.value}`;
   },
 });
 const previewData = {
@@ -66,9 +66,6 @@ const previewData = {
   ],
 };
 let schoolModel;
-const successPost = (data) => {
-  console.log(data);
-};
 onLoad(async () => {
   previewData.list[3].value = query.name;
   sysadminRole.value = (await usePost(`/sys_admin/records`, { usr_id: user.id }))[0];

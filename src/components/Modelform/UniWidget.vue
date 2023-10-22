@@ -124,8 +124,9 @@ const onFuiSelectConfirm = ({ index, options }) => {
   sendValue(options.value);
   fuiSelectShow.value = false;
 };
-let fieldChoices, fuiChoices;
-onLoad(async () => {
+const fieldChoices = ref([]);
+const fuiChoices = ref([]);
+onBeforeMount(async () => {
   if (typeof field.choices == "function") {
     field.choices = await field.choices();
     if (field.type == "foreignkey") {
@@ -133,12 +134,12 @@ onLoad(async () => {
     }
   }
   if (Array.isArray(field.choices)) {
-    fieldChoices = field.choices.map((e) => ({
+    fieldChoices.value = field.choices.map((e) => ({
       _value: e._value,
       text: e.label,
       value: e.value,
     }));
-    fuiChoices = field.choices.map((e) => ({
+    fuiChoices.value = field.choices.map((e) => ({
       _value: e._value,
       text: e.label,
       value: e.value,
@@ -151,7 +152,7 @@ const showChoicesWhenSmall = (field) => {
     field.choices.length <
     (field.max_display_count || Number(process.env.MAX_DISPLAY_COUNT) || 20)
   ) {
-    return fieldChoices?.slice() || [];
+    return fieldChoices.value.slice();
   } else {
     return [];
   }
