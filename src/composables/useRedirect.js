@@ -4,6 +4,7 @@ export function useRedirect() {
   const redirect = computed(() => {
     if (query.redirect) {
       let redirectUrl = query.redirect;
+      console.log("raw redirect Url:", decodeURIComponent(redirectUrl));
       if (redirectUrl.startsWith(process.env.UNI_LOGIN_PAGE)) {
         redirectUrl = process.env.UNI_HOME_PAGE;
       }
