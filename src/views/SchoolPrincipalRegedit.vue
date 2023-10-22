@@ -26,9 +26,9 @@
 <script setup>
 // onShareTimeline
 // onShareAppMessage
-const { session } = useSession();
+useRealNameCert();
+const user = useUser();
 const ready = ref(false);
-const user = session.user;
 const query = useQuery();
 const godRole = ref(user.permission >= process.env.GOD_PERMISSION ? user : null);
 const principalRole = ref();

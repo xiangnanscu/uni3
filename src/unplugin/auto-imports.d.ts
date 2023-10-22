@@ -235,6 +235,7 @@ declare global {
   const usePrevious: typeof import('@vueuse/core')['usePrevious']
   const useQuery: typeof import('../composables/useQuery.js')['useQuery']
   const useRafFn: typeof import('@vueuse/core')['useRafFn']
+  const useRealNameCert: typeof import('../composables/useRealNameCert.js')['useRealNameCert']
   const useRedirect: typeof import('../composables/useRedirect.js')['useRedirect']
   const useRefHistory: typeof import('@vueuse/core')['useRefHistory']
   const useResizeObserver: typeof import('@vueuse/core')['useResizeObserver']
@@ -546,6 +547,7 @@ declare module 'vue' {
     readonly usePrevious: UnwrapRef<typeof import('@vueuse/core')['usePrevious']>
     readonly useQuery: UnwrapRef<typeof import('../composables/useQuery.js')['useQuery']>
     readonly useRafFn: UnwrapRef<typeof import('@vueuse/core')['useRafFn']>
+    readonly useRealNameCert: UnwrapRef<typeof import('../composables/useRealNameCert.js')['useRealNameCert']>
     readonly useRedirect: UnwrapRef<typeof import('../composables/useRedirect.js')['useRedirect']>
     readonly useRefHistory: UnwrapRef<typeof import('@vueuse/core')['useRefHistory']>
     readonly useResizeObserver: UnwrapRef<typeof import('@vueuse/core')['useResizeObserver']>
@@ -851,6 +853,7 @@ declare module '@vue/runtime-core' {
     readonly usePrevious: UnwrapRef<typeof import('@vueuse/core')['usePrevious']>
     readonly useQuery: UnwrapRef<typeof import('../composables/useQuery.js')['useQuery']>
     readonly useRafFn: UnwrapRef<typeof import('@vueuse/core')['useRafFn']>
+    readonly useRealNameCert: UnwrapRef<typeof import('../composables/useRealNameCert.js')['useRealNameCert']>
     readonly useRedirect: UnwrapRef<typeof import('../composables/useRedirect.js')['useRedirect']>
     readonly useRefHistory: UnwrapRef<typeof import('@vueuse/core')['useRefHistory']>
     readonly useResizeObserver: UnwrapRef<typeof import('@vueuse/core')['useResizeObserver']>

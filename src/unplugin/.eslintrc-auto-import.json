@@ -314,6 +314,7 @@
     "ExtractDefaultPropTypes": true,
     "ExtractPropTypes": true,
     "ExtractPublicPropTypes": true,
-    "onReachBottom": true
+    "onReachBottom": true,
+    "useRealNameCert": true
   }
 }
