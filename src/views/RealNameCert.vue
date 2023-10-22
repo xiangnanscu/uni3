@@ -43,6 +43,7 @@ const successPost = async (user) => {
   await loginUser(newUser);
 };
 onLoad(async () => {
+  console.log("RealNameCert onLoad query:", JSON.stringify(query));
   const { data } = await Http.get("/usr/profile/my");
   userData.value.xm = data.xm || "";
   userData.value.phone = data.phone || "";
