@@ -90,6 +90,18 @@ async function getWxUser() {
 }
 
 onLoad(async (options) => {
+  const sessionUser = useUser();
+  if (sessionUser.id) {
+    //有时候不知何故已经登录了也会重定向到此页面,则不用再调用了
+    console.log(
+      "Login.vue onLoad检测已经登录直接重定向,options:",
+      JSON.stringify(options),
+    );
+    await utils.gotoPage({
+      url: redirectUrl.value,
+      redirect: true,
+    });
+  }
   const user = await getWxUser();
   userData.value.id = user.id;
   userData.value.openid = user.openid;
@@ -102,17 +114,7 @@ onLoad(async (options) => {
   } else {
     userData.value.nickname = user.nickname;
     userData.value.avatar = user.avatar;
-    const sessionUser = useUser();
-    if (!sessionUser.id) {
-      await loginUser(userData.value);
-    } else {
-      //有时候已经登录了也会重定向到此页面,则不用再调用了
-      console.log("已经登录直接重定向");
-      await utils.gotoPage({
-        url: redirectUrl.value,
-        redirect: true,
-      });
-    }
+    await loginUser(userData.value);
   }
 });
 
