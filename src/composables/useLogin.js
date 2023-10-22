@@ -3,7 +3,11 @@ export function useLogin() {
   const redirectUrl = useRedirect();
   return async (user, redirect) => {
     login(user);
-    console.log({ cuurentRedirect: redirectUrl.value, passedRedirect: redirect });
+    console.log({
+      cuurentRedirect: redirectUrl.value,
+      passedRedirect: redirect,
+      refresh: useRedirect().value,
+    });
     await utils.gotoPage({
       url: redirectUrl.value,
       redirect: true,
