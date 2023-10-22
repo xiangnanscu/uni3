@@ -98,9 +98,10 @@ onLoad(async (options) => {
       JSON.stringify(options),
     );
     await utils.gotoPage({
-      url: options.redirect || redirectUrl.value, // redirectUrl.value,
+      url: redirectUrl.value, // redirectUrl.value,
       redirect: true,
     });
+    return;
   }
   const user = await getWxUser();
   userData.value.id = user.id;
