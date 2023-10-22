@@ -1,7 +1,7 @@
 export function useRedirect() {
   console.log("useRedirect called");
-  const query = useQuery();
   const redirect = computed(() => {
+    const query = useQuery();
     console.log("useRedirect called query:", JSON.stringify(query.value));
     if (query.value.redirect) {
       const redirectUrl = query.value.redirect;
