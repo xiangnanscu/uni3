@@ -116,8 +116,9 @@ const getSafeRedirect = (url) => {
         res.push(`${m[1]}=${encodeURIComponent(m[2])}`);
       }
     }
-    console.log("safe:", `${path}?${res.join("&")}`);
-    return `${path}?${res.join("&")}`;
+    const safeUrl = `${path}?${res.join("&")}`;
+    console.log("safe:", safeUrl);
+    return safeUrl;
   } else {
     return url;
   }
