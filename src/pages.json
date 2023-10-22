@@ -143,6 +143,10 @@
     {
       "path": "views/SchoolStudentRegeditSuccess",
       "style": { "navigationBarTitleText": "" }
+    },
+    {
+      "path": "views/SchoolPrincipalRegedit",
+      "style": { "navigationBarTitleText": "" }
     }
   ],
   "globalStyle": {

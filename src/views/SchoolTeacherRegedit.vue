@@ -5,14 +5,7 @@
       <p>此处进行班主任登记</p>
     </uni-card>
     <fui-preview :previewData="previewData"></fui-preview>
-    <modelform-uni
-      v-if="loaded"
-      :model="profileModel"
-      :values="postData"
-      :sync-values="true"
-      @success-post="successPost"
-      :action-url="actionUrl"
-    ></modelform-uni>
+    <x-button @click="dispatcher">{{ buttonText }}</x-button>
   </page-layout>
 </template>
 <script setup>
@@ -25,6 +18,17 @@ useWxShare({
 const { session } = useSession();
 const user = session.user;
 const query = useQuery();
+const principalRole = ref();
+const teacherRole = ref();
+const buttonText = computed(() => {
+  return principalRole.value ? "发送" : "登记";
+});
+
+const dispatcher = async () => {
+  // 校长身份
+  if (principalRole.value) {
+  }
+};
 const previewData = {
   list: [
     {
@@ -38,6 +42,10 @@ const previewData = {
     {
       label: "手机号",
       value: user.phone,
+    },
+    {
+      label: "学校",
+      value: "",
     },
   ],
 };
@@ -53,15 +61,16 @@ const loaded = ref(false);
 const updateId = ref();
 let profileModel;
 onLoad(async () => {
-  const [teacherData] = await usePost(`/teacher/records`, { usr_id: user.id });
+  const [principal] = await usePost(`/principal/records`, { usr_id: user.id });
+  const [teacher] = await usePost(`/teacher/records`, { usr_id: user.id });
   const SchoolJson = await useGet(`/teacher/json`);
   SchoolJson.field_names = ["school_id"];
   SchoolJson.admin.form_names = ["school_id"];
   profileModel = await Model.create_model_async(SchoolJson);
   console.log({ profileModel });
-  if (teacherData) {
-    Object.assign(postData.value, teacherData);
-    updateId.value = teacherData.id;
+  if (teacher) {
+    Object.assign(postData.value, teacher);
+    updateId.value = teacher.id;
   }
   loaded.value = true;
 });

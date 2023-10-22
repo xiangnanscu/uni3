@@ -1,7 +1,7 @@
 <template>
   <page-layout>
     <x-title>校方管理</x-title>
-    <div v-if="access_logs.length">
+    <div v-if="ready">
       <uni-list :border="false">
         <uni-list-item
           title="录入学生"
@@ -25,6 +25,15 @@
           :showArrow="false"
         /> -->
         <uni-list-item
+          v-if="godRole || sysadminRole"
+          title="设定学校管理员"
+          thumb-size="lg"
+          link
+          to="/views/SchoolPrincipalRegedit"
+          :showArrow="false"
+        />
+        <uni-list-item
+          v-if="godRole || sysadminRole || principalRole"
           title="设定班主任"
           thumb-size="lg"
           link
@@ -32,6 +41,7 @@
           :showArrow="false"
         />
         <uni-list-item
+          v-if="godRole || sysadminRole || principalRole"
           title="设定门卫"
           thumb-size="lg"
           link
@@ -45,17 +55,18 @@
 </template>
 
 <script setup>
-const access_logs = ref([]);
+const ready = ref(false);
+const { session } = useSession();
+const user = session.user;
 const query = useQuery();
 const page = usePage();
-const toStudentForm = async (std) => {
-  await utils.gotoPage({
-    url: `/views/SchoolStudentAccessLogDetail`,
-    query: { id: std.id },
-  });
-};
+const godRole = ref(user.permission >= process.env.GOD_PERMISSION ? user : null);
+const principalRole = ref();
+const sysadminRole = ref();
 onLoad(async () => {
-  access_logs.value = await usePost(`/student_access_log/records`);
+  sysadminRole.value = (await usePost(`/sys_admin/records`, { usr_id: user.id }))[0];
+  principalRole.value = (await usePost(`/principal/records`, { usr_id: user.id }))[0];
+  ready.value = true;
 });
 </script>
 

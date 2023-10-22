@@ -21,16 +21,7 @@
       <template v-if="loaded && (pollEnd || showResult)">
         <template
           v-for="(
-            {
-              题干,
-              类型,
-              选中,
-              选项,
-              选项图,
-              最大选择数,
-              最小选择数,
-              是否必填
-            },
+            { 题干, 类型, 选中, 选项, 选项图, 最大选择数, 最小选择数, 是否必填 },
             itemIndex
           ) in poll.items"
           :key="itemIndex"
@@ -50,9 +41,7 @@
               <div style="flex: auto; padding: 0 5px">
                 <p>
                   {{ c }}
-                  <span style="font-weight: bold">{{
-                    选中[i] ? "（已选）" : ""
-                  }}</span>
+                  <span style="font-weight: bold">{{ 选中[i] ? "（已选）" : "" }}</span>
                   {{ count(itemIndex, c) }}票
                 </p>
                 <uni-row>
@@ -73,8 +62,7 @@
       <template v-else-if="loaded">
         <template
           v-for="(
-            { 题干, 类型, 选项, 选项图, 最大选择数, 最小选择数, 是否必填 },
-            index
+            { 题干, 类型, 选项, 选项图, 最大选择数, 最小选择数, 是否必填 }, index
           ) in poll.items"
           :key="index"
         >
@@ -89,7 +77,7 @@
                 name: e,
                 value: e,
                 checked: false,
-                image: 选项图[i]
+                image: 选项图[i],
               }))
             "
           ></x-radio>
@@ -101,7 +89,7 @@
                 name: e,
                 value: e,
                 checked: false,
-                image: 选项图[i]
+                image: 选项图[i],
               }))
             "
             :min="最小选择数"
@@ -130,7 +118,7 @@ export default {
       showResult: false,
       answers: [],
       pollLogs: [],
-      poll: null
+      poll: null,
     };
   },
   async onLoad(query) {
@@ -143,10 +131,10 @@ export default {
       return;
     }
     const startOfDay = utils.getLocalTime(
-      new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0)
+      new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0),
     );
     const endOfDay = utils.getLocalTime(
-      new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59)
+      new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59),
     );
     if (utils.getLocalTime(now) > this.poll.endtime) {
       this.pollEnd = true;
@@ -154,7 +142,7 @@ export default {
     } else {
       this.showResult = await usePost(`/poll_log/voted`, {
         poll_id: this.query.id,
-        creator: this.user.id
+        creator: this.user.id,
       });
     }
     this.loaded = true;
@@ -163,21 +151,19 @@ export default {
     async showResult(show) {
       if (show) {
         this.pollLogs = await usePost(`/poll_log/records`, {
-          poll_id: this.query.id
+          poll_id: this.query.id,
         });
         const myVote = this.pollLogs.find((e) => e.creator === this.user.id);
         if (myVote) {
           for (const [i, answer] of myVote.answers.entries()) {
             const item = this.poll.items[i]; // 题目
             item.选中 = item.选项.map((choice) =>
-              Array.isArray(answer)
-                ? answer.includes(choice)
-                : choice === answer
+              Array.isArray(answer) ? answer.includes(choice) : choice === answer,
             );
           }
         }
       }
-    }
+    },
   },
   computed: {
     onlyOne() {
@@ -186,12 +172,12 @@ export default {
     pollChoices() {
       return this.poll.items.map((e) => ({
         value: e.选项文本,
-        text: e.选项文本
+        text: e.选项文本,
       }));
     },
     totalVote() {
       return this.pollLogs.map((e) => e.answers[itemIndex]).flat().length;
-    }
+    },
   },
   methods: {
     count(itemIndex, key) {
@@ -212,7 +198,7 @@ export default {
       return (
         Math.round(
           (this.count(itemIndex, key) * 1000) /
-            this.pollLogs.map((e) => e.answers[itemIndex]).flat().length
+            this.pollLogs.map((e) => e.answers[itemIndex]).flat().length,
         ) / 10
       );
     },
@@ -238,7 +224,7 @@ export default {
       const data = await usePost(`/poll_log/create`, {
         poll_id: this.poll.id,
         // creator: this.user.id,
-        answers: this.answers
+        answers: this.answers,
       });
       this.showResult = true;
       uni.showToast({ title: "提交成功" });
@@ -246,13 +232,14 @@ export default {
     async fetchData(query) {
       const poll = await useGet(`/poll/detail/${query.id}`);
       this.poll = poll;
+      this.record = poll;
       // 初始化
       this.answers = poll.items.map((e) => (e.类型 == "多选" ? [] : ""));
       this.poll.items.forEach((item) => {
         item.选中 = item.选项.map(() => false);
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

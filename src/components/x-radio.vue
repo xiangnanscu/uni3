@@ -4,11 +4,7 @@
       <label class="uni-list-cell" v-for="item in choices" :key="item.value">
         <radio :value="item.value" :checked="item.checked" />
         <div v-if="item.image">
-          <image
-            style="width: 75px; height: 75px"
-            :src="item.image"
-            mode="aspectFit"
-          />
+          <image style="width: 75px; height: 75px" :src="item.image" mode="aspectFit" />
         </div>
         <view>{{ item.name }}</view>
       </label>
@@ -19,7 +15,7 @@
 <script setup>
 const props = defineProps({
   choices: { type: Array },
-  modelValue: {}
+  modelValue: {},
 });
 const emit = defineEmits(["update:modelValue"]);
 </script>
@@ -37,8 +33,8 @@ export default {
       for (const item of this.choices) {
         item.checked = item === choice;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -48,5 +44,6 @@ export default {
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
+  margin-bottom: 1em;
 }
 </style>
