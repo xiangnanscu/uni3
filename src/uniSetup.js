@@ -125,16 +125,17 @@ const setupNav = () => {
           utils.gotoPage({
             url: loginPage,
             query: { redirect: opts.url },
-            redirect: false,
+            redirect: true,
           });
           return false;
         }
         // 再检测是否需要实名
         if (!user.username && realNameCertList.includes(url)) {
+          console.log("需要实名:", opts.url);
           utils.gotoPage({
             url: realNameCertPage,
             query: { redirect: opts.url, message: "此操作需要先实名认证" },
-            redirect: false,
+            redirect: true,
           });
           return false;
         }
