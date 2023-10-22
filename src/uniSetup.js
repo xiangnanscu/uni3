@@ -103,7 +103,22 @@ const realNameCertList = [
   "/views/VolAdd",
   "/views/VolplanDetail",
 ];
-
+const getSafeRedirect = (url) => {
+  const [path, ...qs] = url.split("?");
+  if (qs.length > 1) {
+    // 两个问号说明是redirect中包含问号的情况,需要encode
+    const res = {};
+    for (const token of qs.join("?").split("&")) {
+      const m = token.match(/^(\w+?)=(.+)/);
+      if (m) {
+        res[m[1]] = encodeURIComponent(m[2]);
+      }
+    }
+    return `${path}?${res.join("&")}`;
+  } else {
+    return url;
+  }
+};
 const navStack = [];
 const setupNav = () => {
   navHandlerList.forEach((handler) => {
@@ -125,7 +140,7 @@ const setupNav = () => {
         if (!user.id) {
           utils.gotoPage({
             url: loginPage,
-            query: { redirect: opts.url },
+            query: { redirect: getSafeRedirect(opts.url) },
             redirect: true,
           });
           return false;
@@ -135,7 +150,10 @@ const setupNav = () => {
           console.log("需要实名:", opts.url);
           utils.gotoPage({
             url: realNameCertPage,
-            query: { message: "此操作需要先实名认证", redirect: opts.url },
+            query: {
+              message: "此操作需要先实名认证",
+              redirect: getSafeRedirect(opts.url),
+            },
             redirect: true,
           });
           return false;
