@@ -135,12 +135,14 @@ const setupNav = () => {
         const [url, ...qs] = opts.url.split("?");
         console.log("nav split:", { url, qs });
         if (whiteList.includes(url)) {
-          // console.log("路由拦截-白名单", url, JSON.stringify(opts));
+          console.log("无需登录白名单", url);
           return opts;
         }
+        console.log("需要登录URL", url);
         const user = useUser();
         // 首先检测是否需要登录
         if (!user.id) {
+          console.log("用户未登录", url);
           utils.gotoPage({
             url: loginPage,
             query: { redirect: getSafeRedirect(opts.url) },
