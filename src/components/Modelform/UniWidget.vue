@@ -124,8 +124,8 @@ const onFuiSelectConfirm = ({ index, options }) => {
   sendValue(options.value);
   fuiSelectShow.value = false;
 };
-const fieldChoices = ref([]);
-const fuiChoices = ref([]);
+const fieldChoices = ref();
+const fuiChoices = ref();
 onBeforeMount(async () => {
   if (typeof field.choices == "function") {
     field.choices = await field.choices();
