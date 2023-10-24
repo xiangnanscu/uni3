@@ -5,6 +5,15 @@ import { isLogin } from "@/lib/utils";
 
 const viteEnv = import.meta.env;
 
+function countOccurrences(string, character) {
+  let count = 0;
+  for (const e of string) {
+    if (e === character) {
+      count++;
+    }
+  }
+  return count;
+}
 let baseURL;
 if (process.env.NODE_ENV == "production") {
   baseURL = `${viteEnv.VITE_HTTPS == "on" ? "https" : "http"}://${viteEnv.VITE_HOST}`;
@@ -92,7 +101,8 @@ const whiteList = [
   "/views/VolplanDetail",
 ];
 const realNameCertList = [
-  "/views/SchoolPrincipalRegedit",
+  "/views/SchoolRegeditPrincipal",
+  "/views/SchoolRegeditClassDirector",
   "/views/SchoolStudentRegedit",
   "/views/SchoolTeacherRegedit",
   "/views/FeeplanList",
@@ -164,7 +174,7 @@ const setupNav = () => {
           });
           return false;
         }
-        if (opts.url.includes("?")) {
+        if (countOccurrences(opts.url, "?") === 2) {
           opts.url = getSafeRedirect(opts.url);
           return opts;
         } else {

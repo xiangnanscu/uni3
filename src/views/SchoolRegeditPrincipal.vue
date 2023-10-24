@@ -4,7 +4,7 @@
     <div v-if="ready">
       <div v-if="godRole || sysadminRole">
         <uni-card title="温馨提示">
-          <p>管理员选好学校后点击“邀请学校管理员”把当前页面发送给学校管理员</p>
+          <p>选好学校后点击“邀请学校管理员”把当前页面发送给学校管理员</p>
         </uni-card>
         <modelform-uni
           :model="schoolModel"
@@ -15,10 +15,11 @@
       </div>
       <div v-else>
         <uni-card title="温馨提示">
-          <p>此处进行学校管理员登记</p>
+          <p>此处申请成为学校管理员</p>
         </uni-card>
         <fui-preview :previewData="previewData"></fui-preview>
-        <x-button @click="regeditPrincipal">登记</x-button>
+        <x-button v-if="principalRole" disabled>已申请</x-button>
+        <x-button v-else @click="regeditPrincipal">申请</x-button>
       </div>
     </div>
   </page-layout>
@@ -61,6 +62,10 @@ const previewData = {
       label: "学校",
       value: "",
     },
+    {
+      label: "状态",
+      value: "",
+    },
   ],
 };
 const regeditPrincipal = async () => {
@@ -77,22 +82,23 @@ const regeditPrincipal = async () => {
 let schoolModel;
 onLoad(async () => {
   if (!user.username) {
-    console.log(
-      "****useRealNameCert 未实名, 需要实名认证, 当前页面:",
-      utils.getFullPath(),
-    );
     return utils.gotoPage({
       url: "/views/RealNameCert",
       query: { message: "此操作需要先实名认证", redirect: utils.getFullPath() },
       redirect: true,
     });
   }
+  console.log({ query });
   if (query.school_id) {
+    // 说明是点击管理员分享出来的页面而来
     const school = await useGet(`/school/detail/${query.school_id}`);
     previewData.list[3].value = school.name;
   }
   sysadminRole.value = (await usePost(`/sys_admin/records`, { usr_id: user.id }))[0];
   principalRole.value = (await usePost(`/principal/records`, { usr_id: user.id }))[0];
+  if (principalRole.value) {
+    previewData.list[4].value = principalRole.value.status;
+  }
   const SchoolJson = await useGet(`/principal/json`);
   SchoolJson.field_names = ["school_id"];
   SchoolJson.admin.form_names = ["school_id"];

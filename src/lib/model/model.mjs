@@ -781,7 +781,7 @@ Xodel.to_post_value = function (values, names) {
 Xodel.create_model_async = async function (options) {
   for (const name of options.field_names || Object.keys(options.fields)) {
     const field = options.fields[name];
-    if (field.choices_url) {
+    if (field.choices_url && !field.choices) {
       const fetch_choices = async () => {
         const choices_url = options.is_admin_mode
           ? field.choices_url_admin || field.choices_url // 如果不是fk,那么choices_url_admin不会定义

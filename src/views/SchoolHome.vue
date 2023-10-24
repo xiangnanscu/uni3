@@ -53,7 +53,7 @@ const mainKist = [
     url: "../static/img/parent-child.png",
     text: "亲子登记",
     badge: "",
-    pagePath: "/views/SchoolParentChildRegedit",
+    pagePath: "/views/SchoolRegeditParentChild",
     type: "error",
   },
   {

@@ -29,7 +29,7 @@
           title="设定学校管理员"
           thumb-size="lg"
           link
-          to="/views/SchoolPrincipalRegedit"
+          to="/views/SchoolRegeditPrincipal"
           :showArrow="false"
         />
         <uni-list-item

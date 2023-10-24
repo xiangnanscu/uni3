@@ -96,7 +96,7 @@
       "style": { "navigationBarTitleText": "" }
     },
     {
-      "path": "views/SchoolParentChildRegedit",
+      "path": "views/SchoolRegeditParentChild",
       "style": { "navigationBarTitleText": "" }
     },
     {
@@ -145,7 +145,15 @@
       "style": { "navigationBarTitleText": "" }
     },
     {
-      "path": "views/SchoolPrincipalRegedit",
+      "path": "views/SchoolRegeditPrincipal",
+      "style": { "navigationBarTitleText": "" }
+    },
+    {
+      "path": "views/SchoolRegeditClassDirector",
+      "style": { "navigationBarTitleText": "" }
+    },
+    {
+      "path": "views/SchoolRegeditSuccessPage",
       "style": { "navigationBarTitleText": "" }
     }
   ],
