@@ -88,7 +88,6 @@ onLoad(async () => {
       redirect: true,
     });
   }
-  console.log({ query });
   if (query.school_id) {
     // 说明是点击管理员分享出来的页面而来
     const school = await useGet(`/school/detail/${query.school_id}`);

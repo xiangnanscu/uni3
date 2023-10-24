@@ -37,7 +37,7 @@
           title="设定班主任"
           thumb-size="lg"
           link
-          to="/views/SchoolTeacherRegedit"
+          to="/views/SchoolRegeditClassDirector"
           :showArrow="false"
         />
         <uni-list-item

@@ -101,6 +101,7 @@ const whiteList = [
   "/views/VolplanDetail",
 ];
 const realNameCertList = [
+  "/views/SchoolRegeditParentChild",
   "/views/SchoolRegeditPrincipal",
   "/views/SchoolRegeditClassDirector",
   "/views/SchoolStudentRegedit",

@@ -1,7 +1,7 @@
 <template>
   <page-layout v-if="loaded">
     <x-alert title="智慧校园"> </x-alert>
-    <uni-card title="家长" :border="false" :is-shadow="false" :is-full="true">
+    <!-- <uni-card title="家长" :border="false" :is-shadow="false" :is-full="true">
       <modelform-uni
         :model="ParentModel"
         :values="parent"
@@ -10,7 +10,7 @@
         :action-url="actionUrlParent"
         submit-button-text="保存"
       ></modelform-uni>
-    </uni-card>
+    </uni-card> -->
     <template v-if="parent.id">
       <uni-card title="子女" :border="false" :is-shadow="false" :is-full="true">
         <uni-group v-for="(s, sindex) in students" :key="s.id" mode="card">
@@ -125,16 +125,19 @@ const studentDeleteUrl = computed(
   () =>
     `/parent_student_relation/delete_by_both_ids?sync_to_hik=${isProd}&parent_id=${parent.value.id}&student_id=${currentStudent.value.id}`,
 );
-let ParentModel;
+// let ParentModel;
 let StudentModel;
 onLoad(async () => {
-  ParentModel = await Model.create_model_async(await useGet(`/parent/json`));
+  if (!user.username) {
+    return utils.gotoPage({
+      url: "/views/RealNameCert",
+      query: { message: "此操作需要先实名认证", redirect: utils.getFullPath() },
+      redirect: true,
+    });
+  }
+  // ParentModel = await Model.create_model_async(await useGet(`/parent/json`));
   StudentModel = await Model.create_model_async(await useGet(`/student/json`));
-  let parentCond = { sfzh: user.username };
-  // #ifdef MP-WEIXIN
-  parentCond = { openid: user.openid };
-  // #endif
-  const [parentData] = await usePost(`/parent/records`, parentCond);
+  const [parentData] = await usePost(`/parent/records`, { usr_id: user.id });
   if (parentData) {
     parentData.openid = user.openid;
     parent.value = parentData;

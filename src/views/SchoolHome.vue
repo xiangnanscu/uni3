@@ -1,7 +1,13 @@
 <template>
   <page-layout>
     <x-title> 智慧校园 </x-title>
-    <uni-grid :column="3" :show-border="false" :square="false" @change="change">
+    <uni-grid
+      v-if="ready"
+      :column="3"
+      :show-border="false"
+      :square="false"
+      @change="change"
+    >
       <template v-for="(item, index) in permissionMenu" :key="index">
         <uni-grid-item :index="index">
           <view class="grid-item-box" style="text-align: center; margin-top: 2em">
@@ -27,6 +33,12 @@
 
 <script setup>
 const user = useUser();
+const ready = ref(false);
+const roles = ref();
+onLoad(async () => {
+  roles.value = await helpers.getPassedRoles();
+  ready.value = true;
+});
 const mainKist = [
   {
     url: "../static/img/in-out.png",
@@ -83,7 +95,7 @@ const mainKist = [
     badge: "",
     pagePath: "/views/SchoolStudentStat",
     type: "error",
-    permission: 1,
+    roles: ["sys_admin", "principal", "class_director"],
   },
   {
     url: "../static/img/adminor.png",
@@ -91,7 +103,7 @@ const mainKist = [
     badge: "",
     pagePath: "/views/SchoolAdmin",
     type: "error",
-    permission: 1,
+    roles: ["sys_admin", "principal"],
   },
   // {
   //   url: "../static/img/stat.png",
@@ -104,7 +116,7 @@ const mainKist = [
 ];
 
 const permissionMenu = computed(() =>
-  mainKist.filter((e) => !e.permission || user.permission >= e.permission),
+  mainKist.filter((menu) => !menu.roles || menu.roles.some((role) => roles.value[role])),
 );
 </script>
 

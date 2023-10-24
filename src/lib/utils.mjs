@@ -327,3 +327,10 @@ export function getLocalTime(d = new Date()) {
 
   return `${year}-${month}-${date} ${hours}:${minutes}:${seconds}`;
 }
+
+export function isEmptyObject(obj) {
+  if (!obj || Object.keys(obj).length === 0) {
+    return true;
+  }
+  return false;
+}

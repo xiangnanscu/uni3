@@ -5,14 +5,12 @@
       :title="query.title || `操作成功`"
       :descr="query.descr"
     >
-      <p style="text-align: center; margin-bottom: 1em">
-        订阅“社区通知”，孩子出入校园第一时间知晓
-      </p>
+      <p style="text-align: center; margin-bottom: 1em">等待管理员审核通过</p>
       <fui-button
         @click="goBack"
         width="400rpx"
         height="84rpx"
-        text="前往订阅消息"
+        text="返回首页"
         type="gray"
         color="#09BE4F"
         bold
@@ -29,6 +27,6 @@
 const query = useQuery();
 
 const goBack = async (e) => {
-  await utils.gotoPage("/views/SubscribeList");
+  await utils.gotoPage("Home");
 };
 </script>

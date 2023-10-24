@@ -25,10 +25,10 @@
 const access_logs = ref([]);
 const query = useQuery();
 const page = usePage();
-const toStudentForm = async (std) => {
+const toStudentForm = async (log) => {
   await utils.gotoPage({
     url: `/views/SchoolStudentAccessLogDetail`,
-    query: { id: std.id },
+    query: { id: log.id },
   });
 };
 const oldestId = computed(() => {
