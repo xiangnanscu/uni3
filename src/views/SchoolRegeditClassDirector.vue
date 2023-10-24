@@ -18,7 +18,7 @@
           </fui-button>
         </fui-result>
       </div>
-      <div v-if="godRole || sysadminRole || principalRole">
+      <div v-if="sysadminRole || principalRole">
         <uni-card title="温馨提示">
           <p>两种方式</p>
           <p>
@@ -61,7 +61,6 @@
 const user = useUser();
 const ready = ref(false);
 const query = useQuery();
-const godRole = ref(user.permission >= process.env.GOD_PERMISSION ? user : null);
 const sysadminRole = ref();
 const principalRole = ref();
 const classDirectorRole = ref();
@@ -138,7 +137,6 @@ const applyClassDirector = async (data) => {
 
 let classModel;
 onLoad(async () => {
-  console.log(user.nickname);
   if (!user.username) {
     return utils.gotoPage({
       url: "/views/RealNameCert",
@@ -157,38 +155,42 @@ onLoad(async () => {
     previewData.list[4].value = queryClass.value.name;
   }
   const roles = await helpers.getRoles({});
+  console.log(roles);
   sysadminRole.value = roles.sys_admin?.status == "通过" ? roles.sys_admin : null;
   principalRole.value = roles.principal?.status == "通过" ? roles.principal : null;
   classDirectorRole.value = roles.class_director;
   const ClassJson = await useGet(`/class_director/json`);
-  const setupClassForm = async (classRequired) => {
+  const setupClassForm = async (classRequired, keepField) => {
     ClassJson.field_names = ["school_id", "class_id"];
     ClassJson.admin.form_names = ["school_id", "class_id"];
-    ClassJson.fields.school_id = {
-      type: "integer",
-      label: "学校",
-      disabled: true,
-      choices: [
-        {
-          value: querySchool.value.id,
-          label: querySchool.value.name,
-        },
-      ],
-      default: querySchool.value.id,
-    };
-    ClassJson.fields.class_id = {
-      type: "integer",
-      label: "班级",
-      required: !!classRequired,
-      choices_url: `/class/choices/school/${querySchool.value.id}`,
-    };
+    if (!keepField) {
+      ClassJson.fields.school_id = {
+        type: "integer",
+        label: "学校",
+        disabled: true,
+        choices: [
+          {
+            value: querySchool.value.id,
+            label: querySchool.value.name,
+          },
+        ],
+        default: querySchool.value.id,
+      };
+      ClassJson.fields.class_id = {
+        type: "integer",
+        label: "班级",
+        required: !!classRequired,
+        choices_url: `/class/choices/school/${querySchool.value.id}`,
+      };
+    }
     classModel = await Model.create_model_async(ClassJson);
   };
 
-  if (godRole.value || sysadminRole.value) {
+  if (sysadminRole.value) {
+    await setupClassForm(false, true);
   } else if (principalRole.value) {
     //校长角色, 则按其权限显示邀请的表单
-    setupClassForm();
+    await setupClassForm();
   } else if (classDirectorRole.value) {
     // 班主任角色, 则说明已经申请过了,目前暂时是一个微信号只能绑定一个班主任
     const bindClass = classDirectorRole.value.class_id__name;

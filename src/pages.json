@@ -155,6 +155,14 @@
     {
       "path": "views/SchoolRegeditSuccessPage",
       "style": { "navigationBarTitleText": "" }
+    },
+    {
+      "path": "views/SchoolCheckClassDirector",
+      "style": { "navigationBarTitleText": "" }
+    },
+    {
+      "path": "views/SchoolCheckPrincipal",
+      "style": { "navigationBarTitleText": "" }
     }
   ],
   "globalStyle": {

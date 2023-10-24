@@ -25,29 +25,45 @@
           :showArrow="false"
         /> -->
         <uni-list-item
-          v-if="godRole || sysadminRole"
-          title="设定学校管理员"
+          v-if="sysadminRole"
+          title="邀请学校管理员"
           thumb-size="lg"
           link
           to="/views/SchoolRegeditPrincipal"
           :showArrow="false"
         />
         <uni-list-item
-          v-if="godRole || sysadminRole || principalRole"
-          title="设定班主任"
+          v-if="sysadminRole"
+          title="审核学校管理员"
+          thumb-size="lg"
+          link
+          to="/views/SchoolCheckPrincipal"
+          :showArrow="false"
+        />
+        <uni-list-item
+          v-if="sysadminRole || principalRole"
+          title="邀请班主任"
           thumb-size="lg"
           link
           to="/views/SchoolRegeditClassDirector"
           :showArrow="false"
         />
         <uni-list-item
-          v-if="godRole || sysadminRole || principalRole"
+          v-if="sysadminRole || principalRole"
+          title="审核班主任"
+          thumb-size="lg"
+          link
+          to="/views/SchoolCheckClassDirector"
+          :showArrow="false"
+        />
+        <!-- <uni-list-item
+          v-if="sysadminRole || principalRole"
           title="设定门卫"
           thumb-size="lg"
           link
           to="/views/SchoolHome"
           :showArrow="false"
-        />
+        /> -->
       </uni-list>
     </div>
     <x-alert v-else title="没有记录"> </x-alert>
@@ -59,8 +75,7 @@ const ready = ref(false);
 const { session } = useSession();
 const user = session.user;
 const query = useQuery();
-const page = usePage();
-const godRole = ref(user.permission >= process.env.GOD_PERMISSION ? user : null);
+const roles = ref();
 const principalRole = ref();
 const sysadminRole = ref();
 onLoad(async () => {

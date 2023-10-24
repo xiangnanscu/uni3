@@ -4,10 +4,10 @@
     <div v-if="ready">
       <modelform-uni
         :model="FormModel"
-        :sync-values="false"
+        :values="FormModel.get_defaults()"
         success-url="/views/SchoolStudentRegeditSuccess"
         :success-use-redirect="true"
-        :action-url="actionUrl"
+        :action-url="`/student/register`"
       ></modelform-uni>
     </div>
     <x-alert v-else title="没有记录"> </x-alert>
@@ -22,12 +22,30 @@ useWxShare({
   desc: "",
 });
 const FormModel = ref();
-const query = useQuery();
+const user = useUser();
 const ready = ref();
-const actionUrl = computed(() => `/student/register`);
+const classDirectorRole = ref();
 onLoad(async () => {
+  classDirectorRole.value = (
+    await usePost(`/class_director/records`, { usr_id: user.id })
+  )[0];
+  console.log(classDirectorRole);
   const modelJson = await useGet(`/student/json`);
-  FormModel.value = Model.create_model(modelJson);
+  if (classDirectorRole.value) {
+    const className = classDirectorRole.value.class_id__name;
+    // const cf = modelJson.fields.class_id;
+    // cf.default = className;
+    // cf._postValue = classDirectorRole.value.class_id;
+    // cf.disabled = true;
+    modelJson.fields.class_id = {
+      type: "integer",
+      label: "班级",
+      disabled: true,
+      default: classDirectorRole.value.class_id,
+      choices: [{ value: classDirectorRole.value.class_id, label: className }],
+    };
+  }
+  FormModel.value = await Model.create_model_async(modelJson);
   ready.value = true;
 });
 </script>

@@ -1,12 +1,12 @@
 <template>
   <page-layout>
     <view class="search-bar">
-      <uni-easyinput
+      <!-- <uni-easyinput
         suffixIcon="search"
         v-model="searchValue"
         placeholder="请输入查找内容."
         iconClick="onClick"
-      ></uni-easyinput>
+      ></uni-easyinput> -->
     </view>
     <x-title>学生统计情况（{{ students.length }}人）</x-title>
     <div v-if="students.length">
@@ -27,6 +27,12 @@
       </template>
     </div>
     <x-alert v-else title="没有记录"> </x-alert>
+    <fui-fab
+      :distance="30"
+      position="right"
+      :isDrag="true"
+      @click="utils.gotoPage('SchoolStudentRegedit')"
+    ></fui-fab>
   </page-layout>
 </template>
 
