@@ -1,4 +1,5 @@
-export function useLogin({ redirectUrl }) {
+export function useLogin(opts) {
+  const redirectUrl = opts?.redirectUrl || useRedirect();
   const { login } = useSession();
   return async (user) => {
     login(user);
