@@ -74,10 +74,11 @@ const inviteClassDirector = (data) => {
   schoolId.value = data.school_id;
   classId.value = data.class_id;
 };
+const page = utils.getPage();
 useWxShare({
-  title: "智慧校园学校管理员登记",
+  title: "智慧校园班主任登记",
   desc: "",
-  path: (page) => {
+  path: () => {
     const query = {};
     if (schoolId.value) {
       query.school_id = schoolId.value;
@@ -85,8 +86,7 @@ useWxShare({
     if (classId.value) {
       query.class_id = classId.value;
     }
-    const shareUrl = `${page.path}?${utils.toQueryString(query)}`;
-    console.log({ shareUrl });
+    const shareUrl = `${page.$page.path}?${utils.toQueryString(query)}`;
     return shareUrl;
   },
 });
@@ -124,6 +124,10 @@ const regeditClassDirector = async () => {
     school_id: query.school_id,
     class_id: query.class_id,
   });
+  uni.showToast({
+    title: "已登记,请等待审核",
+    duration: 1000,
+  });
   utils.gotoPage("SchoolRegeditSuccessPage");
 };
 const applyClassDirector = async (data) => {
@@ -131,6 +135,10 @@ const applyClassDirector = async (data) => {
     usr_id: user.id,
     school_id: data.school_id,
     class_id: data.class_id,
+  });
+  uni.showToast({
+    title: "已登记,请等待审核",
+    duration: 1000,
   });
   utils.gotoPage("SchoolRegeditSuccessPage");
 };
@@ -209,7 +217,6 @@ onLoad(async () => {
     userRole.value = user;
     if (!query.class_id) {
       setupClassForm(true);
-    } else {
     }
   }
 

@@ -163,6 +163,14 @@
     {
       "path": "views/SchoolCheckPrincipal",
       "style": { "navigationBarTitleText": "" }
+    },
+    {
+      "path": "views/SchoolRegeditGuard",
+      "style": { "navigationBarTitleText": "" }
+    },
+    {
+      "path": "views/SchoolCheckGuard",
+      "style": { "navigationBarTitleText": "" }
     }
   ],
   "globalStyle": {

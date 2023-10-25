@@ -103,7 +103,7 @@ const mainKist = [
     badge: "",
     pagePath: "/views/SchoolAdmin",
     type: "error",
-    roles: ["sys_admin", "principal"],
+    roles: ["sys_admin", "principal", "class_director"],
   },
   // {
   //   url: "../static/img/stat.png",

@@ -4,21 +4,21 @@
     <div v-if="ready">
       <div v-if="sysadminRole">
         <uni-card title="温馨提示">
-          <p>选好学校后点击“邀请学校管理员”把当前页面发送给学校管理员</p>
+          <p>选好学校后点击“邀请学校门卫”把当前页面发送给学校门卫</p>
         </uni-card>
         <modelform-uni
           :model="schoolModel"
           @send-data="successPost"
           submit-button-open-type="share"
-          submitButtonText="邀请学校管理员"
+          submitButtonText="邀请学校门卫"
         ></modelform-uni>
       </div>
       <div v-else>
         <uni-card title="温馨提示">
-          <p>此处申请成为学校管理员</p>
+          <p>此处申请成为学校门卫</p>
         </uni-card>
         <fui-preview :previewData="previewData"></fui-preview>
-        <x-button v-if="principalRole" disabled>已申请</x-button>
+        <x-button v-if="guardRole" disabled>已申请</x-button>
         <x-button v-else @click="regeditPrincipal">申请</x-button>
       </div>
     </div>
@@ -30,7 +30,7 @@
 const user = useUser();
 const ready = ref(false);
 const query = useQuery();
-const principalRole = ref();
+const guardRole = ref();
 const sysadminRole = ref();
 const schoolId = ref();
 const successPost = (data) => {
@@ -38,7 +38,7 @@ const successPost = (data) => {
 };
 const page = utils.getPage();
 useWxShare({
-  title: "智慧校园学校管理员登记",
+  title: "智慧校园学校门卫登记",
   desc: "",
   path: () => {
     return `${page.$page.path}?school_id=${schoolId.value}`;
@@ -69,12 +69,12 @@ const previewData = {
   ],
 };
 const regeditPrincipal = async () => {
-  await usePost(`/principal/get_or_create`, {
+  await usePost(`/guard/get_or_create`, {
     usr_id: user.id,
     school_id: query.school_id,
   });
   uni.showToast({
-    title: "已登记, 请等待审核",
+    title: "已登记,请等待审核",
     duration: 1000,
   });
   utils.gotoPage("SchoolRegeditSuccessPage");
@@ -94,11 +94,11 @@ onLoad(async () => {
     previewData.list[3].value = school.name;
   }
   sysadminRole.value = (await usePost(`/sys_admin/records`, { usr_id: user.id }))[0];
-  principalRole.value = (await usePost(`/principal/records`, { usr_id: user.id }))[0];
-  if (principalRole.value) {
-    previewData.list[4].value = principalRole.value.status;
+  guardRole.value = (await usePost(`/guard/records`, { usr_id: user.id }))[0];
+  if (guardRole.value) {
+    previewData.list[4].value = guardRole.value.status;
   }
-  const SchoolJson = await useGet(`/principal/json`);
+  const SchoolJson = await useGet(`/guard/json`);
   SchoolJson.field_names = ["school_id"];
   SchoolJson.admin.form_names = ["school_id"];
   schoolModel = await Model.create_model_async(SchoolJson);

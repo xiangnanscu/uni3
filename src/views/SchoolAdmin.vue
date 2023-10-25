@@ -56,6 +56,22 @@
           to="/views/SchoolCheckClassDirector"
           :showArrow="false"
         />
+        <uni-list-item
+          v-if="sysadminRole || principalRole"
+          title="邀请门卫"
+          thumb-size="lg"
+          link
+          to="/views/SchoolRegeditGuard"
+          :showArrow="false"
+        />
+        <uni-list-item
+          v-if="sysadminRole || principalRole"
+          title="审核门卫"
+          thumb-size="lg"
+          link
+          to="/views/SchoolCheckGuard"
+          :showArrow="false"
+        />
         <!-- <uni-list-item
           v-if="sysadminRole || principalRole"
           title="设定门卫"
@@ -75,12 +91,12 @@ const ready = ref(false);
 const { session } = useSession();
 const user = session.user;
 const query = useQuery();
-const roles = ref();
 const principalRole = ref();
 const sysadminRole = ref();
 onLoad(async () => {
-  sysadminRole.value = (await usePost(`/sys_admin/records`, { usr_id: user.id }))[0];
-  principalRole.value = (await usePost(`/principal/records`, { usr_id: user.id }))[0];
+  const roles = await helpers.getPassedRoles();
+  sysadminRole.value = roles.sys_admin;
+  principalRole.value = roles.principal;
   ready.value = true;
 });
 </script>
