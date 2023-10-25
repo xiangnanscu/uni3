@@ -9,7 +9,9 @@
     <uni-list v-if="ready">
       <div v-for="(e, i) in records" :key="e.id">
         <div class="x-row">
-          <div style="margin-left: 1em; padding: 5px">{{ e.usr_id__xm }}</div>
+          <div style="margin-left: 1em; padding: 5px">
+            {{ e.usr_id__xm }}（{{ e.usr_id__username }}）
+          </div>
           <div class="x-row">
             <x-button
               styleString="padding: 0px 5px; font-size: 80%;margin-right:1em"

@@ -6,35 +6,49 @@
       @change="changeActionType"
       :current="current"
     ></fui-tabs>
-    <uni-list v-if="ready">
-      <div v-for="(e, i) in records" :key="e.id">
-        <div class="x-row">
-          <div style="margin-left: 1em; padding: 5px">{{ e.usr_id__xm }}</div>
+    <div v-if="ready" style="margin-top: 1em">
+      <div v-if="records.length">
+        <div v-for="(e, i) in records" :key="e.id" class="x-row">
+          <div style="margin-left: 1em; padding: 5px">
+            {{ e.usr_id__xm }}（{{ e.usr_id__username }}）
+          </div>
           <div class="x-row">
-            <x-button
-              styleString="padding: 0px 5px; font-size: 80%;margin-right:1em"
+            <button
+              v-if="status == '待审核' || status == '拒绝'"
+              style="
+                padding: 0px 5px;
+                font-size: 80%;
+                margin-right: 1em;
+                color: green;
+                border-color: green;
+              "
               size="mini"
+              :plain="true"
               @click="onCheck(i, '通过')"
             >
               通过
-            </x-button>
-            <x-button
-              styleString="padding: 0px 5px; font-size: 80%; color: red; border-color:red"
+            </button>
+            <button
+              v-if="status == '待审核' || status == '通过'"
+              style="padding: 0px 5px; font-size: 80%; color: red; border-color: red"
               size="mini"
+              :plain="true"
               @click="onCheck(i, '拒绝')"
             >
               拒绝
-            </x-button>
+            </button>
           </div>
         </div>
       </div>
-    </uni-list>
+      <uni-notice-bar v-else single text="没有记录" />
+    </div>
   </page-layout>
 </template>
 
 <script setup>
+//TODO: 应该是uniapp的bug为什么使用x-button就会报错ua.split不是function
 const query = useQuery();
-const current = computed(() => Number(query.current || 0));
+const current = ref(query.current || 0);
 const tabs = ["待审核", "通过", "拒绝"];
 const status = computed(() => tabs[current.value]);
 const ready = ref(false);
@@ -46,6 +60,8 @@ const setRecordsByType = async (newType) => {
 };
 const changeActionType = async ({ index, name }) => {
   await setRecordsByType(name);
+  current.value = index;
+  // console.log({ index, status: status.value });
 };
 const onCheck = async (index, status) => {
   await Http.post(`/principal/update/${records.value[index].id}`, {
