@@ -1,7 +1,13 @@
 <template>
   <page-layout v-if="loaded">
     <x-alert title="智慧校园"> </x-alert>
-    <!-- <uni-card title="家长" :border="false" :is-shadow="false" :is-full="true">
+    <uni-card
+      :title="`家长（${user.xm}）`"
+      :border="false"
+      :is-shadow="false"
+      :is-full="true"
+    >
+      <!-- <fui-preview :previewData="previewData"></fui-preview> -->
       <modelform-uni
         :model="ParentModel"
         :values="parent"
@@ -10,7 +16,7 @@
         :action-url="actionUrlParent"
         submit-button-text="保存"
       ></modelform-uni>
-    </uni-card> -->
+    </uni-card>
     <template v-if="parent.id">
       <uni-card title="子女" :border="false" :is-shadow="false" :is-full="true">
         <uni-group v-for="(s, sindex) in students" :key="s.id" mode="card">
@@ -125,7 +131,8 @@ const studentDeleteUrl = computed(
   () =>
     `/parent_student_relation/delete_by_both_ids?sync_to_hik=${isProd}&parent_id=${parent.value.id}&student_id=${currentStudent.value.id}`,
 );
-// let ParentModel;
+let ParentModel;
+let previewData;
 let StudentModel;
 onLoad(async () => {
   if (!user.username) {
@@ -135,21 +142,32 @@ onLoad(async () => {
       redirect: true,
     });
   }
-  // ParentModel = await Model.create_model_async(await useGet(`/parent/json`));
+  previewData = {
+    list: [
+      {
+        label: "姓名",
+        value: user.xm,
+      },
+      {
+        label: "身份证号",
+        value: user.username,
+      },
+    ],
+  };
+  parent.value = await usePost(`/parent/get_or_create`, [
+    { usr_id: user.id },
+    { usr_id: user.id },
+    ["title", "id"],
+  ]);
+  console.log({ parent });
+  ParentModel = await Model.create_model_async(await useGet(`/parent/json`));
   StudentModel = await Model.create_model_async(await useGet(`/student/json`));
-  const [parentData] = await usePost(`/parent/records`, { usr_id: user.id });
-  if (parentData) {
-    parentData.openid = user.openid;
-    parent.value = parentData;
-    const children = await usePost(`/parent_student_relation/query`, {
-      where: { parent_id: parent.value.id },
-      select: ["id"],
-      load_fk_array: ["student_id", "*"],
-    });
-    students.value = children.map((c) => c.student_id);
-  } else {
-    parent.value = { openid: user.openid };
-  }
+  const children = await usePost(`/parent_student_relation/query`, {
+    where: { parent_id: parent.value.id },
+    select: ["id"],
+    load_fk_array: ["student_id", "*"],
+  });
+  students.value = children.map((c) => c.student_id);
   loaded.value = true;
 });
 const onSuccessStudentCreate = async (data) => {
