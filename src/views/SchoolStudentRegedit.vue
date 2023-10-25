@@ -30,13 +30,14 @@ onLoad(async () => {
     await usePost(`/class_director/records`, { usr_id: user.id })
   )[0];
   console.log(classDirectorRole);
+  const roles = await helpers.getPassedRoles();
   const modelJson = await useGet(`/student/json`);
-  if (classDirectorRole.value) {
+  if (roles.sys_admin) {
+  } else if (roles.principle) {
+    // TODO: 多学校的时候根据校长身份只显示一个学校
+  } else if (classDirectorRole.value) {
     const className = classDirectorRole.value.class_id__name;
-    // const cf = modelJson.fields.class_id;
-    // cf.default = className;
-    // cf._postValue = classDirectorRole.value.class_id;
-    // cf.disabled = true;
+    // TODO: 根据班级只显示一个学校
     modelJson.fields.class_id = {
       type: "integer",
       label: "班级",

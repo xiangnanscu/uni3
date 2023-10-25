@@ -126,7 +126,10 @@ const onFuiSelectConfirm = ({ index, options }) => {
 };
 const fieldChoices = ref();
 const fuiChoices = ref();
+const ready = ref(); //确保一些需要提前异步获取到数据加载完之后再渲染
 onBeforeMount(async () => {
+  //onBeforeMount 比template迟调用
+  console.log("widget onBeforeMount start");
   if (typeof field.choices == "function") {
     field.choices = await field.choices();
     if (field.type == "foreignkey") {
@@ -146,8 +149,11 @@ onBeforeMount(async () => {
       checked: e.value === props.modelValue,
     }));
   }
+  ready.value = true;
+  console.log("widget onBeforeMount end");
 });
 const showChoicesWhenSmall = (field) => {
+  console.log("showChoicesWhenSmall call");
   if (
     field.choices.length <
     (field.max_display_count || Number(process.env.MAX_DISPLAY_COUNT) || 20)
@@ -159,217 +165,223 @@ const showChoicesWhenSmall = (field) => {
 };
 </script>
 <template>
-  <template v-if="field.autocomplete">
-    <uni-easyinput
-      @update:modelValue="sendValue"
-      :modelValue="props.modelValue"
-      :disabled="field.disabled"
-      :placeholder="placeholder"
-      @focus="autocompletePopupRef.open()"
-      suffixIcon="forward"
-    />
-    <uni-popup ref="autocompletePopupRef" type="bottom" background-color="#fff">
-      <div style="padding: 1em">
-        <div style="text-align: center; margin-bottom: 1em">
-          {{ field.label }}
-        </div>
-        <input v-model="searchText" :placeholder="field.hint || '输入关键字查找'" focus />
-        <scroll-view :scroll-y="true" style="height: 31em">
-          <uni-list>
-            <uni-list-item
-              v-for="(c, i) in searchText
-                ? fieldChoices.filter((e) => {
-                    if (typeof e.text == 'string') {
-                      return e.text.includes(searchText);
+  <template v-if="ready">
+    <template v-if="field.autocomplete">
+      <uni-easyinput
+        @update:modelValue="sendValue"
+        :modelValue="props.modelValue"
+        :disabled="field.disabled"
+        :placeholder="placeholder"
+        @focus="autocompletePopupRef.open()"
+        suffixIcon="forward"
+      />
+      <uni-popup ref="autocompletePopupRef" type="bottom" background-color="#fff">
+        <div style="padding: 1em">
+          <div style="text-align: center; margin-bottom: 1em">
+            {{ field.label }}
+          </div>
+          <input
+            v-model="searchText"
+            :placeholder="field.hint || '输入关键字查找'"
+            focus
+          />
+          <scroll-view :scroll-y="true" style="height: 31em">
+            <uni-list>
+              <uni-list-item
+                v-for="(c, i) in searchText
+                  ? fieldChoices.filter((e) => {
+                      if (typeof e.text == 'string') {
+                        return e.text.includes(searchText);
+                      } else {
+                        return true;
+                      }
+                    })
+                  : showChoicesWhenSmall(field)"
+                clickable
+                @click="
+                  sendValue(c.value);
+                  if (field.type == 'foreignkey' && Array.isArray(field.choices)) {
+                    const matched = field.choices.find((e) => e.value === c.value);
+                    if (matched) {
+                      field._postValue = matched._value;
                     } else {
-                      return true;
+                      field._postValue = null;
                     }
-                  })
-                : showChoicesWhenSmall(field)"
-              clickable
-              @click="
-                sendValue(c.value);
-                if (field.type == 'foreignkey' && Array.isArray(field.choices)) {
-                  const matched = field.choices.find((e) => e.value === c.value);
-                  if (matched) {
-                    field._postValue = matched._value;
-                  } else {
-                    field._postValue = null;
                   }
-                }
-                autocompletePopupRef.close();
-              "
-              :key="i"
-              :title="c.text"
-              :rightText="c.hint"
-            />
-          </uni-list>
-        </scroll-view>
-      </div>
-    </uni-popup>
-  </template>
-  <template v-else-if="fieldChoices">
-    <uni-data-checkbox
-      v-if="isArrayField || field.tag == 'radio'"
-      @update:modelValue="sendValue"
-      :modelValue="props.modelValue"
-      :disabled="field.disabled"
-      :localdata="fieldChoices"
-      :multiple="isArrayField ? true : false"
-      :max="isArrayField ? field.max || Infinity : 1"
-      :min="field.min || 0"
-      :mode="isArrayField ? 'list' : 'tag'"
-    ></uni-data-checkbox>
-    <div v-else-if="field.attrs.fui">
-      <div style="display: flex; align-items: center">
-        <div
-          style="text-align: center; width: 100%; font-size2: 120%; font-weight2: bold"
-        >
-          {{ props.modelValue }}
+                  autocompletePopupRef.close();
+                "
+                :key="i"
+                :title="c.text"
+                :rightText="c.hint"
+              />
+            </uni-list>
+          </scroll-view>
         </div>
-        <div style="width: 100%">
-          <x-button size="mini" @click="fuiSelectShow = true">点击选择</x-button>
+      </uni-popup>
+    </template>
+    <template v-else-if="fieldChoices">
+      <uni-data-checkbox
+        v-if="isArrayField || field.tag == 'radio'"
+        @update:modelValue="sendValue"
+        :modelValue="props.modelValue"
+        :disabled="field.disabled"
+        :localdata="fieldChoices"
+        :multiple="isArrayField ? true : false"
+        :max="isArrayField ? field.max || Infinity : 1"
+        :min="field.min || 0"
+        :mode="isArrayField ? 'list' : 'tag'"
+      ></uni-data-checkbox>
+      <div v-else-if="field.attrs.fui">
+        <div style="display: flex; align-items: center">
+          <div
+            style="text-align: center; width: 100%; font-size2: 120%; font-weight2: bold"
+          >
+            {{ props.modelValue }}
+          </div>
+          <div style="width: 100%">
+            <x-button size="mini" @click="fuiSelectShow = true">点击选择</x-button>
+          </div>
         </div>
+        <fui-select
+          :show="fuiSelectShow"
+          :options="fuiChoices"
+          :multiple="isArrayField"
+          checkboxColor2="#FFC529"
+          btnBackground2="#FFC529"
+          btnColor2="#1A1D26"
+          closeColor="#6D758A"
+          @close="fuiSelectShow = false"
+          @confirm="onFuiSelectConfirm"
+        ></fui-select>
       </div>
-      <fui-select
-        :show="fuiSelectShow"
-        :options="fuiChoices"
-        :multiple="isArrayField"
-        checkboxColor2="#FFC529"
-        btnBackground2="#FFC529"
-        btnColor2="#1A1D26"
-        closeColor="#6D758A"
-        @close="fuiSelectShow = false"
-        @confirm="onFuiSelectConfirm"
-      ></fui-select>
-    </div>
-    <uni-data-select
-      v-else
-      @update:modelValue="sendValue"
-      :modelValue="props.modelValue"
+      <uni-data-select
+        v-else
+        @update:modelValue="sendValue"
+        :modelValue="props.modelValue"
+        :disabled="field.disabled"
+        :localdata="fieldChoices"
+      ></uni-data-select>
+    </template>
+    <slider
+      v-else-if="field.tag == 'slider'"
+      show-value
+      @change="sendValue($event.detail.value)"
       :disabled="field.disabled"
-      :localdata="fieldChoices"
-    ></uni-data-select>
-  </template>
-  <slider
-    v-else-if="field.tag == 'slider'"
-    show-value
-    @change="sendValue($event.detail.value)"
-    :disabled="field.disabled"
-    :value="props.modelValue"
-    :min="field.min"
-    :max="field.max"
-  />
-  <uni-datetime-picker
-    v-else-if="fieldType == 'date'"
-    type="date"
-    :clear-icon="false"
-    @update:modelValue="sendValue"
-    :modelValue="props.modelValue"
-    :disabled="field.disabled"
-    :placeholder="placeholder"
-  />
-  <uni-datetime-picker
-    v-else-if="fieldType == 'datetime'"
-    type="datetime"
-    :clear-icon="false"
-    @update:modelValue="sendValue"
-    :modelValue="props.modelValue"
-    :disabled="field.disabled"
-    :placeholder="placeholder"
-  />
-  <picker
-    v-else-if="fieldType == 'year_month'"
-    @change="sendValue($event.detail.value)"
-    :value="props.modelValue"
-    mode="date"
-    fields="month"
-  >
-    <uni-easyinput
+      :value="props.modelValue"
+      :min="field.min"
+      :max="field.max"
+    />
+    <uni-datetime-picker
+      v-else-if="fieldType == 'date'"
+      type="date"
+      :clear-icon="false"
       @update:modelValue="sendValue"
       :modelValue="props.modelValue"
       :disabled="field.disabled"
       :placeholder="placeholder"
-      suffixIcon="forward"
     />
-  </picker>
-  <picker
-    v-else-if="fieldType == 'year'"
-    @change="sendValue($event.detail.value)"
-    :value="props.modelValue"
-    mode="date"
-    fields="year"
-  >
-    <uni-easyinput
+    <uni-datetime-picker
+      v-else-if="fieldType == 'datetime'"
+      type="datetime"
+      :clear-icon="false"
       @update:modelValue="sendValue"
       :modelValue="props.modelValue"
       :disabled="field.disabled"
       :placeholder="placeholder"
-      suffixIcon="forward"
     />
-  </picker>
-  <template v-else-if="fieldType.startsWith('alioss')">
-    <wx-avatar
-      v-if="field.attrs.wx_avatar"
-      @update:modelValue="sendValue"
-      @update:error="emit('update:error', $event)"
-      :modelValue="{ url: props.modelValue, errMsg: props.error }"
-      :size="field.size_arg"
-    ></wx-avatar>
-    <uni-file-picker
-      v-else
-      ref="filePickerRef"
-      :del-icon="true"
-      :modelValue="props.modelValue"
-      @update:modelValue="sendValue"
-      :file-mediatype="mediaType"
-      :limit="fileLimit"
-      :disabled="field.disabled"
-      :title="' '"
-      mode="grid"
-      :disable-preview="true"
-      :image-styles="field.attrs.image_styles"
-      return-type="array"
-      @select="filePickerSelectHanlder"
-      @success="filePickerSuccess"
-      @progress="filePickerProgress"
-      @fail="filePickerFail"
-      @delete="filePickerDelete"
-    />
-    <div v-if="field.hint" class="field-hint" :style="field.attrs.hint_styles">
-      {{ field.hint }}
-    </div>
-  </template>
-  <template v-else-if="field.attrs.wxPhone">
+    <picker
+      v-else-if="fieldType == 'year_month'"
+      @change="sendValue($event.detail.value)"
+      :value="props.modelValue"
+      mode="date"
+      fields="month"
+    >
+      <uni-easyinput
+        @update:modelValue="sendValue"
+        :modelValue="props.modelValue"
+        :disabled="field.disabled"
+        :placeholder="placeholder"
+        suffixIcon="forward"
+      />
+    </picker>
+    <picker
+      v-else-if="fieldType == 'year'"
+      @change="sendValue($event.detail.value)"
+      :value="props.modelValue"
+      mode="date"
+      fields="year"
+    >
+      <uni-easyinput
+        @update:modelValue="sendValue"
+        :modelValue="props.modelValue"
+        :disabled="field.disabled"
+        :placeholder="placeholder"
+        suffixIcon="forward"
+      />
+    </picker>
+    <template v-else-if="fieldType.startsWith('alioss')">
+      <wx-avatar
+        v-if="field.attrs.wx_avatar"
+        @update:modelValue="sendValue"
+        @update:error="emit('update:error', $event)"
+        :modelValue="{ url: props.modelValue, errMsg: props.error }"
+        :size="field.size_arg"
+      ></wx-avatar>
+      <uni-file-picker
+        v-else
+        ref="filePickerRef"
+        :del-icon="true"
+        :modelValue="props.modelValue"
+        @update:modelValue="sendValue"
+        :file-mediatype="mediaType"
+        :limit="fileLimit"
+        :disabled="field.disabled"
+        :title="' '"
+        mode="grid"
+        :disable-preview="true"
+        :image-styles="field.attrs.image_styles"
+        return-type="array"
+        @select="filePickerSelectHanlder"
+        @success="filePickerSuccess"
+        @progress="filePickerProgress"
+        @fail="filePickerFail"
+        @delete="filePickerDelete"
+      />
+      <div v-if="field.hint" class="field-hint" :style="field.attrs.hint_styles">
+        {{ field.hint }}
+      </div>
+    </template>
+    <template v-else-if="field.attrs.wxPhone">
+      <uni-easyinput
+        @blur="blurValidate"
+        @update:modelValue="sendValue"
+        :error-message="props.error"
+        disable-color="black"
+        :modelValue="props.modelValue"
+        :disabled="wxPhoneDisabled"
+        :placeholder="placeholder"
+      />
+      <button
+        type="primary"
+        :plain="true"
+        size="mini"
+        open-type="getPhoneNumber"
+        @getphonenumber="getPhoneNumber"
+      >
+        获取微信手机号
+      </button>
+    </template>
     <uni-easyinput
+      v-else
       @blur="blurValidate"
       @update:modelValue="sendValue"
       :error-message="props.error"
-      disable-color="black"
       :modelValue="props.modelValue"
-      :disabled="wxPhoneDisabled"
+      :disabled="field.disabled"
       :placeholder="placeholder"
+      :type="easyType || 'text'"
     />
-    <button
-      type="primary"
-      :plain="true"
-      size="mini"
-      open-type="getPhoneNumber"
-      @getphonenumber="getPhoneNumber"
-    >
-      获取微信手机号
-    </button>
   </template>
-  <uni-easyinput
-    v-else
-    @blur="blurValidate"
-    @update:modelValue="sendValue"
-    :error-message="props.error"
-    :modelValue="props.modelValue"
-    :disabled="field.disabled"
-    :placeholder="placeholder"
-    :type="easyType || 'text'"
-  />
 </template>
 <style scoped>
 .field-hint {

@@ -27,7 +27,7 @@ const actionUrl = computed(
 );
 onLoad(async () => {
   const modelJson = await useGet(`/student/json`);
-  FormModel.value = Model.create_model(modelJson);
+  FormModel.value = await Model.create_model_async(modelJson);
   student.value = await useGet(`/student/detail/${query.id}`);
   ready.value = true;
   console.log({ actionUrl });
