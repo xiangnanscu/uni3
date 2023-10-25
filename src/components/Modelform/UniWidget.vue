@@ -180,7 +180,7 @@ const showChoicesWhenSmall = (field) => {
           <div style="text-align: center; margin-bottom: 1em">
             {{ field.label }}
           </div>
-          <input
+          <uni-easyinput
             v-model="searchText"
             :placeholder="field.hint || '输入关键字查找'"
             focus
