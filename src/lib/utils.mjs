@@ -165,6 +165,7 @@ export function parseSize(t) {
 const UNI_HOME_PAGE = process.env.UNI_HOME_PAGE;
 export const toQueryString = (obj) => {
   return Object.entries(obj)
+    .filter(([k, v]) => v !== undefined)
     .map(([k, v]) => `${k}=${encodeURIComponent(v)}`)
     .join("&");
 };

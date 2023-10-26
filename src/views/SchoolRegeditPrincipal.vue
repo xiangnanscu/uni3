@@ -2,24 +2,25 @@
   <page-layout>
     <x-alert title="智慧校园"> </x-alert>
     <div v-if="ready">
-      <div v-if="sysadminRole">
-        <uni-card title="温馨提示">
-          <p>选好学校后点击“邀请学校管理员”把当前页面发送给学校管理员</p>
-        </uni-card>
-        <modelform-uni
-          :model="schoolModel"
-          @send-data="successPost"
-          submit-button-open-type="share"
-          submitButtonText="邀请学校管理员"
-        ></modelform-uni>
-      </div>
-      <div v-else>
+      <div v-if="query.school_id">
         <uni-card title="温馨提示">
           <p>此处申请成为学校管理员</p>
         </uni-card>
         <fui-preview :previewData="previewData"></fui-preview>
         <x-button v-if="principalRole" disabled>已申请</x-button>
         <x-button v-else @click="regeditPrincipal">申请</x-button>
+      </div>
+      <div v-else-if="sysadminRole">
+        <uni-card title="温馨提示">
+          <p>选好学校后点击“邀请学校管理员”把当前页面发送给学校管理员</p>
+        </uni-card>
+        <modelform-uni
+          :model="schoolModel"
+          :values="inviteData"
+          :sync-values="true"
+          submit-button-open-type="share"
+          submitButtonText="邀请学校管理员"
+        ></modelform-uni>
       </div>
     </div>
   </page-layout>
@@ -32,16 +33,15 @@ const ready = ref(false);
 const query = useQuery();
 const principalRole = ref();
 const sysadminRole = ref();
-const schoolId = ref();
-const successPost = (data) => {
-  schoolId.value = data.school_id;
-};
+const inviteData = ref();
 const page = utils.getPage();
 useWxShare({
   title: "智慧校园学校管理员登记",
   desc: "",
   path: () => {
-    return `${page.$page.path}?school_id=${schoolId.value}`;
+    const shareUrl = `/${page.route}?${utils.toQueryString(inviteData.value)}`;
+    console.log({ shareUrl });
+    return shareUrl;
   },
 });
 const previewData = {
@@ -102,6 +102,7 @@ onLoad(async () => {
   SchoolJson.field_names = ["school_id"];
   SchoolJson.admin.form_names = ["school_id"];
   schoolModel = await Model.create_model_async(SchoolJson);
+  inviteData.value = schoolModel.get_defaults();
   ready.value = true;
 });
 </script>

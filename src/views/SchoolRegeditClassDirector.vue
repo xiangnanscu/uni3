@@ -28,8 +28,8 @@
         </uni-card>
         <modelform-uni
           :model="classModel"
-          :values="classModel.get_defaults()"
-          @send-data="inviteClassDirector"
+          :values="inviteData"
+          :sync-values="true"
           submit-button-open-type="share"
           submitButtonText="邀请班主任"
         ></modelform-uni>
@@ -67,28 +67,14 @@ const classDirectorRole = ref();
 const querySchool = ref();
 const queryClass = ref();
 const userRole = ref();
-const schoolId = ref();
-const classId = ref();
 const applySuccess = ref();
-const inviteClassDirector = (data) => {
-  console.log("inviteClassDirector:", data);
-  schoolId.value = data.school_id;
-  classId.value = data.class_id;
-};
+const inviteData = ref();
 const page = utils.getPage();
 useWxShare({
   title: "智慧校园班主任登记",
   desc: "",
   path: () => {
-    const res = {};
-    console.log("schoolId.value", schoolId.value);
-    if (schoolId.value) {
-      res.school_id = schoolId.value;
-    }
-    if (classId.value) {
-      res.class_id = classId.value;
-    }
-    const shareUrl = `/${page.route}?${utils.toQueryString(res)}`;
+    const shareUrl = `/${page.route}?${utils.toQueryString(inviteData.value)}`;
     console.log({ shareUrl });
     return shareUrl;
   },
@@ -134,11 +120,13 @@ const regeditClassDirector = async () => {
   utils.gotoPage("SchoolRegeditSuccessPage");
 };
 const applyClassDirector = async (data) => {
-  await usePost(`/class_director/get_or_create`, {
+  const applydata = {
     usr_id: user.id,
     school_id: data.school_id,
     class_id: data.class_id,
-  });
+  };
+  console.log("applyClassDirector data", applydata);
+  await usePost(`/class_director/get_or_create`, applydata);
   uni.showToast({
     title: "已登记,请等待审核",
     duration: 1000,
@@ -195,6 +183,7 @@ onLoad(async () => {
       };
     }
     classModel = await Model.create_model_async(ClassJson);
+    inviteData.value = classModel.get_defaults();
   };
 
   if (sysadminRole.value) {
