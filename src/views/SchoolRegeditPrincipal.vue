@@ -18,6 +18,7 @@
           :model="schoolModel"
           :values="inviteData"
           :sync-values="true"
+          :disable-submit="disableSubmit"
           submit-button-open-type="share"
           submitButtonText="邀请学校管理员"
         ></modelform-uni>
@@ -35,6 +36,9 @@ const principalRole = ref();
 const sysadminRole = ref();
 const inviteData = ref();
 const page = utils.getPage();
+const disableSubmit = (values) => {
+  return !values.school_id;
+};
 useWxShare({
   title: "智慧校园学校管理员登记",
   desc: "",

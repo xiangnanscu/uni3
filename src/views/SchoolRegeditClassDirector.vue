@@ -65,8 +65,8 @@ const query = useQuery();
 const sysadminRole = ref();
 const principalRole = ref();
 const classDirectorRole = ref();
-const querySchool = ref();
-const queryClass = ref();
+const schoolData = ref();
+const classData = ref();
 const userRole = ref();
 const applySuccess = ref();
 const inviteData = ref();
@@ -147,21 +147,20 @@ onLoad(async () => {
       redirect: true,
     });
   }
-  if (query.school_id) {
-    // 说明是点击管理员分享出来的页面而来
-    querySchool.value = await useGet(`/school/detail/${query.school_id}`);
-    previewData.list[3].value = querySchool.value.name;
-  }
-  if (query.class_id) {
-    // 说明是点击管理员分享出来的页面而来
-    queryClass.value = await useGet(`/class/detail/${query.class_id}`);
-    previewData.list[4].value = queryClass.value.name;
-  }
   const roles = await helpers.getRoles({});
-  console.log(roles);
   sysadminRole.value = roles.sys_admin?.status == "通过" ? roles.sys_admin : null;
   principalRole.value = roles.principal?.status == "通过" ? roles.principal : null;
   classDirectorRole.value = roles.class_director;
+  if (query.school_id) {
+    // 说明是点击管理员分享出来的页面而来
+    schoolData.value = await useGet(`/school/detail/${query.school_id}`);
+    previewData.list[3].value = schoolData.value.name;
+  }
+  if (query.class_id) {
+    // 说明是点击管理员分享出来的页面而来
+    classData.value = await useGet(`/class/detail/${query.class_id}`);
+    previewData.list[4].value = classData.value.name;
+  }
   const ClassJson = await useGet(`/class_director/json`);
   const setupClassForm = async (classRequired, keepField) => {
     ClassJson.field_names = ["school_id", "class_id"];
@@ -175,27 +174,29 @@ onLoad(async () => {
         required: true,
         choices: [
           {
-            value: querySchool.value.id,
-            label: querySchool.value.name,
+            value: schoolData.value.id,
+            label: schoolData.value.name,
           },
         ],
-        default: querySchool.value.id,
+        default: schoolData.value.id,
       };
       ClassJson.fields.class_id = {
         type: "integer",
         label: "班级",
         required: !!classRequired,
-        choices_url: `/class/choices/school/${querySchool.value.id}`,
+        choices_url: `/class/choices/school/${schoolData.value.id}`,
       };
     }
     classModel = await Model.create_model_async(ClassJson);
     inviteData.value = classModel.get_defaults();
   };
-
   if (sysadminRole.value) {
     await setupClassForm(false, true);
   } else if (principalRole.value) {
     //校长角色, 则按其权限显示邀请的表单
+    if (!schoolData.value) {
+      schoolData.value = await useGet(`/school/detail/${principalRole.value.school_id}`);
+    }
     await setupClassForm();
   } else if (classDirectorRole.value) {
     // 班主任角色, 则说明已经申请过了,目前暂时是一个微信号只能绑定一个班主任
