@@ -143,6 +143,7 @@ onBeforeMount(async () => {
     //从而prepare_autocomplete_choices不会发生作用，因此widget初始化需要再检查一遍
     field.prepare_autocomplete_choices();
     if (props.modelValue !== undefined) {
+      // field._realValue = props.modelValue // 应该直接这样?? 不应该,因为to_form_value把值转换了.
       field._realValue = field.choices.find((e) => e.value === props.modelValue)?._value;
     }
   }
@@ -210,7 +211,7 @@ const showChoicesWhenSmall = (field) => {
                 clickable
                 @click="
                   sendValue(c.value);
-                  if (field.type == 'foreignkey' && Array.isArray(field.choices)) {
+                  if (Array.isArray(field.choices)) {
                     const matched = field.choices.find((e) => e.value === c.value);
                     if (matched) {
                       field._realValue = matched._value;
