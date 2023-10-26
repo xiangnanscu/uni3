@@ -10,6 +10,7 @@
           :model="schoolModel"
           :values="inviteData"
           :sync-values="true"
+          :disable-submit="disableSubmit"
           submit-button-open-type="share"
           submitButtonText="邀请学校门卫"
         ></modelform-uni>
@@ -35,6 +36,9 @@ const guardRole = ref();
 const sysadminRole = ref();
 const inviteData = ref();
 const page = utils.getPage();
+const disableSubmit = (values) => {
+  return !values.school_id;
+};
 useWxShare({
   title: "智慧校园学校门卫登记",
   desc: "",
@@ -102,6 +106,7 @@ onLoad(async () => {
   SchoolJson.field_names = ["school_id"];
   SchoolJson.admin.form_names = ["school_id"];
   schoolModel = await Model.create_model_async(SchoolJson);
+  schoolModel.fields.school_id.required = true;
   inviteData.value = schoolModel.get_defaults();
   ready.value = true;
 });

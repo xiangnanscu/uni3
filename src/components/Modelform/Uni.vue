@@ -21,6 +21,7 @@ const props = defineProps({
   labelWidth: { type: [String, Number] },
   labelAlign: { type: String, default: "right" }, //center, right
   trigger: { type: String, default: "blur" },
+  disableSubmit: { type: Function, default: () => false },
 });
 const smartLabelWidth = computed(() => {
   if (props.labelWidth) {
@@ -81,6 +82,7 @@ onMounted(() => {
 // #endif
 
 const submiting = ref(false);
+const shouldDisabled = computed(() => props.disableSubmit(values));
 const submit = async () => {
   resetErrors();
   formRef.value.clearValidate();
@@ -254,7 +256,7 @@ const submit = async () => {
     </template>
     <x-button
       v-if="!props.hideSubmitButton"
-      :disabled="submiting"
+      :disabled="submiting || shouldDisabled"
       @click="submit"
       :open-type="props.submitButtonOpenType"
     >
