@@ -142,6 +142,9 @@ onBeforeMount(async () => {
     //creat_model_async创建field的时候，如果preload=false,field.choices就依然是函数
     //从而prepare_autocomplete_choices不会发生作用，因此widget初始化需要再检查一遍
     field.prepare_autocomplete_choices();
+    if (props.modelValue !== undefined) {
+      field._realValue = field.choices.find((e) => e.value === props.modelValue)?._value;
+    }
   }
   if (Array.isArray(field.choices)) {
     fieldChoices.value = field.choices.map((e) => ({

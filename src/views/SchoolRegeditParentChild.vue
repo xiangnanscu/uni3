@@ -29,7 +29,7 @@
               <x-button
                 styleString="padding: 0px 5px; font-size: 80%;margin-right:1em"
                 size="mini"
-                @click="onClickEdit(sindex)"
+                @click="onClickEdit(s.id)"
               >
                 编辑
               </x-button>
@@ -43,7 +43,7 @@
             </div>
           </div>
         </uni-group>
-        <x-button styleString="display:block;" @click="openCreateForm">
+        <x-button styleString="display:block;" @click="onClickCreate">
           添加子女
         </x-button>
       </uni-card>
@@ -78,7 +78,6 @@
           v-if="showUpdateForm"
           :action-url="studentUpdateUrl"
           @successPost="onSuccessUpdate"
-          @sendData="onSendUpdateData"
           :model="StudentModel"
           submit-button-text="保存"
           :values="currentStudent"
@@ -162,17 +161,7 @@ onLoad(async () => {
   ]);
   console.log({ parent });
   ParentModel = await Model.create_model_async(await useGet(`/parent/json`));
-  StudentModel = await Model.create_model_async(await useGet(`/student/json`));
-  // const children = await usePost(`/parent_student_relation/query`, {
-  //   where: { parent_id: parent.value.id },
-  //   select: ["id", "student_id__school_id__name"],
-  //   load_fk_array: ["student_id", "*"],
-  // });
-  // students.value = children.map((c) => {
-  //   const res = c.student_id;
-  //   res.school_id.name = res.school_id__name;
-  //   return res;
-  // });
+  // StudentModel = await Model.create_model_async(await useGet(`/student/json`));
   students.value = await usePost(`/student/parent/${parent.value.id}`);
   loaded.value = true;
 });
@@ -190,15 +179,10 @@ const onSuccessStudentCreate = async (data) => {
     mask: true,
   });
 };
-const onSendUpdateData = (data) => {
-  console.log("onSendUpdateData", JSON.stringify(data));
-  console.log("onSendUpdateData", JSON.stringify(currentStudent.value));
-  currentStudent.value.school_id = data.school_id;
-  console.log("onSendUpdateData", JSON.stringify(currentStudent.value));
-};
 const onSuccessUpdate = (data) => {
   console.log("onSuccessUpdate", data);
-  // Object.assign(currentStudent.value, data); //取消, 后端无法控制更新后的school_id__name
+  Object.assign(currentStudent.value, data); //取消, 后端无法控制更新后的school_id__name
+  currentStudent.value;
   updateFormRef.value.close();
   showUpdateForm.value = false;
   studentIndex.value = null;
@@ -214,19 +198,22 @@ const createMaskClick = () => {
 const updateMaskClick = () => {
   showUpdateForm.value = false;
 };
-const onClickEdit = async (sindex) => {
-  studentIndex.value = sindex;
-  updateFormRef.value.open();
-  showUpdateForm.value = true;
-  // await utils.gotoPage({
-  //   redirect: true,
-  //   name: "SchoolStudentForm",
-  //   query: { id: sid, redirect: page.value.$page.fullPath },
-  // });
+const onClickEdit = async (sid) => {
+  // studentIndex.value = sindex;
+  // updateFormRef.value.open();
+  // showUpdateForm.value = true;
+  await utils.gotoPage({
+    name: "SchoolStudentForm",
+    query: { id: sid, redirect: page.value.$page.fullPath },
+  });
 };
-const openCreateForm = () => {
-  createFormRef.value.open();
-  showCreateForm.value = true;
+const onClickCreate = async () => {
+  // createFormRef.value.open();
+  // showCreateForm.value = true;
+  await utils.gotoPage({
+    name: "SchoolStudentForm",
+    query: { redirect: page.value.$page.fullPath },
+  });
 };
 const onClickDelete = (sindex) => {
   studentIndex.value = sindex;

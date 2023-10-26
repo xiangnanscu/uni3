@@ -2,7 +2,9 @@
   <page-layout>
     <x-title>学生信息编辑</x-title>
     <div v-if="ready">
-      <x-title>{{ `${student.grade}年级${student.class}班${student.xm}` }}</x-title>
+      <x-title v-if="student">{{
+        `${student.grade}年级${student.class}班${student.xm}`
+      }}</x-title>
       <modelform-uni
         :model="FormModel"
         :values="student"
