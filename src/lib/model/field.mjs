@@ -164,8 +164,20 @@ class basefield {
     if (this.autocomplete) {
       this.max_choices_count ||= Number(process.env.MAX_CHOICES_COUNT) || 100;
       this.max_display_count ||= Number(process.env.MAX_DISPLAY_COUNT) || 50;
+      this.prepare_autocomplete_choices();
     }
     return this;
+  }
+  prepare_autocomplete_choices() {
+    // console.log("prepare_autocomplete_choices", this.name, JSON.stringify(this.choices));
+    if (Array.isArray(this.choices)) {
+      for (const [_, c] of this.choices.entries()) {
+        if (c._value === undefined) {
+          c._value = c.value;
+          c.value = c.label;
+        }
+      }
+    }
   }
   get_option_names() {
     return [...base_option_names, ...this.constructor.option_names];
@@ -692,21 +704,10 @@ class foreignkey extends basefield {
     if (this.db_type === FK_TYPE_NOT_DEFIEND) {
       this.db_type = fk.db_type || fk.type;
     }
-    this.prepare_choices();
-  }
-  prepare_choices() {
-    if (Array.isArray(this.choices)) {
-      for (const [_, c] of this.choices.entries()) {
-        if (c._value === undefined) {
-          c._value = c.value;
-          c.value = c.label;
-        }
-      }
-    }
   }
   get_validators(validators) {
     const foreignkey_validator = (v) => {
-      if (this._postValue === null) {
+      if (this._realValue === null) {
         throw new Error(`无效的值，请在下拉列表中选择`);
       }
       return v;
@@ -760,16 +761,25 @@ class foreignkey extends basefield {
     }
   }
   to_post_value(value, values) {
-    return this._postValue;
+    if (this.autocomplete) {
+      return this._realValue;
+    } else {
+      return value;
+    }
   }
   to_form_value(value, values) {
-    if (typeof value == "object") {
-      const testValue = value[this.reference_label_column];
-      return testValue == null ? value[this.reference_column] : testValue;
+    if (!this.autocomplete) {
+      return typeof value == "object" ? value[this.reference_column] : value;
+    } else {
+      if (typeof value == "object") {
+        const testValue = value[this.reference_label_column];
+        return testValue == null ? value[this.reference_column] : testValue;
+      } else {
+        // 后端按raw():get()输出
+        const readable = values[`${this.name}__${this.reference_label_column}`];
+        return readable == null ? value : readable;
+      }
     }
-    // 后端按raw():get()输出
-    const readable = values[`${this.name}__${this.reference_label_column}`];
-    return readable == null ? value : readable;
   }
 }
 

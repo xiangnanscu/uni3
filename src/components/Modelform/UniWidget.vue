@@ -1,4 +1,5 @@
 <script setup>
+//TODO:需注意多表单共用model的情况.当前存在field.choices和field._realValue会修改field
 const emit = defineEmits(["update:modelValue", "update:error", "blur:validate"]);
 const props = defineProps({
   field: { type: Object, required: true },
@@ -127,14 +128,20 @@ const onFuiSelectConfirm = ({ index, options }) => {
 const fieldChoices = ref();
 const fuiChoices = ref();
 const ready = ref(); //确保一些需要提前异步获取到数据加载完之后再渲染
+if (field._realValue) {
+  console.log(`多表单共用model的情况,重置field._realValue(${field._realValue})`);
+  field._realValue = null;
+}
 onBeforeMount(async () => {
-  //onBeforeMount 比template迟调用
-  console.log("widget onBeforeMount start");
+  //onBeforeMount 比template后调用
+  // console.log("widget onBeforeMount start");
   if (typeof field.choices == "function") {
     field.choices = await field.choices();
-    if (field.type == "foreignkey") {
-      field.prepare_choices();
-    }
+  }
+  if (field.autocomplete) {
+    //creat_model_async创建field的时候，如果preload=false,field.choices就依然是函数
+    //从而prepare_autocomplete_choices不会发生作用，因此widget初始化需要再检查一遍
+    field.prepare_autocomplete_choices();
   }
   if (Array.isArray(field.choices)) {
     fieldChoices.value = field.choices.map((e) => ({
@@ -150,10 +157,10 @@ onBeforeMount(async () => {
     }));
   }
   ready.value = true;
-  console.log("widget onBeforeMount end");
+  // console.log("widget onBeforeMount end");
 });
 const showChoicesWhenSmall = (field) => {
-  console.log("showChoicesWhenSmall call");
+  // console.log("showChoicesWhenSmall call");
   if (
     field.choices.length <
     (field.max_display_count || Number(process.env.MAX_DISPLAY_COUNT) || 20)
@@ -203,9 +210,9 @@ const showChoicesWhenSmall = (field) => {
                   if (field.type == 'foreignkey' && Array.isArray(field.choices)) {
                     const matched = field.choices.find((e) => e.value === c.value);
                     if (matched) {
-                      field._postValue = matched._value;
+                      field._realValue = matched._value;
                     } else {
-                      field._postValue = null;
+                      field._realValue = null;
                     }
                   }
                   autocompletePopupRef.close();
@@ -236,7 +243,7 @@ const showChoicesWhenSmall = (field) => {
           <div
             style="text-align: center; width: 100%; font-size2: 120%; font-weight2: bold"
           >
-            {{ props.modelValue }}
+            {{ fuiChoices.find((c) => c.value === props.modelValue)?.text }}
           </div>
           <div style="width: 100%">
             <x-button size="mini" @click="fuiSelectShow = true">点击选择</x-button>

@@ -78,6 +78,7 @@
           v-if="showUpdateForm"
           :action-url="studentUpdateUrl"
           @successPost="onSuccessUpdate"
+          @sendData="onSendUpdateData"
           :model="StudentModel"
           submit-button-text="保存"
           :values="currentStudent"
@@ -162,12 +163,17 @@ onLoad(async () => {
   console.log({ parent });
   ParentModel = await Model.create_model_async(await useGet(`/parent/json`));
   StudentModel = await Model.create_model_async(await useGet(`/student/json`));
-  const children = await usePost(`/parent_student_relation/query`, {
-    where: { parent_id: parent.value.id },
-    select: ["id"],
-    load_fk_array: ["student_id", "*"],
-  });
-  students.value = children.map((c) => c.student_id);
+  // const children = await usePost(`/parent_student_relation/query`, {
+  //   where: { parent_id: parent.value.id },
+  //   select: ["id", "student_id__school_id__name"],
+  //   load_fk_array: ["student_id", "*"],
+  // });
+  // students.value = children.map((c) => {
+  //   const res = c.student_id;
+  //   res.school_id.name = res.school_id__name;
+  //   return res;
+  // });
+  students.value = await usePost(`/student/parent/${parent.value.id}`);
   loaded.value = true;
 });
 const onSuccessStudentCreate = async (data) => {
@@ -184,8 +190,15 @@ const onSuccessStudentCreate = async (data) => {
     mask: true,
   });
 };
+const onSendUpdateData = (data) => {
+  console.log("onSendUpdateData", JSON.stringify(data));
+  console.log("onSendUpdateData", JSON.stringify(currentStudent.value));
+  currentStudent.value.school_id = data.school_id;
+  console.log("onSendUpdateData", JSON.stringify(currentStudent.value));
+};
 const onSuccessUpdate = (data) => {
-  Object.assign(currentStudent.value, data);
+  console.log("onSuccessUpdate", data);
+  // Object.assign(currentStudent.value, data); //取消, 后端无法控制更新后的school_id__name
   updateFormRef.value.close();
   showUpdateForm.value = false;
   studentIndex.value = null;
