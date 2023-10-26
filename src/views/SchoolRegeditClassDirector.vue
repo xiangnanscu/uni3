@@ -71,6 +71,7 @@ const schoolId = ref();
 const classId = ref();
 const applySuccess = ref();
 const inviteClassDirector = (data) => {
+  console.log("inviteClassDirector:", data);
   schoolId.value = data.school_id;
   classId.value = data.class_id;
 };
@@ -79,14 +80,16 @@ useWxShare({
   title: "智慧校园班主任登记",
   desc: "",
   path: () => {
-    const query = {};
+    const res = {};
+    console.log("schoolId.value", schoolId.value);
     if (schoolId.value) {
-      query.school_id = schoolId.value;
+      res.school_id = schoolId.value;
     }
     if (classId.value) {
-      query.class_id = classId.value;
+      res.class_id = classId.value;
     }
-    const shareUrl = `${page.$page.path}?${utils.toQueryString(query)}`;
+    const shareUrl = `/${page.route}?${utils.toQueryString(res)}`;
+    console.log({ shareUrl });
     return shareUrl;
   },
 });
