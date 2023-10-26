@@ -100,10 +100,10 @@ const submit = async () => {
       ...values,
       ...formdata,
     });
-    const realData =
+    const respData =
       response.data.type == "uni_error" ? response.data.data : response.data;
     const successStuff = async () => {
-      emit("successPost", realData);
+      emit("successPost", respData);
       if (props.successUrl) {
         await utils.gotoPage({
           url: props.successUrl,
@@ -114,28 +114,28 @@ const submit = async () => {
         await uni.showToast({ title: props.successMessage });
       }
     };
-    if (typeof realData == "object") {
-      const dataType = realData.type;
+    if (typeof respData == "object") {
+      const dataType = respData.type;
       if (dataType == "field_error") {
-        errors[realData.name] = realData.message;
+        errors[respData.name] = respData.message;
         if (props.showModal && props.errShowType !== "modal") {
           uni.showModal({
-            title: `“${realData.label}”:${realData.message}`,
+            title: `“${respData.label}”:${respData.message}`,
             showCancel: false,
           });
         }
       } else if (dataType == "field_error_batch") {
-        errors[realData.name] = realData.message;
+        errors[respData.name] = respData.message;
         if (props.showModal && props.errShowType !== "modal") {
           uni.showModal({
-            title: `“${realData.label}”第${realData.index}行错误`,
-            content: realData.message,
+            title: `“${respData.label}”第${respData.index}行错误`,
+            content: respData.message,
             showCancel: false,
           });
         }
       } else if (dataType == "model_errors") {
-        Object.assign(errors, realData.errors);
-        const messages = Object.entries(realData.errors)
+        Object.assign(errors, respData.errors);
+        const messages = Object.entries(respData.errors)
           .map(([name, message]) => `${props.model.name_to_label[name]}: ${message}`)
           .join("\n");
         uni.showModal({
@@ -149,7 +149,7 @@ const submit = async () => {
     } else if (response.data.type == "uni_error") {
       uni.showModal({
         title: "发生错误",
-        content: realData,
+        content: respData,
         showCancel: false,
       });
     } else {

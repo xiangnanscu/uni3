@@ -1,16 +1,17 @@
 <template>
   <page-layout>
-    <x-title>学生信息编辑</x-title>
+    <x-title>学生信息录入</x-title>
     <div v-if="ready">
-      <x-title v-if="student">{{
+      <!-- <x-title v-if="student">{{
         `${student.grade}年级${student.class}班${student.xm}`
-      }}</x-title>
+      }}</x-title> -->
       <modelform-uni
         :model="FormModel"
         :values="student"
         :sync-values="false"
         :success-url="query.redirect"
         :success-use-redirect="true"
+        @successPost="successPost"
         :action-url="actionUrl"
       ></modelform-uni>
     </div>
@@ -25,14 +26,26 @@ const query = useQuery();
 const ready = ref();
 const actionUrl = computed(
   () =>
-    `/student/update/${query.id}?sync_to_hik=${process.env.NODE_ENV === "production"}`,
+    (query.id ? `/student/update/${query.id}` : `/student/register`) +
+    `?sync_to_hik=${process.env.NODE_ENV === "production"}`,
 );
+const successPost = async (data) => {
+  if (query.parent_id && !query.id) {
+    await usePost(`/parent_student_relation/merge?key=parent_id&key=student_id`, [
+      { parent_id: query.parent_id, student_id: data.id },
+    ]);
+  }
+  await utils.gotoPage({
+    url: query.redirect,
+  });
+};
 onLoad(async () => {
   const modelJson = await useGet(`/student/json`);
   FormModel.value = await Model.create_model_async(modelJson);
-  student.value = await useGet(`/student/detail/${query.id}`);
+  if (query.id) {
+    student.value = await useGet(`/student/detail/${query.id}`);
+  }
   ready.value = true;
-  console.log({ actionUrl });
 });
 </script>
 
