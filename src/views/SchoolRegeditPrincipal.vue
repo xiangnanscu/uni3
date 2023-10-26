@@ -64,7 +64,7 @@ const previewData = {
     },
     {
       label: "状态",
-      value: "",
+      value: "待申请",
     },
   ],
 };

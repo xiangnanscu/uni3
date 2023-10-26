@@ -103,7 +103,7 @@ const previewData = {
     },
     {
       label: "状态",
-      value: "未申请",
+      value: "待申请",
     },
   ],
 };
@@ -162,11 +162,13 @@ onLoad(async () => {
   const setupClassForm = async (classRequired, keepField) => {
     ClassJson.field_names = ["school_id", "class_id"];
     ClassJson.admin.form_names = ["school_id", "class_id"];
+    ClassJson.fields.school_id.required = true;
     if (!keepField) {
       ClassJson.fields.school_id = {
         type: "integer",
         label: "学校",
         disabled: true,
+        required: true,
         choices: [
           {
             value: querySchool.value.id,

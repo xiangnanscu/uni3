@@ -8,7 +8,8 @@
         </uni-card>
         <modelform-uni
           :model="schoolModel"
-          @send-data="successPost"
+          :values="inviteData"
+          :sync-values="true"
           submit-button-open-type="share"
           submitButtonText="邀请学校门卫"
         ></modelform-uni>
@@ -32,16 +33,15 @@ const ready = ref(false);
 const query = useQuery();
 const guardRole = ref();
 const sysadminRole = ref();
-const schoolId = ref();
-const successPost = (data) => {
-  schoolId.value = data.school_id;
-};
+const inviteData = ref();
 const page = utils.getPage();
 useWxShare({
   title: "智慧校园学校门卫登记",
   desc: "",
   path: () => {
-    return `${page.$page.path}?school_id=${schoolId.value}`;
+    const shareUrl = `/${page.route}?${utils.toQueryString(inviteData.value)}`;
+    console.log({ shareUrl });
+    return shareUrl;
   },
 });
 const previewData = {
@@ -102,6 +102,7 @@ onLoad(async () => {
   SchoolJson.field_names = ["school_id"];
   SchoolJson.admin.form_names = ["school_id"];
   schoolModel = await Model.create_model_async(SchoolJson);
+  inviteData.value = schoolModel.get_defaults();
   ready.value = true;
 });
 </script>
