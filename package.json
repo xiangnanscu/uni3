@@ -1,5 +1,5 @@
 {
-  "name": "uni-preset-vue",
+  "name": "uni3",
   "version": "1.390.0",
   "license": "ISC",
   "scripts": {
@@ -74,7 +74,8 @@
     "jest": "yarn node --experimental-vm-modules $(yarn bin jest)",
     "diff": "diff --exclude=node_modules --exclude=.git --exclude=logs  --exclude=dist -bur ~/xodel ~/jahy",
     "stat": "bin/goaccess-stat.sh",
-    "update": "bin/update-mini.sh",
+    "update": "bin/update.sh",
+    "update-mini": "bin/update-mini.sh",
     "postinstall": "patch-package",
     "type-check": "vue-tsc --noEmit"
   },
