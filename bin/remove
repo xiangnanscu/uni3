@@ -1,1 +1,0 @@
-find . \( -path ./node_modules -o -path ./.git \) -prune -o \( -name "*.js" -o -name "*.vue" \) -type f -exec sed -i "/授权予江安红云智慧科技有/d" {} \;

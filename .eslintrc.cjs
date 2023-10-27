@@ -10,6 +10,7 @@ module.exports = {
     uni: "readonly",
     wx: "readonly",
     getApp: "readonly",
+    log: "readonly",
   },
   env: {
     node: true,
@@ -17,9 +18,9 @@ module.exports = {
   },
   extends: [
     "./src/unplugin/.eslintrc-auto-import.json",
+    "@vue/eslint-config-typescript",
     "plugin:vue/vue3-essential",
     "eslint:recommended",
-    "@vue/eslint-config-typescript",
     "@vue/eslint-config-prettier/skip-formatting",
   ],
   parserOptions: {
