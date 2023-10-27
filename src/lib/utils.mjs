@@ -234,6 +234,9 @@ export async function gotoPage(params) {
     return false;
   }
 }
+export async function redirect(url, query) {
+  return await gotoPage({ url, query, redirect: true });
+}
 export async function tryGotoPage(opts) {
   if (!opts?.url) {
     if (opts?.redirect) {

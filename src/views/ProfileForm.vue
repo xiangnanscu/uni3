@@ -4,15 +4,16 @@
       v-if="ready"
       :model="profileModel"
       :values="userData"
-      @success-post="successPostWX"
+      :success-url="redirectUrl"
       action-url="/update_profile"
+      @success-post="login"
     ></modelform-uni>
   </page-layout>
 </template>
 
 <script setup>
-const { session } = useSession();
-const loginUser = useLogin();
+const { session, login } = useSession();
+const redirectUrl = useRedirect();
 let wx_avatar = true;
 // #ifdef H5
 wx_avatar = false;
@@ -32,10 +33,6 @@ const profileModel = Model.create_model({
     intro: { label: "简介", input_type: "textarea" },
   },
 });
-
-const successPostWX = async (user) => {
-  await loginUser(user);
-};
 const ready = ref(false);
 onMounted(async () => {
   const { data } = await Http.get("/usr/profile/my");

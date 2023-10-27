@@ -7,7 +7,9 @@
       label-position="left"
       label-align="left"
       :show-modal="true"
-      @success-post="successPostH5"
+      :success-url="redirectUrl"
+      :success-use-redirect="true"
+      @success-post="login"
     >
     </modelform-uni>
     <!-- #endif -->
@@ -18,6 +20,8 @@
         :model="profileModel"
         :values="userData"
         :sync-values="true"
+        :success-url="redirectUrl"
+        :success-use-redirect="true"
         @success-post="successPostWX"
         submit-button-text="微信登录"
         action-url="/update_profile?update_session=1"
@@ -28,17 +32,13 @@
 </template>
 
 <script setup>
-const query = useQuery();
-const redirectUrl = useRedirect(query);
+const avatarSize = process.env.ALIOSS_AVATAR_SIZE || "500K";
 const store = useStore();
 store.message = "请先登录";
-const avatarSize = process.env.ALIOSS_AVATAR_SIZE || "2M";
-const loginUser = useLogin({ redirectUrl });
+const sessionUser = useUser();
+const redirectUrl = useRedirect();
+const { login } = useSession();
 // #ifdef H5
-const successPostH5 = async (user) => {
-  await loginUser(user);
-};
-
 const loginModel = Model.create_model({
   field_names: ["username", "password"],
   fields: {
@@ -49,8 +49,18 @@ const loginModel = Model.create_model({
 // #endif
 
 // #ifdef MP-WEIXIN
-const successPostWX = async (user) => {
-  await loginUser({ ...userData.value, ...user });
+const userData = ref({
+  id: "",
+  username: "",
+  xm: "",
+  nickname: "",
+  avatar: "",
+  permission: "",
+  phone: "",
+  openid: "",
+});
+const successPostWX = (user) => {
+  login({ ...userData.value, ...user });
 };
 
 const profileModel = Model.create_model({
@@ -67,16 +77,6 @@ const profileModel = Model.create_model({
   },
 });
 const needCompleteProfile = ref(false);
-const userData = ref({
-  id: "",
-  username: "",
-  xm: "",
-  nickname: "",
-  avatar: "",
-  permission: "",
-  phone: "",
-  openid: "",
-});
 
 async function getWxUser() {
   const { code, errMsg } = await uni.login();
@@ -88,20 +88,14 @@ async function getWxUser() {
   });
   return user;
 }
-
 onLoad(async (options) => {
-  const sessionUser = useUser();
   if (sessionUser.id) {
     //有时候不知何故已经登录了也会重定向到此页面,则不用再调用了
     console.log(
       "Login.vue onLoad检测已经登录直接重定向,options:",
       JSON.stringify(options),
     );
-    await utils.gotoPage({
-      url: redirectUrl.value, // redirectUrl.value,
-      redirect: true,
-    });
-    return;
+    return await utils.redirect(redirectUrl.value);
   }
   const user = await getWxUser();
   userData.value.id = user.id;
@@ -115,7 +109,8 @@ onLoad(async (options) => {
   } else {
     userData.value.nickname = user.nickname;
     userData.value.avatar = user.avatar;
-    await loginUser(userData.value);
+    login(userData.value);
+    await utils.redirect(redirectUrl.value);
   }
 });
 

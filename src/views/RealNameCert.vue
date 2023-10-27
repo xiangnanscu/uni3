@@ -10,6 +10,8 @@
       :values="userData"
       :sync-values="true"
       label-width="6em"
+      :success-url="redirectUrl"
+      :success-use-redirect="true"
       @success-post="successPost"
       action-url="/update_profile?update_session=1"
     ></modelform-uni>
@@ -17,9 +19,8 @@
 </template>
 <script setup>
 const query = useQuery();
-const redirectUrl = useRedirect(query);
-const { session } = useSession();
-const loginUser = useLogin({ redirectUrl });
+const redirectUrl = useRedirect();
+const { session, login } = useSession();
 let wxPhone = true;
 // #ifdef H5
 wxPhone = false;
@@ -39,9 +40,9 @@ const profileModel = Model.create_model({
   },
 });
 
-const successPost = async (user) => {
+const successPost = (user) => {
   const newUser = { ...userData.value, ...user };
-  await loginUser(newUser);
+  login(newUser);
 };
 onLoad(async () => {
   console.log("RealNameCert onLoad query:", JSON.stringify(query));
