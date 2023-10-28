@@ -65,17 +65,16 @@
 <script>
 export default {
   props: {
-    threadOtherPrefix: { type: String, default: `/thread/other` }
+    threadOtherPrefix: { type: String, default: `/thread/other` },
   },
   data() {
     return {
       currentProfile: null,
       currentProfileThreads: null,
-      currentMessage: ""
+      currentMessage: "",
     };
   },
   async onLoad(query) {
-    console.log("onload", { query });
     this.query = query;
     await this.fetchData(query);
   },
@@ -83,7 +82,7 @@ export default {
     async sendMessage() {
       const { data } = await Http.post(`/message/create`, {
         target: this.currentProfile.id,
-        content: this.currentMessage
+        content: this.currentMessage,
       });
       this.$refs.popupMessage.close();
       uni.showToast({ icon: "none", title: "发送成功" });
@@ -93,7 +92,7 @@ export default {
       const { data: profile } = await Http.get(`/usr/profile/${query.id}`);
       this.currentProfile = profile;
       this.currentProfileThreads = threads;
-    }
-  }
+    },
+  },
 };
 </script>

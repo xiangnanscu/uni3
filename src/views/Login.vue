@@ -1,5 +1,6 @@
 <template>
   <page-layout>
+    <x-alert v-if="query.message" :title="query.message"> </x-alert>
     <!-- #ifdef H5 -->
     <modelform-uni
       :model="loginModel"
@@ -33,8 +34,7 @@
 
 <script setup>
 const avatarSize = process.env.ALIOSS_AVATAR_SIZE || "500K";
-const store = useStore();
-store.message = "请先登录";
+const query = useQuery();
 const sessionUser = useUser();
 const redirectUrl = useRedirect();
 const { login } = useSession();
@@ -104,7 +104,7 @@ onLoad(async (options) => {
   userData.value.xm = user.xm;
   userData.value.username = user.username;
   userData.value.phone = user.phone;
-  if (!user.nickname || !user.avatar) {
+  if (process.env.NEED_COMPLETE_PROFILE == "true" && (!user.nickname || !user.avatar)) {
     needCompleteProfile.value = true;
   } else {
     userData.value.nickname = user.nickname;

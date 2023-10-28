@@ -134,48 +134,40 @@ const getSafeRedirect = (url) => {
     return url;
   }
 };
-const navStack = [];
 const setupNav = () => {
   navHandlerList.forEach((handler) => {
     uni.addInterceptor(handler, {
       invoke(opts) {
-        console.log("路由拦截", handler, opts.url);
-        navStack.push(new Date().getTime());
+        console.log("**路由拦截:", handler, opts.url);
         const { message, error } = storeToRefs(useStore());
         message.value = "";
         error.value = "";
-        const [url, ...qs] = opts.url.split("?");
-        console.log("nav split:", { url, qs });
-        if (whiteList.includes(url)) {
-          console.log("无需登录白名单", url);
+        const [route_path, ...qs] = opts.url.split("?");
+        // console.log("nav split:", { url, qs });
+        if (whiteList.includes(route_path)) {
           return opts;
         }
-        console.log("需要登录URL", url);
         const user = useUser();
         // 首先检测是否需要登录
         if (!user.id) {
-          console.log("用户未登录", url);
-          utils.gotoPage({
-            url: loginPage,
-            query: { redirect: getSafeRedirect(opts.url) },
-            redirect: true,
+          console.log("**需要登录的URL:", route_path);
+          utils.redirect(loginPage, {
+            message: "此操作需要登录",
+            redirect: getSafeRedirect(opts.url),
           });
           return false;
         }
         // 再检测是否需要实名
-        if (!user.username && realNameCertList.includes(url)) {
-          console.log("需要实名:", opts.url);
-          utils.gotoPage({
-            url: realNameCertPage,
-            query: {
-              message: "此操作需要先实名认证",
-              redirect: getSafeRedirect(opts.url),
-            },
-            redirect: true,
+        if (!user.username && realNameCertList.includes(route_path)) {
+          console.log("**需要实名的URL:", opts.url);
+          utils.redirect(realNameCertPage, {
+            message: "此操作需要实名认证",
+            redirect: getSafeRedirect(opts.url),
           });
           return false;
         }
         if (countOccurrences(opts.url, "?") === 2) {
+          console.log("**检测到2个问号需调用getSafeRedirect");
           opts.url = getSafeRedirect(opts.url);
           return opts;
         } else {
@@ -184,7 +176,6 @@ const setupNav = () => {
       },
       complete(res) {
         // console.log("路由拦截结束", res);
-        navStack.pop();
       },
       fail(err) {
         // 失败回调拦截
