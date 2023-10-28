@@ -243,20 +243,6 @@ export default {
           },
         ],
       },
-      panelVolplan: { head: "志愿服务", list: [] },
-      panelAd: { head: "杂文轩", list: [] },
-      panelPoll: { head: "问卷调查", list: [] },
-      searchValue: "",
-      goddess: {
-        ctime: "2023-10-20 15:01:58+08",
-        views: 97,
-        title: "小鱼等于咖啡",
-        sex: "",
-        id: 80,
-        pics: [
-          "//lzwlkj.oss-cn-shenzhen.aliyuncs.com/jaqn/vc-upload-1697783342920-7.jpg",
-        ],
-      },
       volplan: {
         pics: [
           "//lzwlkj.oss-cn-shenzhen.aliyuncs.com/jaqn/vc-upload-1698107988250-8.jpg",
@@ -266,39 +252,12 @@ export default {
         ctime: "2023-10-24 08:46:08+08",
         id: 54,
       },
-      ads: [
-        {
-          title:
-            "白天做金融，晚上写科幻，刘慈欣为他颁奖！摘得雨果奖的90后中国科幻作家海漄，写了什么？",
-          ctime: "2023-10-25 09:16:16+08",
-          pics: [
-            "//lzwlkj.oss-cn-shenzhen.aliyuncs.com/jaqn/vc-upload-1698196256929-4.png",
-          ],
-          id: 36,
-          views: 4,
-          hide: false,
-        },
-        {
-          title: "无痛爬山你怎么看？",
-          ctime: "2023-10-18 09:09:43+08",
-          pics: [
-            "//lzwlkj.oss-cn-shenzhen.aliyuncs.com/jaqn/vc-upload-1697590424547-4.jpg",
-          ],
-          id: 35,
-          views: 20,
-          hide: false,
-        },
-        {
-          title: "定了！梅西下个月来中国，11月8日将现身成都凤凰山体育场",
-          ctime: "2023-10-16 08:48:03+08",
-          pics: [
-            "//lzwlkj.oss-cn-shenzhen.aliyuncs.com/jaqn/vc-upload-1697416981962-4.jpg",
-          ],
-          id: 34,
-          views: 20,
-          hide: false,
-        },
-      ],
+      panelVolplan: { head: "志愿服务", list: [] },
+      panelAd: { head: "杂文轩", list: [] },
+      panelPoll: { head: "问卷调查", list: [] },
+      searchValue: "",
+      goddess: null,
+      ads: null,
       polls: null,
       news: null,
       imageList: [],
