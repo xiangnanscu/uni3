@@ -40,7 +40,8 @@ function clean_choice(c) {
 }
 function string_choices_to_array(s) {
   const choices = [];
-  for (let line of s.split("\n")) {
+  const spliter = (s.includes("\n") && "\n") || ",";
+  for (let line of s.split(spliter)) {
     line = line.trim();
     if (line !== "") {
       choices.push(line);
@@ -402,7 +403,7 @@ class text extends basefield {
       this.default = "";
     }
     if (this.attrs.auto_size === undefined) {
-      this.attrs.auto_size = true;
+      this.attrs.auto_size = false;
     }
   }
 }
@@ -1114,7 +1115,7 @@ class alioss extends string {
     } else if (!Array.isArray(file_list) || !file_list[0]) {
       return "";
     } else {
-      return file_list[0].ossUrl || "";
+      return file_list[0].ossUrl || file_list[0] || "";
     }
   }
 }
@@ -1160,7 +1161,7 @@ class alioss_list extends basearray {
     if (!Array.isArray(file_list) || !file_list[0]) {
       return [];
     } else {
-      return file_list.map((e) => e.ossUrl);
+      return file_list.map((e) => e.ossUrl || e);
     }
   }
 }

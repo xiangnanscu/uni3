@@ -88,10 +88,6 @@ const submit = async () => {
   formRef.value.clearValidate();
   const cleanedData = await formRef.value.validate();
   const formdata = props.model.to_post_value(cleanedData, props.model.names);
-  // if (vm.vnode.props.onSendData) {
-  //   // 不知为何微信小程序突然props不包含onXXX属性和H5端不一致
-  //   emit("sendData", formdata);
-  // }
   emit("sendData", formdata);
   if (!props.actionUrl) {
     return;
@@ -210,7 +206,11 @@ const submit = async () => {
           </uni-forms-item>
         </template>
         <uni-forms-item :label="values[field.name]?.length > 0 ? '' : field.label">
-          <x-button size="mini" @click="values[field.name].push(field.get_default())">
+          <x-button
+            size="mini"
+            :text="`添加${field.label}`"
+            @click="values[field.name].push(field.get_default())"
+          >
             <uni-icons type="plusempty" style="color: #fff"></uni-icons>
             添加{{ field.label }}
           </x-button>
@@ -257,6 +257,7 @@ const submit = async () => {
     <x-button
       v-if="!props.hideSubmitButton"
       :disabled="submiting || shouldDisabled"
+      :text="props.submitButtonText"
       @click="submit"
       :open-type="props.submitButtonOpenType"
     >

@@ -3,7 +3,7 @@ import { createSSRApp } from "vue";
 import App from "./App.vue";
 import { createPinia } from "pinia";
 import uniSetup from "./uniSetup";
-import { isLogin } from "@/lib/utils";
+import { isLogin, NeedLoginError } from "@/lib/helpers.js";
 import { Model } from "@/lib/model/model.mjs";
 import { basefield } from "@/lib/model/field.mjs";
 import Http from "@/globals/Http.js";
@@ -48,17 +48,17 @@ export function createApp() {
   setTimeout(() => {
     app.config.errorHandler = (err, instance, info) => {
       console.error("errorHandler captured...", err, { instance, info });
-      if (typeof err == "string") {
+      if (err instanceof NeedLoginError || err.message == LOGIN_HINT) {
+        console.log("checkLogin 需要登录", instance);
+        utils.redirect(loginPage, {
+          message: "此操作需要登录",
+          redirect: utils.getSafeRedirect(instance.$page.fullPath),
+        });
+      } else if (typeof err == "string") {
         uni.showModal({
           title: `错误`,
           content: err,
           showCancel: false,
-        });
-      } else if (err.message == LOGIN_HINT) {
-        utils.gotoPage({
-          url: loginPage,
-          query: { redirect: utils.getFullPath() },
-          redirect: true,
         });
       } else if (err.type == "uni_error") {
         uni.showModal({

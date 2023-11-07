@@ -1,6 +1,6 @@
 <template>
   <page-layout>
-    <x-alert v-if="query.message" :title="query.message"> </x-alert>
+    <f-alert v-if="query.message"> {{ query.message }} </f-alert>
     <!-- #ifdef H5 -->
     <modelform-uni
       :model="loginModel"
@@ -78,16 +78,6 @@ const profileModel = Model.create_model({
 });
 const needCompleteProfile = ref(false);
 
-async function getWxUser() {
-  const { code, errMsg } = await uni.login();
-  if (errMsg !== "login:ok") {
-    throw new Error(errMsg);
-  }
-  const user = await usePost("/wx_login", {
-    code,
-  });
-  return user;
-}
 onLoad(async (options) => {
   if (sessionUser.id) {
     //有时候不知何故已经登录了也会重定向到此页面,则不用再调用了
@@ -97,7 +87,7 @@ onLoad(async (options) => {
     );
     return await utils.redirect(redirectUrl.value);
   }
-  const user = await getWxUser();
+  const user = await helpers.getWxUser();
   userData.value.id = user.id;
   userData.value.openid = user.openid;
   userData.value.permission = user.permission;

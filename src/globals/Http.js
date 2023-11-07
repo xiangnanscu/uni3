@@ -13,9 +13,13 @@ const throwOnUniError = (response) => {
       utils.gotoPage({
         url: process.env.UNI_LOGIN_PAGE,
         query: { redirect: utils.getFullPath() },
-        redirect: false
+        redirect: false,
       });
     } else if (data.status >= 500) {
+      throw new WxResquestError(data);
+    } else if (data.status === 404) {
+      throw new WxResquestError(data);
+    } else {
       throw new WxResquestError(data);
     }
   }
@@ -24,43 +28,24 @@ const throwOnUniError = (response) => {
 
 class Http {
   static async get(url, data, opts) {
-    const showLoading = !opts?.disableShowLoading;
-    try {
-      if (showLoading) {
-        uni.showLoading();
-      }
-      const response = await uni.request({
-        url,
-        data: data || {},
-        method: "get",
-        ...opts
-      });
-      return throwOnUniError(response);
-    } finally {
-      if (showLoading) {
-        uni.hideLoading();
-      }
-    }
+    const response = await uni.request({
+      url,
+      data: data || {},
+      method: "get",
+      foo: "bar",
+      ...opts,
+    });
+    return throwOnUniError(response);
   }
 
   static async post(url, data, opts) {
-    const showLoading = !opts?.disableShowLoading;
-    try {
-      if (showLoading) {
-        uni.showLoading();
-      }
-      const response = await uni.request({
-        url,
-        data: data || {},
-        method: "post",
-        ...opts
-      });
-      return throwOnUniError(response);
-    } finally {
-      if (showLoading) {
-        uni.hideLoading();
-      }
-    }
+    const response = await uni.request({
+      url,
+      data: data || {},
+      method: "post",
+      ...opts,
+    });
+    return throwOnUniError(response);
   }
 }
 

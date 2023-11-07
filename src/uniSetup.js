@@ -1,7 +1,6 @@
 import cookie from "cookie";
 import { useStore } from "@/store";
 import { version } from "../package.json";
-import { isLogin } from "@/lib/utils";
 
 const viteEnv = import.meta.env;
 
@@ -33,10 +32,14 @@ const setupRequest = () => {
     invoke(args) {
       // console.log("global uni.request invoke:", args);
       const store = useStore();
+      const showLoading = !args?.disableLoading && !store.disableLoading;
       store.loading = true;
       store.message = "";
       store.error = "";
       const header = args.header || {};
+      if (showLoading) {
+        uni.showLoading();
+      }
       // #ifdef MP-WEIXIN
       for (const cookieName of cookieNames) {
         const cookieStr = uni.getStorageSync(`cookie_${cookieName}`);
@@ -64,6 +67,10 @@ const setupRequest = () => {
     complete(args) {
       // console.log("global uni.request complete:", args);
       const store = useStore();
+      const showLoading = !args?.disableLoading && !store.disableLoading;
+      if (showLoading) {
+        uni.hideLoading();
+      }
       store.loading = false;
       const cookies = args.cookies || [];
       // #ifdef H5
@@ -85,12 +92,12 @@ const setupRequest = () => {
 };
 
 const navHandlerList = ["navigateTo", "redirectTo", "switchTab"];
-const loginPage = process.env.UNI_LOGIN_PAGE;
+const UNI_LOGIN_PAGE = process.env.UNI_LOGIN_PAGE;
 const realNameCertPage = "/views/RealNameCert";
 const whiteList = [
   "/",
   process.env.UNI_HOME_PAGE,
-  loginPage,
+  UNI_LOGIN_PAGE,
   "/views/tabbar/ProfileMy",
   "/views/AdDetail",
   "/views/NewsDetail",
@@ -114,31 +121,11 @@ const realNameCertList = [
   "/views/VolAdd",
   "/views/VolplanDetail",
 ];
-const getSafeRedirect = (url) => {
-  const [path, ...qs] = url.split("?");
-  if (qs.length > 1) {
-    // 两个问号说明是redirect中包含问号的情况,需要encode
-    const res = [];
-    for (const token of qs.join("?").split("&")) {
-      // console.log({ token });
-      const m = token.match(/^(\w+?)=(.+)/);
-      if (m) {
-        // res[m[1]] = encodeURIComponent(m[2]);
-        res.push(`${m[1]}=${encodeURIComponent(m[2])}`);
-      }
-    }
-    const safeUrl = `${path}?${res.join("&")}`;
-    console.log("safe:", safeUrl);
-    return safeUrl;
-  } else {
-    return url;
-  }
-};
 const setupNav = () => {
   navHandlerList.forEach((handler) => {
     uni.addInterceptor(handler, {
       invoke(opts) {
-        console.log("**路由拦截??:", handler, opts.url);
+        console.log("**路由拦截:", handler, opts.url);
         const { message, error } = storeToRefs(useStore());
         message.value = "";
         error.value = "";
@@ -151,9 +138,9 @@ const setupNav = () => {
         // 首先检测是否需要登录
         if (!user.id) {
           console.log("**需要登录的URL:", route_path);
-          utils.redirect(loginPage, {
+          utils.redirect(UNI_LOGIN_PAGE, {
             message: "此操作需要登录",
-            redirect: getSafeRedirect(opts.url),
+            redirect: utils.getSafeRedirect(opts.url),
           });
           return false;
         }
@@ -162,13 +149,13 @@ const setupNav = () => {
           console.log("**需要实名的URL:", opts.url);
           utils.redirect(realNameCertPage, {
             message: "此操作需要实名认证",
-            redirect: getSafeRedirect(opts.url),
+            redirect: utils.getSafeRedirect(opts.url),
           });
           return false;
         }
         if (countOccurrences(opts.url, "?") === 2) {
-          console.log("**检测到2个问号需调用getSafeRedirect");
-          opts.url = getSafeRedirect(opts.url);
+          console.log("**检测到2个问号需调用utils.getSafeRedirect");
+          opts.url = utils.getSafeRedirect(opts.url);
           return opts;
         } else {
           return opts;

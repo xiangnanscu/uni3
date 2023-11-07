@@ -1,10 +1,5 @@
 <template>
-  <uni-grid
-    :column="columns || 1"
-    :show-border="false"
-    :square="true"
-    @change="change"
-  >
+  <uni-grid :column="columns || 1" :show-border="false" :square="true" @change="change">
     <uni-grid-item
       v-for="(url, index) in urls"
       :index="index"
@@ -30,7 +25,7 @@ export default {
   props: ["urls", "columns"],
   data() {
     return {
-      localValue: []
+      localValue: [],
     };
   },
   methods: {
@@ -38,13 +33,13 @@ export default {
       uni.previewImage({
         current: index,
         urls: this.urls,
-        loop: true
+        loop: true,
       });
     },
     change(event) {
       this.$emit("change", event);
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

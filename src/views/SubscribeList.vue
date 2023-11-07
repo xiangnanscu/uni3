@@ -16,7 +16,7 @@
         </view>
       </uni-list>
     </div>
-    <x-alert v-else title="没有记录"> </x-alert>
+    <f-alert v-else> 没有记录</f-alert>
   </page-layout>
 </template>
 
@@ -29,8 +29,8 @@ onLoad(async (opts) => {
   const subscribeLogs = await usePost(
     `/subscribe/records?select=status&select=id&select=template_id`,
     {
-      openid: user.openid
-    }
+      openid: user.openid,
+    },
   );
   const enabledIds = subscribeLogs
     .filter((e) => e.status == "启用")
@@ -38,39 +38,59 @@ onLoad(async (opts) => {
   for (const t of templates) {
     t.checked = enabledIds.includes(t.priTmplId) ? true : false;
   }
-  subscribeItems.value = templates.filter(
-    (e) => !excludeTitles.includes(e.title)
-  );
+  subscribeItems.value = templates.filter((e) => !excludeTitles.includes(e.title));
+  // #ifdef MP-WEIXIN
+  wx.getSetting({
+    withSubscriptions: true,
+    success(res) {
+      console.log(res.authSetting);
+      // res.authSetting = {
+      //   "scope.userInfo": true,
+      //   "scope.userLocation": true
+      // }
+      console.log(res.subscriptionsSetting);
+      // res.subscriptionsSetting = {
+      //   mainSwitch: true, // 订阅消息总开关
+      //   itemSettings: {   // 每一项开关
+      //     SYS_MSG_TYPE_INTERACTIVE: 'accept', // 小游戏系统订阅消息
+      //     SYS_MSG_TYPE_RANK: 'accept'
+      //     zun-LzcQyW-edafCVvzPkK4de2Rllr1fFpw2A_x0oXE: 'reject', // 普通一次性订阅消息
+      //     ke_OZC_66gZxALLcsuI7ilCJSP2OJ2vWo2ooUPpkWrw: 'ban',
+      //   }
+      // }
+    },
+  });
+  // #endif
 });
 async function onSubsribeChange(item, selected) {
   const priTmplId = item.priTmplId;
   if (selected) {
     const res = await uni.requestSubscribeMessage?.({
-      tmplIds: [priTmplId]
+      tmplIds: [priTmplId],
     });
     if (res?.[priTmplId] == "accept") {
       const subsRes = await usePost(`/subscribe/create`, {
         template_id: priTmplId,
         openid: user.openid,
-        status: "启用"
+        status: "启用",
       });
       item.checked = true;
       uni.showToast({
         title: "订阅成功",
-        icon: "success"
+        icon: "success",
       });
     } else {
       item.checked = false;
       uni.showToast({
         title: "订阅失败",
-        icon: "error"
+        icon: "error",
       });
     }
   } else {
     item.checked = false;
     uni.showToast({
       title: "订阅失败",
-      icon: "error"
+      icon: "error",
     });
   }
 }

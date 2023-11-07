@@ -34,22 +34,19 @@
       @choose="choose"
       @delFile="delFile"
     >
-      <slot><x-button size="mini">选择文件</x-button></slot>
+      <slot><x-button size="mini" text="选择文件">选择文件</x-button></slot>
     </upload-file>
   </view>
 </template>
 
 <script>
-import {
-  chooseAndUploadFile,
-  uploadCloudFiles
-} from "./choose-and-upload-file.js";
+import { chooseAndUploadFile, uploadCloudFiles } from "./choose-and-upload-file.js";
 import {
   get_file_ext,
   get_extname,
   get_files_and_is_max,
   get_file_info,
-  get_file_data
+  get_file_data,
 } from "./utils.js";
 import uploadImage from "./upload-image.vue";
 import uploadFile from "./upload-file.vue";
@@ -68,10 +65,10 @@ export default {
   name: "uniFilePicker",
   components: {
     uploadImage,
-    uploadFile
+    uploadFile,
   },
   options: {
-    virtualHost: true
+    virtualHost: true,
   },
   emits: [
     "select",
@@ -80,7 +77,7 @@ export default {
     "progress",
     "delete",
     "update:modelValue",
-    "input"
+    "input",
   ],
   props: {
     ossSize: { type: String, default: ALIOSS_IMAGE_SIZE },
@@ -94,7 +91,7 @@ export default {
       type: [Array, Object],
       default() {
         return [];
-      }
+      },
     },
     // #endif
 
@@ -103,52 +100,52 @@ export default {
       type: [Array, Object],
       default() {
         return [];
-      }
+      },
     },
     // #endif
 
     disabled: {
       type: Boolean,
-      default: false
+      default: false,
     },
     disablePreview: {
       type: Boolean,
-      default: false
+      default: false,
     },
     delIcon: {
       type: Boolean,
-      default: true
+      default: true,
     },
     // 自动上传
     autoUpload: {
       type: Boolean,
-      default: true
+      default: true,
     },
     // 最大选择个数 ，h5只能限制单选或是多选
     limit: {
       type: [Number, String],
-      default: 9
+      default: 9,
     },
     // 列表样式 grid | list | list-card
     mode: {
       type: String,
-      default: "grid"
+      default: "grid",
     },
     // 选择文件类型  image/video/all
     fileMediatype: {
       type: String,
-      default: "image"
+      default: "image",
     },
     // 文件类型筛选
     fileExtname: {
       type: [Array, String],
       default() {
         return [];
-      }
+      },
     },
     title: {
       type: String,
-      default: ""
+      default: "",
     },
     listStyles: {
       type: Object,
@@ -159,38 +156,38 @@ export default {
           // 是否显示分隔线
           dividline: true,
           // 线条样式
-          borderStyle: {}
+          borderStyle: {},
         };
-      }
+      },
     },
     imageStyles: {
       type: Object,
       default() {
         return {
           width: "auto",
-          height: "auto"
+          height: "auto",
         };
-      }
+      },
     },
     readonly: {
       type: Boolean,
-      default: false
+      default: false,
     },
     returnType: {
       type: String,
-      default: "array"
+      default: "array",
     },
     sizeType: {
       type: Array,
       default() {
         return ["original", "compressed"];
-      }
-    }
+      },
+    },
   },
   data() {
     return {
       files: [],
-      localValue: []
+      localValue: [],
     };
   },
   watch: {
@@ -199,7 +196,7 @@ export default {
       handler(newVal, oldVal) {
         this.setValue(newVal, oldVal);
       },
-      immediate: true
+      immediate: true,
     },
     // #endif
     // #ifdef VUE3
@@ -207,8 +204,8 @@ export default {
       handler(newVal, oldVal) {
         this.setValue(newVal, oldVal);
       },
-      immediate: true
-    }
+      immediate: true,
+    },
     // #endif
   },
   computed: {
@@ -236,7 +233,7 @@ export default {
         return 9;
       }
       return this.limit;
-    }
+    },
   },
   created() {
     // TODO 兼容不开通服务空间的情况
@@ -333,7 +330,7 @@ export default {
       ) {
         uni.showToast({
           title: `您最多选择 ${this.limitLength} 个文件`,
-          icon: "none"
+          icon: "none",
         });
         return;
       }
@@ -357,13 +354,13 @@ export default {
           onChooseFile: this.chooseFileCallback,
           onUploadProgress: (progressEvent) => {
             this.setProgress(progressEvent, progressEvent.index);
-          }
+          },
         })
         .then(async (result) => {
           const { data: payload } = await Http.post(this.ossPayloadUrl, {
             size: this.ossSize,
             bucket: this.ossBucket,
-            lifetime: this.ossLifetime
+            lifetime: this.ossLifetime,
           });
           const tasks = [];
           const size = parseSize(this.ossSize);
@@ -387,8 +384,8 @@ export default {
                   formData: {
                     key,
                     success_action_status: 200,
-                    ...payload
-                  }
+                    ...payload,
+                  },
                 })
                 .then(([err, res]) => {
                   console.log({ err, res });
@@ -407,7 +404,7 @@ export default {
                     fileItem.errMsg = res.errMsg;
                   }
                   return fileItem.url;
-                })
+                }),
             );
           }
           Promise.all(tasks).then((res) => {
@@ -426,9 +423,7 @@ export default {
     async chooseFileCallback(res) {
       const _extname = get_extname(this.fileExtname);
       const is_one =
-        (Number(this.limitLength) === 1 &&
-          this.disablePreview &&
-          !this.disabled) ||
+        (Number(this.limitLength) === 1 && this.disablePreview && !this.disabled) ||
         this.returnType === "object";
       // 如果这有一个文件 ，需要清空本地缓存数据
       if (is_one) {
@@ -451,12 +446,12 @@ export default {
         this.files.push(filedata);
         currentData.push({
           ...filedata,
-          file: files[i]
+          file: files[i],
         });
       }
       this.$emit("select", {
         tempFiles: currentData,
-        tempFilePaths: filePaths
+        tempFilePaths: filePaths,
       });
       res.tempFiles = files;
       // 停止自动上传
@@ -527,14 +522,14 @@ export default {
         // 状态改变返回
         this.$emit("success", {
           tempFiles: this.backObject(successData),
-          tempFilePaths: tempFilePath
+          tempFilePaths: tempFilePath,
         });
       }
 
       if (errorData.length > 0) {
         this.$emit("fail", {
           tempFiles: errorData, // this.backObject(errorData),
-          tempFilePaths: errorTempFilePath
+          tempFilePaths: errorTempFilePath,
         });
       }
     },
@@ -549,13 +544,11 @@ export default {
       const fileLenth = this.files.length;
       const percentNum = (index / fileLenth) * 100;
       const percentCompleted = Math.round(
-        (progressEvent.loaded * 100) / progressEvent.total
+        (progressEvent.loaded * 100) / progressEvent.total,
       );
       let idx = index;
       if (!type) {
-        idx = this.files.findIndex(
-          (p) => p.uuid === progressEvent.tempFile.uuid
-        );
+        idx = this.files.findIndex((p) => p.uuid === progressEvent.tempFile.uuid);
       }
       if (idx === -1 || !this.files[idx]) return;
       // fix by mehaotian 100 就会消失，-1 是为了让进度条消失
@@ -564,7 +557,7 @@ export default {
       this.$emit("progress", {
         index: idx,
         progress: parseInt(percentCompleted),
-        tempFile: this.files[idx]
+        tempFile: this.files[idx],
       });
     },
 
@@ -575,7 +568,7 @@ export default {
     delFile(index) {
       this.$emit("delete", {
         tempFile: this.files[index],
-        tempFilePath: this.files[index].url
+        tempFilePath: this.files[index].url,
       });
       this.files.splice(index, 1);
       this.$nextTick(() => {
@@ -592,7 +585,7 @@ export default {
       const len = name.length;
       return {
         name: name.substring(0, last_len),
-        ext: name.substring(last_len + 1, len)
+        ext: name.substring(last_len + 1, len),
       };
     },
 
@@ -635,14 +628,14 @@ export default {
           path: v.path,
           size: v.size,
           fileID: v.fileID,
-          url: v.url
+          url: v.url,
         });
       });
       return newFilesData;
     },
     async getTempFileURL(fileList) {
       fileList = {
-        fileList: [].concat(fileList)
+        fileList: [].concat(fileList),
       };
       const urls = await uniCloud.getTempFileURL(fileList);
       return urls.fileList[0].tempFileURL || "";
@@ -659,8 +652,8 @@ export default {
         parentName = parent.$options.name;
       }
       return parent;
-    }
-  }
+    },
+  },
 };
 </script>
 

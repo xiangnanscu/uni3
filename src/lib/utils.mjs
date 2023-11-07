@@ -1,6 +1,5 @@
 import { Buffer } from "buffer";
 import pagesJson from "@/pages.json";
-import { useSession } from "@/store/session";
 
 export function isWeixin() {
   const ua = navigator.userAgent.toLowerCase();
@@ -234,8 +233,18 @@ export async function gotoPage(params) {
     return false;
   }
 }
-export async function redirect(url, query) {
-  return await gotoPage({ url, query, redirect: true });
+export async function redirect(params, query, delay) {
+  if (typeof query == "number") {
+    delay = query;
+    query = undefined;
+  }
+  setTimeout(async () => {
+    await gotoPage({
+      ...(params[0] == "/" ? { url: params } : { name: params }),
+      query,
+      redirect: true,
+    });
+  }, delay || 0);
 }
 export async function tryGotoPage(opts) {
   if (!opts?.url) {
@@ -263,18 +272,6 @@ export const toModelName = (s) => {
 
 export const textDigest = (s, n = 10) => {
   return s.length <= n ? s : s.slice(0, n) + "...";
-};
-
-export const isLogin = () => {
-  const sessionCookie = uni.getStorageSync("cookie_session");
-  if (!sessionCookie) {
-    return false;
-  }
-  const { session } = useSession();
-  if (!session?.user?.id) {
-    return false;
-  }
-  return true;
 };
 
 // 格式化数字，确保为两位数
@@ -338,3 +335,24 @@ export function isEmptyObject(obj) {
   }
   return false;
 }
+
+export const getSafeRedirect = (url) => {
+  const [path, ...qs] = url.split("?");
+  if (qs.length > 1) {
+    // 两个问号说明是redirect中包含问号的情况,需要encode
+    const res = [];
+    for (const token of qs.join("?").split("&")) {
+      // console.log({ token });
+      const m = token.match(/^(\w+?)=(.+)/);
+      if (m) {
+        // res[m[1]] = encodeURIComponent(m[2]);
+        res.push(`${m[1]}=${encodeURIComponent(m[2])}`);
+      }
+    }
+    const safeUrl = `${path}?${res.join("&")}`;
+    console.log("safe:", safeUrl);
+    return safeUrl;
+  } else {
+    return url;
+  }
+};

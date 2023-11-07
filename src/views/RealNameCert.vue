@@ -1,29 +1,28 @@
 <template>
   <page-layout>
-    <x-alert v-if="query.message" :title="query.message"> </x-alert>
-    <uni-card title="温馨提示">
+    <f-alert v-if="query.message"> {{ query.message }} </f-alert>
+    <!-- <uni-card title="温馨提示">
       <p>此处填写小程序用户的实名信息，请确保正确，提交之后将不可修改。</p>
       <p>如果实名认证信息有误，请联系小程序管理员核实修改。</p>
-    </uni-card>
-    <modelform-uni
+    </uni-card> -->
+    <modelform-fui
       :model="profileModel"
       :values="userData"
       :sync-values="true"
-      label-width="6em"
       :success-url="redirectUrl"
       :success-use-redirect="true"
       @success-post="successPost"
       action-url="/update_profile?update_session=1"
-    ></modelform-uni>
+    ></modelform-fui>
   </page-layout>
 </template>
 <script setup>
 const query = useQuery();
 const redirectUrl = useRedirect();
 const { session, login } = useSession();
-let wxPhone = true;
+let wx_phone = true;
 // #ifdef H5
-wxPhone = false;
+wx_phone = false;
 // #endif
 const userData = ref({ id: session.user.id, xm: "", username: "", phone: "" });
 const profileModel = Model.create_model({
@@ -34,7 +33,7 @@ const profileModel = Model.create_model({
     phone: {
       label: "手机号",
       required: true,
-      attrs: { wxPhone },
+      attrs: { wx_phone },
       disabled: false,
     },
   },

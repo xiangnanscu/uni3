@@ -6,15 +6,13 @@ const ALIOSS_LIFETIME = process.env.ALIOSS_LIFETIME;
 const ALIOSS_UPLOAD_PREFIX = process.env.ALIOSS_UPLOAD_PREFIX;
 const ALIOSS_URL = process.env.ALIOSS_URL;
 
-const imgExtMap = {
+const mediaExtMap = {
   "image/bmp": "bmp",
   "image/jpeg": "jpg",
   "image/png": "png",
   "image/tiff": "tif",
   "image/webp": "webp",
-  "image/vnd.microsoft.icon": "ico"
-};
-const videoExtMap = {
+  "image/vnd.microsoft.icon": "ico",
   "video/mp4": "mp4",
   "video/x-msvideo": "avi",
   "video/quicktime": "mov",
@@ -24,7 +22,7 @@ const videoExtMap = {
   "video/webm": "webm",
   "video/x-matroska": "mkv",
   "video/3gpp": "3gp",
-  "video/ogg": "ogg"
+  "video/ogg": "ogg",
 };
 // interface aliossOpts {
 //   size?: string | number;
@@ -35,7 +33,7 @@ const videoExtMap = {
 // }
 // interface aliossAntdImage {
 //   uid: string;
-//   type: keyof typeof imgExtMap;
+//   type: keyof typeof mediaExtMap;
 //   name: string;
 //   ossUrl?: string;
 // }
@@ -49,13 +47,13 @@ class Alioss {
     const { data } = await Http.post(ALIOSS_PAYLOAD_URL, {
       size: ALIOSS_SIZE,
       lifetime: ALIOSS_LIFETIME,
-      ...opts
+      ...opts,
     });
     return data;
   };
   static getOssKey = (file, subprefix = "file") => {
-    return `${ALIOSS_UPLOAD_PREFIX}/${subprefix}/${file.uuid}.${
-      videoExtMap[file.type] || file.name.split(".").pop()
+    return `${ALIOSS_UPLOAD_PREFIX}/${subprefix}/${file.uuid || utils.uuid()}.${
+      mediaExtMap[file.type] || file.name.split(".").pop()
     }`;
   };
   static async uploadH5({ file, url, data, config, size, prefix }) {
@@ -65,7 +63,7 @@ class Alioss {
       ...data,
       ...(await Alioss.getPayload({ size })),
       key: ossKey,
-      file
+      file,
     })) {
       formData.append(key, value);
     }
@@ -75,17 +73,18 @@ class Alioss {
         "X-Requested-With": "XMLHttpRequest",
         "Content-Type": "multipart/form-data",
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE"
+        "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE",
       },
       params: {
-        t: new Date().getTime()
+        t: new Date().getTime(),
       },
       responseType: "json", // 'arraybuffer', 'document', 'json', 'text', 'stream','blob'
       responseEncoding: "utf8",
-      ...config
+      ...config,
     });
     return `${ALIOSS_URL}${ossKey}`;
   }
+  ///@params file {type,name,path}
   static async uploadUni({ file, url, size, prefix }) {
     const ossKey = Alioss.getOssKey(file, prefix);
     const uploadUrl = url || ALIOSS_URL;
@@ -95,8 +94,8 @@ class Alioss {
       name: "file",
       formData: {
         key: ossKey,
-        ...(await Alioss.getPayload({ size, key: ossKey }))
-      }
+        ...(await Alioss.getPayload({ size, key: ossKey })),
+      },
     });
     if (statusCode > 399) {
       throw new Error(`上传出错`);
@@ -105,7 +104,7 @@ class Alioss {
     }
   }
   static antdDataCallback = async (file) => {
-    const ext = imgExtMap[file.type] || file.name.split(".").pop();
+    const ext = mediaExtMap[file.type] || file.name.split(".").pop();
     const key = `${ALIOSS_UPLOAD_PREFIX}/${file.uid}.${ext}`;
     const payload = await this.getPayload({ key, size: ALIOSS_SIZE });
     payload.key = key;
@@ -113,12 +112,12 @@ class Alioss {
     return payload;
   };
   static makeAntdDataCallback = (field) => async (file) => {
-    const ext = imgExtMap[file.type] || file.name.split(".").pop();
+    const ext = mediaExtMap[file.type] || file.name.split(".").pop();
     const key = `${ALIOSS_UPLOAD_PREFIX}/${file.uid}.${ext}`;
     const payload = await this.getPayload({
       key,
       size: field.size || ALIOSS_SIZE,
-      lifetime: field.lifetime || ALIOSS_LIFETIME
+      lifetime: field.lifetime || ALIOSS_LIFETIME,
     });
     payload.key = key;
     file.ossUrl = `${ALIOSS_URL}${key}`;

@@ -13,14 +13,14 @@
       :avatar-circle="true"
     ></uni-list-item>
   </uni-list>
-  <x-alert v-else title="还没有帖子, 快来首发吧!"> </x-alert>
+  <f-alert v-else>还没有帖子, 快来首发吧! </f-alert>
 </template>
 
 <script>
 export default {
   props: {
-    records: { type: Array, default: () => [] }
-  }
+    records: { type: Array, default: () => [] },
+  },
 };
 </script>
 

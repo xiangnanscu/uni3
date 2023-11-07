@@ -8,9 +8,12 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AliossPicker: typeof import('./../components/alioss-picker.vue')['default']
+    FAlert: typeof import('./../components/f-alert.vue')['default']
     Favicon: typeof import('./../components/favicon.vue')['default']
     GenericActions: typeof import('./../components/generic-actions.vue')['default']
     InlineTest: typeof import('./../components/InlineTest.vue')['default']
+    ModelformFui: typeof import('./../components/Modelform/Fui.vue')['default']
+    ModelformFuiWidget: typeof import('./../components/Modelform/FuiWidget.vue')['default']
     ModelformUni: typeof import('./../components/Modelform/Uni.vue')['default']
     ModelformUniBatchButton: typeof import('./../components/Modelform/UniBatchButton.vue')['default']
     ModelformUniMiniButton: typeof import('./../components/Modelform/UniMiniButton.vue')['default']
@@ -38,6 +41,7 @@ declare module 'vue' {
     XRadio: typeof import('./../components/x-radio.vue')['default']
     XSubtitle: typeof import('./../components/x-subtitle.vue')['default']
     XTagbutton: typeof import('./../components/x-tagbutton.vue')['default']
+    XText: typeof import('./../components/x-text.vue')['default']
     XTitle: typeof import('./../components/x-title.vue')['default']
   }
 }

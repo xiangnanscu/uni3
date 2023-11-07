@@ -2,16 +2,20 @@
   <view class="page-layout">
     <div v-if="message" class="global-message">{{ message }}</div>
     <div v-if="error" class="global-error">{{ error }}</div>
-    <slot />
+    <fui-card :margin="margin" :showBorder="false" shadow="0 2rpx 4rpx 0 #fff">
+      <slot />
+    </fui-card>
   </view>
-  <fui-safe-area></fui-safe-area>
+  <!-- <fui-safe-area></fui-safe-area> -->
 </template>
 <script setup>
 const { message, error } = storeToRefs(useStore());
+const props = defineProps({
+  margin: { type: Array },
+});
 </script>
 <style>
 .page-layout {
-  padding: 5px 8px;
 }
 
 .fui-spin {

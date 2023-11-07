@@ -113,7 +113,7 @@ const getPhoneNumber = async (event) => {
 let wxPhoneDisabled = field.disabled === undefined ? false : field.disabled;
 // #ifdef H5
 wxPhoneDisabled = false;
-field.attrs.wxPhone = false;
+field.attrs.wx_phone = false;
 field.attrs.wx_avatar = false;
 // #endif
 const placeholder = field.attrs?.placeholder || field.hint;
@@ -250,7 +250,9 @@ const showChoicesWhenSmall = (field) => {
             {{ fuiChoices.find((c) => c.value === props.modelValue)?.text }}
           </div>
           <div style="width: 100%">
-            <x-button size="mini" @click="fuiSelectShow = true">点击选择</x-button>
+            <x-button size="mini" @click="fuiSelectShow = true" text="点击选择">
+              点击选择
+            </x-button>
           </div>
         </div>
         <fui-select
@@ -362,7 +364,7 @@ const showChoicesWhenSmall = (field) => {
         {{ field.hint }}
       </div>
     </template>
-    <template v-else-if="field.attrs.wxPhone">
+    <template v-else-if="field.attrs.wx_phone">
       <uni-easyinput
         @blur="blurValidate"
         @update:modelValue="sendValue"
@@ -372,15 +374,16 @@ const showChoicesWhenSmall = (field) => {
         :disabled="wxPhoneDisabled"
         :placeholder="placeholder"
       />
-      <button
+      <x-button
         type="primary"
         :plain="true"
+        text="获取微信手机号"
         size="mini"
         open-type="getPhoneNumber"
         @getphonenumber="getPhoneNumber"
       >
         获取微信手机号
-      </button>
+      </x-button>
     </template>
     <uni-easyinput
       v-else

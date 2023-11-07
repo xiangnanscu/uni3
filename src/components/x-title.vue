@@ -4,11 +4,21 @@
   </view>
 </template>
 
+<script setup>
+const props = defineProps({
+  sizeRate: { type: Number, default: 1 },
+  color: { type: String, default: "black" },
+});
+const fontSize = props.sizeRate * 120 + "%";
+const fontColor = props.color;
+</script>
+
 <style scoped>
 .x-title {
   text-align: center;
-  font-size: 120%;
+  font-size: v-bind(fontSize);
+  color: v-bind(fontColor);
   font-weight: bold;
-  padding: 1em;
+  padding: 20rpx;
 }
 </style>
