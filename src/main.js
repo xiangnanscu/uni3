@@ -6,6 +6,7 @@ import uniSetup from "./uniSetup";
 import { isLogin, NeedLoginError } from "@/lib/helpers.js";
 import { Model } from "@/lib/model/model.mjs";
 import { basefield } from "@/lib/model/field.mjs";
+import { getFullPath } from "@/lib/utils";
 import Http from "@/globals/Http.js";
 
 Model.Http = Http;
@@ -49,10 +50,10 @@ export function createApp() {
     app.config.errorHandler = (err, instance, info) => {
       console.error("errorHandler captured...", err, { instance, info });
       if (err instanceof NeedLoginError || err.message == LOGIN_HINT) {
-        console.log("checkLogin 需要登录", instance);
+        console.log("checkLogin 需要登录");
         utils.redirect(loginPage, {
           message: "此操作需要登录",
-          redirect: utils.getSafeRedirect(instance.$page.fullPath),
+          redirect: utils.getSafeRedirect(getFullPath()),
         });
       } else if (typeof err == "string") {
         uni.showModal({

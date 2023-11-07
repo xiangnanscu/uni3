@@ -5,7 +5,6 @@ cp -r uni3/src/components src
 cp -r uni3/src/composables src
 cp -r uni3/src/globals src
 cp -r uni3/src/lib src
-cp -r uni3/src/uniSetup.js src
 cp -r uni3/src/main.js src
 cp -r uni3/src/views/Login.vue src/views
 cp -r uni3/src/views/MixinShare.js src/views
@@ -16,5 +15,4 @@ cp -r uni3/src/views/SubscribeList.vue src/views
 cp -r uni3/src/views/SuccessPage.vue src/views
 cp -r uni3/patches .
 cp -r uni3/.eslintrc.cjs .
-cp -r uni3/package.json .
 rm -rf uni3
