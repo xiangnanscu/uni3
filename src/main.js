@@ -50,7 +50,7 @@ export function createApp() {
     app.config.errorHandler = (err, instance, info) => {
       console.error("errorHandler captured...", err, { instance, info });
       if (err instanceof NeedLoginError || err.message == LOGIN_HINT) {
-        console.log("checkLogin 需要登录");
+        console.log("NeedLoginError需要登录");
         utils.redirect(loginPage, {
           message: "此操作需要登录",
           redirect: utils.getSafeRedirect(getFullPath()),
