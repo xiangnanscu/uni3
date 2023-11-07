@@ -18,8 +18,8 @@ const getAnonymousSession = () =>
       id: null,
       permission: 0,
       openid: "",
-      avatar: ""
-    }
+      avatar: "",
+    },
   });
 
 const getSession = () => {
@@ -53,6 +53,6 @@ export const useSession = defineStore("session", () => {
   return {
     session,
     login,
-    logout
+    logout,
   };
 });
