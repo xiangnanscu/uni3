@@ -30,7 +30,7 @@ const cookieNames = ["session"];
 const setupRequest = () => {
   uni.addInterceptor("request", {
     invoke(args) {
-      // console.log("global uni.request invoke:", args);
+      console.log("global uni.request invoke:", args);
       const store = useStore();
       const showLoading = !args?.disableLoading && !store.disableLoading;
       store.loading = true;

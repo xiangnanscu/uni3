@@ -1,3 +1,5 @@
+import { NeedLoginError } from "@/lib/helpers.js";
+
 class WxResquestError extends Error {
   constructor({ type, status, data }) {
     super(data);
@@ -10,11 +12,7 @@ const throwOnUniError = (response) => {
   const data = response.data;
   if (typeof data == "object" && data.type == "uni_error") {
     if (data.status === 403) {
-      utils.gotoPage({
-        url: process.env.UNI_LOGIN_PAGE,
-        query: { redirect: utils.getFullPath() },
-        redirect: false,
-      });
+      throw new NeedLoginError();
     } else if (data.status >= 500) {
       throw new WxResquestError(data);
     } else if (data.status === 404) {
@@ -22,8 +20,9 @@ const throwOnUniError = (response) => {
     } else {
       throw new WxResquestError(data);
     }
+  } else {
+    return response;
   }
-  return response;
 };
 
 class Http {
