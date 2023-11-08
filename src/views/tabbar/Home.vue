@@ -1,5 +1,5 @@
 <template>
-  <page-layout>
+  <div>
     <view class="search-bar">
       <uni-easyinput
         suffixIcon="search"
@@ -199,13 +199,14 @@
     </fui-panel>
 
     <fui-divider text="到底了" />
-  </page-layout>
+  </div>
 </template>
 
 <script setup>
 // onShareTimeline
 // onShareAppMessage
 useWxShare({ title: "江安youth home!" });
+onShow(async () => {});
 </script>
 
 <script>
@@ -234,7 +235,6 @@ export default {
             id: 142,
             title: "被狗咬伤女童200万捐款惹争议",
             src: "//lzwlkj.oss-cn-shenzhen.aliyuncs.com/jaqn/vc-upload-1698112190246-10.jpg",
-            desc: "10月23日，四川崇州被狗咬伤女童已",
           },
           {
             id: 141,
@@ -322,21 +322,28 @@ export default {
     },
   },
   async onShow() {
-    await useBadgeNumber();
-    const { noticeText, goddess, volplan, ads, polls, news } = await usePost(
-      `/home_data`,
-    );
-    this.noticeText = noticeText;
-    this.goddess = goddess[0];
-    this.volplan = volplan[0];
-    this.ads = ads;
-    this.polls = polls;
-    this.panelNews.list = news.map((e) => ({
-      id: e.id,
-      title: e.title,
-      src: e.pics[0],
-      desc1: e.content.slice(0, 50),
-    }));
+    const store = require("@/store");
+    try {
+      await useBadgeNumber();
+      const { noticeText, goddess, volplan, ads, polls, news } = await usePost(
+        `/home_data`,
+      );
+      this.noticeText = noticeText;
+      this.goddess = goddess[0];
+      this.volplan = volplan[0];
+      this.ads = ads;
+      this.polls = polls;
+      this.panelNews.list = news.map((e) => ({
+        id: e.id,
+        title: e.title,
+        src: e.pics[0],
+        desc1: e.content.slice(0, 50),
+      }));
+    } catch (error) {
+      console.log("更新letter_mdoel错误", error);
+    } finally {
+      store.disableLoading = false;
+    }
   },
   methods: {
     updateApp() {
