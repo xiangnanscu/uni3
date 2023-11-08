@@ -19,7 +19,7 @@ declare module 'vue' {
     ModelformUniMiniButton: typeof import('./../components/Modelform/UniMiniButton.vue')['default']
     ModelformUniTableField: typeof import('./../components/Modelform/UniTableField.vue')['default']
     ModelformUniWidget: typeof import('./../components/Modelform/UniWidget.vue')['default']
-    PageLayout: typeof import('./../components/PageLayout.vue')['default']
+    PageLayout: typeof import('./../components/page-layout.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     ScoreRadar: typeof import('./../components/ScoreRadar.vue')['default']
