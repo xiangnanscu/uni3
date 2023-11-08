@@ -33,6 +33,9 @@ const getSession = () => {
     if (typeof session !== "object" || typeof session.user !== "object") {
       return getAnonymousSession();
     }
+    // if (!session.expire || new Date().getTime() - session.expire) {
+    //   return getAnonymousSession();
+    // }
     return reactive(session);
   } catch (error) {
     return getAnonymousSession();
