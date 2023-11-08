@@ -210,6 +210,7 @@ onShow(async () => {});
 </script>
 
 <script>
+import { useStore } from "@/store";
 // panelNews: {
 // 	head: 'First UI介绍',
 // 	list: [{
@@ -322,7 +323,8 @@ export default {
     },
   },
   async onShow() {
-    const store = require("@/store");
+    const store = useStore();
+    store.disableLoading = true;
     try {
       await useBadgeNumber();
       const { noticeText, goddess, volplan, ads, polls, news } = await usePost(
