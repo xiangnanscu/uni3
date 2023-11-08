@@ -356,3 +356,28 @@ export const getSafeRedirect = (url) => {
     return url;
   }
 };
+
+const unit_table = {
+  s: 1,
+  m: 60,
+  h: 3600,
+  d: 3600 * 24,
+  w: 3600 * 24 * 7,
+  M: 3600 * 24 * 30,
+  y: 3600 * 24 * 365,
+};
+export function timeParser(t) {
+  if (typeof t === "string") {
+    const unit = t[t.length - 1];
+    const secs = unit_table[unit];
+    if (!secs) throw "invalid time unit: " + unit;
+    const ts = t.substring(0, t.length - 1);
+    const num = Number(ts);
+    if (!num) throw "can't convert '" + (ts + "' to a number");
+    return num * secs;
+  } else if (typeof t === "number") {
+    return t;
+  } else {
+    throw new Error("invalid type:" + typeof t);
+  }
+}

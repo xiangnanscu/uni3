@@ -21,7 +21,7 @@
         <uni-group v-for="(s, sindex) in students" :key="s.id" mode="card">
           <div class="x-row">
             <div class="x-row">
-              <image :src="s.avatar" mode="widthFix" style="width: 45px" />
+              <image :src="s.avatar" mode="widthFix" style="width: 45px; height: 60px" />
               <div style="margin-left: 1em">{{ s.xm }}</div>
             </div>
             <div>

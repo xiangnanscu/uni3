@@ -39,7 +39,7 @@ const useFui = process.env.X_BUTTON_UI === "fui";
 
 const props = defineProps({
   type: { type: String, default: "primary" },
-  size: { type: String, default: "mini" }, // default mini
+  size: { type: String, default: "default" }, // default mini
   styleString: { type: String, default: "" },
   // https://uniapp.dcloud.net.cn/component/button.html#open-type-%E6%9C%89%E6%95%88%E5%80%BC
   openType: { type: String },

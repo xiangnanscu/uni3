@@ -311,13 +311,6 @@ export default {
   async onLoad() {
     // #ifdef MP-WEIXIN
     this.updateApp();
-    // if (!this.user.id) {
-    //   const { code, errMsg } = await uni.login();
-    //   if (errMsg !== "login:ok") {
-    //     throw new Error(errMsg);
-    //   }
-    //   await usePost("/wx_login", { code });
-    // }
     // #endif
   },
   onUnload() {
