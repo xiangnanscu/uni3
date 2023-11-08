@@ -12,6 +12,7 @@ const throwOnUniError = (response) => {
   const data = response.data;
   if (typeof data == "object" && data.type == "uni_error") {
     if (data.status === 403) {
+      console.log("权限不足，需要登陆");
       throw new NeedLoginError();
     } else if (data.status >= 500) {
       throw new WxResquestError(data);

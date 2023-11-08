@@ -125,7 +125,7 @@ const setupNav = () => {
   navHandlerList.forEach((handler) => {
     uni.addInterceptor(handler, {
       invoke(opts) {
-        console.log("**路由拦截:", handler, opts.url);
+        console.log("韬哥专用路由拦截:", handler, opts.url);
         const { message, error } = storeToRefs(useStore());
         message.value = "";
         error.value = "";
