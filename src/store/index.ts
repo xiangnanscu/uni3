@@ -1,6 +1,6 @@
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
-export { useSession } from "./session";
+export { useSession } from "@/lib/session";
 
 export const useStore = defineStore("store", () => {
   const siderKeys = ref<string[]>([]);
