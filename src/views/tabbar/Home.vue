@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <page-layout>
     <view class="search-bar">
       <uni-easyinput
         suffixIcon="search"
@@ -199,7 +199,7 @@
     </fui-panel>
 
     <fui-divider text="到底了" />
-  </div>
+  </page-layout>
 </template>
 
 <script setup>
