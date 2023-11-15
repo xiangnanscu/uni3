@@ -326,7 +326,7 @@ export default {
     const store = useStore();
     store.disableLoading = true;
     try {
-      await useBadgeNumber();
+      await useBadgeNumber({ isTabbar: true });
       const { noticeText, goddess, volplan, ads, polls, news } = await usePost(
         `/home_data`,
       );

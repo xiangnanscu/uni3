@@ -1,11 +1,9 @@
-export const useBadgeNumber = async (opts) => {
-  const {
-    setFriendsApplyCount,
-    setFriendsMessageCount,
-    setSystemMessageCount
-  } = useStore();
-  const { friendsApplyCount, friendsMessageCount, systemMessageCount } =
-    storeToRefs(useStore());
+export const useBadgeNumber = async (opts = {}) => {
+  const { setFriendsApplyCount, setFriendsMessageCount, setSystemMessageCount } =
+    useStore();
+  const { friendsApplyCount, friendsMessageCount, systemMessageCount } = storeToRefs(
+    useStore(),
+  );
   const { friends_apply_count, friends_message_count, system_message_count } =
     await usePost(`/badge_number`, opts || {});
   if (typeof friends_apply_count == "number") {
@@ -17,28 +15,27 @@ export const useBadgeNumber = async (opts) => {
   if (typeof system_message_count == "number") {
     setSystemMessageCount(system_message_count);
   }
-  if (utils.isTabbarPage()) {
-    const friendsMessageTotalCount =
-      friendsApplyCount.value + friendsMessageCount.value;
+  if (opts.isTabbar) {
+    const friendsMessageTotalCount = friendsApplyCount.value + friendsMessageCount.value;
 
     if (friendsMessageTotalCount) {
       uni.setTabBarBadge({
         index: 1,
-        text: String(friendsMessageTotalCount)
+        text: String(friendsMessageTotalCount),
       });
     } else {
       uni.removeTabBarBadge({
-        index: 1
+        index: 1,
       });
     }
     if (systemMessageCount.value) {
       uni.setTabBarBadge({
         index: 3,
-        text: String(system_message_count)
+        text: String(system_message_count),
       });
     } else {
       uni.removeTabBarBadge({
-        index: 3
+        index: 3,
       });
     }
   }
@@ -46,6 +43,6 @@ export const useBadgeNumber = async (opts) => {
   return {
     friendsApplyCount,
     friendsMessageCount,
-    systemMessageCount
+    systemMessageCount,
   };
 };

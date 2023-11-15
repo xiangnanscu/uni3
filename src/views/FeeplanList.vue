@@ -94,22 +94,21 @@ export default {
       await this.fetchData({ sfzh });
     },
     async fetchData({ sfzh }) {
-      const { data: members } = await Http.post(`/youth_member/get`, { sfzh });
+      const members = await usePost(`/youth_member/get`, { sfzh });
       if (members.length === 0) {
         this.ready = true;
       } else {
-        const { data: records } = await Http.post(`/youth_fee/by_sfzh`, {
+        this.ready = true;
+        this.fees = await usePost(`/youth_fee/by_sfzh`, {
           sfzh,
         });
-        this.ready = true;
-        this.fees = records;
         this.member = members[0];
         this.branch_name = this.member.branch_name.replace("四川省宜宾市江安县", "");
       }
     },
     async payFee(feeItem) {
       const planId = feeItem.feeplan_id;
-      const { data: payed } = await Http.post(`/orders/check`, {
+      const payed = await usePost(`/orders/check`, {
         youth_fee_id: feeItem.id,
       });
       if (payed) {
@@ -123,18 +122,17 @@ export default {
       if (errMsg !== "login:ok") {
         throw new Error(errMsg);
       }
-      const { data } = await Http.post(`/wx/youth_fee_preorder_wx`, {
-        code,
-        timestamp: new Date().getTime().toString(),
-        youth_fee_id: feeItem.id,
-        feeplan_id: planId,
-      });
       const {
         signature: paySign,
         prepay_id,
         timestamp: timeStamp,
         nonce_str: nonceStr,
-      } = data;
+      } = await usePost(`/wx/youth_fee_preorder_wx`, {
+        code,
+        timestamp: new Date().getTime().toString(),
+        youth_fee_id: feeItem.id,
+        feeplan_id: planId,
+      });
       const self = this;
       const opts = {
         timeStamp: timeStamp.toString(),

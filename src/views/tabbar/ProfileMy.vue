@@ -161,10 +161,9 @@ export default {
       profile: null,
     };
   },
-  onLoad(options) {
-    console.log("my onLoad", options);
-  },
+  onLoad(options) {},
   async onShow() {
+    log("profile onshow this.user", this.isLogin, this.user);
     if (this.isLogin) {
       const { data: profile } = await Http.get("/usr/profile/my");
       this.profile = profile;

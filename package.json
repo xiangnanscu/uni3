@@ -1,6 +1,6 @@
 {
   "name": "uni3",
-  "version": "1.401.0",
+  "version": "1.402.0",
   "license": "ISC",
   "scripts": {
     "env": "dotenv -e .env -e .env.local --",
