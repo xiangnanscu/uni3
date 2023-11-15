@@ -10,13 +10,13 @@
         >
           <template v-slot:header>
             <view class="slot-box avatar-container">
-              <navigator :url="`/views/Profile?id=${post.creator}`">
+              <x-navigator :url="`/views/Profile?id=${post.creator}`">
                 <image
                   class="post-avatar"
                   :src="post.creator__avatar"
                   mode="widthFix"
                 ></image
-              ></navigator>
+              ></x-navigator>
             </view>
           </template>
           <template v-slot:body>
@@ -34,9 +34,7 @@
                 <text>{{ post.content }}</text>
               </view>
               <view class="post-footer"
-                ><text
-                  >第{{ index + 1 }}楼 {{ utils.fromNow(post.ctime) }}</text
-                ></view
+                ><text>第{{ index + 1 }}楼 {{ utils.fromNow(post.ctime) }}</text></view
               >
               <view class="post-comment" v-if="post.comments?.length">
                 <template v-for="c in post.comments" :key="c.id">
@@ -44,24 +42,24 @@
                     @click="replyPostComment({ post, comment: c })"
                     style="margin-bottom: 5px"
                   >
-                    <navigator
+                    <x-navigator
                       style="display: inline-block"
                       :url="`/views/Profile?id=${c.creator}`"
                     >
                       <span class="nickname-link">
                         {{ c.creator__nickname }}
                       </span>
-                    </navigator>
+                    </x-navigator>
                     <template v-if="c.post_comment_id">
                       回复
-                      <navigator
+                      <x-navigator
                         style="display: inline-block"
                         :url="`/views/Profile?id=${c.post_comment_id__creator__id}`"
                       >
                         <span class="nickname-link">
                           {{ c.post_comment_id__creator__nickname }}
                         </span>
-                      </navigator>
+                      </x-navigator>
                     </template>
                     ：{{ c.content }}
                   </p>
@@ -136,14 +134,14 @@ export default {
     target: { type: Object },
     scrollId: { type: String },
     targetModel: { type: String },
-    posts: { type: Array }
+    posts: { type: Array },
   },
   data() {
     return {
       scrollTo: null,
       currentPost: null,
       showDelete: false,
-      showPostActionPanel: false
+      showPostActionPanel: false,
     };
   },
   mounted() {
@@ -202,8 +200,8 @@ export default {
     changeOthers() {
       console.log("changeOthers");
     },
-    change() {}
-  }
+    change() {},
+  },
 };
 </script>
 

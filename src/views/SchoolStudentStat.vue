@@ -13,7 +13,7 @@
       <template v-for="[grade, classes] of Object.entries(grades)" :key="grade">
         <x-title>{{ `${grade}年级` }}</x-title>
         <uni-list :title="`${grade}年级`" :border="false">
-          <navigator
+          <x-navigator
             v-for="[cls, cls_students] of Object.entries(classes)"
             :key="cls"
             :url="`/views/SchoolStudentList?class=${cls}&grade=${grade}`"
@@ -22,7 +22,7 @@
               :title="`${cls}班（${cls_students.length}人）`"
               :showArrow="false"
             />
-          </navigator>
+          </x-navigator>
         </uni-list>
       </template>
     </div>

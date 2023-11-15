@@ -11,7 +11,7 @@
       <template v-for="(item, index) in permissionMenu" :key="index">
         <uni-grid-item :index="index">
           <view class="grid-item-box" style="text-align: center; margin-top: 2em">
-            <navigator
+            <x-navigator
               :url="item.pagePath"
               hover-class="navigator-hover"
               open-type="navigate"
@@ -23,7 +23,7 @@
               <view v-if="item.badge" class="grid-dot">
                 <uni-badge :text="item.badge" :type="item.type" />
               </view>
-            </navigator>
+            </x-navigator>
           </view>
         </uni-grid-item>
       </template>

@@ -3,7 +3,7 @@
     <x-title>杂文轩</x-title>
     <div v-if="NewsRecords.length">
       <uni-list :border="false">
-        <navigator
+        <x-navigator
           v-for="(item, index) in NewsRecords"
           :key="index"
           :url="`/views/AdDetail?id=${item.id}`"
@@ -12,7 +12,7 @@
             :title="item.title"
             :showArrow="false"
             :rightText="utils.fromNow(item.ctime)"
-        /></navigator>
+        /></x-navigator>
       </uni-list>
     </div>
     <x-alert v-else title="没有记录"> </x-alert>
@@ -23,12 +23,12 @@
 export default defineComponent({
   data() {
     return {
-      NewsRecords: []
+      NewsRecords: [],
     };
   },
   async onLoad(opts) {
     this.NewsRecords = await usePost(`/ad/records`, { type: this.type });
-  }
+  },
 });
 </script>
 

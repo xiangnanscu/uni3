@@ -8,7 +8,7 @@
         :avatar="avatar"
         :note="intro"
       >
-        <navigator
+        <x-navigator
           url="/views/AddMeFirend"
           open-type="navigate"
           hover-class="navigator-hover"
@@ -18,7 +18,7 @@
             src="../../static/img/qrcode.png"
             mode="scaleToFill"
           />
-        </navigator>
+        </x-navigator>
       </uni-list-chat>
     </uni-list>
     <uni-list>

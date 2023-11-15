@@ -3,7 +3,7 @@
     <x-title>青年驿站</x-title>
     <div v-if="StageRecords.length">
       <uni-list :border="false">
-        <navigator
+        <x-navigator
           v-for="(item, index) in StageRecords"
           :key="index"
           :url="`/views/StageDetail?id=${item.id}`"
@@ -12,7 +12,7 @@
             :title="item.name"
             :showArrow="false"
             :rightText="utils.fromNow(item.ctime)"
-        /></navigator>
+        /></x-navigator>
       </uni-list>
     </div>
     <x-alert v-else title="没有记录"> </x-alert>
@@ -24,7 +24,7 @@ export default {
   data() {
     return {
       query: {},
-      StageRecords: []
+      StageRecords: [],
     };
   },
   async onLoad(query) {
@@ -35,8 +35,8 @@ export default {
     async fetchData(query) {
       const records = await usePost(`/stage/records`, {});
       this.StageRecords = records;
-    }
-  }
+    },
+  },
 };
 </script>
 

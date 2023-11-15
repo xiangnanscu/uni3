@@ -18,7 +18,7 @@
     <uni-grid :column="4" :show-border="false" :square="false" @change="change">
       <uni-grid-item v-for="(item, index) in mainKist" :index="index" :key="index">
         <view class="grid-item-box" style="text-align: center">
-          <navigator
+          <x-navigator
             :url="item.pagePath"
             hover-class="navigator-hover"
             open-type="navigate"
@@ -35,7 +35,7 @@
             <view v-if="item.badge" class="grid-dot">
               <uni-badge :text="item.badge" :type="item.type" />
             </view>
-          </navigator>
+          </x-navigator>
         </view>
       </uni-grid-item>
     </uni-grid>

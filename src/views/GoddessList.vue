@@ -2,7 +2,7 @@
   <page-layout>
     <x-title>江安“新青年”</x-title>
     <uni-list :border="false">
-      <navigator
+      <x-navigator
         v-for="(item, index) in GoddessList"
         :key="index"
         :url="`/views/GoddessDetail?id=${item.id}`"
@@ -11,7 +11,7 @@
           :title="item.title"
           :showArrow="true"
           :rightText="utils.fromNow(item.ctime)"
-      /></navigator>
+      /></x-navigator>
     </uni-list>
   </page-layout>
 </template>
@@ -35,7 +35,7 @@ export default {
       total: 0,
       current: 1,
       query: {},
-      GoddessList: []
+      GoddessList: [],
     };
   },
   async onLoad(query) {
@@ -46,12 +46,12 @@ export default {
     async fetchData(query) {
       const records = await usePost(`/goddess/records`, {
         hide: false,
-        status: "通过"
+        status: "通过",
       });
       this.GoddessList = records;
       // this.total = total;
-    }
-  }
+    },
+  },
 };
 </script>
 

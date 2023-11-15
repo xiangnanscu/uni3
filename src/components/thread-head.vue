@@ -2,13 +2,9 @@
   <view style="padding: 0 5px">
     <view class="thread-main">
       <div class="slot-box avatar-container">
-        <navigator :url="`/views/Profile?id=${target.creator}`">
-          <image
-            class="post-avatar"
-            :src="target.creator__avatar"
-            mode="widthFix"
-          ></image
-        ></navigator>
+        <x-navigator :url="`/views/Profile?id=${target.creator}`">
+          <image class="post-avatar" :src="target.creator__avatar" mode="widthFix"></image
+        ></x-navigator>
       </div>
       <div style="padding: 2px">
         <div class="thread-nickname">{{ target.creator__nickname }}</div>
@@ -28,7 +24,7 @@
 const props = defineProps({
   target: { type: Object },
   targetModel: { type: String },
-  posts: { type: Array }
+  posts: { type: Array },
 });
 const picsUrls = computed(() => props.target?.pics || []);
 </script>

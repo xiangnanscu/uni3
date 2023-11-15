@@ -17,23 +17,16 @@
         ></modelform-uni>
       </div>
       <div v-else>
-        <div
-          style="
-            font-size: 120%;
-            color: green;
-            padding: 5px;
-            margin-bottom: 1em;
-          "
-        >
+        <div style="font-size: 120%; color: green; padding: 5px; margin-bottom: 1em">
           申请已发送
         </div>
-        <navigator
+        <x-navigator
           open-type="switchTab"
           url="/views/tabbar/Home"
           style="display: flex; justify-content: space-around"
         >
           <x-button size="mini">返回</x-button>
-        </navigator>
+        </x-navigator>
       </div>
     </div>
   </page-layout>
@@ -48,21 +41,21 @@ const ready = ref();
 const waiting = ref();
 const applyModel = Model.create_model({
   fields: {
-    hello_message: { label: "", hint: "附加消息, 选填", maxlength: 50 }
-  }
+    hello_message: { label: "", hint: "附加消息, 选填", maxlength: 50 },
+  },
 });
 onLoad(async (opts) => {
   if (!user.id) {
     await utils.gotoPage({
       url: loginPage,
       query: { redirect: utils.getFullPath() },
-      redirect: false
+      redirect: false,
     });
   } else {
     const uid = query.q.split("/").pop();
     approver.value = await usePost(`/usr/query`, {
       get: { id: uid },
-      select: ["id", "nickname", "avatar"]
+      select: ["id", "nickname", "avatar"],
     });
     ready.value = true;
   }

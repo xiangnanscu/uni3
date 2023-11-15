@@ -37,6 +37,7 @@ declare module 'vue' {
     XButton: typeof import('./../components/x-button.vue')['default']
     XChatbar: typeof import('./../components/x-chatbar.vue')['default']
     XCheckbox: typeof import('./../components/x-checkbox.vue')['default']
+    XNavigator: typeof import('./../components/x-navigator.vue')['default']
     XPicker: typeof import('./../components/x-picker.vue')['default']
     XRadio: typeof import('./../components/x-radio.vue')['default']
     XSubtitle: typeof import('./../components/x-subtitle.vue')['default']

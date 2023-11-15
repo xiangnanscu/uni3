@@ -3,7 +3,7 @@
     <x-title>志愿服务</x-title>
     <div v-if="VolplanRecords.length">
       <uni-list :border="false">
-        <navigator
+        <x-navigator
           v-for="(item, index) in VolplanRecords"
           :key="index"
           :url="`/views/VolplanDetail?id=${item.id}`"
@@ -12,7 +12,7 @@
             :title="item.title"
             :showArrow="false"
             :rightText="utils.fromNow(item.ctime)"
-        /></navigator>
+        /></x-navigator>
       </uni-list>
     </div>
     <x-alert v-else title="没有记录"> </x-alert>
@@ -24,7 +24,7 @@ export default {
   data() {
     return {
       query: {},
-      VolplanRecords: []
+      VolplanRecords: [],
     };
   },
   async onLoad(query) {
@@ -35,8 +35,8 @@ export default {
     async fetchData(query) {
       const records = await usePost(`/volplan/records`, { status: "通过" });
       this.VolplanRecords = records;
-    }
-  }
+    },
+  },
 };
 </script>
 

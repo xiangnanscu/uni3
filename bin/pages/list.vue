@@ -1,7 +1,7 @@
 <template>
   <page-layout>
     <uni-list :border="false">
-      <navigator
+      <x-navigator
         v-for="(item, index) in {{modelName}}Records"
         :key="index"
         :url="`/views/{{modelName}}Detail/{{modelName}}Detail?id=${item.id}`"
@@ -10,7 +10,7 @@
           :title="item.title"
           :showArrow="false"
           :rightText="utils.fromNow(item.ctime)"
-      /></navigator>
+      /></x-navigator>
     </uni-list>
     <uni-pagination :total="total" @change="clickPage" :current="current" />
   </page-layout>
@@ -24,7 +24,7 @@ export default {
       total: 0,
       current: 1,
       query: {},
-      {{modelName}}Records: [],
+      {{}}Records: [],
     };
   },
   async onLoad(query) {
