@@ -24,7 +24,7 @@ export default {
       total: 0,
       current: 1,
       query: {},
-      {{}}Records: [],
+      {{modelName}}Records: [],
     };
   },
   async onLoad(query) {

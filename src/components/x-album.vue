@@ -1,7 +1,13 @@
 <template>
-  <uni-grid :column="columns || 1" :show-border="false" :square="true" @change="change">
+  <uni-grid
+    v-if="urls?.length"
+    :column="picColumns"
+    :show-border="false"
+    :square="true"
+    @change="change"
+  >
     <uni-grid-item
-      v-for="(url, index) in urls"
+      v-for="(url, index) in normalizedUrls"
       :index="index"
       :key="index"
       style="margin: auto"
@@ -10,7 +16,7 @@
         <image
           class="grid-item-box"
           :src="url"
-          mode="aspectFit"
+          :mode="picMode"
           @click="previewImages(index)"
         />
       </view>
@@ -22,18 +28,36 @@
 export default {
   name: "XAlbum",
   emits: ["change"],
-  props: ["urls", "columns"],
+  props: ["urls", "columns", "mode"],
   data() {
     return {
       localValue: [],
     };
   },
+  computed: {
+    normalizedUrls() {
+      return this.urls.map((e) => (e.startsWith("http") ? e : "https:" + e));
+    },
+    picMode() {
+      if (this.mode) {
+        return this.mode;
+      } else {
+        return this.urls.length == 1 ? "aspectFit" : "scaleToFill";
+      }
+    },
+    picColumns() {
+      if (this.columns) {
+        return this.columns;
+      } else {
+        return this.urls.length < 3 ? this.urls.length : 3;
+      }
+    },
+  },
   methods: {
     previewImages(index) {
       uni.previewImage({
         current: index,
-        urls: this.urls,
-        loop: true,
+        urls: this.normalizedUrls,
       });
     },
     change(event) {

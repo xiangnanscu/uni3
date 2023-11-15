@@ -490,6 +490,7 @@ const chooseLocation = async () => {
       :disabled="field.disabled"
       :autoHeight="true"
       minHeight="200rpx"
+      :maxlength="-1"
       :cursorSpacing="120"
       @blur="blurValidate(field.name)"
       @update:modelValue="sendValue"

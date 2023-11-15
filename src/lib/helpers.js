@@ -50,6 +50,9 @@ export async function autoLogin(force) {
     } finally {
       store.disableLoading = false;
     }
+    return useUser();
+  } else {
+    return useUser();
   }
   // #endif
 }

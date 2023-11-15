@@ -69,7 +69,7 @@ export const useSession = defineStore("session", () => {
     uni.setStorageSync("session", JSON.stringify(session));
   }
   function logout() {
-    session.user = getAnonymousSession().user;
+    Object.assign(session.user, getAnonymousSession().user);
     removeSession();
   }
   return {
