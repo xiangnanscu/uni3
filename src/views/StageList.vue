@@ -34,6 +34,11 @@
     <x-alert v-else title="暂无申请记录"> </x-alert>
   </page-layout>
 </template>
+<script setup>
+// onShareTimeline
+// onShareAppMessage
+useWxShare({ title: "江安“青年驿站”邀请你！", imageUrl: "" });
+</script>
 
 <script>
 export default {
