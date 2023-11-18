@@ -15,8 +15,8 @@
         /></x-navigator>
       </uni-list>
     </div>
-    <x-alert v-else title="没有记录"> </x-alert>
-    <x-title>申请记录</x-title>
+    <x-alert v-else title="暂无青年驿站"> </x-alert>
+    <x-title style="margin-top: 1em">申请记录</x-title>
     <div v-if="StageApplyRecords.length">
       <uni-list :border="false">
         <x-navigator
@@ -31,6 +31,7 @@
         /></x-navigator>
       </uni-list>
     </div>
+    <x-alert v-else title="暂无申请记录"> </x-alert>
   </page-layout>
 </template>
 
