@@ -69,7 +69,7 @@ export default {
     },
     async joinVol() {
       await utils.gotoPage({
-        url: "/views/StageApply",
+        url: "/views/StageApplyHint",
         query: {
           stage_id: this.record.id,
           stage_name: this.record.name,

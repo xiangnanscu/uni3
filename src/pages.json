@@ -175,6 +175,18 @@
     {
       "path": "views/SchoolRegeditParentChild2",
       "style": { "navigationBarTitleText": "" }
+    },
+    {
+      "path": "views/StageApplyDetail",
+      "style": { "navigationBarTitleText": "" }
+    },
+    {
+      "path": "views/StageApplySuccess",
+      "style": { "navigationBarTitleText": "" }
+    },
+    {
+      "path": "views/StageApplyHint",
+      "style": { "navigationBarTitleText": "" }
     }
   ],
   "globalStyle": {

@@ -15,11 +15,7 @@
 <script setup>
 const ThreadAddData = ref({ title: "", content: "", pics: [] });
 const successPost = async (data) => {
-  await utils.gotoPage({
-    url: "/views/SuccessPage",
-    redirect: true,
-    query: { title: "申请已提交", descr: "请等待审核" }
-  });
+  await utils.redirect("StageApplySuccess");
 };
 
 const threadModel = ref(null);
@@ -32,7 +28,7 @@ onLoad(async () => {
     disabled: true,
     db_type: "varchar",
     label: "驿站名称",
-    choices: [{ label: query.stage_name, value: query.stage_id }]
+    choices: [{ label: query.stage_name, value: query.stage_id }],
   };
   threadModel.value = await Model.create_model_async(data);
   ThreadAddData.value.stage = query.stage_id;

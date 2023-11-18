@@ -16,6 +16,21 @@
       </uni-list>
     </div>
     <x-alert v-else title="没有记录"> </x-alert>
+    <x-title>申请记录</x-title>
+    <div v-if="StageApplyRecords.length">
+      <uni-list :border="false">
+        <x-navigator
+          v-for="(item, index) in StageApplyRecords"
+          :key="index"
+          :url="`/views/StageApplyDetail?id=${item.id}`"
+        >
+          <uni-list-item
+            :title="item.stage__name"
+            :showArrow="false"
+            :rightText="utils.fromNow(item.ctime)"
+        /></x-navigator>
+      </uni-list>
+    </div>
   </page-layout>
 </template>
 
@@ -25,6 +40,7 @@ export default {
     return {
       query: {},
       StageRecords: [],
+      StageApplyRecords: [],
     };
   },
   async onLoad(query) {
@@ -33,8 +49,8 @@ export default {
   },
   methods: {
     async fetchData(query) {
-      const records = await usePost(`/stage/records`, {});
-      this.StageRecords = records;
+      this.StageRecords = await usePost(`/stage/records`, {});
+      this.StageApplyRecords = await usePost(`/stage_apply/records_my`, {});
     },
   },
 };
