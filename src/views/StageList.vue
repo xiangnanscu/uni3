@@ -10,7 +10,7 @@
         >
           <uni-list-item
             :title="item.name"
-            :showArrow="false"
+            :showArrow="true"
             :rightText="utils.fromNow(item.ctime)"
         /></x-navigator>
       </uni-list>
