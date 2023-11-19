@@ -73,3 +73,17 @@ export function checkRealName() {
     throw new NeedRealNameError(`需要实名认证`);
   }
 }
+
+export function gotoPageWithSuccess(params) {
+  if (typeof params == "string") {
+    uni.showToast({ title: "操作成功" });
+    setTimeout(async () => {
+      await utils.gotoPage(params);
+    }, 1000);
+  } else {
+    uni.showToast({ title: params.title });
+    setTimeout(async () => {
+      await utils.gotoPage(params.url);
+    }, 1000);
+  }
+}

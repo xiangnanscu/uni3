@@ -187,6 +187,10 @@
     {
       "path": "views/StageApplyHint",
       "style": { "navigationBarTitleText": "" }
+    },
+    {
+      "path": "views/SchoolLeaveDetail",
+      "style": { "navigationBarTitleText": "" }
     }
   ],
   "globalStyle": {

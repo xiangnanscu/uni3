@@ -12,7 +12,7 @@
       <div>
         <div v-if="p.title" class="title">{{ p.title }}</div>
         <x-text v-if="p.hello" :text="p.hello"></x-text>
-        <x-text :text="p.content" text-indent="2em"></x-text>
+        <x-text :text="p.content" indent="2em"></x-text>
       </div>
     </fui-card>
   </div>
@@ -26,7 +26,7 @@ const query = useQuery();
 const hints = [
   {
     title: "",
-    content: `江安县“青年人才驿站”主要为来江就业创业、见习调研的青年人才提供免费最长不超过14天住宿服务。 `,
+    content: `江安县“青年人才驿站”主要为来江就业创业、见习调研的青年人才提供免费最长不超过14天住宿服务。`,
   },
   {
     title: "一、入住条件",

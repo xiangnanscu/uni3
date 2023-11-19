@@ -18,13 +18,13 @@
 const props = defineProps([
   "text",
   "size",
-  "textIndent",
+  "indent",
   "color",
   "padding",
   "firstLineNoIndent",
 ]);
-const textIndent = props.textIndent || "0";
-const fontSize = props.fontSize || "36rpx";
+const textIndent = props.indent || "0";
+const fontSize = props.size || "36rpx";
 const padding = props.padding || "5rpx";
 const color = props.color || "black";
 const firstLineNoIndent = props.firstLineNoIndent;

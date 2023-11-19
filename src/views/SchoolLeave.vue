@@ -15,7 +15,7 @@ const records = ref([]);
 const students = ref([]);
 const page = usePage();
 const roles = ref({});
-const showFloatPlus = ref(true);
+const showFloatPlus = ref(false);
 const createFormRef = ref(null);
 const updateFormRef = ref(null);
 const showCreateForm = ref(false);
@@ -39,23 +39,35 @@ let RecordModel;
 onLoad(async () => {
   await helpers.autoLogin();
   roles.value = await helpers.getRoles({ status: "通过" });
-  if (!roles.value.parent) {
-    throw `尚未注册家长信息，无法使用此功能`;
-  }
-  students.value = await usePost(`/student/parent/${roles.value.parent.id}`);
-  const RecordJson = await useGet(`/${modelName}/json`);
-  RecordJson.field_names = ["student_id", "reason"];
-  RecordModel = await Model.create_model_async(RecordJson);
-  const f = RecordModel.fields.student_id;
-  if (f.choices.length === 1) {
-    f.default = f.choices[0].value;
+  if (roles.value.parent) {
+    students.value = await usePost(`/student/parent/${roles.value.parent.id}`);
+    if (students.value.length) {
+      showFloatPlus.value = true;
+      const RecordJson = await useGet(`/${modelName}/json`);
+      RecordJson.field_names = ["student_id", "reason"];
+      RecordJson.fields.student_id.choices = students.value.map((e) => ({
+        school_id: e.school_id,
+        class_id: e.class_id,
+        value: e.id,
+        label: e.xm,
+      }));
+      RecordModel = await Model.create_model_async(RecordJson);
+      const f = RecordModel.fields.student_id;
+      if (f.choices.length === 1) {
+        f.default = f.choices[0].value;
+      }
+    }
   }
   records.value = await usePost(`/${modelName}/records`);
   ready.value = true;
 });
 const onSuccessCreate = async (data) => {
   log("onSuccessCreate", data);
-  records.value.push(data);
+  const choice = RecordModel.fields.student_id.choices.find(
+    (c) => c.value === data.student_id,
+  );
+  data.student_id__xm = choice.label;
+  records.value.unshift(data);
   createFormRef.value.close();
   showCreateForm.value = false;
   uni.showToast({
@@ -109,9 +121,7 @@ const onDeleteConfirm = async () => {
   }
 };
 const getLeaveTitle = (r) => {
-  return `${r.student_id__xm}-${utils.textDigest(r.reason, 6)}-${
-    r.status
-  }-${utils.getWeChatMessageTime(r.ctime)}`;
+  return `${r.student_id__xm}（${r.status}）`;
 };
 </script>
 <template>
@@ -119,31 +129,18 @@ const getLeaveTitle = (r) => {
     <x-title> 请销假</x-title>
     <uni-card title="" :border="false" :is-shadow="false" :is-full="true">
       <x-alert v-if="!records.length" title="没有记录"></x-alert>
-      <uni-group v-for="(r, index) in records" :key="r.id" mode="card">
-        <div class="x-row">
-          <div class="x-row">
-            <div style="margin-left: 1em">{{ getLeaveTitle(r) }}</div>
-          </div>
-          <div>
-            <x-button
-              v-if="!hideEdit"
-              styleString="padding: 0px 5px; font-size: 80%;margin-right:1em"
-              size="mini"
-              @click="onClickEdit(index)"
-            >
-              编辑
-            </x-button>
-            <x-button
-              v-if="!hideDelete"
-              styleString="padding: 0px 5px; font-size: 80%; color: red; border-color:red"
-              size="mini"
-              @click="onClickDelete(index)"
-            >
-              删除
-            </x-button>
-          </div>
-        </div>
-      </uni-group>
+      <uni-list>
+        <uni-list-item
+          v-for="(r, index) in records"
+          :key="r.id"
+          :title="getLeaveTitle(r)"
+          :right-text="utils.getWeChatMessageTime(r.ctime)"
+          show-arrow
+          :note="utils.textDigest(r.reason, 10)"
+          :to="`/views/SchoolLeaveDetail?id=${r.id}`"
+        >
+        </uni-list-item>
+      </uni-list>
       <fui-fab
         v-if="showFloatPlus"
         :distance="30"

@@ -41,6 +41,13 @@ onLoad(async () => {
 });
 const mainKist = [
   {
+    url: "../static/img/parent-child.png",
+    text: "亲子登记",
+    badge: "",
+    pagePath: "/views/SchoolRegeditParentChild",
+    type: "error",
+  },
+  {
     url: "../static/img/in-out.png",
     text: "校园进出",
     pagePath: "/views/SchoolStudentAccessLog",
@@ -61,13 +68,7 @@ const mainKist = [
     pagePath: "/views/SchoolNotice",
     type: "error",
   },
-  {
-    url: "../static/img/parent-child.png",
-    text: "亲子登记",
-    badge: "",
-    pagePath: "/views/SchoolRegeditParentChild",
-    type: "error",
-  },
+
   {
     url: "../static/img/score.png",
     text: "成绩管理",

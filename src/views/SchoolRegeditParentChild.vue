@@ -1,6 +1,6 @@
 <template>
   <page-layout v-if="loaded">
-    <x-alert title="智慧校园"> </x-alert>
+    <x-title text="">亲子登记</x-title>
     <uni-card
       :title="`家长（${user.xm}）`"
       :border="false"

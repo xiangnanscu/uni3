@@ -265,8 +265,14 @@ const submit = async () => {
       :text="props.submitButtonText"
       @click="submit"
       :open-type="props.submitButtonOpenType"
+      size="default"
     >
-      {{ props.submitButtonText }}
+      <template v-if="submitButtonText.length == 2">
+        {{ submitButtonText[0] }} &nbsp; {{ submitButtonText[1] }}
+      </template>
+      <template v-else>
+        {{ submitButtonText }}
+      </template>
     </x-button>
   </uni-forms>
 </template>
