@@ -7,6 +7,8 @@ const props = defineProps({
   values: { type: Object, default: () => ({}) },
   errors: { type: Object, default: () => ({}) },
   syncValues: { type: Boolean, default: false },
+  valuesHook: { type: Function },
+
   actionUrl: { type: String, required: false },
   successUrl: { type: [Object, String] },
   successMessage: { type: String },
@@ -89,6 +91,9 @@ const submit = async () => {
   const cleanedData = await formRef.value.validate();
   const formdata = props.model.to_post_value(cleanedData, props.model.names);
   emit("sendData", formdata);
+  if (props.valuesHook) {
+    Object.assign(formdata, props.valuesHook({ data: formdata, model: props.model }));
+  }
   if (!props.actionUrl) {
     return;
   }

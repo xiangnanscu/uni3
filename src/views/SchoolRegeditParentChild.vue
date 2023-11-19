@@ -86,13 +86,7 @@ const studentDeleteUrl = computed(
 );
 let ParentModel;
 onLoad(async () => {
-  if (!user.username) {
-    return utils.gotoPage({
-      url: "/views/RealNameCert",
-      query: { message: "此操作需要先实名认证", redirect: utils.getFullPath() },
-      redirect: true,
-    });
-  }
+  helpers.checkRealName();
   parent.value = await usePost(`/parent/get_or_create`, [
     { usr_id: user.id },
     { usr_id: user.id },

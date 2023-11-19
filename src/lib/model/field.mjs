@@ -64,7 +64,7 @@ function get_choices(raw_choices) {
       c = { value: c, label: String(c) };
     } else if (typeof c === "object") {
       const [value, label, hint] = clean_choice(c);
-      c = { value, label, hint };
+      c = { ...c, value, label, hint };
     } else {
       throw new Error("invalid choice type:" + typeof c);
     }

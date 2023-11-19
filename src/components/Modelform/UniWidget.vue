@@ -149,11 +149,13 @@ onBeforeMount(async () => {
   }
   if (Array.isArray(field.choices)) {
     fieldChoices.value = field.choices.map((e) => ({
+      ...e,
       _value: e._value,
       text: e.label,
       value: e.value,
     }));
     fuiChoices.value = field.choices.map((e) => ({
+      ...e,
       _value: e._value,
       text: e.label,
       value: e.value,

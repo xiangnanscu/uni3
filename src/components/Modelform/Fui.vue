@@ -6,6 +6,7 @@ const props = defineProps({
   values: { type: Object, default: () => ({}) }, //	formdata，结合FormItem组件校验时必传
   errors: { type: Object, default: () => ({}) },
   syncValues: { type: Boolean, default: false },
+  valuesHook: { type: Function },
 
   marginBottom: { type: String },
   bottomBorder: { type: Boolean, default: undefined },
@@ -157,6 +158,9 @@ const submit = async () => {
   }
   const formdata = props.model.to_post_value(values, props.model.names);
   // emit("sendData", formdata);
+  if (props.valuesHook) {
+    Object.assign(formdata, props.valuesHook({ data: formdata, model: props.model }));
+  }
   if (!props.actionUrl) {
     return;
   }

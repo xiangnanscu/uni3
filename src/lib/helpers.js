@@ -58,10 +58,18 @@ export async function autoLogin(force) {
 }
 
 export class NeedLoginError extends Error {}
+export class NeedRealNameError extends Error {}
 
 export function checkLogin() {
   const user = useUser();
   if (!user.id) {
     throw new NeedLoginError(`需要登录`);
+  }
+}
+
+export function checkRealName() {
+  const user = useUser();
+  if (!user.username) {
+    throw new NeedRealNameError(`需要实名认证`);
   }
 }

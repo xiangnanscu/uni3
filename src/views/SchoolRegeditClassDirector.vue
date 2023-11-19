@@ -140,13 +140,7 @@ const applyClassDirector = async (data) => {
 
 let classModel;
 onLoad(async () => {
-  if (!user.username) {
-    return utils.gotoPage({
-      url: "/views/RealNameCert",
-      query: { message: "此操作需要先实名认证", redirect: utils.getFullPath() },
-      redirect: true,
-    });
-  }
+  helpers.checkRealName();
   const roles = await helpers.getRoles({});
   sysadminRole.value = roles.sys_admin?.status == "通过" ? roles.sys_admin : null;
   principalRole.value = roles.principal?.status == "通过" ? roles.principal : null;

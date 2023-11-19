@@ -50,7 +50,7 @@ const mainKist = [
   {
     url: "../static/img/leave.png",
     text: "请销假",
-    pagePath: "/views/Todo",
+    pagePath: "/views/SchoolLeave",
     badge: "",
     type: "error",
   },

@@ -3,7 +3,7 @@ import { createSSRApp } from "vue";
 import App from "./App.vue";
 import { createPinia } from "pinia";
 import uniSetup from "./uniSetup";
-import { isLogin, NeedLoginError } from "@/lib/helpers.js";
+import { isLogin, NeedLoginError, NeedRealNameError } from "@/lib/helpers.js";
 import { Model } from "@/lib/model/model.mjs";
 import { basefield } from "@/lib/model/field.mjs";
 import { getFullPath } from "@/lib/utils";
@@ -48,10 +48,16 @@ export function createApp() {
   });
   setTimeout(() => {
     app.config.errorHandler = (err, instance, info) => {
-      console.error("errorHandler captured...", err, { instance, info });
+      // console.error("errorHandler captured...", err, { instance, info });
       if (err instanceof NeedLoginError || err.message == LOGIN_HINT) {
         console.log("NeedLoginError需要登录");
         utils.redirect(loginPage, {
+          message: "此操作需要登录",
+          redirect: utils.getSafeRedirect(getFullPath()),
+        });
+      } else if (err instanceof NeedRealNameError) {
+        console.log("NeedRealNameError需要实名认证");
+        utils.redirect("/views/RealNameCert", {
           message: "此操作需要登录",
           redirect: utils.getSafeRedirect(getFullPath()),
         });

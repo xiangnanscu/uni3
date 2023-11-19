@@ -82,6 +82,7 @@ if (showArrow) {
 }
 const fieldChoices = computed(() =>
   (fieldType !== "array" ? field.choices : field.field.choices)?.map((e) => ({
+    ...e, // 保留其他属性
     text: e.label,
     value: e.value,
   })),
@@ -222,49 +223,8 @@ const chooseLocation = async () => {
 <template>
   <template v-if="ready">
     <template v-if="fieldChoices">
-      <template v-if="field.tag == 'select'">
-        <fui-input
-          :bottomLeft="0"
-          :borderBottom="true"
-          :padding="[0]"
-          :disabled="false"
-          @focus="clickOnSelectInput"
-          :borderColor="props.borderColor"
-          :placeholder="field.attrs.placeholder"
-          backgroundColor="transparent"
-          :modelValue="fieldChoices.find((c) => c.value === props.modelValue)?.text"
-        >
-          <fui-button
-            type="gray"
-            width="200rpx"
-            height="64rpx"
-            size="28"
-            text="选择"
-            @click="showSelect = true"
-          ></fui-button>
-        </fui-input>
-        <fui-select
-          v-if="!field.attrs.picker"
-          :show="showSelect"
-          :options="fuiChoices"
-          :title="`${field.label}`"
-          :type="field.attrs.selectType || 'list'"
-          @click="onSelectClick"
-          @confirm="onSelectConfirm"
-          @close="showSelect = false"
-        >
-        </fui-select>
-        <fui-picker
-          v-else
-          :linkage="true"
-          :options="fuiChoices"
-          :show="showSelect"
-          @change="onPickerConfirm"
-          @cancel="showSelect = false"
-        ></fui-picker>
-      </template>
       <fui-radio-group
-        v-else-if="field.tag == 'radio'"
+        v-if="field.tag == 'radio'"
         @update:modelValue="
           sendValue($event);
           sendError('');
@@ -315,6 +275,47 @@ const chooseLocation = async () => {
           ></fui-text>
         </fui-label>
       </fui-checkbox-group>
+      <template v-else>
+        <fui-input
+          :bottomLeft="0"
+          :borderBottom="true"
+          :padding="[0]"
+          :disabled="false"
+          @focus="clickOnSelectInput"
+          :borderColor="props.borderColor"
+          :placeholder="field.attrs.placeholder"
+          backgroundColor="transparent"
+          :modelValue="fieldChoices.find((c) => c.value === props.modelValue)?.text"
+        >
+          <fui-button
+            type="gray"
+            width="200rpx"
+            height="64rpx"
+            size="28"
+            text="选择"
+            @click="showSelect = true"
+          ></fui-button>
+        </fui-input>
+        <fui-select
+          v-if="!field.attrs.picker"
+          :show="showSelect"
+          :options="fuiChoices"
+          :title="`${field.label}`"
+          :type="field.attrs.selectType || 'list'"
+          @click="onSelectClick"
+          @confirm="onSelectConfirm"
+          @close="showSelect = false"
+        >
+        </fui-select>
+        <fui-picker
+          v-else
+          :linkage="true"
+          :options="fuiChoices"
+          :show="showSelect"
+          @change="onPickerConfirm"
+          @cancel="showSelect = false"
+        ></fui-picker>
+      </template>
       <div v-if="!props.error && field.hint" class="field-hint">
         {{ field.hint }}
       </div>
