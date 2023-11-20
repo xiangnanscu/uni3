@@ -23,7 +23,7 @@
             <view class="post-body">
               <view class="post-header">
                 <div>{{ post.creator__nickname }}</div>
-                <div @click="togglePostActionPanel(post)">
+                <div v-if="showActions" @click="togglePostActionPanel(post)">
                   <image
                     class="post-action-dot"
                     src="../static/img/tabbar/more-tpp.png"
@@ -132,6 +132,7 @@
 export default {
   props: {
     target: { type: Object },
+    showActions: { type: Boolean, default: true },
     scrollId: { type: String },
     targetModel: { type: String },
     posts: { type: Array },

@@ -13,7 +13,7 @@ Model.Http = Http;
 basefield.Http = Http;
 const pinia = createPinia();
 const LOGIN_HINT = "login required";
-const loginPage = process.env.UNI_LOGIN_PAGE;
+const UNI_LOGIN_PAGE = process.env.UNI_LOGIN_PAGE;
 globalThis.log = console.log;
 // https://pinia.vuejs.org/core-concepts/plugins.html#adding-new-external-properties
 // pinia.use(({ store }) => {
@@ -51,7 +51,7 @@ export function createApp() {
       // console.error("errorHandler captured...", err, { instance, info });
       if (err instanceof NeedLoginError || err.message == LOGIN_HINT) {
         console.log("NeedLoginError需要登录");
-        utils.redirect(loginPage, {
+        utils.redirect(UNI_LOGIN_PAGE, {
           message: "此操作需要登录",
           redirect: utils.getSafeRedirect(getFullPath()),
         });

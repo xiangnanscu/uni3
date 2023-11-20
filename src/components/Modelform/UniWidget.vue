@@ -7,6 +7,7 @@ const props = defineProps({
   error: { type: String, default: "" },
 });
 // const uniFormItem = inject("uniFormItem", null);
+const ready = ref(); //确保一些需要提前异步获取到数据加载完之后再渲染
 const field = props.field;
 const fieldType = props.field.type;
 const mediaType =
@@ -125,9 +126,19 @@ const onFuiSelectConfirm = ({ index, options }) => {
   sendValue(options.value);
   fuiSelectShow.value = false;
 };
-const fieldChoices = ref();
-const fuiChoices = ref();
-const ready = ref(); //确保一些需要提前异步获取到数据加载完之后再渲染
+const fieldChoices = computed(() =>
+  (fieldType !== "array" ? field.choices : field.field.choices)?.map((e) => ({
+    ...e, // 保留其他属性
+    text: e.label,
+    value: e.value,
+  })),
+);
+const fuiChoices = computed(() =>
+  fieldChoices.value.map((e) => ({
+    ...e,
+    checked: e.value === props.modelValue,
+  })),
+);
 if (field._realValue) {
   console.log(`多表单共用model的情况,重置field._realValue(${field._realValue})`);
   field._realValue = null;
@@ -146,21 +157,6 @@ onBeforeMount(async () => {
       // field._realValue = props.modelValue // 应该直接这样?? 不应该,因为to_form_value把值转换了.
       field._realValue = field.choices.find((e) => e.value === props.modelValue)?._value;
     }
-  }
-  if (Array.isArray(field.choices)) {
-    fieldChoices.value = field.choices.map((e) => ({
-      ...e,
-      _value: e._value,
-      text: e.label,
-      value: e.value,
-    }));
-    fuiChoices.value = field.choices.map((e) => ({
-      ...e,
-      _value: e._value,
-      text: e.label,
-      value: e.value,
-      checked: e.value === props.modelValue,
-    }));
   }
   ready.value = true;
   // console.log("widget onBeforeMount end");
