@@ -26,14 +26,19 @@
             </div>
             <div>
               <x-button
-                style="padding: 0px 5px; font-size: 80%; margin-right: 1em"
+                style-string="padding: 0px 5px; font-size: 80%; margin-right: 1em"
                 size="mini"
                 @click="onClickEdit(s.id)"
               >
                 编辑
               </x-button>
               <x-button
-                style="padding: 0px 5px; font-size: 80%; color: red; border-color: red"
+                :style="{
+                  padding: '0px 5px',
+                  'font-size': '80%',
+                  color: 'red',
+                  'border-color': 'red',
+                }"
                 size="mini"
                 @click="onClickDelete(sindex)"
               >
