@@ -13,11 +13,7 @@
     <slot />
   </button>
 </template>
-
 <script setup>
-defineOptions({
-  styleIsolation: "shared",
-});
 //
 const emit = defineEmits(["click", "getphonenumber", "chooseavatar"]);
 const useFui = process.env.X_BUTTON_UI === "fui";
@@ -34,6 +30,11 @@ const props = defineProps({
   disabled: { type: Boolean, default: false },
   plain: { type: Boolean, default: true },
 });
+</script>
+<script>
+export default {
+  options: { styleIsolation: "shared" },
+};
 </script>
 <style scoped>
 .x {
