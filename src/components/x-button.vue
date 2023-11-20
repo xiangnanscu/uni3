@@ -15,6 +15,10 @@
 </template>
 
 <script setup>
+defineOptions({
+  styleIsolation: "shared",
+});
+//
 const emit = defineEmits(["click", "getphonenumber", "chooseavatar"]);
 const useFui = process.env.X_BUTTON_UI === "fui";
 
