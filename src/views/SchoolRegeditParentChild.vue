@@ -149,6 +149,11 @@ const successPostParent = async (user) => {
   });
 };
 </script>
+<script>
+export default {
+  options: { styleIsolation: "shared" },
+};
+</script>
 <style scoped>
 .x-row {
   display: flex;
