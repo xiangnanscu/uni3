@@ -19,7 +19,7 @@ const emit = defineEmits(["click", "getphonenumber", "chooseavatar"]);
 const useFui = process.env.X_BUTTON_UI === "fui";
 
 const props = defineProps({
-  type: { type: String, default: "default" },
+  type: { type: String, default: "primary" },
   size: { type: String, default: "mini" }, // default mini
   styleString: {
     type: String,
