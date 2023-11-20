@@ -12,10 +12,11 @@
         style="width: 100%"
       />
       <fui-preview :previewData="previewData"></fui-preview>
+      <x-button @click="joinVol" :plain="false" size="default">申请入住</x-button>
       <tinymce-text :html="record.content" style="margin-top: 1em"></tinymce-text>
       <template #actions> </template>
     </uni-card>
-    <x-button @click="joinVol" type="default" :plain="false">申请入住</x-button>
+    <x-button @click="joinVol" :plain="false" size="default">申请入住</x-button>
     <div style="height: 4em"></div>
     <x-bottom>
       <generic-actions :target="record" target-model="stage" style="width: 100%" />
