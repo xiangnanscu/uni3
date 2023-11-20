@@ -1,6 +1,6 @@
 <template>
   <button
-    :style2="props.styleString"
+    :style="props.styleString"
     :type="props.type"
     :plain="props.plain"
     :size="props.size"
@@ -23,7 +23,7 @@ const props = defineProps({
   size: { type: String, default: "mini" }, // default mini
   styleString: {
     type: String,
-    default: "color:#ffffff;backgroundColor:#465CFF;borderColor:#465CFF",
+    default2: "color:#ffffff;backgroundColor:#465CFF;borderColor:#465CFF",
   },
   // https://uniapp.dcloud.net.cn/component/button.html#open-type-%E6%9C%89%E6%95%88%E5%80%BC
   openType: { type: String },
