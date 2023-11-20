@@ -26,7 +26,7 @@
             </div>
             <div>
               <x-button
-                style-string="padding: 0px 5px; font-size: 80%; margin-right: 1em"
+                style="padding: 0px 5px; font-size: 80%; margin-right: 1em"
                 size="mini"
                 @click="onClickEdit(s.id)"
               >
