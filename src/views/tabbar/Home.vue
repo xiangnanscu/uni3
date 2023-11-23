@@ -197,7 +197,15 @@
         </uni-list-item>
       </uni-list>
     </fui-panel>
-
+    <uni-list>
+      <uni-list-item
+        title="幸运大转盘"
+        showArrow
+        link="navigateTo"
+        :to="`/views/LuckyWheel`"
+      >
+      </uni-list-item>
+    </uni-list>
     <fui-divider text="到底了" />
   </page-layout>
 </template>
