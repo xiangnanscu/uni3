@@ -192,7 +192,8 @@
       "path": "views/SchoolLeaveDetail",
       "style": { "navigationBarTitleText": "" }
     },
-    { "path": "views/zhuanpan", "style": { "navigationBarTitleText": "" } }
+    { "path": "views/zhuanpan", "style": { "navigationBarTitleText": "" } },
+    { "path": "views/LuckyWheel", "style": { "navigationBarTitleText": "" } }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",

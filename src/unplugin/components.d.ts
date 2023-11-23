@@ -12,6 +12,7 @@ declare module 'vue' {
     Favicon: typeof import('./../components/favicon.vue')['default']
     GenericActions: typeof import('./../components/generic-actions.vue')['default']
     InlineTest: typeof import('./../components/InlineTest.vue')['default']
+    KevyMask: typeof import('./../components/kevy-mask.vue')['default']
     ModelformFui: typeof import('./../components/Modelform/Fui.vue')['default']
     ModelformFuiWidget: typeof import('./../components/Modelform/FuiWidget.vue')['default']
     ModelformUni: typeof import('./../components/Modelform/Uni.vue')['default']

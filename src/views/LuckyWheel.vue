@@ -1,18 +1,18 @@
 <template>
   <div class="content">
-    <div class="t-bg" style="background-image: url('/static/luck/DZP_BJ.png')">
-      <image class="t-wan" src="/static/luck/wenan.png"></image>
-      <image class="t-wan-lp" src="/static/luck/hengfu.png"></image>
+    <div class="t-bg" style="background-image: url('../static/luck/DZP_BJ.png')">
+      <image class="t-wan" src="../static/luck/wenan.png"></image>
+      <image class="t-wan-lp" src="../static/luck/hengfu.png"></image>
       <div
         class="t-choujiang t-flex-row"
-        style="background-image: url('/static/luck/BJ.png')"
+        style="background-image: url('../static/luck/BJ.png')"
       >
         <div
           :animation="rotate"
           class="t-zp"
-          style="background-image: url('/static/luck/jiangpin.png')"
+          style="background-image: url('../static/luck/jiangpin.png')"
         ></div>
-        <image @click="start" class="t-start" src="/static/luck/start.png"></image>
+        <image @click="start" class="t-start" src="../static/luck/start.png"></image>
       </div>
     </div>
     <!-- 规则部分 -->
@@ -20,7 +20,7 @@
       <div class="t-luck-wrapper">
         <div
           class="t-jh t-flex-row"
-          style="background-image: url('/static/luck/anniu.png')"
+          style="background-image: url('../static/luck/anniu.png')"
         >
           您还有{{ luckDrawTimes }}次机会
         </div>
@@ -57,16 +57,19 @@
         <div class="t-tk-modal">
           <div
             class="t-tk-bg t-bg-full"
-            style="background-image: url('/static/luck/tankuang.png')"
+            style="background-image: url('../static/luck/tankuang.png')"
           >
             <div v-if="drawIdx != null && drawIdx == 0" class="t-xxcy t-flex-col-s">
-              <image src="/static/luck/xiexiecanyu.png"></image>
+              <image src="../static/luck/xiexiecanyu.png"></image>
               <div class="t-xxcy-ts t-flex-row">再努力努力肯定就会中哦~</div>
             </div>
             <div v-if="drawIdx != null && drawIdx > 0" class="t-tk-zj t-flex-col-s">
-              <image class="t-tk-zj-tip" src="/static/luck/wenzi.png"></image>
+              <image class="t-tk-zj-tip" src="../static/luck/wenzi.png"></image>
               <div class="t-tk-zj-desc t-flex-col">
-                <image class="t-zj-jp" :src="'/static/luck/' + drawIdx + '.png'"></image>
+                <image
+                  class="t-zj-jp"
+                  :src="'../static/luck/' + drawIdx + '.png'"
+                ></image>
                 <div class="t-zj-jp-desc">
                   某某公司提供的能量动力
                   {{
@@ -97,7 +100,7 @@
           <div
             @click="toConfirmAwd"
             class="t-tk-btn t-bg-full"
-            style="background-image: url('/static/luck/xiaoanniu.png')"
+            style="background-image: url('../static/luck/xiaoanniu.png')"
           >
             {{ drawIdx > 0 ? "领取" : "确定" }}
           </div>
@@ -112,11 +115,8 @@ var animation = uni.createAnimation({
   duration: 4000,
   timingFunction: "ease-out",
 });
-import kevyMask from "@/components/kevy-mask/kevy-mask.vue";
+
 export default {
-  components: {
-    kevyMask,
-  },
   data() {
     return {
       rotate: 0, //度数-抽奖动画
