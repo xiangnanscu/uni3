@@ -13,7 +13,9 @@
       <image class="t-wan-lp" src="../static/luck/hengfu.png"></image>
       <div
         class="t-choujiang t-flex-row"
-        style="background-image: url('../static/luck/BJ.png')"
+        style="
+          background-image: url('https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700748996560-14.png');
+        "
       >
         <div
           :animation="rotate"
@@ -30,7 +32,9 @@
       <div class="t-luck-wrapper">
         <div
           class="t-jh t-flex-row"
-          style="background-image: url('../static/luck/anniu.png')"
+          style="
+            background-image: url('https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700748996560-16.png');
+          "
         >
           您还有{{ luckDrawTimes }}次机会
         </div>
@@ -101,7 +105,9 @@
           <div
             @click="toConfirmAwd"
             class="t-tk-btn t-bg-full"
-            style="background-image: url('../static/luck/xiaoanniu.png')"
+            style="
+              background-image: url('https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700748996560-18.png');
+            "
           >
             {{ drawIdx > 0 ? "领取" : "确定" }}
           </div>
