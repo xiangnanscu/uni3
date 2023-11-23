@@ -1,7 +1,15 @@
 <template>
   <div class="content">
-    <div class="t-bg" style="background-image: url('../static/luck/DZP_BJ.png')">
-      <image class="t-wan" src="../static/luck/wenan.png"></image>
+    <div
+      class="t-bg"
+      style="
+        background-image: url('https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700748996560-5.png');
+      "
+    >
+      <image
+        class="t-wan"
+        src="https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700748996560-8.png"
+      ></image>
       <image class="t-wan-lp" src="../static/luck/hengfu.png"></image>
       <div
         class="t-choujiang t-flex-row"
@@ -10,7 +18,7 @@
         <div
           :animation="rotate"
           class="t-zp"
-          style="background-image: url('../static/luck/jiangpin.png')"
+          style="background-image: url('../static/luck/wheel.png')"
         ></div>
         <image @click="start" class="t-start" src="../static/luck/start.png"></image>
       </div>
@@ -23,17 +31,6 @@
           style="background-image: url('../static/luck/anniu.png')"
         >
           您还有{{ luckDrawTimes }}次机会
-        </div>
-        <div class="t-fuhuo-text t-flex-row">复活方式</div>
-        <div class="t-fh-fs t-flex-row-sb">
-          <div class="t-flex-row" hover-class="t-click-class">观看品牌5s视频</div>
-          <button
-            open-type="share"
-            class="t-share t-flex-row t-plain-btn"
-            hover-class="t-click-class"
-          >
-            一键分享朋友
-          </button>
         </div>
         <div class="t-line"></div>
         <div class="t-r-title t-flex-row">抽奖规则</div>
@@ -57,7 +54,9 @@
         <div class="t-tk-modal">
           <div
             class="t-tk-bg t-bg-full"
-            style="background-image: url('../static/luck/tankuang.png')"
+            style="
+              background-image: url('https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700748996560-7.png');
+            "
           >
             <div v-if="drawIdx != null && drawIdx == 0" class="t-xxcy t-flex-col-s">
               <image src="../static/luck/xiexiecanyu.png"></image>
