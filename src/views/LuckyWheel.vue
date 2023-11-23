@@ -71,13 +71,7 @@
               background-image: url('https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700748996560-7.png');
             "
           >
-            <div v-if="drawIdx != null && drawIdx == 0" class="t-xxcy t-flex-col-s">
-              <image
-                src="https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700754130137-9.png"
-              ></image>
-              <div class="t-xxcy-ts t-flex-row">再努力努力肯定就会中哦~</div>
-            </div>
-            <div v-if="drawIdx != null && drawIdx > 0" class="t-tk-zj t-flex-col-s">
+            <div v-if="drawIdx != null && !noRewards" class="t-tk-zj t-flex-col-s">
               <image
                 class="t-tk-zj-tip"
                 src="https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700754130137-7.png"
@@ -87,31 +81,14 @@
                   class="t-zj-jp"
                   :src="'../static/luck/' + drawIdx + '.png'"
                 ></image>
-                <div class="t-zj-jp-desc">
-                  某某公司提供的能量动力
-                  {{
-                    drawIdx == 5
-                      ? "探亲礼包"
-                      : drawIdx == 4
-                      ? "加油卡"
-                      : drawIdx == 3
-                      ? "鸡腿"
-                      : drawIdx == 2
-                      ? "方便面"
-                      : "矿泉水"
-                  }}，同等价值{{
-                    drawIdx == 5
-                      ? "888"
-                      : drawIdx == 4
-                      ? "100"
-                      : drawIdx == 3
-                      ? "10"
-                      : drawIdx == 2
-                      ? "5"
-                      : "2"
-                  }}元现金已到账微信零钱
-                </div>
+                <div class="t-zj-jp-desc">{{ items[drawIdx].name }}</div>
               </div>
+            </div>
+            <div v-if="drawIdx != null && noRewards" class="t-xxcy t-flex-col-s">
+              <image
+                src="https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700754130137-9.png"
+              ></image>
+              <div class="t-xxcy-ts t-flex-row">再努力努力肯定就会中哦~</div>
             </div>
           </div>
           <div
@@ -121,7 +98,7 @@
               background-image: url('https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700748996560-18.png');
             "
           >
-            {{ drawIdx > 0 ? "领取" : "确定" }}
+            {{ !noRewards ? "领取" : "确定" }}
           </div>
         </div>
       </div>
@@ -143,7 +120,27 @@ export default {
       luckDrawTimes: 5, //抽奖机会，5代表可以抽5次
       isShowAwd: false, //是否显示奖品弹框，抽奖后提示，要么中奖奖品，要么谢谢参与
       drawIdx: null, //抽到的奖品下标，用于指定中奖奖品并旋转转盘到对应奖品处。例如共5个奖品，下标3代表第4个奖品，下标从0开始
+      items: [
+        {},
+        { name: "帆布包" },
+        { name: "渔夫帽" },
+        {},
+        { name: "充电宝" },
+        { name: "玻璃杯" },
+      ],
+      resetCall: null,
     };
+  },
+  computed: {
+    unitRotate() {
+      return 360 / this.items.length;
+    },
+    noRewards() {
+      if (this.drawIdx === null) {
+        return true;
+      }
+      return !this.items[this.drawIdx].name;
+    },
   },
   onLoad() {},
   methods: {
@@ -184,12 +181,10 @@ export default {
             animation1.rotate(0).step();
             $.drawIdx = awardIdx;
             $.isShowAwd = true;
-            $.$nextTick(() => {
-              setTimeout(() => {
-                $.rotate = animation1.export();
-                $.turning = false;
-              }, 1000);
-            });
+            $.resetCall = () => {
+              $.rotate = animation1.export();
+              $.turning = false;
+            };
           }, 4350);
         });
       }
@@ -200,22 +195,8 @@ export default {
      * @param {*} type 1-计算角度 2-计算奖品
      */
     computeRotateAward(idx, type) {
-      let award;
-      if (idx == 5) {
-        award = type == 1 ? 60 : "探亲礼包";
-      } else if (idx == 4) {
-        award = type == 1 ? 300 : "加油卡";
-      } else if (idx == 3) {
-        award = type == 1 ? 120 : "鸡腿";
-      } else if (idx == 2) {
-        award = type == 1 ? 240 : "方便面";
-      } else if (idx == 1) {
-        award = type == 1 ? 180 : "矿泉水";
-      } else {
-        award = type == 1 ? 0 : "谢谢参与";
-      }
       //这里6代表6圈，你可以设置为你想要的
-      return type == 1 ? 6 * 360 + award : award;
+      return 6 * 360 + idx * this.unitRotate;
     },
 
     /**
@@ -224,6 +205,7 @@ export default {
     toConfirmAwd() {
       //这里中奖信息关闭弹框
       this.isShowAwd = false;
+      this.resetCall();
     },
   },
 };
@@ -595,7 +577,7 @@ export default {
 .t-zj-jp-desc {
   font-size: 24rpx;
   color: #d93637;
-  text-align: justify;
+  text-align: center;
   width: 420rpx;
 }
 
