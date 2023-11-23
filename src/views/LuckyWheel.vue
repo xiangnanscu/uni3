@@ -10,7 +10,10 @@
         class="t-wan"
         src="https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700748996560-8.png"
       ></image>
-      <image class="t-wan-lp" src="../static/luck/hengfu.png"></image>
+      <image
+        class="t-wan-lp"
+        src="https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700754130137-3.png"
+      ></image>
       <div
         class="t-choujiang t-flex-row"
         style="
@@ -24,7 +27,11 @@
             background-image: url('https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700748996560-12.png');
           "
         ></div>
-        <image @click="start" class="t-start" src="../static/luck/start.png"></image>
+        <image
+          @click="start"
+          class="t-start"
+          src="https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700754130137-5.png"
+        ></image>
       </div>
     </div>
     <!-- 规则部分 -->
@@ -65,11 +72,16 @@
             "
           >
             <div v-if="drawIdx != null && drawIdx == 0" class="t-xxcy t-flex-col-s">
-              <image src="../static/luck/xiexiecanyu.png"></image>
+              <image
+                src="https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700754130137-9.png"
+              ></image>
               <div class="t-xxcy-ts t-flex-row">再努力努力肯定就会中哦~</div>
             </div>
             <div v-if="drawIdx != null && drawIdx > 0" class="t-tk-zj t-flex-col-s">
-              <image class="t-tk-zj-tip" src="../static/luck/wenzi.png"></image>
+              <image
+                class="t-tk-zj-tip"
+                src="https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700754130137-7.png"
+              ></image>
               <div class="t-tk-zj-desc t-flex-col">
                 <image
                   class="t-zj-jp"
