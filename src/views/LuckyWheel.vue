@@ -18,7 +18,9 @@
         <div
           :animation="rotate"
           class="t-zp"
-          style="background-image: url('../static/luck/wheel.png')"
+          style="
+            background-image: url('https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700748996560-10.png');
+          "
         ></div>
         <image @click="start" class="t-start" src="../static/luck/start.png"></image>
       </div>
