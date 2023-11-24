@@ -38,6 +38,7 @@ const query = useQuery();
 const sessionUser = useUser();
 const redirectUrl = useRedirect();
 const { login } = useSession();
+
 // #ifdef H5
 const loginModel = Model.create_model({
   field_names: ["username", "password"],
@@ -79,14 +80,6 @@ const profileModel = Model.create_model({
 const needCompleteProfile = ref(false);
 
 onLoad(async (options) => {
-  // if (sessionUser.id) {
-  //   //当客户端没有过期而服务端已经过期，需要重新登录。以服务端为准
-  //   console.log(
-  //     "Login.vue onLoad检测已经登录直接重定向,options:",
-  //     JSON.stringify(options),
-  //   );
-  //   return await utils.redirect(redirectUrl.value);
-  // }
   const user = await helpers.getWxUser();
   userData.value.id = user.id;
   userData.value.openid = user.openid;

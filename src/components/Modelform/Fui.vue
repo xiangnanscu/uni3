@@ -157,7 +157,7 @@ const submit = async () => {
     return;
   }
   const formdata = props.model.to_post_value(values, props.model.names);
-  // emit("sendData", formdata);
+  emit("sendData", formdata);
   if (props.valuesHook) {
     Object.assign(formdata, props.valuesHook({ data: formdata, model: props.model }));
   }

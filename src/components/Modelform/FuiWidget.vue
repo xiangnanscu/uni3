@@ -129,29 +129,35 @@ const fuiDeleteFile = (file) => {
 };
 const fuiUploadCallback = async (file) => {
   //上传的文件信息
-  // #ifdef MP-WEIXIN
-  // 微信平台file对象只有path和size属性
-  const [_, name, ext] = file.path.match(/\/(\w+)\.(\w+)$/);
-  file.name = `${name}.${ext}`;
-  // #endif
-  if (file.size > field.size) {
-    const current = (file.size / 1024 / 1024).toFixed(1);
-    sendError(
-      `文件过大(当前${
-        current > 1 ? current + "MB" : (file.size / 1024).toFixed(1) + "KB"
-      },上限${field.size_arg})`,
-    );
+  try {
+    // #ifdef MP-WEIXIN
+    // 微信平台file对象只有path和size属性
+    const [_, name, ext] = file.path.match(/\/(\w+)\.(\w+)$/);
+    file.name = `${name}.${ext}`;
+    // #endif
+    if (file.size > field.size) {
+      const current = (file.size / 1024 / 1024).toFixed(1);
+      sendError(
+        `文件过大(当前${
+          current > 1 ? current + "MB" : (file.size / 1024).toFixed(1) + "KB"
+        },上限${field.size_arg})`,
+      );
+      fuiDeleteFile(file);
+      return;
+    }
+    const url = await Alioss.uploadUni({
+      file,
+      size: field.size,
+      prefix: "img",
+    });
+    sendValue([...props.modelValue, url]);
+    sendError("");
+    return url;
+  } catch (error) {
+    console.log("error:", error);
+    sendError(`错误：${error.message || error.errMsg}`);
     fuiDeleteFile(file);
-    return;
   }
-  const url = await Alioss.uploadUni({
-    file,
-    size: field.size,
-    prefix: "img",
-  });
-  sendValue([...props.modelValue, url]);
-  sendError("");
-  return url;
 };
 const fuiUploadVideoCallback = async (path, index) => {
   //上传的文件信息
