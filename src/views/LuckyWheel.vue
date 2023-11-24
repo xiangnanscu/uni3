@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div v-if="lottery" class="content">
     <div class="t-bg" :style="{ 'background-image': `url(${urls.page_bg})` }">
       <image class="t-wan" :src="urls.lucky_wheel_name"></image>
       <image class="t-wan-lp" :src="urls.lucky_text"></image>
@@ -10,7 +10,7 @@
         <div
           :animation="rotate"
           class="t-zp"
-          :style="{ 'background-image': `url(${urls.wheel})` }"
+          :style="{ 'background-image': `url(${urls.wheel_pic})` }"
         ></div>
         <image @click="start" class="t-start" :src="urls.start"></image>
       </div>
@@ -91,9 +91,15 @@ export default {
       luckDrawTimes: 5, //抽奖机会，5代表可以抽5次
       isShowAwd: false, //是否显示奖品弹框，抽奖后提示，要么中奖奖品，要么谢谢参与
       drawIdx: null, //抽到的奖品下标，用于指定中奖奖品并旋转转盘到对应奖品处。例如共5个奖品，下标3代表第4个奖品，下标从0开始
+      lottery: null,
       items: [],
-      urls: {
-        wheel:
+      resetCall: null,
+    };
+  },
+  computed: {
+    urls() {
+      return {
+        wheel_pic:
           "https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700788995748-5.png",
         page_bg:
           "https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700748996560-5.png",
@@ -115,11 +121,9 @@ export default {
           "https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700754130137-9.png",
         confirm_bg:
           "https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700748996560-18.png",
-      },
-      resetCall: null,
-    };
-  },
-  computed: {
+        ...this.lottery,
+      };
+    },
     unitRotate() {
       return 360 / this.items.length;
     },
@@ -134,6 +138,7 @@ export default {
     await helpers.autoLogin();
     // const init = await usePost(`/lucky/init`);
     const lottery = await useGet(`/lottery/detail/${query.id}`);
+    this.lottery = lottery;
     this.items = lottery.prize_list;
     // this.luckDrawTimes = init.luckDrawTimes;
   },
