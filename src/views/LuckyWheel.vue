@@ -1,37 +1,18 @@
 <template>
   <div class="content">
-    <div
-      class="t-bg"
-      style="
-        background-image: url('https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700748996560-5.png');
-      "
-    >
-      <image
-        class="t-wan"
-        src="https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700748996560-8.png"
-      ></image>
-      <image
-        class="t-wan-lp"
-        src="https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700754130137-3.png"
-      ></image>
+    <div class="t-bg" :style="{ 'background-image': `url(${urls.page_bg})` }">
+      <image class="t-wan" :src="urls.lucky_wheel_name"></image>
+      <image class="t-wan-lp" :src="urls.lucky_text"></image>
       <div
         class="t-choujiang t-flex-row"
-        style="
-          background-image: url('https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700748996560-14.png');
-        "
+        :style="{ 'background-image': `url(${urls.wheel_bg})` }"
       >
         <div
           :animation="rotate"
           class="t-zp"
-          style="
-            background-image: url('https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700748996560-12.png');
-          "
+          :style="{ 'background-image': `url(${urls.wheel})` }"
         ></div>
-        <image
-          @click="start"
-          class="t-start"
-          src="https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700754130137-5.png"
-        ></image>
+        <image @click="start" class="t-start" :src="urls.start"></image>
       </div>
     </div>
     <!-- 规则部分 -->
@@ -39,9 +20,7 @@
       <div class="t-luck-wrapper">
         <div
           class="t-jh t-flex-row"
-          style="
-            background-image: url('https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700748996560-16.png');
-          "
+          :style="{ 'background-image': `url(${urls.chance_text_bg})` }"
         >
           您还有{{ luckDrawTimes }}次机会
         </div>
@@ -67,36 +46,28 @@
         <div class="t-tk-modal">
           <div
             class="t-tk-bg t-bg-full"
-            style="
-              background-image: url('https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700748996560-7.png');
-            "
+            :style="{ 'background-image': `url(${urls.award_bg})` }"
           >
             <div v-if="drawIdx != null && !noRewards" class="t-tk-zj t-flex-col-s">
-              <image
-                class="t-tk-zj-tip"
-                src="https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700754130137-7.png"
-              ></image>
+              <image class="t-tk-zj-tip" :src="urls.congrats_text"></image>
               <div class="t-tk-zj-desc t-flex-col">
                 <image
                   class="t-zj-jp"
                   :src="'../static/luck/' + drawIdx + '.png'"
+                  mode="widthFix"
                 ></image>
                 <div class="t-zj-jp-desc">{{ items[drawIdx].name }}</div>
               </div>
             </div>
             <div v-if="drawIdx != null && noRewards" class="t-xxcy t-flex-col-s">
-              <image
-                src="https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700754130137-9.png"
-              ></image>
+              <image :src="urls.thanks_text"></image>
               <div class="t-xxcy-ts t-flex-row">再努力努力肯定就会中哦~</div>
             </div>
           </div>
           <div
             @click="toConfirmAwd"
             class="t-tk-btn t-bg-full"
-            style="
-              background-image: url('https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700748996560-18.png');
-            "
+            :style="{ 'background-image': `url(${urls.confirm_bg})` }"
           >
             {{ !noRewards ? "领取" : "确定" }}
           </div>
@@ -128,6 +99,30 @@ export default {
         { name: "充电宝" },
         { name: "玻璃杯" },
       ],
+      urls: {
+        wheel:
+          "https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700788995748-5.png",
+        page_bg:
+          "https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700748996560-5.png",
+        lucky_wheel_name:
+          "https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700748996560-8.png",
+        lucky_text:
+          "https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700754130137-3.png",
+        wheel_bg:
+          "https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700748996560-14.png",
+        start:
+          "https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700754130137-5.png",
+        chance_text_bg:
+          "https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700748996560-16.png",
+        award_bg:
+          "https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700748996560-7.png",
+        congrats_text:
+          "https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700754130137-7.png",
+        thanks_text:
+          "https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700754130137-9.png",
+        confirm_bg:
+          "https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700748996560-18.png",
+      },
       resetCall: null,
     };
   },
@@ -142,14 +137,18 @@ export default {
       return !this.items[this.drawIdx].name;
     },
   },
-  onLoad() {},
+  async onLoad() {
+    await helpers.autoLogin();
+    const init = usePost(`/lucky/init`);
+    this.luckDrawTimes = init.luckDrawTimes;
+  },
   methods: {
     /**
      * 抽奖按钮点击
      */
     start() {
-      const $ = this;
-      const luckDrawTimes = $.luckDrawTimes;
+      const self = this;
+      const luckDrawTimes = self.luckDrawTimes;
       if (luckDrawTimes < 1) {
         uni.showToast({
           title: "抽奖机会已用完",
@@ -157,33 +156,33 @@ export default {
         });
         return;
       }
-      if (!$.turning) {
-        $.turning = true;
-        $.$nextTick(() => {
+      if (!self.turning) {
+        self.turning = true;
+        self.$nextTick(async () => {
           //这里去请求服务器，生成中奖信息，其中awardIdx为中奖
           // uni.request({
           // })
           //以下为模拟请求返回数据，awardIdx从0开始，0代表谢谢参与，其他代表剩余的奖品，这里随机一个数（0-4之间）
           const res = {
-            awardIdx: Math.floor(Math.random() * 5),
+            awardIdx: 2, // Math.floor(Math.random() * 5),
           };
-          const { awardIdx } = res;
+          const { index: awardIdx } = await usePost(`/lucky/index`);
           //计算旋转角度
-          const rdm = $.computeRotateAward(awardIdx, 1);
+          const rdm = self.computeRotateAward(awardIdx, 1);
           animation.rotate(rdm).step();
-          $.rotate = animation.export();
-          $.luckDrawTimes = $.luckDrawTimes <= 0 ? 0 : $.luckDrawTimes - 1;
+          self.rotate = animation.export();
+          self.luckDrawTimes = self.luckDrawTimes <= 0 ? 0 : self.luckDrawTimes - 1;
           setTimeout(() => {
             const animation1 = uni.createAnimation({
               duration: 100,
               timingFunction: "linear",
             });
             animation1.rotate(0).step();
-            $.drawIdx = awardIdx;
-            $.isShowAwd = true;
-            $.resetCall = () => {
-              $.rotate = animation1.export();
-              $.turning = false;
+            self.drawIdx = awardIdx;
+            self.isShowAwd = true;
+            self.resetCall = () => {
+              self.rotate = animation1.export();
+              self.turning = false;
             };
           }, 4350);
         });
@@ -413,22 +412,23 @@ export default {
 
 .t-tk-modal {
   width: 632rpx;
-  height: 588rpx;
+  /* height: 588rpx; */
   position: relative;
   box-sizing: border-box;
 }
 
 .t-tk-bg {
   width: 100%;
-  height: 528rpx;
+  /* height: 528rpx; */
   background-size: 100% 100%;
+  padding-bottom: 5rem;
 }
 
 .t-tk-btn {
   width: 336rpx;
   height: 120rpx;
   position: absolute;
-  bottom: 0rpx;
+  bottom: 15rpx;
   left: calc(50% - 168rpx);
   font-size: 40rpx;
   color: #980100;
@@ -563,19 +563,21 @@ export default {
 
 .t-tk-zj-desc {
   width: 474rpx;
-  height: 281rpx;
+  /* height: 281rpx; */
   background: #fef2cd;
   border-radius: 20rpx;
   margin-top: 2rpx;
+  padding-bottom: 0.5rem;
 }
 
 .t-zj-jp {
   width: 264rpx;
-  height: 157rpx;
+  /* height: 157rpx; */
 }
 
 .t-zj-jp-desc {
-  font-size: 24rpx;
+  font-size: 28rpx;
+  font-weight: bold;
   color: #d93637;
   text-align: center;
   width: 420rpx;
