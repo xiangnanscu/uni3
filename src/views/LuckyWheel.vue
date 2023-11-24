@@ -61,7 +61,7 @@
             </div>
             <div v-if="drawIdx != null && noRewards" class="t-xxcy t-flex-col-s">
               <image :src="urls.thanks_text"></image>
-              <div class="t-xxcy-ts t-flex-row">再努力努力肯定就会中哦~</div>
+              <div class="t-xxcy-ts t-flex-row">很遗憾，没有中奖</div>
             </div>
           </div>
           <div
@@ -91,14 +91,7 @@ export default {
       luckDrawTimes: 5, //抽奖机会，5代表可以抽5次
       isShowAwd: false, //是否显示奖品弹框，抽奖后提示，要么中奖奖品，要么谢谢参与
       drawIdx: null, //抽到的奖品下标，用于指定中奖奖品并旋转转盘到对应奖品处。例如共5个奖品，下标3代表第4个奖品，下标从0开始
-      items: [
-        {},
-        { name: "帆布包" },
-        { name: "渔夫帽" },
-        {},
-        { name: "充电宝" },
-        { name: "玻璃杯" },
-      ],
+      items: [],
       urls: {
         wheel:
           "https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700788995748-5.png",
@@ -134,13 +127,15 @@ export default {
       if (this.drawIdx === null) {
         return true;
       }
-      return !this.items[this.drawIdx].name;
+      return !this.items[this.drawIdx]?.name;
     },
   },
-  async onLoad() {
+  async onLoad(query) {
     await helpers.autoLogin();
-    const init = usePost(`/lucky/init`);
-    this.luckDrawTimes = init.luckDrawTimes;
+    // const init = await usePost(`/lucky/init`);
+    const lottery = await useGet(`/lottery/detail/${query.id}`);
+    this.items = lottery.prize_list;
+    // this.luckDrawTimes = init.luckDrawTimes;
   },
   methods: {
     /**
@@ -168,7 +163,7 @@ export default {
           };
           const { index: awardIdx } = await usePost(`/lucky/index`);
           //计算旋转角度
-          const rdm = self.computeRotateAward(awardIdx, 1);
+          const rdm = self.computeRotateAward(awardIdx);
           animation.rotate(rdm).step();
           self.rotate = animation.export();
           self.luckDrawTimes = self.luckDrawTimes <= 0 ? 0 : self.luckDrawTimes - 1;
@@ -193,7 +188,7 @@ export default {
      * @param {*} idx 中奖奖品下标，从0开始
      * @param {*} type 1-计算角度 2-计算奖品
      */
-    computeRotateAward(idx, type) {
+    computeRotateAward(idx) {
       //这里6代表6圈，你可以设置为你想要的
       return 6 * 360 + idx * this.unitRotate;
     },
@@ -428,7 +423,7 @@ export default {
   width: 336rpx;
   height: 120rpx;
   position: absolute;
-  bottom: 15rpx;
+  bottom: -50rpx;
   left: calc(50% - 168rpx);
   font-size: 40rpx;
   color: #980100;

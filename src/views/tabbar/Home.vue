@@ -202,7 +202,7 @@
         title="幸运大转盘"
         showArrow
         link="navigateTo"
-        :to="`/views/LuckyWheel`"
+        :to="`/views/LuckyWheel?id=1`"
       >
       </uni-list-item>
     </uni-list>
