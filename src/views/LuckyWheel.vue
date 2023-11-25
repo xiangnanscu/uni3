@@ -22,21 +22,40 @@
           class="t-jh t-flex-row"
           :style="{ 'background-image': `url(${urls.chance_text_bg})` }"
         >
-          您还有{{ luckDrawTimes }}次机会
+          <span v-if="!available">奖品已抽完</span>
+          <span v-else>您还有{{ luckDrawTimes }}次机会</span>
         </div>
         <div class="t-line"></div>
         <div class="t-r-title t-flex-row">抽奖规则</div>
         <div class="t-rule">
-          <text>1.无门槛参与：凡是授权获取电话号码的小程序用户均可参与抽奖；</text>
-          <text
-            >2.每个用户每天默认有一次抽奖资格，用户可以通过以下方式复活继续参与抽奖：
-            （1）通过观看品牌视频5秒钟每天获取一次复活资格
-            （2）通过一键分享朋友圈（且有人点击）获取复活资格，每分享一个新的朋友，获取一次复活资格，复活次数上不封顶；</text
+          <text>
+            1、输入密码参与：凡是授权获取电话号码的小程序用户均可通过输入当天密码参与抽奖。
+          </text>
+          <text>2、每个用户每天有2次抽奖资格。</text>
+          <text>
+            3、中奖奖品以现场领取形式下发用户，11月26日至30日用户可凭下方中奖记录到剧荟广场青年之家领取奖品，逾时不候。
+          </text>
+        </div>
+        <div class="t-line"></div>
+        <div class="t-r-title t-flex-row">中奖记录</div>
+        <div class="t-rule">
+          <div
+            v-for="(log, i) in logs"
+            :key="log.id"
+            style="display: flex; align-items: center; margin-bottom: 1em"
           >
-          <text
-            >3.中奖奖品以现金的形式下发用户微信零钱，到账时间不超过24小时,具体到账时间以微信支付通知为准（因微信官方要求，微信实名认证用户方可收到奖金）；</text
-          >
-          <text>4.中奖记录在个人中心-我的红包中查看。</text>
+            <image
+              class="t-zj-jp"
+              style="width: 30px; height: 30px; margin-right: 4px"
+              :src="items[log.prize_index - 1].pic"
+              mode="widthFix"
+            ></image>
+            <text
+              >{{ i + 1 }}. {{ items[log.prize_index - 1].name || "未中奖" }}（{{
+                utils.getWeChatMessageTime(log.ctime)
+              }}）</text
+            >
+          </div>
         </div>
       </div>
     </div>
@@ -51,11 +70,7 @@
             <div v-if="drawIdx != null && !noRewards" class="t-tk-zj t-flex-col-s">
               <image class="t-tk-zj-tip" :src="urls.congrats_text"></image>
               <div class="t-tk-zj-desc t-flex-col">
-                <image
-                  class="t-zj-jp"
-                  :src="'../static/luck/' + drawIdx + '.png'"
-                  mode="widthFix"
-                ></image>
+                <image class="t-zj-jp" :src="items[drawIdx].pic" mode="widthFix"></image>
                 <div class="t-zj-jp-desc">{{ items[drawIdx].name }}</div>
               </div>
             </div>
@@ -88,12 +103,15 @@ export default {
     return {
       rotate: 0, //度数-抽奖动画
       turning: false, //转盘是否正在转
-      luckDrawTimes: 5, //抽奖机会，5代表可以抽5次
+      luckDrawTimes: 0, //抽奖机会，5代表可以抽5次
       isShowAwd: false, //是否显示奖品弹框，抽奖后提示，要么中奖奖品，要么谢谢参与
       drawIdx: null, //抽到的奖品下标，用于指定中奖奖品并旋转转盘到对应奖品处。例如共5个奖品，下标3代表第4个奖品，下标从0开始
       lottery: null,
       items: [],
       resetCall: null,
+      today_count: null,
+      available: null,
+      logs: [],
     };
   },
   computed: {
@@ -136,11 +154,15 @@ export default {
   },
   async onLoad(query) {
     await helpers.autoLogin();
-    // const init = await usePost(`/lucky/init`);
-    const lottery = await useGet(`/lottery/detail/${query.id}`);
+    const { today_count, available, lottery } = await useGet(
+      `/lottery_log/lottery_check/${query.id}`,
+    );
+    this.logs = await usePost(`/lottery_log/records`, { usr_id: this.user.id });
+    this.today_count = today_count;
+    this.available = available;
     this.lottery = lottery;
     this.items = lottery.prize_list;
-    // this.luckDrawTimes = init.luckDrawTimes;
+    this.luckDrawTimes = Math.max((lottery.daily_limit || 1) - today_count, 0);
   },
   methods: {
     /**
@@ -163,10 +185,10 @@ export default {
           // uni.request({
           // })
           //以下为模拟请求返回数据，awardIdx从0开始，0代表谢谢参与，其他代表剩余的奖品，这里随机一个数（0-4之间）
-          const res = {
-            awardIdx: 2, // Math.floor(Math.random() * 5),
-          };
-          const { index: awardIdx } = await usePost(`/lucky/index`);
+          const log = await usePost(`/lottery_log/create`, {
+            lottery_id: self.lottery.id,
+          });
+          const awardIdx = log.prize_index - 1;
           //计算旋转角度
           const rdm = self.computeRotateAward(awardIdx);
           animation.rotate(rdm).step();
@@ -183,6 +205,7 @@ export default {
             self.resetCall = () => {
               self.rotate = animation1.export();
               self.turning = false;
+              self.logs.unshift(log);
             };
           }, 4350);
         });

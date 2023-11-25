@@ -48,7 +48,7 @@ export function createApp() {
   });
   setTimeout(() => {
     app.config.errorHandler = (err, instance, info) => {
-      // console.error("errorHandler captured...", err, { instance, info });
+      console.error("errorHandler captured...", err, { instance, info });
       if (err instanceof NeedLoginError || err.message == LOGIN_HINT) {
         console.log("NeedLoginError需要登录");
         utils.redirect(UNI_LOGIN_PAGE, {
