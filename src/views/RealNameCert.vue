@@ -44,9 +44,11 @@ const successPost = (user) => {
   login(newUser);
 };
 onLoad(async () => {
-  console.log("RealNameCert onLoad query:", JSON.stringify(query));
   await helpers.autoLogin();
   const { data } = await Http.get("/usr/profile/my");
+  if (data.username && data.phone) {
+    return await utils.redirect(redirectUrl.value);
+  }
   userData.value.xm = data.xm || "";
   userData.value.phone = data.phone || "";
   userData.value.username = data.username || "";
