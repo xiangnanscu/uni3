@@ -106,6 +106,8 @@ const whiteList = [
   // "/views/PollDetail",
   "/views/StageDetail",
   "/views/VolplanDetail",
+  "/views/LuckyWheel",
+  "/views/RealNameCert",
 ];
 const realNameCertList = [
   "/views/SchoolRegeditParentChild",

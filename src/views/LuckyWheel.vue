@@ -1,5 +1,13 @@
 <template>
-  <div v-if="lottery" class="content">
+  <div v-if="lottery?.password && !ready" style="padding-top: 5rem">
+    <fui-single-input
+      ref="passwordInput"
+      type="number"
+      isFocus
+      @complete="onComplete"
+    ></fui-single-input>
+  </div>
+  <div v-else-if="lottery" class="content">
     <div class="t-bg" :style="{ 'background-image': `url(${urls.page_bg})` }">
       <image class="t-wan" :src="urls.lucky_wheel_name"></image>
       <image class="t-wan-lp" :src="urls.lucky_text"></image>
@@ -107,6 +115,7 @@ export default {
       isShowAwd: false, //是否显示奖品弹框，抽奖后提示，要么中奖奖品，要么谢谢参与
       drawIdx: null, //抽到的奖品下标，用于指定中奖奖品并旋转转盘到对应奖品处。例如共5个奖品，下标3代表第4个奖品，下标从0开始
       lottery: null,
+      ready: false,
       items: [],
       resetCall: null,
       today_count: null,
@@ -153,18 +162,25 @@ export default {
     },
   },
   async onLoad(query) {
-    await helpers.autoLogin();
+    await helpers.checkRealName();
     const { today_count, available, lottery } = await useGet(
       `/lottery_log/lottery_check/${query.id}`,
     );
     this.logs = await usePost(`/lottery_log/records`, { usr_id: this.user.id });
     this.today_count = today_count;
     this.available = available;
-    this.lottery = lottery;
     this.items = lottery.prize_list;
     this.luckDrawTimes = Math.max((lottery.daily_limit || 1) - today_count, 0);
+    this.lottery = lottery;
   },
   methods: {
+    onComplete({ detail: { value } }) {
+      if (value == this.lottery.password) {
+        this.ready = true;
+      } else {
+        this.$refs.passwordInput.clear();
+      }
+    },
     /**
      * 抽奖按钮点击
      */
