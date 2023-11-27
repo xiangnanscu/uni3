@@ -58,6 +58,7 @@ export function createApp() {
       } else if (err instanceof NeedRealNameError) {
         console.log("NeedRealNameError需要实名认证");
         utils.redirect("/views/RealNameCert", {
+          justCheck: 1,
           message: "此操作需要实名认证",
           redirect: utils.getSafeRedirect(getFullPath()),
         });

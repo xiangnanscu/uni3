@@ -29,30 +29,32 @@ const currentRecord = computed(() =>
 const recordCreateUrl = computed(() => `/${modelName}/create`);
 const recordUpdateUrl = computed(() => `/${modelName}/update/${currentRecord.value.id}`);
 const recordDeleteUrl = computed(() => `/${modelName}/delete/${currentRecord.value.id}`);
-const attachSchoolClass = ({ data, model }) => {
-  const choice = model.fields.student_id.choices.find((c) => c.value === data.student_id);
-  if (choice) {
-    return { school_id: choice.school_id, class_id: choice.class_id };
-  }
-};
+const attachSchoolClass = ({ data, model }) => {};
 let RecordModel;
 onLoad(async () => {
   await helpers.autoLogin();
-  roles.value = await helpers.getRoles({ status: "通过" });
-  if (roles.value.class_director || roles.value.principal) {
+  roles.value = await helpers.getPassedRoles();
+  if (roles.value.class_director || roles.value.principal || roles.value.sys_admin) {
     showFloatPlus.value = true;
     const RecordJson = await useGet(`/${modelName}/json`);
-    RecordJson.field_names = ["student_id", "reason"];
-    RecordJson.fields.student_id.choices = students.value.map((e) => ({
-      school_id: e.school_id,
-      class_id: e.class_id,
-      value: e.id,
-      label: e.xm,
-    }));
     RecordModel = await Model.create_model_async(RecordJson);
-    const f = RecordModel.fields.student_id;
-    if (f.choices.length === 1) {
-      f.default = f.choices[0].value;
+    const sf = RecordModel.fields.school_id;
+    const cf = RecordModel.fields.class_id;
+    //TODO:需要厘清多学校情形下, 确定学校后如何只返回该学校的班级.要有联动机制
+    if (roles.value.principal) {
+      const school_id = roles.value.principal.school_id;
+      sf.choices = sf.choices.filter((c) => c.value === school_id);
+      sf.default = school_id;
+      sf.disabled = true;
+    } else if (roles.value.class_director) {
+      const school_id = roles.value.class_director.school_id;
+      const class_id = roles.value.class_director.class_id;
+      sf.choices = sf.choices.filter((c) => c.value === school_id);
+      cf.choices = cf.choices.filter((c) => c.value === class_id);
+      sf.default = school_id;
+      cf.default = class_id;
+      sf.disabled = true;
+      cf.disabled = true;
     }
   }
   records.value = await usePost(`/${modelName}/records`);
@@ -60,10 +62,6 @@ onLoad(async () => {
 });
 const onSuccessCreate = async (data) => {
   log("onSuccessCreate", data);
-  const choice = RecordModel.fields.student_id.choices.find(
-    (c) => c.value === data.student_id,
-  );
-  data.student_id__xm = choice.label;
   records.value.unshift(data);
   createFormRef.value.close();
   showCreateForm.value = false;
@@ -76,7 +74,6 @@ const onSuccessCreate = async (data) => {
 const onSuccessUpdate = (data) => {
   console.log("onSuccessUpdate", data);
   Object.assign(currentRecord.value, Array.isArray(data) ? data[0] : data);
-  currentRecord.value;
   updateFormRef.value.close();
   showUpdateForm.value = false;
   recordIndex.value = null;
@@ -117,24 +114,20 @@ const onDeleteConfirm = async () => {
     uni.showToast({ title: "删除失败" });
   }
 };
-const getLeaveTitle = (r) => {
-  return `${r.student_id__xm}（${r.status}）`;
-};
 </script>
 <template>
   <div v-if="ready">
-    <x-title> 请销假</x-title>
+    <x-title> 学校通知</x-title>
     <uni-card title="" :border="false" :is-shadow="false" :is-full="true">
       <x-alert v-if="!records.length" title="没有记录"></x-alert>
       <uni-list>
         <uni-list-item
           v-for="(r, index) in records"
           :key="r.id"
-          :title="getLeaveTitle(r)"
+          :title="r.title"
           :right-text="utils.getWeChatMessageTime(r.ctime)"
           show-arrow
-          :note="utils.textDigest(r.reason, 10)"
-          :to="`/views/SchoolLeaveDetail?id=${r.id}`"
+          :to="`/views/SchoolNoticeDetail?id=${r.id}`"
         >
         </uni-list-item>
       </uni-list>
@@ -160,7 +153,7 @@ const getLeaveTitle = (r) => {
           :values-hook="attachSchoolClass"
           @successPost="onSuccessCreate"
           :model="RecordModel"
-          submit-button-text="请假"
+          submit-button-text="提交"
           :values="RecordModel.get_defaults()"
         ></modelform-fui>
       </div>

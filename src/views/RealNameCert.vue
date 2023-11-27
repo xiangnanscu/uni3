@@ -46,7 +46,7 @@ const successPost = (user) => {
 onLoad(async () => {
   await helpers.autoLogin();
   const { data } = await Http.get("/usr/profile/my");
-  if (data.username && data.phone) {
+  if (query.justCheck && data.username && data.phone) {
     return await utils.redirect(redirectUrl.value);
   }
   userData.value.xm = data.xm || "";
