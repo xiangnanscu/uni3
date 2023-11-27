@@ -193,7 +193,11 @@
       "path": "views/SchoolLeaveDetail",
       "style": { "navigationBarTitleText": "" }
     },
-    { "path": "views/LuckyWheel", "style": { "navigationBarTitleText": "" } }
+    { "path": "views/LuckyWheel", "style": { "navigationBarTitleText": "" } },
+    {
+      "path": "views/MiniQrcodeDispatcher",
+      "style": { "navigationBarTitleText": "" }
+    }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
