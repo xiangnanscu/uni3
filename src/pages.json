@@ -197,6 +197,10 @@
     {
       "path": "views/MiniQrcodeDispatcher",
       "style": { "navigationBarTitleText": "" }
+    },
+    {
+      "path": "views/WxLoginByMiniQrcode",
+      "style": { "navigationBarTitleText": "" }
     }
   ],
   "globalStyle": {
