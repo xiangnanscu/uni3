@@ -197,6 +197,18 @@
     {
       "path": "views/LoginByMiniAcode",
       "style": { "navigationBarTitleText": "" }
+    },
+    {
+      "path": "views/SchoolStudentScore",
+      "style": { "navigationBarTitleText": "" }
+    },
+    {
+      "path": "views/SchoolHomework",
+      "style": { "navigationBarTitleText": "" }
+    },
+    {
+      "path": "views/SchoolHomeworkDetail",
+      "style": { "navigationBarTitleText": "" }
     }
   ],
   "globalStyle": {

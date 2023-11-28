@@ -72,14 +72,14 @@ const mainKist = [
   {
     url: "../static/img/score.png",
     text: "成绩管理",
-    pagePath: "/views/Todo",
+    pagePath: "/views/SchoolStudentScore",
     badge: "",
     type: "error",
   },
   {
     url: "../static/img/homework.png",
     text: "家庭作业",
-    pagePath: "/views/Todo",
+    pagePath: "/views/SchoolHomework",
     badge: "",
     type: "error",
   },
