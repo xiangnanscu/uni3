@@ -97,9 +97,9 @@
             mode="list"
           ></x-checkbox>
           <uni-easyinput v-else v-model.trim="answers[index]" type="text" />
-          <div style="height: 3em"></div>
-          <x-button @click="submitPoll">提交</x-button>
         </template>
+        <div style="height: 3em"></div>
+        <x-button @click="submitPoll">提交</x-button>
       </template>
     </uni-card>
   </page-layout>
