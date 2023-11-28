@@ -286,7 +286,7 @@ const chooseLocation = async () => {
           :bottomLeft="0"
           :borderBottom="true"
           :padding="[0]"
-          :disabled="false"
+          :disabled="field.disabled"
           @focus="clickOnSelectInput"
           :borderColor="props.borderColor"
           :placeholder="field.attrs.placeholder"

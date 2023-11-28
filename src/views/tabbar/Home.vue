@@ -197,12 +197,15 @@
         </uni-list-item>
       </uni-list>
     </fui-panel>
+    <x-title>幸运转盘</x-title>
     <uni-list>
       <uni-list-item
-        title="幸运大转盘"
+        v-for="w in wheels"
+        :key="w.id"
+        :title="w.name"
         showArrow
         link="navigateTo"
-        :to="`/views/LuckyWheel?id=1`"
+        :to="`/views/LuckyWheel?id=${w.id}`"
       >
       </uni-list-item>
     </uni-list>
@@ -269,6 +272,7 @@ export default {
       ads: null,
       polls: null,
       news: null,
+      wheels: null,
       imageList: [],
       noticeText: "",
       mainKist: [
@@ -349,6 +353,7 @@ export default {
         src: e.pics[0],
         desc1: e.content.slice(0, 50),
       }));
+      this.wheels = await usePost(`/lottery/records`);
     } catch (error) {
       console.log("更新letter_mdoel错误", error);
     } finally {

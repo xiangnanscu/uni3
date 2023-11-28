@@ -20,7 +20,12 @@
           class="t-zp"
           :style="{ 'background-image': `url(${urls.wheel_pic})` }"
         ></div>
-        <image @click="start" class="t-start" :src="urls.start"></image>
+        <image
+          v-if="!expired && available"
+          @click="start"
+          class="t-start"
+          :src="urls.start"
+        ></image>
       </div>
     </div>
     <!-- 规则部分 -->
@@ -30,8 +35,10 @@
           class="t-jh t-flex-row"
           :style="{ 'background-image': `url(${urls.chance_text_bg})` }"
         >
-          <span v-if="!available">奖品已抽完</span>
-          <span v-else>您还有{{ luckDrawTimes }}次机会</span>
+          <span v-if="expired">抽奖已结束</span>
+          <span v-else-if="!available">奖品已抽完</span>
+          <span v-else-if="luckDrawTimes > 0">您还有{{ luckDrawTimes }}次机会</span>
+          <span v-else-if="luckDrawTimes === 0">抽奖机会已用完</span>
         </div>
         <div class="t-line"></div>
         <div class="t-r-title t-flex-row">抽奖规则</div>
@@ -150,6 +157,9 @@ export default {
           "https://lzwlkj.oss-cn-shenzhen.aliyuncs.com/jahy/vc-upload-1700748996560-18.png",
         ...this.lottery,
       };
+    },
+    expired() {
+      return this.lottery.end_time < utils.getLocaltime();
     },
     unitRotate() {
       return 360 / this.items.length;
