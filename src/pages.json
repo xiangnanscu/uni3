@@ -195,11 +195,7 @@
     },
     { "path": "views/LuckyWheel", "style": { "navigationBarTitleText": "" } },
     {
-      "path": "views/MiniQrcodeDispatcher",
-      "style": { "navigationBarTitleText": "" }
-    },
-    {
-      "path": "views/WxLoginByMiniQrcode",
+      "path": "views/LoginByMiniAcode",
       "style": { "navigationBarTitleText": "" }
     }
   ],
