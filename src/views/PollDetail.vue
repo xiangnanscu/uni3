@@ -175,9 +175,9 @@ export default {
         text: e.选项文本,
       }));
     },
-    totalVote() {
-      return this.pollLogs.map((e) => e.answers[itemIndex]).flat().length;
-    },
+    // totalVote() {
+    //   return this.pollLogs.map((e) => e.answers[itemIndex]).flat().length;
+    // },
   },
   methods: {
     count(itemIndex, key) {

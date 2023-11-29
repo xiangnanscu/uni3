@@ -8,11 +8,7 @@
           :disabled="checkedNumber >= max && !modelValue.includes(item.value)"
         />
         <div v-if="item.image">
-          <image
-            style="width: 75px; height: 75px"
-            :src="item.image"
-            mode="aspectFit"
-          />
+          <image style="width: 75px; height: 75px" :src="item.image" mode="aspectFit" />
         </div>
         <view>{{ item.name }}</view>
       </label>
@@ -26,7 +22,7 @@ const props = defineProps({
   min: { type: Number },
   max: { type: Number },
   choices: { type: Array },
-  modelValue: { type: Array }
+  modelValue: { type: Array },
 });
 const emit = defineEmits(["update:modelValue"]);
 const p = (e) => console.log(e);
@@ -40,7 +36,7 @@ export default {
   computed: {
     checkedNumber() {
       return this.modelValue.length;
-    }
+    },
   },
   methods: {
     checkboxChange: function (e) {
@@ -49,8 +45,8 @@ export default {
       for (const item of this.choices) {
         item.checked = values.includes(item.value);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -60,5 +56,6 @@ export default {
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
+  margin-bottom: 1em;
 }
 </style>
