@@ -766,7 +766,9 @@ Xodel.to_form_value = function (values, names) {
   for (const name of names || this.field_names) {
     const field = this.fields[name];
     const value = field.to_form_value(values[name], values);
-    res[name] = value;
+    if (value !== undefined) {
+      res[name] = value;
+    }
   }
   return res;
 };
@@ -774,7 +776,11 @@ Xodel.to_post_value = function (values, names) {
   const data = {};
   for (const name of names || this.field_names) {
     const field = this.fields[name];
-    data[name] = field.to_post_value(values[name], values);
+    const value = field.to_post_value(values[name], values);
+    if (value !== undefined) {
+      // 为了modelform的{...values, ...model.to_post_value(formdata)}不会把values覆盖掉
+      data[name] = value;
+    }
   }
   return data;
 };

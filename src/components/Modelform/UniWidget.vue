@@ -1,5 +1,4 @@
 <script setup>
-//TODO:需注意多表单共用model的情况.当前存在field.choices和field._realValue会修改field
 const emit = defineEmits(["update:modelValue", "update:error", "blur:validate"]);
 const props = defineProps({
   field: { type: Object, required: true },
@@ -14,7 +13,8 @@ const mediaType =
   field.media_type == "video" ? "video" : fieldType.includes("image") ? "image" : "all";
 const filePickerRef = ref(null);
 const autocompletePopupRef = ref(null);
-const searchText = ref("");
+const autocompleteSearchText = ref("");
+const autocompleteInputValue = ref("");
 // const uniFile = {
 //   cloudPath: "1684568038130_0.png",
 //   extname: "png",
@@ -139,24 +139,11 @@ const fuiChoices = computed(() =>
     checked: e.value === props.modelValue,
   })),
 );
-if (field._realValue) {
-  console.log(`多表单共用model的情况,重置field._realValue(${field._realValue})`);
-  field._realValue = null;
-}
 onBeforeMount(async () => {
   //onBeforeMount 比template后调用
   // console.log("widget onBeforeMount start");
   if (typeof field.choices == "function") {
     field.choices = await field.choices();
-  }
-  if (field.autocomplete) {
-    //creat_model_async创建field的时候，如果preload=false,field.choices就依然是函数
-    //从而prepare_autocomplete_choices不会发生作用，因此widget初始化需要再检查一遍
-    field.prepare_autocomplete_choices();
-    if (props.modelValue !== undefined) {
-      // field._realValue = props.modelValue // 应该直接这样?? 不应该,因为to_form_value把值转换了.
-      field._realValue = field.choices.find((e) => e.value === props.modelValue)?._value;
-    }
   }
   ready.value = true;
   // console.log("widget onBeforeMount end");
@@ -177,8 +164,7 @@ const showChoicesWhenSmall = (field) => {
   <template v-if="ready">
     <template v-if="field.autocomplete">
       <uni-easyinput
-        @update:modelValue="sendValue"
-        :modelValue="props.modelValue"
+        v-model="autocompleteInputValue"
         :disabled="field.disabled"
         :placeholder="placeholder"
         @focus="autocompletePopupRef.open()"
@@ -190,17 +176,17 @@ const showChoicesWhenSmall = (field) => {
             {{ field.label }}
           </div>
           <uni-easyinput
-            v-model="searchText"
+            v-model="autocompleteSearchText"
             :placeholder="field.hint || '输入关键字查找'"
             focus
           />
           <scroll-view :scroll-y="true" style="height: 31em">
             <uni-list>
               <uni-list-item
-                v-for="(c, i) in searchText
+                v-for="(c, i) in autocompleteSearchText
                   ? fieldChoices.filter((e) => {
                       if (typeof e.text == 'string') {
-                        return e.text.includes(searchText);
+                        return e.text.includes(autocompleteSearchText);
                       } else {
                         return true;
                       }
@@ -209,14 +195,7 @@ const showChoicesWhenSmall = (field) => {
                 clickable
                 @click="
                   sendValue(c.value);
-                  if (Array.isArray(field.choices)) {
-                    const matched = field.choices.find((e) => e.value === c.value);
-                    if (matched) {
-                      field._realValue = matched._value;
-                    } else {
-                      field._realValue = null;
-                    }
-                  }
+                  autocompleteInputValue = c.label;
                   autocompletePopupRef.close();
                 "
                 :key="i"
@@ -358,7 +337,7 @@ const showChoicesWhenSmall = (field) => {
         @fail="filePickerFail"
         @delete="filePickerDelete"
       />
-      <div v-if="field.hint" class="field-hint" :style="field.attrs.hint_styles">
+      <div v-if="field.hint" class="field-hint" :style="field.attrs.hint_style">
         {{ field.hint }}
       </div>
     </template>

@@ -1,5 +1,6 @@
 <script setup>
-log("fui form setup");
+import { repr } from "@/lib/utils.mjs";
+
 const emit = defineEmits(["sendData", "successPost"]);
 const props = defineProps({
   model: { type: [Object, Function], required: true },
@@ -8,16 +9,6 @@ const props = defineProps({
   syncValues: { type: Boolean, default: false },
   valuesHook: { type: Function },
   names: { type: Array },
-
-  marginBottom: { type: String },
-  bottomBorder: { type: Boolean, default: undefined },
-  padding: { type: Array, default: () => ["30rpx", "0"] }, //	表单外层padding值（上，右，下，左），同css顺序,如：['30rpx','32rpx']
-  disabled: { type: Boolean, default: false }, //是否禁用该表单内的所有组件,透明遮罩层
-  errorPosition: { type: [String, Number], default: 1 }, //FormItem 组件错误提示定位方式方式：1-absolute 2-relative
-  errorAlign: { type: String, default: "center" }, //FormItem 组件错误提示显示对齐方式，可选值：left、center、right
-  labelWidth: { type: [String, Number] },
-  labelSize: { type: [String, Number], default: 32 }, // 32是系统默认
-  labelAlign: { type: String, default: "left" }, //left, right
 
   actionUrl: { type: String, required: false },
   successUrl: { type: [Object, String] },
@@ -29,18 +20,37 @@ const props = defineProps({
   submitButtonOpenType: { type: String, default: "" },
   errShowType: { type: String, default: "undertext" },
   showModal: { type: Boolean, default: false },
-  // labelPosition: { type: String, default: "left" }, // top
-  // errorFontSize: { type: [String, Number], default: 28 },
-  // showFormError: { type: Boolean, default: false }, // 否显示校验错误信息，设置false时，可结合formItem组件显示校验信息
-  // show: { type: Boolean, default: false }, // 否显示校验错误信息，设置false时，可结合formItem组件显示校验信息
   trigger: { type: String, default: "blur" },
   disableSubmit: { type: Function, default: () => false },
+
+  marginBottom: { type: String },
+  bottomBorder: { type: Boolean, default: undefined },
+  padding: { type: Array, default: () => ["30rpx", "0"] }, //	表单外层padding值（上，右，下，左），同css顺序,如：['30rpx','32rpx']
+  disabled: { type: Boolean, default: false }, //是否禁用该表单内的所有组件,透明遮罩层
+  errorPosition: { type: [String, Number], default: 1 }, //FormItem 组件错误提示定位方式方式：1-absolute 2-relative
+  errorAlign: { type: String, default: "center" }, //FormItem 组件错误提示显示对齐方式，可选值：left、center、right
+  labelWidth: { type: [String, Number] },
+  labelSize: { type: [String, Number], default: 32 }, // 32是系统默认
+  labelAlign: { type: String, default: "left" }, //left, right
 });
 const deepcopy = (o) => JSON.parse(JSON.stringify(o));
 const values = props.syncValues
   ? reactive(props.values)
   : reactive(deepcopy(props.values));
-Object.assign(values, props.model.to_form_value(values, props.model.names));
+const formNames = computed(
+  () => props.names || props.model.admin?.form_names || props.model.names,
+);
+const fieldsArray = computed(() =>
+  formNames.value.map((name) => props.model.fields[name]).filter((e) => e),
+);
+const rules = computed(() => {
+  const res = [];
+  for (const field of fieldsArray.value) {
+    res.push(getFieldRule(field));
+  }
+  return res;
+});
+Object.assign(values, props.model.to_form_value(values, formNames.value));
 const errors = reactive(props.errors);
 const formRef = ref();
 const submiting = ref(false);
@@ -104,19 +114,6 @@ const getFieldRule = (field, index) => {
   }
   return rule;
 };
-const formNames = computed(
-  () => props.names || props.model.admin?.form_names || props.model.names,
-);
-const fieldsArray = computed(() =>
-  formNames.value.map((name) => props.model.fields[name]).filter((e) => e),
-);
-const rules = computed(() => {
-  const res = [];
-  for (const field of fieldsArray.value) {
-    res.push(getFieldRule(field));
-  }
-  return res;
-});
 const smartLabelWidth = computed(() => {
   if (props.labelWidth) {
     return props.labelWidth;
@@ -160,7 +157,7 @@ const submit = async () => {
     }
     return;
   }
-  const formdata = props.model.to_post_value(values, props.model.names);
+  const formdata = props.model.to_post_value(values, formNames.value);
   emit("sendData", formdata);
   if (props.valuesHook) {
     Object.assign(formdata, props.valuesHook({ data: formdata, model: props.model }));
@@ -175,26 +172,18 @@ const submit = async () => {
       ...formdata,
     };
     const respData = await usePost(props.actionUrl, postData);
-    const successStuff = async () => {
-      emit("successPost", respData);
-      if (props.successUrl) {
-        await utils.gotoPage({
-          url: props.successUrl,
-          redirect: props.successUseRedirect,
-        });
-      }
-      if (props.successMessage) {
-        await uni.showToast({ title: props.successMessage });
-      }
-    };
-    await successStuff();
+    emit("successPost", respData);
+    if (props.successUrl) {
+      await utils.gotoPage({
+        url: props.successUrl,
+        redirect: props.successUseRedirect,
+      });
+    }
+    if (props.successMessage) {
+      await uni.showToast({ title: props.successMessage });
+    }
   } catch (error) {
     console.error("uni-form error:", utils.repr(error));
-    // uni.showModal({
-    //   title: "错误",
-    //   content: error.errMsg || error.message,
-    //   showCancel: false,
-    // });
     if (error.type == "uni_error") {
       const formerror = error.data;
       const dataType = formerror.type;
@@ -228,11 +217,16 @@ const submit = async () => {
       } else {
         uni.showModal({
           title: "错误",
-          content: error.errMsg || error.message,
+          content: JSON.stringify(formerror),
           showCancel: false,
         });
       }
     } else {
+      uni.showModal({
+        title: "错误",
+        content: error.errMsg || error.message,
+        showCancel: false,
+      });
     }
   } finally {
     submiting.value = false;

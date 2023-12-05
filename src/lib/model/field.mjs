@@ -166,20 +166,8 @@ class basefield {
     if (this.autocomplete) {
       this.max_choices_count ||= Number(process.env.MAX_CHOICES_COUNT) || 100;
       this.max_display_count ||= Number(process.env.MAX_DISPLAY_COUNT) || 50;
-      this.prepare_autocomplete_choices();
     }
     return this;
-  }
-  prepare_autocomplete_choices() {
-    // console.log("prepare_autocomplete_choices", this.name, JSON.stringify(this.choices));
-    if (Array.isArray(this.choices)) {
-      for (const [_, c] of this.choices.entries()) {
-        if (c._value === undefined) {
-          c._value = c.value;
-          c.value = c.label;
-        }
-      }
-    }
   }
   get_option_names() {
     return [...base_option_names, ...this.constructor.option_names];
@@ -707,34 +695,6 @@ class foreignkey extends basefield {
       this.db_type = fk.db_type || fk.type;
     }
   }
-  get_validators(validators) {
-    const foreignkey_validator = (v) => {
-      if (this._realValue === null) {
-        throw new Error(`无效的值，请在下拉列表中选择`);
-      }
-      return v;
-    };
-    validators.unshift(foreignkey_validator);
-    // const foreignkey_autocomplete_validator = (v) => {
-    //   console.log("foreignkey_autocomplete_validator", v);
-    //   if (this.autocomplete && Array.isArray(this.choices)) {
-    //     // 前端,需要进行双检查
-    //     const matchedChoice = this.choices.find((e) => e.label === v);
-    //     console.log("this.choices", this.choices, matchedChoice);
-    //     if (matchedChoice) {
-    //       return matchedChoice.value;
-    //     }
-    //     if (this.choices.some((e) => e.value === v)) {
-    //       return v;
-    //     }
-    //     throw new Error("输入错误，请输入关键字然后在下拉列表中选取");
-    //   } else {
-    //     return v;
-    //   }
-    // };
-    // validators.unshift(foreignkey_autocomplete_validator);
-    return super.get_validators(validators);
-  }
   load(value) {
     //TODO: 用Proxy改写以便和后端一致
     const fk_name = this.reference_column;
@@ -763,11 +723,7 @@ class foreignkey extends basefield {
     }
   }
   to_post_value(value, values) {
-    if (this.autocomplete) {
-      return this._realValue;
-    } else {
-      return value;
-    }
+    return value;
   }
   to_form_value(value, values) {
     if (!this.autocomplete) {

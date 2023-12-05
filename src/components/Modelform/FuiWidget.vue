@@ -1,5 +1,4 @@
 <script setup>
-//TODO:需注意多表单共用model的情况.当前存在field.choices和field._realValue会修改field
 const emit = defineEmits([
   "update:modelValue",
   "update:error",
@@ -391,7 +390,11 @@ const chooseLocation = async () => {
         @cancel="showSelect = false"
       ></fui-picker>
     </template>
-    <div v-if="!props.error && props.field.hint" class="field-hint">
+    <div
+      v-if="!props.error && props.field.hint"
+      class="field-hint"
+      :style="props.field.attrs.hint_style"
+    >
       {{ props.field.hint }}
     </div>
   </template>
@@ -448,7 +451,11 @@ const chooseLocation = async () => {
       @preview="fuiUploadPreview"
     >
     </fui-upload>
-    <div v-if="!props.error && props.field.hint" class="field-hint">
+    <div
+      v-if="!props.error && props.field.hint"
+      class="field-hint"
+      :style="props.field.attrs.hint_style"
+    >
       {{ props.field.hint }}
     </div>
   </template>

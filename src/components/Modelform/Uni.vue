@@ -8,6 +8,7 @@ const props = defineProps({
   errors: { type: Object, default: () => ({}) },
   syncValues: { type: Boolean, default: false },
   valuesHook: { type: Function },
+  names: { type: Array },
 
   actionUrl: { type: String, required: false },
   successUrl: { type: [Object, String] },
@@ -19,29 +20,40 @@ const props = defineProps({
   submitButtonOpenType: { type: String, default: "" },
   errShowType: { type: String, default: "undertext" },
   showModal: { type: Boolean, default: false },
+  trigger: { type: String, default: "blur" },
+  disableSubmit: { type: Function, default: () => false },
+
   labelPosition: { type: String, default: "left" }, // top
   labelWidth: { type: [String, Number] },
   labelAlign: { type: String, default: "right" }, //center, right
-  trigger: { type: String, default: "blur" },
-  disableSubmit: { type: Function, default: () => false },
-});
-const smartLabelWidth = computed(() => {
-  if (props.labelWidth) {
-    return props.labelWidth;
-  } else {
-    const maxLabelLength = Object.values(props.model.fields)
-      .map((f) => f.label.length)
-      .reduce((max, current) => Math.max(max, current));
-    return `${maxLabelLength + 2}em`;
-  }
 });
 const deepcopy = (o) => JSON.parse(JSON.stringify(o));
 const values = props.syncValues
   ? reactive(props.values)
   : reactive(deepcopy(props.values));
-Object.assign(values, props.model.to_form_value(values, props.model.names));
+const formNames = computed(
+  () => props.names || props.model.admin?.form_names || props.model.names,
+);
+const fieldsArray = computed(() =>
+  formNames.value.map((name) => props.model.fields[name]).filter((e) => e),
+);
+const rules = computed(() => {
+  const res = {};
+  for (const field of fieldsArray.value) {
+    formsItemRefs[field.name] = ref(null);
+    res[field.name] = {
+      rules: getFieldRules(field),
+    };
+  }
+  return res;
+});
+Object.assign(values, props.model.to_form_value(values, formNames.value));
 const errors = reactive(props.errors);
 const formRef = ref();
+const submiting = ref(false);
+const updateValues = (data) => {
+  Object.assign(values, data);
+};
 const getFieldRules = (field, index) => [
   { required: field.required, errorMessage: `必须填写${field.label}` },
   {
@@ -52,44 +64,43 @@ const getFieldRules = (field, index) => [
     },
   },
 ];
-const formNames = props.formNames || props.model.admin?.form_names || props.model.names;
-const fieldsArray = computed(() => formNames.map((name) => props.model.fields[name]));
+const smartLabelWidth = computed(() => {
+  if (props.labelWidth) {
+    return props.labelWidth;
+  } else {
+    const maxLabelLength = fieldsArray.value
+      .map((f) => f.label.length)
+      .reduce((max, current) => Math.max(max, current));
+    return `${maxLabelLength + 2}em`;
+  }
+});
 const formsItemRefs = {};
-const rules = {};
 const resetErrors = () => {
   for (const field of fieldsArray.value) {
     errors[field.name] = field.type == "array" ? [] : "";
   }
 };
 resetErrors();
-for (const field of fieldsArray.value) {
-  formsItemRefs[field.name] = ref(null);
-  rules[field.name] = {
-    rules: getFieldRules(field),
-  };
-}
-
+//TODO: 需要watch:rules以应对model变化
 // #ifdef MP-WEIXIN
 onReady(() => {
   console.log("onReady modelform uni");
-  formRef.value.setRules(rules);
+  formRef.value.setRules(rules.value);
 });
 // #endif
 const vm = getCurrentInstance();
 // #ifdef H5
 onMounted(() => {
   console.log("onMounted modelform uni");
-  formRef.value.setRules(rules);
+  formRef.value.setRules(rules.value);
 });
 // #endif
-
-const submiting = ref(false);
 const shouldDisabled = computed(() => props.disableSubmit(values));
 const submit = async () => {
   resetErrors();
   formRef.value.clearValidate();
   const cleanedData = await formRef.value.validate();
-  const formdata = props.model.to_post_value(cleanedData, props.model.names);
+  const formdata = props.model.to_post_value(cleanedData, formNames.value);
   emit("sendData", formdata);
   if (props.valuesHook) {
     Object.assign(formdata, props.valuesHook({ data: formdata, model: props.model }));
@@ -99,46 +110,46 @@ const submit = async () => {
   }
   submiting.value = true;
   try {
-    const response = await Http.post(props.actionUrl, {
+    const postData = {
       ...values,
       ...formdata,
-    });
-    const respData =
-      response.data.type == "uni_error" ? response.data.data : response.data;
-    const successStuff = async () => {
-      emit("successPost", respData);
-      if (props.successUrl) {
-        await utils.gotoPage({
-          url: props.successUrl,
-          redirect: props.successUseRedirect,
-        });
-      }
-      if (props.successMessage) {
-        await uni.showToast({ title: props.successMessage });
-      }
     };
-    if (typeof respData == "object") {
-      const dataType = respData.type;
+    const respData = await usePost(props.actionUrl, postData);
+    emit("successPost", respData);
+    if (props.successUrl) {
+      await utils.gotoPage({
+        url: props.successUrl,
+        redirect: props.successUseRedirect,
+      });
+    }
+    if (props.successMessage) {
+      await uni.showToast({ title: props.successMessage });
+    }
+  } catch (error) {
+    console.error("uni-form error:", utils.repr(error));
+    if (error.type == "uni_error") {
+      const formerror = error.data;
+      const dataType = formerror.type;
       if (dataType == "field_error") {
-        errors[respData.name] = respData.message;
+        errors[formerror.name] = formerror.message;
         if (props.showModal && props.errShowType !== "modal") {
           uni.showModal({
-            title: `“${respData.label}”:${respData.message}`,
+            title: `“${formerror.label}”:${formerror.message}`,
             showCancel: false,
           });
         }
       } else if (dataType == "field_error_batch") {
-        errors[respData.name] = respData.message;
+        errors[formerror.name] = formerror.message;
         if (props.showModal && props.errShowType !== "modal") {
           uni.showModal({
-            title: `“${respData.label}”第${respData.index}行错误`,
-            content: respData.message,
+            title: `“${formerror.label}”第${formerror.index}行错误`,
+            content: formerror.message,
             showCancel: false,
           });
         }
       } else if (dataType == "model_errors") {
-        Object.assign(errors, respData.errors);
-        const messages = Object.entries(respData.errors)
+        Object.assign(errors, formerror.errors);
+        const messages = Object.entries(formerror.errors)
           .map(([name, message]) => `${props.model.name_to_label[name]}: ${message}`)
           .join("\n");
         uni.showModal({
@@ -147,24 +158,19 @@ const submit = async () => {
           showCancel: false,
         });
       } else {
-        await successStuff();
+        uni.showModal({
+          title: "错误",
+          content: JSON.stringify(formerror),
+          showCancel: false,
+        });
       }
-    } else if (response.data.type == "uni_error") {
+    } else {
       uni.showModal({
-        title: "发生错误",
-        content: respData,
+        title: "错误",
+        content: error.errMsg || error.message,
         showCancel: false,
       });
-    } else {
-      await successStuff();
     }
-  } catch (error) {
-    console.error("uni-form error:", error);
-    uni.showModal({
-      title: "错误",
-      content: error.errMsg || error.message,
-      showCancel: false,
-    });
   } finally {
     submiting.value = false;
   }
