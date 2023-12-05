@@ -40,24 +40,10 @@ const values = props.syncValues
 const formNames = computed(
   () => props.names || props.model.admin?.form_names || props.model.names,
 );
+Object.assign(values, props.model.to_form_value(values, formNames.value));
 const fieldsArray = computed(() =>
   formNames.value.map((name) => props.model.fields[name]).filter((e) => e),
 );
-const rules = computed(() => {
-  const res = [];
-  for (const field of fieldsArray.value) {
-    res.push(getFieldRule(field));
-  }
-  return res;
-});
-Object.assign(values, props.model.to_form_value(values, formNames.value));
-const errors = reactive(props.errors);
-const formRef = ref();
-const submiting = ref(false);
-const showArrow = ref();
-const updateValues = (data) => {
-  Object.assign(values, data);
-};
 const getFieldRule = (field, index) => {
   const rule = {
     name: field.name,
@@ -114,6 +100,19 @@ const getFieldRule = (field, index) => {
   }
   return rule;
 };
+const rules = computed(() => {
+  const res = [];
+  for (const field of fieldsArray.value) {
+    res.push(getFieldRule(field));
+  }
+  return res;
+});
+const errors = reactive(props.errors);
+const formRef = ref();
+const submiting = ref(false);
+const updateValues = (data) => {
+  Object.assign(values, data);
+};
 const smartLabelWidth = computed(() => {
   if (props.labelWidth) {
     return props.labelWidth;
@@ -124,11 +123,13 @@ const smartLabelWidth = computed(() => {
     return `${(maxLabelLength + 2) * props.labelSize}`;
   }
 });
+const showArrow = ref();
 const resetErrors = () => {
   for (const field of fieldsArray.value) {
     errors[field.name] = field.type == "array" ? [] : "";
   }
 };
+resetErrors();
 const shouldDisabled = computed(() => props.disableSubmit(values));
 const validateField = async (name) => {
   const res = await formRef.value.validator(

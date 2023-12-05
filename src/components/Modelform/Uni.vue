@@ -34,26 +34,10 @@ const values = props.syncValues
 const formNames = computed(
   () => props.names || props.model.admin?.form_names || props.model.names,
 );
+Object.assign(values, props.model.to_form_value(values, formNames.value));
 const fieldsArray = computed(() =>
   formNames.value.map((name) => props.model.fields[name]).filter((e) => e),
 );
-const rules = computed(() => {
-  const res = {};
-  for (const field of fieldsArray.value) {
-    formsItemRefs[field.name] = ref(null);
-    res[field.name] = {
-      rules: getFieldRules(field),
-    };
-  }
-  return res;
-});
-Object.assign(values, props.model.to_form_value(values, formNames.value));
-const errors = reactive(props.errors);
-const formRef = ref();
-const submiting = ref(false);
-const updateValues = (data) => {
-  Object.assign(values, data);
-};
 const getFieldRules = (field, index) => [
   { required: field.required, errorMessage: `必须填写${field.label}` },
   {
@@ -64,6 +48,23 @@ const getFieldRules = (field, index) => [
     },
   },
 ];
+const rules = computed(() => {
+  const res = {};
+  for (const field of fieldsArray.value) {
+    formsItemRefs[field.name] = ref(null);
+    res[field.name] = {
+      rules: getFieldRules(field),
+    };
+  }
+  return res;
+});
+const errors = reactive(props.errors);
+const formRef = ref();
+const submiting = ref(false);
+const updateValues = (data) => {
+  Object.assign(values, data);
+};
+
 const smartLabelWidth = computed(() => {
   if (props.labelWidth) {
     return props.labelWidth;
@@ -81,6 +82,7 @@ const resetErrors = () => {
   }
 };
 resetErrors();
+const shouldDisabled = computed(() => props.disableSubmit(values));
 //TODO: 需要watch:rules以应对model变化
 // #ifdef MP-WEIXIN
 onReady(() => {
@@ -88,14 +90,12 @@ onReady(() => {
   formRef.value.setRules(rules.value);
 });
 // #endif
-const vm = getCurrentInstance();
 // #ifdef H5
 onMounted(() => {
   console.log("onMounted modelform uni");
   formRef.value.setRules(rules.value);
 });
 // #endif
-const shouldDisabled = computed(() => props.disableSubmit(values));
 const submit = async () => {
   resetErrors();
   formRef.value.clearValidate();
@@ -204,6 +204,7 @@ const submit = async () => {
                   v-model="values[field.name][index]"
                   v-model:error="errors[field.name][index]"
                   @blur:validate="formsItemRefs[field.name + index].onFieldChange($event)"
+                  @update:values="updateValues"
                   :field="field.field"
                 />
               </div>
