@@ -7,6 +7,7 @@ const props = defineProps({
   errors: { type: Object, default: () => ({}) },
   syncValues: { type: Boolean, default: false },
   valuesHook: { type: Function },
+  names: { type: Array },
 
   marginBottom: { type: String },
   bottomBorder: { type: Boolean, default: undefined },
@@ -101,10 +102,10 @@ const getFieldRule = (field, index) => {
   return rule;
 };
 const formNames = computed(
-  () => props.formNames || props.model.admin?.form_names || props.model.names,
+  () => props.names || props.model.admin?.form_names || props.model.names,
 );
 const fieldsArray = computed(() =>
-  formNames.value.map((name) => props.model.fields[name]),
+  formNames.value.map((name) => props.model.fields[name]).filter((e) => e),
 );
 const rules = computed(() => {
   const res = [];
@@ -253,20 +254,24 @@ const getBottomBorder = (field) => {
     return props.bottomBorder;
   }
 };
-// watch(
-//   () => props.model,
-//   (model) => {
-//     log("model change");
-//   },
-// );
-onMounted(() => {
-  log("fui modelform mounted");
+const ready = ref();
+onMounted(async () => {
+  for (const field of fieldsArray.value) {
+    if (typeof field.choices == "function") {
+      field.choices = await field.choices();
+    }
+    // #ifdef H5
+    if (field.attrs?.wx_phone) field.attrs.wx_phone = false;
+    if (field.attrs?.wx_avatar) field.attrs.wx_avatar = false;
+    // #endif
+  }
   resetErrors();
-  // formRef.value.switchRealTimeValidator(true, rules.value);
+  ready.value = true;
 });
 </script>
 <template>
   <fui-form
+    v-if="ready"
     ref="formRef"
     :model="values"
     :show="false"

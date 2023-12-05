@@ -1,25 +1,28 @@
 <template>
   <page-layout>
     <f-alert v-if="query.message"> {{ query.message }} </f-alert>
-    <uni-card title="温馨提示">
-      <p>此处填写小程序用户的实名信息，请确保正确，提交之后将不可修改。</p>
-      <p>如果实名认证信息有误，请联系小程序管理员核实修改。</p>
-    </uni-card>
-    <modelform-fui
-      :model="profileModel"
-      :values="userData"
-      :sync-values="true"
-      :success-url="redirectUrl"
-      :success-use-redirect="true"
-      @success-post="successPost"
-      action-url="/update_profile?update_session=1"
-    ></modelform-fui>
+    <div v-if="showForm">
+      <uni-card title="温馨提示">
+        <p>此处填写小程序用户的实名信息，请确保正确，提交之后将不可修改。</p>
+        <p>如果实名认证信息有误，请联系小程序管理员核实修改。</p>
+      </uni-card>
+      <modelform-fui
+        :model="profileModel"
+        :values="userData"
+        :sync-values="true"
+        :success-url="redirectUrl"
+        :success-use-redirect="true"
+        @success-post="successPost"
+        action-url="/update_profile?update_session=1"
+      ></modelform-fui>
+    </div>
   </page-layout>
 </template>
 <script setup>
 const query = useQuery();
 const redirectUrl = useRedirect();
 const { session, login } = useSession();
+const showForm = ref();
 let wx_phone = true;
 // #ifdef H5
 wx_phone = false;
@@ -58,5 +61,6 @@ onLoad(async () => {
   if (data.username) {
     profileModel.fields.username.disabled = true;
   }
+  showForm.value = true;
 });
 </script>

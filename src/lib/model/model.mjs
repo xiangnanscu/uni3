@@ -800,7 +800,7 @@ Xodel.create_model_async = async function (options) {
         field.choices = fetch_choices;
       }
     }
-    if (typeof field.reference == "string") {
+    if (field.type == "foreignkey" && typeof field.reference == "string") {
       if (field.reference == field.table_name) {
         field.reference = "self";
       } else {
