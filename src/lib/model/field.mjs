@@ -119,6 +119,7 @@ const base_option_names = [
   "preload",
   "lazy",
   "tag",
+  "group",
   "attrs",
 ];
 class basefield {

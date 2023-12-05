@@ -2,13 +2,13 @@
   <page-layout>
     <x-title>学生信息录入</x-title>
     <div v-if="ready">
-      <modelform-uni
+      <modelform-fui
         :model="FormModel"
         :values="FormModel.get_defaults()"
         success-url="/views/SchoolStudentRegeditSuccess"
         :success-use-redirect="true"
         :action-url="`/student/register`"
-      ></modelform-uni>
+      ></modelform-fui>
     </div>
     <x-alert v-else title="没有记录"> </x-alert>
   </page-layout>
@@ -31,7 +31,7 @@ onLoad(async () => {
   )[0];
   console.log(classDirectorRole);
   const roles = await helpers.getPassedRoles();
-  const modelJson = await useGet(`/student/json`);
+  const modelJson = await useGet(`/student/regedit_json`);
   if (roles.sys_admin) {
   } else if (roles.principle) {
     // TODO: 多学校的时候根据校长身份只显示一个学校

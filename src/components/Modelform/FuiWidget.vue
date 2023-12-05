@@ -1,6 +1,11 @@
 <script setup>
 //TODO:需注意多表单共用model的情况.当前存在field.choices和field._realValue会修改field
-const emit = defineEmits(["update:modelValue", "update:error", "blur:validate"]);
+const emit = defineEmits([
+  "update:modelValue",
+  "update:error",
+  "blur:validate",
+  "update:values",
+]);
 const props = defineProps({
   field: { type: Object, required: true },
   modelValue: { required: true },
@@ -60,10 +65,17 @@ const onSelectConfirm = ({ index, options }) => {
   sendError("");
   showSelect.value = false;
 };
-
+const pickerResultText = ref();
 const onPickerConfirm = (e) => {
-  // log("onPickerConfirm", e);
-  sendValue(e.value);
+  // log(e);
+  pickerResultText.value = e.result;
+  if (props.field.group) {
+    for (const [i, opts] of props.field.group.entries()) {
+      emit("update:values", { [opts.form_key || opts.value_key]: e.value[i] });
+    }
+  } else {
+    sendValue(e.value);
+  }
   sendError("");
   showSelect.value = false;
 };
@@ -72,15 +84,42 @@ if (showArrow) {
     showSelect.value = true;
   };
 }
-const fieldChoices = computed(() =>
-  (fieldType.value !== "array" ? props.field.choices : props.field.field.choices)?.map(
-    (e) => ({
+const fieldChoices = computed(() => {
+  if (!Array.isArray(props.field.choices)) {
+    return null;
+  }
+  const group = props.field.group;
+  if (group) {
+    const choices = [];
+    for (const c of props.field.choices) {
+      let currentLevel = choices;
+      for (const [i, opts] of group.entries()) {
+        let l = currentLevel.find((e) => e.value == c[opts.value_key]);
+        if (!l) {
+          l = { value: c[opts.value_key], text: c[opts.label_key] };
+          if (i < group.length - 1) {
+            l.children = [];
+          }
+          currentLevel.push(l);
+        }
+        currentLevel = l.children;
+      }
+    }
+    return choices;
+  } else if (fieldType.value === "array") {
+    return props.field.field.choices.map((e) => ({
       ...e, // 保留其他属性
       text: e.label,
       value: e.value,
-    }),
-  ),
-);
+    }));
+  } else {
+    return props.field.choices.map((e) => ({
+      ...e, // 保留其他属性
+      text: e.label,
+      value: e.value,
+    }));
+  }
+});
 const fuiChoices = computed(() =>
   fieldChoices.value.map((e) => ({
     ...e,
@@ -334,12 +373,19 @@ const chooseLocation = async () => {
         :bottomBorder="false"
         borderColor="transparent"
       >
-        {{ fieldChoices.find((c) => c.value === props.modelValue)?.text }}
+        <template v-if="props.field.group">
+          {{ pickerResultText }}
+        </template>
+        <template v-else>
+          {{ fieldChoices.find((c) => c.value === props.modelValue)?.text }}
+        </template>
+
         <view class="fui-list-input" :style="{ 'background-color': borderColor }"> </view>
       </fui-list-cell>
       <fui-picker
         linkage
-        :options="fuiChoices"
+        :options="fieldChoices"
+        :layer="props.field.group?.length || 1"
         :show="showSelect"
         @change="onPickerConfirm"
         @cancel="showSelect = false"

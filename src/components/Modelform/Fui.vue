@@ -45,6 +45,9 @@ const errors = reactive(props.errors);
 const formRef = ref();
 const submiting = ref(false);
 const showArrow = ref();
+const updateValues = (data) => {
+  Object.assign(values, data);
+};
 const getFieldRule = (field, index) => {
   const rule = {
     name: field.name,
@@ -167,12 +170,11 @@ const submit = async () => {
   }
   submiting.value = true;
   try {
-    const response = await Http.post(props.actionUrl, {
-      ...values, // TODO:这里先暂时不包含,观察应用情况
+    const postData = {
+      ...values,
       ...formdata,
-    });
-    const respData =
-      response.data.type == "uni_error" ? response.data.data : response.data;
+    };
+    const respData = await usePost(props.actionUrl, postData);
     const successStuff = async () => {
       emit("successPost", respData);
       if (props.successUrl) {
@@ -185,28 +187,37 @@ const submit = async () => {
         await uni.showToast({ title: props.successMessage });
       }
     };
-    if (typeof respData == "object") {
-      const dataType = respData.type;
+    await successStuff();
+  } catch (error) {
+    console.error("uni-form error:", utils.repr(error));
+    // uni.showModal({
+    //   title: "错误",
+    //   content: error.errMsg || error.message,
+    //   showCancel: false,
+    // });
+    if (error.type == "uni_error") {
+      const formerror = error.data;
+      const dataType = formerror.type;
       if (dataType == "field_error") {
-        errors[respData.name] = respData.message;
+        errors[formerror.name] = formerror.message;
         if (props.showModal && props.errShowType !== "modal") {
           uni.showModal({
-            title: `“${respData.label}”:${respData.message}`,
+            title: `“${formerror.label}”:${formerror.message}`,
             showCancel: false,
           });
         }
       } else if (dataType == "field_error_batch") {
-        errors[respData.name] = respData.message;
+        errors[formerror.name] = formerror.message;
         if (props.showModal && props.errShowType !== "modal") {
           uni.showModal({
-            title: `“${respData.label}”第${respData.index}行错误`,
-            content: respData.message,
+            title: `“${formerror.label}”第${formerror.index}行错误`,
+            content: formerror.message,
             showCancel: false,
           });
         }
       } else if (dataType == "model_errors") {
-        Object.assign(errors, respData.errors);
-        const messages = Object.entries(respData.errors)
+        Object.assign(errors, formerror.errors);
+        const messages = Object.entries(formerror.errors)
           .map(([name, message]) => `${props.model.name_to_label[name]}: ${message}`)
           .join("\n");
         uni.showModal({
@@ -215,24 +226,14 @@ const submit = async () => {
           showCancel: false,
         });
       } else {
-        await successStuff();
+        uni.showModal({
+          title: "错误",
+          content: error.errMsg || error.message,
+          showCancel: false,
+        });
       }
-    } else if (response.data.type == "uni_error") {
-      uni.showModal({
-        title: "发生错误",
-        content: respData,
-        showCancel: false,
-      });
     } else {
-      await successStuff();
     }
-  } catch (error) {
-    console.error("uni-form error:", error);
-    uni.showModal({
-      title: "错误",
-      content: error.errMsg || error.message,
-      showCancel: false,
-    });
   } finally {
     submiting.value = false;
   }
@@ -300,6 +301,7 @@ onMounted(async () => {
           :modelValue="values[field.name]"
           @update:modelValue="values[field.name] = $event"
           @blur:validate="validateField"
+          @update:values="updateValues"
           v-model:error="errors[field.name]"
           :field="field"
         />

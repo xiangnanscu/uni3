@@ -5,12 +5,14 @@ class WxResquestError extends Error {
     super(data);
     this.type = type;
     this.status = status;
+    this.data = data;
   }
 }
 
 const throwOnUniError = (response) => {
   const data = response.data;
   if (typeof data == "object" && data.type == "uni_error") {
+    log("throwOnUniError", data);
     if (data.status === 403) {
       console.log("权限不足，需要登陆");
       throw new NeedLoginError();
