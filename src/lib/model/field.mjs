@@ -726,18 +726,19 @@ class foreignkey extends basefield {
     return value;
   }
   to_form_value(value, values) {
-    if (!this.autocomplete) {
-      return typeof value == "object" ? value[this.reference_column] : value;
-    } else {
-      if (typeof value == "object") {
-        const testValue = value[this.reference_label_column];
-        return testValue == null ? value[this.reference_column] : testValue;
-      } else {
-        // 后端按raw():get()输出
-        const readable = values[`${this.name}__${this.reference_label_column}`];
-        return readable == null ? value : readable;
-      }
-    }
+    return typeof value == "object" ? value[this.reference_column] : value;
+    // if (!this.autocomplete) {
+    //   return typeof value == "object" ? value[this.reference_column] : value;
+    // } else {
+    //   if (typeof value == "object") {
+    //     const testValue = value[this.reference_label_column];
+    //     return testValue == null ? value[this.reference_column] : testValue;
+    //   } else {
+    //     // 后端按raw():get()输出
+    //     const readable = values[`${this.name}__${this.reference_label_column}`];
+    //     return readable == null ? value : readable;
+    //   }
+    // }
   }
 }
 
@@ -1059,7 +1060,11 @@ class alioss extends string {
       return url || "";
     }
     if (typeof url == "string") {
-      return url ? [map_to_antd_file_value(url)] : [];
+      if (this.attrs.is_fui) {
+        return url ? [url] : [];
+      } else {
+        return url ? [map_to_antd_file_value(url)] : [];
+      }
     } else if (Array.isArray(url)) {
       return [...url];
     } else {
@@ -1109,7 +1114,7 @@ class alioss_list extends basearray {
   }
   to_form_value(urls) {
     if (Array.isArray(urls)) {
-      return urls.map(map_to_antd_file_value);
+      return this.attrs.is_fui ? urls.slice() : urls.map(map_to_antd_file_value);
     } else {
       return [];
     }

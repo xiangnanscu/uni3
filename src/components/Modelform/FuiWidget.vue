@@ -64,10 +64,26 @@ const onSelectConfirm = ({ index, options }) => {
   sendError("");
   showSelect.value = false;
 };
-const pickerResultText = ref();
+const pickerCurrentChoice = computed(() => {
+  const lastGroup = props.field.group[props.field.group.length - 1];
+  const key = lastGroup.value_key;
+  return props.field.choices.find((c) => c[key] === props.modelValue);
+});
+const pickerResultText = computed(() => {
+  const c = pickerCurrentChoice.value;
+  return c ? props.field.group.map((opts) => `${c[opts.label_key]}`).join("") : "";
+});
+const pickerInitValue = computed(() => {
+  if (props.modelValue == null) {
+    return [];
+  } else {
+    return props.field.group.map(
+      (opts) => `${pickerCurrentChoice.value?.[opts.label_key]}`,
+    );
+  }
+});
 const onPickerConfirm = (e) => {
   // log(e);
-  pickerResultText.value = e.result;
   if (props.field.group) {
     for (const [i, opts] of props.field.group.entries()) {
       emit("update:values", { [opts.form_key || opts.value_key]: e.value[i] });
@@ -268,6 +284,11 @@ const chooseLocation = async () => {
     addressName.value = res.name;
   }
 };
+const fileList = computed(() =>
+  Array.isArray(props.modelValue)
+    ? props.modelValue.map((e) => (typeof e == "string" ? e : e.url))
+    : [],
+);
 </script>
 <template>
   <template v-if="fieldChoices">
@@ -383,6 +404,7 @@ const chooseLocation = async () => {
       </fui-list-cell>
       <fui-picker
         linkage
+        :value="pickerInitValue"
         :options="fieldChoices"
         :layer="props.field.group?.length || 1"
         :show="showSelect"
@@ -413,8 +435,7 @@ const chooseLocation = async () => {
       :max="fileLimit"
       :disabled="props.field.disabled"
       :radius="16"
-      :modelValue="props.modelValue"
-      :fileList="props.modelValue"
+      :fileList="fileList"
       :compressed="true"
       :maxDuration="props.field.attrs.maxDuration || 60"
       :width="props.field.attrs.width || 320"
@@ -436,8 +457,7 @@ const chooseLocation = async () => {
       :max="fileLimit"
       :disabled="props.field.disabled"
       :radius="16"
-      :modelValue="props.modelValue"
-      :fileList="props.modelValue"
+      :fileList="fileList"
       :sizeType="props.field.attrs.sizeType || ['compressed']"
       :suffix="props.field.attrs.suffix"
       :width="props.field.attrs.width"

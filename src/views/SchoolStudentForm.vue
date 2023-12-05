@@ -5,7 +5,7 @@
       <!-- <x-title v-if="student">{{
         `${student.grade}年级${student.class}班${student.xm}`
       }}</x-title> -->
-      <modelform-uni
+      <modelform-fui
         :model="FormModel"
         :values="student"
         :sync-values="false"
@@ -13,7 +13,7 @@
         :success-use-redirect="true"
         @successPost="successPost"
         :action-url="actionUrl"
-      ></modelform-uni>
+      ></modelform-fui>
     </div>
     <x-alert v-else title="没有记录"> </x-alert>
   </page-layout>
@@ -40,7 +40,7 @@ const successPost = async (data) => {
   });
 };
 onLoad(async () => {
-  const modelJson = await useGet(`/student/json`);
+  const modelJson = await useGet(`/student/regedit_json`);
   FormModel.value = await Model.create_model_async(modelJson);
   if (query.id) {
     student.value = await useGet(`/student/detail/${query.id}`);
