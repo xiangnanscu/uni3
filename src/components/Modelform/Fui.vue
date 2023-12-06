@@ -311,10 +311,16 @@ onMounted(async () => {
     <fui-button
       v-if="!props.hideSubmitButton"
       :disabled="submiting || shouldDisabled"
-      :text="props.submitButtonText"
+      :text2="props.submitButtonText"
       @click="submit"
       :open-type="props.submitButtonOpenType"
     >
+      <template v-if="submitButtonText.length == 2">
+        {{ submitButtonText[0] }} &nbsp; {{ submitButtonText[1] }}
+      </template>
+      <template v-else>
+        {{ submitButtonText }}
+      </template>
     </fui-button>
   </fui-form>
 </template>
