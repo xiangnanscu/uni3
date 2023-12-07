@@ -92,7 +92,9 @@ onLoad(async () => {
     { usr_id: user.id },
     ["title", "id"],
   ]);
-  ParentModel = await Model.create_model_async(await useGet(`/parent/json`));
+  const json = await useGet(`/parent/json`);
+  json.field_names = ["title"];
+  ParentModel = await Model.create_model_async(json);
   students.value = await usePost(`/student/parent/${parent.value.id}`);
   loaded.value = true;
 });

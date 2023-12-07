@@ -14,14 +14,14 @@
         <uni-card title="温馨提示">
           <p>选好学校后点击“邀请学校管理员”把当前页面发送给学校管理员</p>
         </uni-card>
-        <modelform-fui
+        <modelform-uni
           :model="schoolModel"
           :values="inviteData"
           :sync-values="true"
           :disable-submit="disableSubmit"
           submit-button-open-type="share"
           submitButtonText="邀请学校管理员"
-        ></modelform-fui>
+        ></modelform-uni>
       </div>
     </div>
   </page-layout>

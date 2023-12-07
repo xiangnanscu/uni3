@@ -83,18 +83,31 @@ const resetErrors = () => {
 };
 resetErrors();
 const shouldDisabled = computed(() => props.disableSubmit(values));
+const ready = ref();
+const prepareForm = async () => {
+  for (const field of fieldsArray.value) {
+    if (typeof field.choices == "function") {
+      field.choices = await field.choices();
+    }
+    // #ifdef H5
+    if (field.attrs?.wx_phone) field.attrs.wx_phone = false;
+    if (field.attrs?.wx_avatar) field.attrs.wx_avatar = false;
+    // #endif
+  }
+  resetErrors();
+  ready.value = true;
+};
+watch(formRef, (form) => {
+  if (form) {
+    form.setRules(rules.value);
+  }
+});
 //TODO: 需要watch:rules以应对model变化
 // #ifdef MP-WEIXIN
-onReady(() => {
-  console.log("onReady modelform uni");
-  formRef.value.setRules(rules.value);
-});
+onReady(prepareForm);
 // #endif
 // #ifdef H5
-onMounted(() => {
-  console.log("onMounted modelform uni");
-  formRef.value.setRules(rules.value);
-});
+onMounted(prepareForm);
 // #endif
 const submit = async () => {
   resetErrors();
@@ -178,6 +191,7 @@ const submit = async () => {
 </script>
 <template>
   <uni-forms
+    v-if="ready"
     ref="formRef"
     :model="values"
     :err-show-type="props.errShowType"
@@ -261,6 +275,7 @@ const submit = async () => {
           :modelValue="values[field.name]"
           @update:modelValue="values[field.name] = $event"
           @blur:validate="formsItemRefs[field.name].onFieldChange($event)"
+          @update:values="updateValues"
           v-model:error="errors[field.name]"
           :field="field"
         />

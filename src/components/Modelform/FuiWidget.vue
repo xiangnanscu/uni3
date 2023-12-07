@@ -50,8 +50,6 @@ const getPhoneNumber = async (event) => {
 };
 const placeholder = computed(() => props.field.attrs?.placeholder || props.field.hint);
 const fieldInline = computed(() => !!props.field.attrs.inline);
-const showArrow = computed(() => props.field.choices && props.field.tag == "select");
-const formItemEvents = {};
 const showSelect = ref();
 const onSelectClick = ({ index, options }) => {
   sendValue(options.value);
@@ -94,11 +92,6 @@ const onPickerConfirm = (e) => {
   sendError("");
   showSelect.value = false;
 };
-if (showArrow) {
-  formItemEvents.click = (e) => {
-    showSelect.value = true;
-  };
-}
 const fieldChoices = computed(() => {
   if (!Array.isArray(props.field.choices)) {
     return null;

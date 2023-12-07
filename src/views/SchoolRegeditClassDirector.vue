@@ -26,14 +26,14 @@
           </p>
           <p>2.选好学校和班级后点击“邀请班主任”把当前页面分享给对应班级的班主任</p>
         </uni-card>
-        <modelform-fui
+        <modelform-uni
           :model="classModel"
           :values="inviteData"
           :sync-values="true"
           :disable-submit="disableSubmit"
           submit-button-open-type="share"
           submitButtonText="邀请班主任"
-        ></modelform-fui>
+        ></modelform-uni>
       </div>
       <div v-else>
         <uni-card title="温馨提示">
@@ -45,12 +45,12 @@
           <x-button @click="regeditClassDirector">申请</x-button>
         </template>
         <template v-else>
-          <modelform-fui
+          <modelform-uni
             :model="classModel"
             :values="classModel.get_defaults()"
             @send-data="applyClassDirector"
             submitButtonText="申请"
-          ></modelform-fui>
+          ></modelform-uni>
         </template>
       </div>
     </div>
@@ -155,32 +155,32 @@ onLoad(async () => {
     classData.value = await useGet(`/class/detail/${query.class_id}`);
     previewData.list[4].value = classData.value.name;
   }
-  const ClassJson = await useGet(`/class_director/json`);
+  const ClassJson = await useGet(`/class_director/json?names=class_id`);
   const setupClassForm = async (classRequired, keepField) => {
-    ClassJson.field_names = ["school_id", "class_id"];
-    ClassJson.admin.form_names = ["school_id", "class_id"];
-    ClassJson.fields.school_id.required = true;
-    if (!keepField) {
-      ClassJson.fields.school_id = {
-        type: "integer",
-        label: "学校",
-        disabled: true,
-        required: true,
-        choices: [
-          {
-            value: schoolData.value.id,
-            label: schoolData.value.name,
-          },
-        ],
-        default: schoolData.value.id,
-      };
-      ClassJson.fields.class_id = {
-        type: "integer",
-        label: "班级",
-        required: !!classRequired,
-        choices_url: `/class/choices/school/${schoolData.value.id}`,
-      };
-    }
+    // ClassJson.field_names = ["school_id", "class_id"];
+    // ClassJson.admin.form_names = ["school_id", "class_id"];
+    // ClassJson.fields.school_id.required = true;
+    // if (!keepField) {
+    //   ClassJson.fields.school_id = {
+    //     type: "integer",
+    //     label: "学校",
+    //     disabled: true,
+    //     required: true,
+    //     choices: [
+    //       {
+    //         value: schoolData.value.id,
+    //         label: schoolData.value.name,
+    //       },
+    //     ],
+    //     default: schoolData.value.id,
+    //   };
+    //   ClassJson.fields.class_id = {
+    //     type: "integer",
+    //     label: "班级",
+    //     required: !!classRequired,
+    //     choices_url: `/class/choices/school/${schoolData.value.id}`,
+    //   };
+    // }
     classModel = await Model.create_model_async(ClassJson);
     inviteData.value = classModel.get_defaults();
   };

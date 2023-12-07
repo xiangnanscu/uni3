@@ -167,12 +167,6 @@ const fieldChoices = computed(() => {
     }));
   }
 });
-const fuiChoices = computed(() =>
-  fieldChoices.value.map((e) => ({
-    ...e,
-    checked: e.value === props.modelValue,
-  })),
-);
 const showChoicesWhenSmall = (field) => {
   // console.log("showChoicesWhenSmall call");
   if (
@@ -183,6 +177,16 @@ const showChoicesWhenSmall = (field) => {
   } else {
     return [];
   }
+};
+const onPickerConfirm = ({ detail: { value } }) => {
+  if (props.field.group) {
+    for (const [i, opts] of props.field.group.entries()) {
+      emit("update:values", { [opts.form_key || opts.value_key]: value[i].value });
+    }
+  } else {
+    sendValue(value);
+  }
+  emit("update:error", "");
 };
 </script>
 <template>
@@ -243,31 +247,13 @@ const showChoicesWhenSmall = (field) => {
       :min="props.field.min || 0"
       :mode="isArrayField ? 'list' : 'tag'"
     ></uni-data-checkbox>
-    <div v-else-if="props.field.attrs.fui">
-      <div style="display: flex; align-items: center">
-        <div
-          style="text-align: center; width: 100%; font-size2: 120%; font-weight2: bold"
-        >
-          {{ fuiChoices.find((c) => c.value === props.modelValue)?.text }}
-        </div>
-        <div style="width: 100%">
-          <x-button size="mini" @click="fuiSelectShow = true" text="点击选择">
-            点击选择
-          </x-button>
-        </div>
-      </div>
-      <fui-select
-        :show="fuiSelectShow"
-        :options="fuiChoices"
-        :multiple="isArrayField"
-        checkboxColor2="#FFC529"
-        btnBackground2="#FFC529"
-        btnColor2="#1A1D26"
-        closeColor="#6D758A"
-        @close="fuiSelectShow = false"
-        @confirm="onFuiSelectConfirm"
-      ></fui-select>
-    </div>
+    <uni-data-picker
+      v-else-if="props.field.group"
+      :modelValue="pickerInitValue"
+      :localdata="fieldChoices"
+      @change="onPickerConfirm"
+    >
+    </uni-data-picker>
     <uni-data-select
       v-else
       @update:modelValue="sendValue"

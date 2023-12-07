@@ -160,7 +160,10 @@ class basefield {
         this.null = true;
       }
     }
-    if (Array.isArray(this.choices) || typeof this.choices === "string") {
+    if (
+      !this.group &&
+      (Array.isArray(this.choices) || typeof this.choices === "string")
+    ) {
       this.choices = get_choices(this.choices);
     }
     if (this.autocomplete) {
