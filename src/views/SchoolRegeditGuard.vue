@@ -6,14 +6,14 @@
         <uni-card title="温馨提示">
           <p>选好学校后点击“邀请学校门卫”把当前页面发送给学校门卫</p>
         </uni-card>
-        <modelform-uni
+        <modelform-fui
           :model="schoolModel"
           :values="inviteData"
           :sync-values="true"
           :disable-submit="disableSubmit"
           submit-button-open-type="share"
           submitButtonText="邀请学校门卫"
-        ></modelform-uni>
+        ></modelform-fui>
       </div>
       <div v-else>
         <uni-card title="温馨提示">

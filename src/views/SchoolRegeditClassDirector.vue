@@ -26,14 +26,14 @@
           </p>
           <p>2.选好学校和班级后点击“邀请班主任”把当前页面分享给对应班级的班主任</p>
         </uni-card>
-        <modelform-uni
+        <modelform-fui
           :model="classModel"
           :values="inviteData"
           :sync-values="true"
           :disable-submit="disableSubmit"
           submit-button-open-type="share"
           submitButtonText="邀请班主任"
-        ></modelform-uni>
+        ></modelform-fui>
       </div>
       <div v-else>
         <uni-card title="温馨提示">
@@ -45,12 +45,12 @@
           <x-button @click="regeditClassDirector">申请</x-button>
         </template>
         <template v-else>
-          <modelform-uni
+          <modelform-fui
             :model="classModel"
             :values="classModel.get_defaults()"
             @send-data="applyClassDirector"
             submitButtonText="申请"
-          ></modelform-uni>
+          ></modelform-fui>
         </template>
       </div>
     </div>

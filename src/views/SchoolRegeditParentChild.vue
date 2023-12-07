@@ -7,14 +7,14 @@
       :is-shadow="false"
       :is-full="true"
     >
-      <modelform-uni
+      <modelform-fui
         :model="ParentModel"
         :values="parent"
         :sync-values="true"
         @success-post="successPostParent"
         :action-url="actionUrlParent"
         submit-button-text="保存"
-      ></modelform-uni>
+      ></modelform-fui>
     </uni-card>
     <template v-if="parent.id">
       <uni-card title="子女" :border="false" :is-shadow="false" :is-full="true">

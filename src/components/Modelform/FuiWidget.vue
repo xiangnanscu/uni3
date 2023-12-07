@@ -76,8 +76,10 @@ const pickerResultText = computed(() => {
 const pickerInitValue = computed(() => {
   if (props.modelValue == null) {
     return [];
-  } else {
+  } else if (props.field.group) {
     return props.field.group.map((opts) => pickerCurrentChoice.value?.[opts.label_key]);
+  } else {
+    return props.modelValue;
   }
 });
 const onPickerConfirm = (e) => {
