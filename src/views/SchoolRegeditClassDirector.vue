@@ -21,10 +21,8 @@
       <div v-if="sysadminRole || principalRole">
         <uni-card title="温馨提示">
           <p>两种方式</p>
-          <p>
-            1.选好学校（不用选班级）点击“邀请班主任”把当前页面分享到班主任群，由班主任自行选择班级申请
-          </p>
-          <p>2.选好学校和班级后点击“邀请班主任”把当前页面分享给对应班级的班主任</p>
+          <p>1.点击右上角分享该页面到班主任群，由班主任自行选择班级申请。</p>
+          <p>2.选好学校班级后点击“邀请班主任”分享该页面给对应的班主任</p>
         </uni-card>
         <modelform-uni
           :model="classModel"
@@ -156,31 +154,7 @@ onLoad(async () => {
     previewData.list[4].value = classData.value.name;
   }
   const ClassJson = await useGet(`/class_director/json?names=class_id`);
-  const setupClassForm = async (classRequired, keepField) => {
-    // ClassJson.field_names = ["school_id", "class_id"];
-    // ClassJson.admin.form_names = ["school_id", "class_id"];
-    // ClassJson.fields.school_id.required = true;
-    // if (!keepField) {
-    //   ClassJson.fields.school_id = {
-    //     type: "integer",
-    //     label: "学校",
-    //     disabled: true,
-    //     required: true,
-    //     choices: [
-    //       {
-    //         value: schoolData.value.id,
-    //         label: schoolData.value.name,
-    //       },
-    //     ],
-    //     default: schoolData.value.id,
-    //   };
-    //   ClassJson.fields.class_id = {
-    //     type: "integer",
-    //     label: "班级",
-    //     required: !!classRequired,
-    //     choices_url: `/class/choices/school/${schoolData.value.id}`,
-    //   };
-    // }
+  const setupClassForm = async () => {
     classModel = await Model.create_model_async(ClassJson);
     inviteData.value = classModel.get_defaults();
   };
@@ -191,6 +165,7 @@ onLoad(async () => {
     if (!schoolData.value) {
       schoolData.value = await useGet(`/school/detail/${principalRole.value.school_id}`);
     }
+    inviteData.value.school_id = principalRole.value.school_id;
     await setupClassForm();
   } else if (classDirectorRole.value) {
     // 班主任角色, 则说明已经申请过了,目前暂时是一个微信号只能绑定一个班主任

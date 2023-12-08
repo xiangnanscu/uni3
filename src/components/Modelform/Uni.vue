@@ -299,6 +299,9 @@ const submit = async () => {
   </uni-forms>
 </template>
 <style scoped>
+/* ::v-deep(.uni-forms-item__content) {
+  display: flex;
+} */
 .dynamic-delete-button {
   cursor: pointer;
   position: relative;

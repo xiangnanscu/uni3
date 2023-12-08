@@ -43,6 +43,9 @@ const autocompleteInputValue = ref("");
 const sendValue = (value) => {
   emit("update:modelValue", value);
 };
+const sendError = (value) => {
+  emit("update:error", value);
+};
 const blurValidate = () => {
   emit("update:error", ""); // 先清除老错误
   emit("blur:validate", props.modelValue);
@@ -122,14 +125,37 @@ const getPhoneNumber = async (event) => {
     sendValue(data.purePhoneNumber);
   }
 };
-const placeholder = props.field.attrs?.placeholder || props.field.hint;
-const fuiSelectShow = ref();
-const onFuiSelectConfirm = ({ index, options }) => {
-  if (index === -1) {
-    return;
+const placeholder = computed(() => props.field.attrs?.placeholder || props.field.hint);
+const showSelect = ref();
+const pickerCurrentChoice = computed(() => {
+  const lastGroup = props.field.group[props.field.group.length - 1];
+  const key = lastGroup.value_key;
+  return props.field.choices.find((c) => c[key] === props.modelValue);
+});
+const pickerResultText = computed(() => {
+  const c = pickerCurrentChoice.value;
+  return c ? props.field.group.map((opts) => `${c[opts.label_key]}`).join("") : "";
+});
+const pickerInitValue = computed(() => {
+  if (props.modelValue == null) {
+    return [];
+  } else if (props.field.group) {
+    return props.field.group.map((opts) => pickerCurrentChoice.value?.[opts.label_key]);
+  } else {
+    return props.modelValue;
   }
-  sendValue(options.value);
-  fuiSelectShow.value = false;
+});
+const onPickerConfirm = (e) => {
+  // log(e);
+  if (props.field.group) {
+    for (const [i, opts] of props.field.group.entries()) {
+      emit("update:values", { [opts.form_key || opts.value_key]: e.value[i] });
+    }
+  } else {
+    sendValue(e.value);
+  }
+  sendError("");
+  showSelect.value = false;
 };
 const fieldChoices = computed(() => {
   if (!Array.isArray(props.field.choices)) {
@@ -177,16 +203,6 @@ const showChoicesWhenSmall = (field) => {
   } else {
     return [];
   }
-};
-const onPickerConfirm = ({ detail: { value } }) => {
-  if (props.field.group) {
-    for (const [i, opts] of props.field.group.entries()) {
-      emit("update:values", { [opts.form_key || opts.value_key]: value[i].value });
-    }
-  } else {
-    sendValue(value);
-  }
-  emit("update:error", "");
 };
 </script>
 <template>
@@ -247,13 +263,33 @@ const onPickerConfirm = ({ detail: { value } }) => {
       :min="props.field.min || 0"
       :mode="isArrayField ? 'list' : 'tag'"
     ></uni-data-checkbox>
-    <uni-data-picker
-      v-else-if="props.field.group"
-      :modelValue="pickerInitValue"
-      :localdata="fieldChoices"
-      @change="onPickerConfirm"
-    >
-    </uni-data-picker>
+    <template v-else-if="props.field.group">
+      <fui-list-cell
+        arrow
+        @click="showSelect = true"
+        :padding="[0]"
+        :bottomBorder="false"
+        borderColor="transparent"
+      >
+        <template v-if="props.field.group">
+          {{ pickerResultText }}
+        </template>
+        <template v-else>
+          {{ fieldChoices.find((c) => c.value === props.modelValue)?.text }}
+        </template>
+
+        <view class="fui-list-input" :style="{ 'background-color': borderColor }"> </view>
+      </fui-list-cell>
+      <fui-picker
+        linkage
+        :value="pickerInitValue"
+        :options="fieldChoices"
+        :layer="props.field.group?.length || 1"
+        :show="showSelect"
+        @change="onPickerConfirm"
+        @cancel="showSelect = false"
+      ></fui-picker>
+    </template>
     <uni-data-select
       v-else
       @update:modelValue="sendValue"
