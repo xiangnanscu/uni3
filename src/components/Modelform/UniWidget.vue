@@ -43,6 +43,7 @@ const autocompleteSearchText = ref("");
 const autocompleteInputValue = ref("");
 const sendValue = (value) => {
   emit("update:modelValue", value);
+  log({ value });
 };
 const sendError = (value) => {
   emit("update:error", value);
@@ -217,13 +218,7 @@ const showChoicesWhenSmall = (field) => {
         :bottomBorder="false"
         borderColor="transparent"
       >
-        <template v-if="props.field.group">
-          {{ pickerResultText }}
-        </template>
-        <template v-else>
-          {{ fieldChoices.find((c) => c.value === props.modelValue)?.text }}
-        </template>
-
+        {{ pickerResultText }}
         <view class="fui-list-input" :style="{ 'background-color': borderColor }"> </view>
       </fui-list-cell>
       <fui-picker
@@ -292,13 +287,27 @@ const showChoicesWhenSmall = (field) => {
       :min="props.field.min || 0"
       :mode="isArrayField ? 'list' : 'tag'"
     ></uni-data-checkbox>
-    <uni-data-select
+    <!-- <uni-data-select
       v-else
       @update:modelValue="sendValue"
       :modelValue="props.modelValue"
       :disabled="props.field.disabled"
       :localdata="fieldChoices"
-    ></uni-data-select>
+    ></uni-data-select> -->
+    <picker
+      v-else
+      @change="sendValue(fieldChoices[$event.detail.value]?.value)"
+      :value="fieldChoices.findIndex((c) => c.value === props.modelValue)"
+      :range="fieldChoices"
+      range-key="text"
+    >
+      <uni-easyinput
+        :modelValue="fieldChoices.find((c) => c.value === props.modelValue)?.text"
+        :disabled="props.field.disabled"
+        :placeholder="placeholder"
+        suffixIcon="forward"
+      />
+    </picker>
   </template>
   <slider
     v-else-if="props.field.tag == 'slider'"

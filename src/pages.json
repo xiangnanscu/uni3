@@ -174,10 +174,6 @@
       "style": { "navigationBarTitleText": "" }
     },
     {
-      "path": "views/SchoolRegeditParentChild2",
-      "style": { "navigationBarTitleText": "" }
-    },
-    {
       "path": "views/StageApplyDetail",
       "style": { "navigationBarTitleText": "" }
     },
