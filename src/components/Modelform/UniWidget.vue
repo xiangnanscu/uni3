@@ -135,8 +135,12 @@ const pickerCurrentChoice = computed(() => {
   return props.field.choices.find((c) => c[key] === props.modelValue);
 });
 const pickerResultText = computed(() => {
-  const c = pickerCurrentChoice.value;
-  return c ? props.field.group.map((opts) => `${c[opts.label_key]}`).join("") : "";
+  if (props.field.group) {
+    const c = pickerCurrentChoice.value;
+    return c ? props.field.group.map((opts) => `${c[opts.label_key]}`).join("") : "";
+  } else {
+    return fieldChoices.value.find((c) => c.value === props.modelValue)?.text;
+  }
 });
 const pickerInitValue = computed(() => {
   if (props.modelValue == null) {
@@ -212,7 +216,6 @@ const showChoicesWhenSmall = (field) => {
     <template v-if="props.field.group">
       <fui-list-cell
         arrow
-        style="height: 100%"
         @click="showSelect = true"
         :padding="[0]"
         :bottomBorder="false"
@@ -287,27 +290,27 @@ const showChoicesWhenSmall = (field) => {
       :min="props.field.min || 0"
       :mode="isArrayField ? 'list' : 'tag'"
     ></uni-data-checkbox>
-    <!-- <uni-data-select
-      v-else
-      @update:modelValue="sendValue"
-      :modelValue="props.modelValue"
-      :disabled="props.field.disabled"
-      :localdata="fieldChoices"
-    ></uni-data-select> -->
-    <picker
-      v-else
-      @change="sendValue(fieldChoices[$event.detail.value]?.value)"
-      :value="fieldChoices.findIndex((c) => c.value === props.modelValue)"
-      :range="fieldChoices"
-      range-key="text"
-    >
-      <uni-easyinput
-        :modelValue="fieldChoices.find((c) => c.value === props.modelValue)?.text"
-        :disabled="props.field.disabled"
-        :placeholder="placeholder"
-        suffixIcon="forward"
-      />
-    </picker>
+    <template v-else>
+      <fui-list-cell
+        arrow
+        @click="showSelect = true"
+        :padding="[0]"
+        :bottomBorder="false"
+        borderColor="transparent"
+      >
+        {{ pickerResultText }}
+        <view class="fui-list-input" :style="{ 'background-color': borderColor }"> </view>
+      </fui-list-cell>
+      <fui-picker
+        linkage
+        :value="pickerInitValue"
+        :options="fieldChoices"
+        :layer="1"
+        :show="showSelect"
+        @change="onPickerConfirm"
+        @cancel="showSelect = false"
+      ></fui-picker>
+    </template>
   </template>
   <slider
     v-else-if="props.field.tag == 'slider'"
