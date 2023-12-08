@@ -266,6 +266,7 @@ const showChoicesWhenSmall = (field) => {
     <template v-else-if="props.field.group">
       <fui-list-cell
         arrow
+        style="height: 100%"
         @click="showSelect = true"
         :padding="[0]"
         :bottomBorder="false"
@@ -421,6 +422,9 @@ const showChoicesWhenSmall = (field) => {
 </template>
 
 <style scoped>
+::v-deep(.fui-list__cell) {
+  height: 100%;
+}
 .field-hint {
   padding: 4px 0;
 }
