@@ -135,13 +135,7 @@ let ParentModel;
 let previewData;
 let StudentModel;
 onLoad(async () => {
-  if (!user.username) {
-    return utils.gotoPage({
-      url: "/views/RealNameCert",
-      query: { message: "此操作需要先实名认证", redirect: utils.getFullPath() },
-      redirect: true,
-    });
-  }
+  helpers.checkRealName();
   previewData = {
     list: [
       {

@@ -48,10 +48,16 @@ const getFieldRules = (field, index) => [
     },
   },
 ];
+const formsItemRefs = computed(() => {
+  const res = {};
+  for (const field of fieldsArray.value) {
+    res[field.name] = ref(null);
+  }
+  return res;
+});
 const rules = computed(() => {
   const res = {};
   for (const field of fieldsArray.value) {
-    formsItemRefs[field.name] = ref(null);
     res[field.name] = {
       rules: getFieldRules(field),
     };
@@ -75,7 +81,6 @@ const smartLabelWidth = computed(() => {
     return `${maxLabelLength + 2}em`;
   }
 });
-const formsItemRefs = {};
 const resetErrors = () => {
   for (const field of fieldsArray.value) {
     errors[field.name] = field.type == "array" ? [] : "";

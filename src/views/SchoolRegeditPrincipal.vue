@@ -85,13 +85,7 @@ const regeditPrincipal = async () => {
 };
 let schoolModel;
 onLoad(async () => {
-  if (!user.username) {
-    return utils.gotoPage({
-      url: "/views/RealNameCert",
-      query: { message: "此操作需要先实名认证", redirect: utils.getFullPath() },
-      redirect: true,
-    });
-  }
+  helpers.checkRealName();
   if (query.school_id) {
     // 说明是点击管理员分享出来的页面而来
     const school = await useGet(`/school/detail/${query.school_id}`);

@@ -1,222 +1,7 @@
-<template>
-  <page-layout>
-    <view class="search-bar">
-      <uni-easyinput
-        suffixIcon="search"
-        v-model="searchValue"
-        placeholder="请输入查找内容"
-        iconClick="onClick"
-      ></uni-easyinput>
-    </view>
-    <uni-notice-bar
-      class="notice-bar"
-      :speed="50"
-      show-icon
-      scrollable
-      :text="noticeText"
-    />
-    <uni-grid :column="4" :show-border="false" :square="false" @change="change">
-      <uni-grid-item v-for="(item, index) in mainKist" :index="index" :key="index">
-        <view class="grid-item-box" style="text-align: center">
-          <x-navigator
-            :url="item.pagePath"
-            hover-class="navigator-hover"
-            open-type="navigate"
-          >
-            <image
-              class="banner-image"
-              :src="item.url"
-              mode="widthFix"
-              style="width: 64px; height: 64px"
-            />
-            <view>
-              <text class="logo-text">{{ item.text }}</text>
-            </view>
-            <view v-if="item.badge" class="grid-dot">
-              <uni-badge :text="item.badge" :type="item.type" />
-            </view>
-          </x-navigator>
-        </view>
-      </uni-grid-item>
-    </uni-grid>
-    <fui-panel
-      v-if="panelNews.list.length > 0"
-      @click="newsClick"
-      :panelData="panelNews"
-      :width="150"
-      :height="120"
-      :marginTop="24"
-      :size="25"
-      :descSize="26"
-    >
-      <fui-list-cell
-        arrow
-        :bottomBorder="false"
-        topBorder
-        topLeft="32"
-        @click="gotoNewsPage"
-      >
-        <text class="fui-text__link">查看更多</text>
-      </fui-list-cell>
-    </fui-panel>
-    <fui-panel
-      v-if="goddess"
-      :panelData="panelData4"
-      :width="150"
-      :height="120"
-      :marginTop="24"
-      :size="25"
-      :descSize="26"
-    >
-      <fui-card>
-        <view class="fui-list__item">
-          <image
-            @click="onGoddessClick"
-            style="width: 100%"
-            :src="goddess.pics[0]"
-            mode="widthFix"
-          />
-        </view>
-      </fui-card>
-      <fui-list-cell
-        arrow
-        :bottomBorder="false"
-        topBorder
-        topLeft="32"
-        @click="onGoddessClick"
-      >
-        <text class="fui-text__link"> {{ goddess.title }}</text>
-      </fui-list-cell>
-      <fui-list-cell
-        arrow
-        :bottomBorder="false"
-        topBorder
-        topLeft="32"
-        @click="onGoddessListClick"
-      >
-        <text class="fui-text__link"> 查看更多</text>
-      </fui-list-cell>
-    </fui-panel>
-    <fui-panel
-      v-if="volplan"
-      :panelData="panelVolplan"
-      :width="150"
-      :height="120"
-      :marginTop="24"
-      :size="25"
-      :descSize="26"
-    >
-      <fui-card>
-        <view class="fui-list__item">
-          <image
-            @click="onVolplanClick"
-            style="width: 100%"
-            :src="volplan.pics[0]"
-            mode="widthFix"
-          />
-        </view>
-      </fui-card>
-      <fui-list-cell
-        arrow
-        :bottomBorder="false"
-        topBorder
-        topLeft="32"
-        @click="onVolplanClick"
-      >
-        <text class="fui-text__link"> {{ volplan.title }}</text>
-      </fui-list-cell>
-      <fui-list-cell
-        arrow
-        :bottomBorder="false"
-        topBorder
-        topLeft="32"
-        @click="onVolplanListClick"
-      >
-        <text class="fui-text__link"> 查看更多</text>
-      </fui-list-cell>
-    </fui-panel>
-    <fui-panel
-      v-if="ads?.length"
-      :panelData="panelAd"
-      :marginTop="24"
-      :size="25"
-      :descSize="26"
-    >
-      <fui-card>
-        <view class="fui-list__item">
-          <swiper
-            class="swiper"
-            circular
-            :indicator-dots="true"
-            :autoplay="true"
-            :interval="2000"
-            :duration="500"
-          >
-            <swiper-item v-for="e in ads" :key="e.id">
-              <view>
-                <image
-                  @click="onAdClick(e)"
-                  style="width: 100%"
-                  :src="e.pics[0]"
-                  mode="widthFix"
-                />
-              </view>
-            </swiper-item>
-          </swiper>
-        </view>
-      </fui-card>
-      <fui-list-cell
-        arrow
-        :bottomBorder="false"
-        topBorder
-        topLeft="32"
-        @click="onAdListClick"
-      >
-        <text class="fui-text__link"> 查看更多</text>
-      </fui-list-cell>
-    </fui-panel>
-
-    <fui-panel
-      v-if="polls && polls.length"
-      :panelData="panelPoll"
-      :width="150"
-      :height="120"
-      :marginTop="24"
-      :size="25"
-      :descSize="26"
-    >
-      <uni-list>
-        <uni-list-item
-          v-for="e in polls"
-          :key="e.id"
-          :title="e.title"
-          showArrow
-          link="navigateTo"
-          :to="`/views/PollDetail?id=${e.id}`"
-        >
-        </uni-list-item>
-      </uni-list>
-    </fui-panel>
-    <x-title>幸运转盘</x-title>
-    <uni-list>
-      <uni-list-item
-        v-for="w in wheels"
-        :key="w.id"
-        :title="w.name"
-        showArrow
-        link="navigateTo"
-        :to="`/views/LuckyWheel?id=${w.id}`"
-      >
-      </uni-list-item>
-    </uni-list>
-    <fui-divider text="到底了" />
-  </page-layout>
-</template>
-
 <script setup>
 // onShareTimeline
 // onShareAppMessage
-useWxShare({ title: "江安youth home!" });
+useWxShare({ title: "江安youth home!", imageUrl: "../../static/cover-share.jpg" });
 onShow(async () => {});
 </script>
 
@@ -492,6 +277,221 @@ export default {
   },
 };
 </script>
+
+<template>
+  <page-layout>
+    <view class="search-bar">
+      <uni-easyinput
+        suffixIcon="search"
+        v-model="searchValue"
+        placeholder="请输入查找内容"
+        iconClick="onClick"
+      ></uni-easyinput>
+    </view>
+    <uni-notice-bar
+      class="notice-bar"
+      :speed="50"
+      show-icon
+      scrollable
+      :text="noticeText"
+    />
+    <uni-grid :column="4" :show-border="false" :square="false" @change="change">
+      <uni-grid-item v-for="(item, index) in mainKist" :index="index" :key="index">
+        <view class="grid-item-box" style="text-align: center">
+          <x-navigator
+            :url="item.pagePath"
+            hover-class="navigator-hover"
+            open-type="navigate"
+          >
+            <image
+              class="banner-image"
+              :src="item.url"
+              mode="widthFix"
+              style="width: 64px; height: 64px"
+            />
+            <view>
+              <text class="logo-text">{{ item.text }}</text>
+            </view>
+            <view v-if="item.badge" class="grid-dot">
+              <uni-badge :text="item.badge" :type="item.type" />
+            </view>
+          </x-navigator>
+        </view>
+      </uni-grid-item>
+    </uni-grid>
+    <fui-panel
+      v-if="panelNews.list.length > 0"
+      @click="newsClick"
+      :panelData="panelNews"
+      :width="150"
+      :height="120"
+      :marginTop="24"
+      :size="25"
+      :descSize="26"
+    >
+      <fui-list-cell
+        arrow
+        :bottomBorder="false"
+        topBorder
+        topLeft="32"
+        @click="gotoNewsPage"
+      >
+        <text class="fui-text__link">查看更多</text>
+      </fui-list-cell>
+    </fui-panel>
+    <fui-panel
+      v-if="goddess"
+      :panelData="panelData4"
+      :width="150"
+      :height="120"
+      :marginTop="24"
+      :size="25"
+      :descSize="26"
+    >
+      <fui-card>
+        <view class="fui-list__item">
+          <image
+            @click="onGoddessClick"
+            style="width: 100%"
+            :src="goddess.pics[0]"
+            mode="widthFix"
+          />
+        </view>
+      </fui-card>
+      <fui-list-cell
+        arrow
+        :bottomBorder="false"
+        topBorder
+        topLeft="32"
+        @click="onGoddessClick"
+      >
+        <text class="fui-text__link"> {{ goddess.title }}</text>
+      </fui-list-cell>
+      <fui-list-cell
+        arrow
+        :bottomBorder="false"
+        topBorder
+        topLeft="32"
+        @click="onGoddessListClick"
+      >
+        <text class="fui-text__link"> 查看更多</text>
+      </fui-list-cell>
+    </fui-panel>
+    <fui-panel
+      v-if="volplan"
+      :panelData="panelVolplan"
+      :width="150"
+      :height="120"
+      :marginTop="24"
+      :size="25"
+      :descSize="26"
+    >
+      <fui-card>
+        <view class="fui-list__item">
+          <image
+            @click="onVolplanClick"
+            style="width: 100%"
+            :src="volplan.pics[0]"
+            mode="widthFix"
+          />
+        </view>
+      </fui-card>
+      <fui-list-cell
+        arrow
+        :bottomBorder="false"
+        topBorder
+        topLeft="32"
+        @click="onVolplanClick"
+      >
+        <text class="fui-text__link"> {{ volplan.title }}</text>
+      </fui-list-cell>
+      <fui-list-cell
+        arrow
+        :bottomBorder="false"
+        topBorder
+        topLeft="32"
+        @click="onVolplanListClick"
+      >
+        <text class="fui-text__link"> 查看更多</text>
+      </fui-list-cell>
+    </fui-panel>
+    <fui-panel
+      v-if="ads?.length"
+      :panelData="panelAd"
+      :marginTop="24"
+      :size="25"
+      :descSize="26"
+    >
+      <fui-card>
+        <view class="fui-list__item">
+          <swiper
+            class="swiper"
+            circular
+            :indicator-dots="true"
+            :autoplay="true"
+            :interval="2000"
+            :duration="500"
+          >
+            <swiper-item v-for="e in ads" :key="e.id">
+              <view>
+                <image
+                  @click="onAdClick(e)"
+                  style="width: 100%"
+                  :src="e.pics[0]"
+                  mode="widthFix"
+                />
+              </view>
+            </swiper-item>
+          </swiper>
+        </view>
+      </fui-card>
+      <fui-list-cell
+        arrow
+        :bottomBorder="false"
+        topBorder
+        topLeft="32"
+        @click="onAdListClick"
+      >
+        <text class="fui-text__link"> 查看更多</text>
+      </fui-list-cell>
+    </fui-panel>
+
+    <fui-panel
+      v-if="polls && polls.length"
+      :panelData="panelPoll"
+      :width="150"
+      :height="120"
+      :marginTop="24"
+      :size="25"
+      :descSize="26"
+    >
+      <uni-list>
+        <uni-list-item
+          v-for="e in polls"
+          :key="e.id"
+          :title="e.title"
+          showArrow
+          link="navigateTo"
+          :to="`/views/PollDetail?id=${e.id}`"
+        >
+        </uni-list-item>
+      </uni-list>
+    </fui-panel>
+    <x-title>幸运转盘</x-title>
+    <uni-list>
+      <uni-list-item
+        v-for="w in wheels"
+        :key="w.id"
+        :title="w.name"
+        showArrow
+        link="navigateTo"
+        :to="`/views/LuckyWheel?id=${w.id}`"
+      >
+      </uni-list-item>
+    </uni-list>
+    <fui-divider text="到底了" />
+  </page-layout>
+</template>
 
 <style scoped>
 .fui-section__title {

@@ -124,10 +124,10 @@ const regeditClassDirector = async () => {
 const applyClassDirector = async (data) => {
   const applydata = {
     usr_id: user.id,
-    school_id: data.school_id,
+    school_id: query.school_id,
     class_id: data.class_id,
   };
-  console.log("applyClassDirector data", applydata);
+  // console.log("applyClassDirector data", applydata);
   await usePost(`/class_director/get_or_create`, applydata);
   uni.showToast({
     title: "已登记,请等待审核",
@@ -154,19 +154,15 @@ onLoad(async () => {
     previewData.list[4].value = classData.value.name;
   }
   const ClassJson = await useGet(`/class_director/json?names=class_id`);
-  const setupClassForm = async () => {
-    classModel = await Model.create_model_async(ClassJson);
-    inviteData.value = classModel.get_defaults();
-  };
+  classModel = await Model.create_model_async(ClassJson);
   if (sysadminRole.value) {
-    await setupClassForm(false, true);
+    //
   } else if (principalRole.value) {
     //校长角色, 则按其权限显示邀请的表单
     if (!schoolData.value) {
       schoolData.value = await useGet(`/school/detail/${principalRole.value.school_id}`);
     }
     inviteData.value.school_id = principalRole.value.school_id;
-    await setupClassForm();
   } else if (classDirectorRole.value) {
     // 班主任角色, 则说明已经申请过了,目前暂时是一个微信号只能绑定一个班主任
     const bindClass = classDirectorRole.value.class_id__name;
@@ -180,14 +176,11 @@ onLoad(async () => {
     if (applyStatus == "通过") {
       applySuccess.value = true;
     }
+    inviteData.value.school_id = classDirectorRole.value.school_id;
   } else {
     // 点击分享页面而来的普通角色, 根据是否query有class_id来决定是否显示表单
     userRole.value = user;
-    if (!query.class_id) {
-      setupClassForm(true);
-    }
   }
-
   ready.value = true;
 });
 </script>
