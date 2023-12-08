@@ -2,13 +2,13 @@
   <page-layout>
     <x-title>学生信息录入</x-title>
     <div v-if="ready">
-      <modelform-fui
+      <modelform-uni
         :model="FormModel"
         :values="FormModel.get_defaults()"
         success-url="/views/SchoolStudentRegeditSuccess"
         :success-use-redirect="true"
         :action-url="`/student/register`"
-      ></modelform-fui>
+      ></modelform-uni>
     </div>
     <x-alert v-else title="没有记录"> </x-alert>
   </page-layout>

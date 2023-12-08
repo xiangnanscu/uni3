@@ -154,6 +154,7 @@
 
 <style scoped>
 	.fui-list__cell {
+    height: 100%;
 		position: relative;
 		flex: 1;
 		/* #ifndef APP-NVUE */

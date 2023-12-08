@@ -6,7 +6,7 @@
         <p>此处填写小程序用户的实名信息，请确保正确，提交之后将不可修改。</p>
         <p>如果实名认证信息有误，请联系小程序管理员核实修改。</p>
       </uni-card>
-      <modelform-fui
+      <modelform-uni
         :model="profileModel"
         :values="userData"
         :sync-values="true"
@@ -14,7 +14,7 @@
         :success-use-redirect="true"
         @success-post="successPost"
         action-url="/update_profile?update_session=1"
-      ></modelform-fui>
+      ></modelform-uni>
     </div>
   </page-layout>
 </template>

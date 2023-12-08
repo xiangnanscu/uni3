@@ -26,6 +26,7 @@ const props = defineProps({
   field: { type: Object, required: true },
   modelValue: { required: true },
   error: { type: String, default: "" },
+  borderColor: { type: String, default: "#ccc" },
 });
 // const uniFormItem = inject("uniFormItem", null);
 const ready = ref(); //确保一些需要提前异步获取到数据加载完之后再渲染
@@ -206,64 +207,8 @@ const showChoicesWhenSmall = (field) => {
 };
 </script>
 <template>
-  <template v-if="props.field.autocomplete">
-    <uni-easyinput
-      v-model="autocompleteInputValue"
-      :disabled="props.field.disabled"
-      :placeholder="placeholder"
-      @focus="autocompletePopupRef.open()"
-      suffixIcon="forward"
-    />
-    <uni-popup ref="autocompletePopupRef" type="bottom" background-color="#fff">
-      <div style="padding: 1em">
-        <div style="text-align: center; margin-bottom: 1em">
-          {{ props.field.label }}
-        </div>
-        <uni-easyinput
-          v-model="autocompleteSearchText"
-          :placeholder="props.field.hint || '输入关键字查找'"
-          focus
-        />
-        <scroll-view :scroll-y="true" style="height: 31em">
-          <uni-list>
-            <uni-list-item
-              v-for="(c, i) in autocompleteSearchText
-                ? fieldChoices.filter((e) => {
-                    if (typeof e.text == 'string') {
-                      return e.text.includes(autocompleteSearchText);
-                    } else {
-                      return true;
-                    }
-                  })
-                : showChoicesWhenSmall(props.field)"
-              clickable
-              @click="
-                sendValue(c.value);
-                autocompleteInputValue = c.label;
-                autocompletePopupRef.close();
-              "
-              :key="i"
-              :title="c.text"
-              :rightText="c.hint"
-            />
-          </uni-list>
-        </scroll-view>
-      </div>
-    </uni-popup>
-  </template>
-  <template v-else-if="fieldChoices">
-    <uni-data-checkbox
-      v-if="isArrayField || props.field.tag == 'radio'"
-      @update:modelValue="sendValue"
-      :modelValue="props.modelValue"
-      :disabled="props.field.disabled"
-      :localdata="fieldChoices"
-      :multiple="isArrayField ? true : false"
-      :max="isArrayField ? props.field.max || Infinity : 1"
-      :min="props.field.min || 0"
-      :mode="isArrayField ? 'list' : 'tag'"
-    ></uni-data-checkbox>
-    <template v-else-if="props.field.group">
+  <template v-if="fieldChoices">
+    <template v-if="props.field.group">
       <fui-list-cell
         arrow
         style="height: 100%"
@@ -291,6 +236,62 @@ const showChoicesWhenSmall = (field) => {
         @cancel="showSelect = false"
       ></fui-picker>
     </template>
+    <template v-else-if="props.field.autocomplete">
+      <uni-easyinput
+        v-model="autocompleteInputValue"
+        :disabled="props.field.disabled"
+        :placeholder="placeholder"
+        @focus="autocompletePopupRef.open()"
+        suffixIcon="forward"
+      />
+      <uni-popup ref="autocompletePopupRef" type="bottom" background-color="#fff">
+        <div style="padding: 1em">
+          <div style="text-align: center; margin-bottom: 1em">
+            {{ props.field.label }}
+          </div>
+          <uni-easyinput
+            v-model="autocompleteSearchText"
+            :placeholder="props.field.hint || '输入关键字查找'"
+            focus
+          />
+          <scroll-view :scroll-y="true" style="height: 31em">
+            <uni-list>
+              <uni-list-item
+                v-for="(c, i) in autocompleteSearchText
+                  ? fieldChoices.filter((e) => {
+                      if (typeof e.text == 'string') {
+                        return e.text.includes(autocompleteSearchText);
+                      } else {
+                        return true;
+                      }
+                    })
+                  : showChoicesWhenSmall(props.field)"
+                clickable
+                @click="
+                  sendValue(c.value);
+                  autocompleteInputValue = c.label;
+                  autocompletePopupRef.close();
+                "
+                :key="i"
+                :title="c.text"
+                :rightText="c.hint"
+              />
+            </uni-list>
+          </scroll-view>
+        </div>
+      </uni-popup>
+    </template>
+    <uni-data-checkbox
+      v-else-if="isArrayField || props.field.tag == 'radio'"
+      @update:modelValue="sendValue"
+      :modelValue="props.modelValue"
+      :disabled="props.field.disabled"
+      :localdata="fieldChoices"
+      :multiple="isArrayField ? true : false"
+      :max="isArrayField ? props.field.max || Infinity : 1"
+      :min="props.field.min || 0"
+      :mode="isArrayField ? 'list' : 'tag'"
+    ></uni-data-checkbox>
     <uni-data-select
       v-else
       @update:modelValue="sendValue"
@@ -422,8 +423,15 @@ const showChoicesWhenSmall = (field) => {
 </template>
 
 <style scoped>
-::v-deep(.fui-list__cell) {
-  height: 100%;
+.fui-list-input {
+  position: absolute;
+  bottom: 0;
+  height: 1px;
+  transform: scaleY(0.5) translateZ(0);
+  transform-origin: 0 100%;
+  z-index: 1;
+  background-color: v-bind(borderColor);
+  width: 100%;
 }
 .field-hint {
   padding: 4px 0;

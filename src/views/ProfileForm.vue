@@ -1,13 +1,13 @@
 <template>
   <page-layout>
-    <modelform-fui
+    <modelform-uni
       v-if="ready"
       :model="profileModel"
       :values="userData"
       :success-url="redirectUrl"
       action-url="/update_profile"
       @success-post="login"
-    ></modelform-fui>
+    ></modelform-uni>
   </page-layout>
 </template>
 

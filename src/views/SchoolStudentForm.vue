@@ -5,7 +5,7 @@
       <!-- <x-title v-if="student">{{
         `${student.grade}年级${student.class}班${student.xm}`
       }}</x-title> -->
-      <modelform-fui
+      <modelform-uni
         :model="FormModel"
         :values="student"
         :sync-values="false"
@@ -13,7 +13,7 @@
         :success-use-redirect="true"
         @successPost="successPost"
         :action-url="actionUrl"
-      ></modelform-fui>
+      ></modelform-uni>
     </div>
     <x-alert v-else title="没有记录"> </x-alert>
   </page-layout>

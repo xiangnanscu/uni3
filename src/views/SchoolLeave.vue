@@ -157,7 +157,7 @@ const getLeaveTitle = (r) => {
       @maskClick="createMaskClick"
     >
       <div style="padding: 1em">
-        <modelform-fui
+        <modelform-uni
           v-if="showCreateForm"
           :action-url="recordCreateUrl"
           :values-hook="attachSchoolClass"
@@ -165,7 +165,7 @@ const getLeaveTitle = (r) => {
           :model="RecordModel"
           submit-button-text="请假"
           :values="RecordModel.get_defaults()"
-        ></modelform-fui>
+        ></modelform-uni>
       </div>
     </uni-popup>
     <uni-popup
@@ -176,14 +176,14 @@ const getLeaveTitle = (r) => {
       @maskClick="updateMaskClick"
     >
       <div style="padding: 1em">
-        <modelform-fui
+        <modelform-uni
           v-if="showUpdateForm"
           :action-url="recordUpdateUrl"
           @successPost="onSuccessUpdate"
           :model="RecordModel"
           submit-button-text="请假"
           :values="currentRecord"
-        ></modelform-fui>
+        ></modelform-uni>
       </div>
     </uni-popup>
     <uni-popup ref="deleteConfirmRef" type="dialog">

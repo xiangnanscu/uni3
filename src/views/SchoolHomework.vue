@@ -147,7 +147,7 @@ const onDeleteConfirm = async () => {
       @maskClick="createMaskClick"
     >
       <div style="padding: 1em">
-        <modelform-fui
+        <modelform-uni
           v-if="showCreateForm"
           :action-url="recordCreateUrl"
           :values-hook="attachSchoolClass"
@@ -155,7 +155,7 @@ const onDeleteConfirm = async () => {
           :model="RecordModel"
           submit-button-text="提交"
           :values="RecordModel.get_defaults()"
-        ></modelform-fui>
+        ></modelform-uni>
       </div>
     </uni-popup>
     <uni-popup
@@ -166,14 +166,14 @@ const onDeleteConfirm = async () => {
       @maskClick="updateMaskClick"
     >
       <div style="padding: 1em">
-        <modelform-fui
+        <modelform-uni
           v-if="showUpdateForm"
           :action-url="recordUpdateUrl"
           @successPost="onSuccessUpdate"
           :model="RecordModel"
           submit-button-text="请假"
           :values="currentRecord"
-        ></modelform-fui>
+        ></modelform-uni>
       </div>
     </uni-popup>
     <uni-popup ref="deleteConfirmRef" type="dialog">
