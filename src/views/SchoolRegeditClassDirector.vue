@@ -140,6 +140,7 @@ let classModel;
 onLoad(async () => {
   helpers.checkRealName();
   const roles = await helpers.getRoles({});
+  log(roles);
   sysadminRole.value = roles.sys_admin?.status == "通过" ? roles.sys_admin : null;
   principalRole.value = roles.principal?.status == "通过" ? roles.principal : null;
   classDirectorRole.value = roles.class_director;
