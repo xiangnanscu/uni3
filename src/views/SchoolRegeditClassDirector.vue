@@ -67,7 +67,7 @@ const schoolData = ref();
 const classData = ref();
 const userRole = ref();
 const applySuccess = ref();
-const inviteData = ref();
+const inviteData = ref({});
 const page = utils.getPage();
 const disableSubmit = (values) => {
   return !values.school_id;
