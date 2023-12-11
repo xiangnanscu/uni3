@@ -5,12 +5,15 @@
       :title="query.title || `操作成功`"
       :descr="query.descr"
     >
-      <p style="text-align: center; margin-bottom: 1em">等待管理员审核通过</p>
+      <p style="text-align: center; margin-bottom: 1em">请等待校方管理员通过</p>
+      <p style="text-align: center; margin-bottom: 1em">
+        点击下方“订阅通知”，及时收到微信提醒。
+      </p>
       <fui-button
-        @click="goBack"
+        @click="onSubsribeChange"
         width="400rpx"
         height="84rpx"
-        text="返回首页"
+        text="订阅通知"
         type="gray"
         color="#09BE4F"
         bold
@@ -29,4 +32,22 @@ const query = useQuery();
 const goBack = async (e) => {
   await utils.gotoPage("Home");
 };
+async function onSubsribeChange() {
+  const priTmplId = "sd-x4lKjBXN5C0NK7vF56ZyGrdL35mUscVam8At8Wtw";
+  const res = await uni.requestSubscribeMessage?.({
+    tmplIds: [priTmplId],
+  });
+  if (res?.[priTmplId] == "accept") {
+    uni.showToast({
+      title: "操作成功",
+      icon: "success",
+    });
+    await utils.redirect("Home", 1000);
+  } else {
+    uni.showToast({
+      title: "订阅失败",
+      icon: "error",
+    });
+  }
+}
 </script>
