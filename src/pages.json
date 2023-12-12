@@ -205,6 +205,10 @@
     {
       "path": "views/SchoolHomeworkDetail",
       "style": { "navigationBarTitleText": "" }
+    },
+    {
+      "path": "views/SchoolSubscribeHint",
+      "style": { "navigationBarTitleText": "" }
     }
   ],
   "globalStyle": {
