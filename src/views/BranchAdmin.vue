@@ -8,7 +8,7 @@
           title="邀请团县委管理员"
           thumb-size="lg"
           link
-          to="/views/BranchRegeditPrincipal"
+          to="/views/BranchPrincipalRegedit"
           :showArrow="false"
         />
         <uni-list-item
@@ -16,23 +16,23 @@
           title="审核团县委管理员"
           thumb-size="lg"
           link
-          to="/views/BranchCheckPrincipal"
+          to="/views/BranchPrincipalCheck"
           :showArrow="false"
         />
         <uni-list-item
           v-if="sysadminRole || principalRole"
-          title="邀请乡镇管理员"
+          title="邀请下级管理员"
           thumb-size="lg"
           link
-          to="/views/SchoolRegeditClassDirector"
+          to="/views/BranchAdminRegedit"
           :showArrow="false"
         />
         <uni-list-item
           v-if="sysadminRole || principalRole"
-          title="审核乡镇管理员"
+          title="审核下级管理员"
           thumb-size="lg"
           link
-          to="/views/SchoolCheckClassDirector"
+          to="/views/BranchAdminCheck"
           :showArrow="false"
         />
       </uni-list>
@@ -51,7 +51,7 @@ const sysadminRole = ref();
 onLoad(async () => {
   const roles = await helpers.getPassedRoles();
   sysadminRole.value = roles.sys_admin;
-  principalRole.value = roles.branch_principal;
+  principalRole.value = roles.branch_admin;
   ready.value = true;
 });
 </script>
