@@ -205,7 +205,16 @@
     {
       "path": "views/SchoolHomeworkDetail",
       "style": { "navigationBarTitleText": "" }
-    }
+    },
+    {
+      "path": "views/SchoolSubscribeHint",
+      "style": { "navigationBarTitleText": "" }
+    },
+    {
+      "path": "views/MiniQrcodeDispatcher",
+      "style": { "navigationBarTitleText": "" }
+    },
+    { "path": "views/BranchAdmin", "style": { "navigationBarTitleText": "" } }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",

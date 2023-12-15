@@ -72,14 +72,13 @@
           to="/views/SchoolCheckGuard"
           :showArrow="false"
         />
-        <!-- <uni-list-item
-          v-if="sysadminRole || principalRole"
-          title="设定门卫"
+        <uni-list-item
+          title="家长订阅"
           thumb-size="lg"
           link
-          to="/views/SchoolHome"
+          to="/views/SchoolSubscribeHint"
           :showArrow="false"
-        /> -->
+        />
       </uni-list>
     </div>
     <x-alert v-else title="没有记录"> </x-alert>

@@ -67,7 +67,7 @@ const schoolData = ref();
 const classData = ref();
 const userRole = ref();
 const applySuccess = ref();
-const inviteData = ref();
+const inviteData = ref({});
 const page = utils.getPage();
 const disableSubmit = (values) => {
   return !values.school_id;
@@ -143,6 +143,7 @@ onLoad(async () => {
   sysadminRole.value = roles.sys_admin?.status == "通过" ? roles.sys_admin : null;
   principalRole.value = roles.principal?.status == "通过" ? roles.principal : null;
   classDirectorRole.value = roles.class_director;
+  log(roles, { sysadminRole, principalRole, classDirectorRole, query });
   if (query.school_id) {
     // 说明是点击管理员分享出来的页面而来
     schoolData.value = await useGet(`/school/detail/${query.school_id}`);

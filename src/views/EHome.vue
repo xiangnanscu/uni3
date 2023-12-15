@@ -1,8 +1,14 @@
 <template>
   <page-layout>
     <x-title> 团建E家 </x-title>
-    <uni-grid :column="3" :show-border="false" :square="false" @change="change">
-      <uni-grid-item v-for="(item, index) in mainKist" :index="index" :key="index">
+    <uni-grid
+      v-if="ready"
+      :column="3"
+      :show-border="false"
+      :square="false"
+      @change="change"
+    >
+      <uni-grid-item v-for="(item, index) in permissionMenu" :index="index" :key="index">
         <view class="grid-item-box" style="text-align: center; margin-top: 2em">
           <x-navigator
             :url="item.pagePath"
@@ -24,6 +30,13 @@
 </template>
 
 <script setup>
+const user = useUser();
+const ready = ref(false);
+const roles = ref();
+onLoad(async () => {
+  roles.value = await helpers.getPassedRoles();
+  ready.value = true;
+});
 const mainKist = [
   {
     url: "../static/img/party-class.png",
@@ -67,7 +80,18 @@ const mainKist = [
     badge: "",
     type: "error",
   },
+  {
+    url: "../static/img/adminor.png",
+    text: "管理员",
+    badge: "",
+    pagePath: "/views/BranchAdmin",
+    type: "error",
+    roles: ["sys_admin", "principal", "class_director"],
+  },
 ];
+const permissionMenu = computed(() =>
+  mainKist.filter((menu) => !menu.roles || menu.roles.some((role) => roles.value[role])),
+);
 </script>
 
 <style scoped>

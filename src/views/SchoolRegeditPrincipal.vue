@@ -34,7 +34,7 @@ const ready = ref(false);
 const query = useQuery();
 const principalRole = ref();
 const sysadminRole = ref();
-const inviteData = ref();
+const inviteData = ref({});
 const page = utils.getPage();
 const disableSubmit = (values) => {
   return !values.school_id;
