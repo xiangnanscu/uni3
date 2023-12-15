@@ -4,10 +4,13 @@ export function useWxShare({ title, imageUrl, desc, path }) {
     const shareUrl = typeof path == "function" ? path() : path || utils.getFullPath();
     console.log({ shareUrl });
     return {
-      title,
+      title: typeof title == "function" ? title() : title,
       desc,
       path: shareUrl,
-      imageUrl: imageUrl || "../static/cover-share.jpg",
+      imageUrl:
+        typeof imageUrl == "function"
+          ? imageUrl()
+          : imageUrl || "../static/cover-share.jpg",
     };
   });
   onShareAppMessage((options) => {
@@ -15,10 +18,13 @@ export function useWxShare({ title, imageUrl, desc, path }) {
     const shareUrl = typeof path == "function" ? path() : path || utils.getFullPath();
     console.log({ shareUrl });
     return {
-      title,
+      title: typeof title == "function" ? title() : title,
       desc,
       path: shareUrl,
-      imageUrl: imageUrl || "../static/cover-share.jpg",
+      imageUrl:
+        typeof imageUrl == "function"
+          ? imageUrl()
+          : imageUrl || "../static/cover-share.jpg",
     };
   });
 }

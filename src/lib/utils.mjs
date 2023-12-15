@@ -174,6 +174,7 @@ const appendAnimationParams = (opts) => {
 export function getPage(delta = 0) {
   const pages = getCurrentPages();
   const page = pages[pages.length - delta - 1];
+  log({ page });
   return page;
 }
 export function getFullPath(delta = 0) {

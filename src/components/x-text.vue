@@ -1,7 +1,7 @@
 <template>
   <div>
     <template v-for="(line, i) in props.text.split('\n')" :key="i">
-      <div class="padding color">
+      <div class="padding color" style="line-height: 200%">
         <text
           v-if="line.trim()"
           :class="{ indent: firstLineNoIndent ? i > 0 : true, size: true }"
@@ -25,8 +25,9 @@ const props = defineProps([
 ]);
 const textIndent = props.indent || "0";
 const fontSize = props.size || "36rpx";
-const padding = props.padding || "5rpx";
+const padding = props.padding || "10rpx 5rpx";
 const color = props.color || "black";
+const lineHeight = props.lineHeight || "120%";
 const firstLineNoIndent = props.firstLineNoIndent;
 </script>
 

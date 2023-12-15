@@ -14,21 +14,21 @@ export default {
         title: this.shareTitlePrefix + (this.record?.title || ""),
         desc: this.desc,
         path: utils.getFullPath(),
-        imageUrl: this.imageUrl
+        imageUrl: this.imageUrl,
       };
     },
     desc() {
-      const content = this.record?.content
-      if (content && content[0]!=='<') {
-        return utils.textDigest(content, 20)
+      const content = this.record?.content;
+      if (content && content[0] !== "<") {
+        return utils.textDigest(content, 20);
       } else {
-        return ""
+        return "";
       }
     },
     imageUrl() {
       const img = this.record?.pics?.[0];
       return img ? (img.startsWith("http") ? img : "https:" + img) : "";
-    }
+    },
   },
-  methods: {}
+  methods: {},
 };
