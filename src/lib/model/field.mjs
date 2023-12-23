@@ -819,9 +819,9 @@ class basearray extends json {
 }
 
 class array extends basearray {
-  static option_names = ["field"];
+  static option_names = ["field", "min"];
   constructor(options) {
-    super({ type: "array", ...options });
+    super({ type: "array", min: 1, ...options });
     assert(
       typeof this.field === "object",
       `array field "${this.name}" must define field`,
@@ -903,11 +903,19 @@ class array extends basearray {
     }
   }
   to_form_value(value) {
+    let res;
     if (Array.isArray(value)) {
-      return [...value.map((e) => this.field.to_form_value(e))];
+      res = [...value.map((e) => this.field.to_form_value(e))];
     } else {
-      return [];
+      res = [];
     }
+    if (this.min && res.length < this.min) {
+      const m = this.min - res.length;
+      for (let i = 0; i < m; i++) {
+        res.push(this.field.get_default());
+      }
+    }
+    return res;
   }
 }
 

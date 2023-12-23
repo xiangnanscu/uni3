@@ -788,12 +788,13 @@ Xodel.create_model_async = async function (options) {
   for (const name of options.field_names || Object.keys(options.fields)) {
     const field = options.fields[name];
     if (field.choices_url && !field.choices) {
-      const fetch_choices = async () => {
+      const fetch_choices = async (opts = {}) => {
         const choices_url = options.is_admin_mode
           ? field.choices_url_admin || field.choices_url // 如果不是fk,那么choices_url_admin不会定义
           : field.choices_url;
+        const keyword = opts.keyword;
         const { data: choices } = await this.Http[field.choices_url_method || "post"](
-          choices_url,
+          choices_url + (keyword ? `?${field.keyword_query_name}=${keyword}` : ""),
         );
         const res = options.choices_callback
           ? options.choices_callback(choices, field)
@@ -847,8 +848,7 @@ Xodel.get_http_model = async function (model_key, is_admin_mode) {
   return this.http_model_cache[model_key];
 };
 Xodel.create_model = function (options) {
-  const XodelClass = this._make_model_class(this.normalize(options));
-  return create_model_proxy(XodelClass);
+  return this._make_model_class(this.normalize(options));
 };
 Xodel.create_sql = function () {
   return ModelSql.new({ model: this, table_name: this.table_name });
@@ -960,8 +960,9 @@ Xodel._make_model_class = function (opts) {
   if (ModelClass.auto_now_add_name) {
     ModelClass.ensure_ctime_list_names(ModelClass.auto_now_add_name);
   }
-  ModelClass.resolve_self_foreignkey();
-  return ModelClass;
+  const proxy = create_model_proxy(ModelClass);
+  Xodel.resolve_self_foreignkey.call(proxy);
+  return proxy;
 };
 Xodel.normalize = function (options) {
   const _extends = options.extends;
@@ -1128,7 +1129,7 @@ Xodel.mix_with_base = function (...varargs) {
   return this.mix(base_model, ...varargs);
 };
 Xodel.mix = function (...varargs) {
-  return create_model_proxy(this._make_model_class(this.merge_models([...varargs])));
+  return this._make_model_class(this.merge_models([...varargs]));
 };
 Xodel.merge_models = function (models) {
   if (models.length < 2) {
