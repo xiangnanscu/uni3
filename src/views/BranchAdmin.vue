@@ -1,38 +1,22 @@
 <template>
   <page-layout>
-    <x-title>支部管理</x-title>
+    <x-title>团委管理</x-title>
     <div v-if="ready">
       <uni-list :border="false">
         <uni-list-item
-          v-if="sysadminRole"
-          title="邀请团县委管理员"
+          v-if="invitable"
+          title="邀请团委管理员"
           thumb-size="lg"
           link
-          to="/views/BranchPrincipalRegedit"
+          to="/views/BranchRegeditAdmin"
           :showArrow="false"
         />
         <uni-list-item
-          v-if="sysadminRole"
-          title="审核团县委管理员"
+          v-if="invitable"
+          title="审核团委管理员"
           thumb-size="lg"
           link
-          to="/views/BranchPrincipalCheck"
-          :showArrow="false"
-        />
-        <uni-list-item
-          v-if="sysadminRole || principalRole"
-          title="邀请下级管理员"
-          thumb-size="lg"
-          link
-          to="/views/BranchAdminRegedit"
-          :showArrow="false"
-        />
-        <uni-list-item
-          v-if="sysadminRole || principalRole"
-          title="审核下级管理员"
-          thumb-size="lg"
-          link
-          to="/views/BranchAdminCheck"
+          to="/views/BranchCheckAdmin"
           :showArrow="false"
         />
       </uni-list>
@@ -48,6 +32,7 @@ const user = session.user;
 const query = useQuery();
 const principalRole = ref();
 const sysadminRole = ref();
+const invitable = computed(() => principalRole.value || sysadminRole.value);
 onLoad(async () => {
   const roles = await helpers.getPassedRoles();
   sysadminRole.value = roles.sys_admin;
