@@ -60,6 +60,7 @@
         </template>
       </template>
       <template v-else-if="loaded">
+        <!-- {{ answers }} -->
         <template
           v-for="(
             { 题干, 类型, 选项, 选项图, 最大选择数, 最小选择数, 是否必填 }, index
