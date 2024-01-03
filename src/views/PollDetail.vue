@@ -4,7 +4,7 @@
       <template #actions> </template>
       <p class="poll-title">{{ poll.title }}</p>
       <x-subtitle>
-        <div>{{ utils.fromNow(poll.ctime) }}</div>
+        <div style="text-align: center; width: 100%">{{ poll.ctime.slice(0, 16) }}</div>
       </x-subtitle>
       <image
         v-if="poll.pics[0]"
