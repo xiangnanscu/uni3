@@ -6,8 +6,8 @@ export async function getRoles(data) {
   return await usePost(`/role/get_roles`, data);
 }
 
-export async function getPassedRoles(data) {
-  return await usePost(`/role/get_roles`, { ...data, status: "通过" });
+export async function getPassedRoles() {
+  return await usePost(`/role/get_roles`, { status: "通过" });
 }
 
 export async function getWxUser() {

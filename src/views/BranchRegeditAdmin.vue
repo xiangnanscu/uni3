@@ -4,7 +4,7 @@
     <div v-if="ready">
       <div v-if="query.branch_id">
         <uni-card title="温馨提示">
-          <p>此处申请成为团委管理员</p>
+          <p>此处申请成为团组织管理员</p>
         </uni-card>
         <fui-preview :previewData="previewData"></fui-preview>
         <x-button v-if="branchAdminRole" disabled>已申请</x-button>
@@ -12,7 +12,7 @@
       </div>
       <div v-else-if="sysAdminRole">
         <uni-card title="温馨提示">
-          <p>选好团委后点击“邀请团委管理员”把当前页面发送给团委管理员</p>
+          <p>选好组织后点击“邀请团组织管理员”即可</p>
         </uni-card>
         <modelform-uni
           :model="branchModel"
@@ -21,7 +21,7 @@
           @send-data="successPost"
           :disable-submit="disableSubmit"
           submit-button-open-type="share"
-          submitButtonText="邀请团委管理员"
+          submitButtonText="邀请团组织管理员"
         ></modelform-uni>
       </div>
     </div>
@@ -45,7 +45,7 @@ const successPost = (values) => {
   log("successPost", values);
 };
 useWxShare({
-  title: "团委管理员登记",
+  title: "团组织管理员登记",
   desc: "",
   path: () => {
     const shareUrl = `/${page.route}?branch_id=${inviteData.value.branch_id}`;
@@ -68,7 +68,7 @@ const previewData = {
       value: user.phone,
     },
     {
-      label: "团委",
+      label: "团组织",
       value: "",
     },
     {
@@ -79,7 +79,6 @@ const previewData = {
 };
 const regeditPrincipal = async () => {
   await usePost(`/branch_admin/get_or_create`, {
-    usr_id: user.id,
     branch_id: query.branch_id,
   });
   uni.showToast({
@@ -91,7 +90,7 @@ const regeditPrincipal = async () => {
 let branchModel;
 onLoad(async () => {
   helpers.checkRealName();
-  const roles = await helpers.getPassedRoles();
+  const roles = await helpers.getRoles();
   if (query.branch_id) {
     // 说明是点击管理员分享出来的页面而来
     const branch = await useGet(`/branch/detail/${query.branch_id}`);
