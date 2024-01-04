@@ -26,7 +26,7 @@ export function createApp() {
   app.mixin({
     computed: {
       user() {
-        const { session } = useSession();
+        const session = useSession();
         return session.user;
       },
     },

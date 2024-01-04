@@ -68,7 +68,7 @@ useWxShare({
   title: "智慧校园亲子登记",
   desc: "",
 });
-const { session } = useSession();
+const session = useSession();
 const user = session.user;
 const loaded = ref(false);
 const parent = ref({});

@@ -15,7 +15,7 @@ useWxShare({
   title: "智慧校园教师登记",
   desc: "",
 });
-const { session } = useSession();
+const session = useSession();
 const user = session.user;
 const query = useQuery();
 const principalRole = ref();

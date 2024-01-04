@@ -80,6 +80,12 @@ export const useSession = defineStore("session", () => {
   if (!session.user.id) {
     removeSession();
   }
+  return session;
+});
+
+export const useAuth = defineStore("auth", () => {
+  console.log("useAuth called");
+  const session = useSession();
   function login({ user, roles }) {
     Object.assign(session.user, user);
     Object.assign(session.roles, roles);

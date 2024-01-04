@@ -1,5 +1,5 @@
 export function useGenericActions({ targetModel, target }) {
-  const { session } = useSession();
+  const session = useSession();
   const actionsReady = ref(false);
   const favStatus = ref(false);
   const shareStatus = ref(false);

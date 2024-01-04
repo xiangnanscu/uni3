@@ -87,7 +87,7 @@
 
 <script setup>
 const ready = ref(false);
-const { session } = useSession();
+const session = useSession();
 const user = session.user;
 const query = useQuery();
 const principalRole = ref();

@@ -26,7 +26,7 @@ export const isLogin = () => {
   if (!sessionCookie) {
     return false;
   }
-  const { session } = useSession();
+  const session = useSession();
   if (!session?.user?.id) {
     return false;
   }
