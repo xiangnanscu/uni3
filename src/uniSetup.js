@@ -30,7 +30,7 @@ const cookieNames = ["session"];
 const setupRequest = () => {
   uni.addInterceptor("request", {
     invoke(args) {
-      // console.log("global uni.request invoke:", args);
+      console.log("global uni.request invoke:", args);
       const store = useStore();
       const showLoading = !args?.disableLoading && !store.disableLoading;
       store.loading = true;
@@ -44,7 +44,6 @@ const setupRequest = () => {
       // 读取storage手动附上cookie
       for (const cookieName of cookieNames) {
         const cookieStr = uni.getStorageSync(`cookie_${cookieName}`);
-        log(`cookie_${cookieName}:`, cookieStr);
         if (cookieStr) {
           if (header.cookie) {
             header.cookie = `${header.cookie};${cookieName}=${cookieStr}`;
@@ -75,7 +74,6 @@ const setupRequest = () => {
       }
       store.loading = false;
       const cookies = args.cookies || [];
-      log("cookies", args.cookies);
       // #ifdef H5
       if (cookies.length === 0 && args.header["set-cookie-patch"]) {
         cookies.push(...args.header["set-cookie-patch"].split(", "));
@@ -85,9 +83,7 @@ const setupRequest = () => {
         const c = cookie.parse(cookieStr);
         for (const cookieName of cookieNames) {
           if (c[cookieName]) {
-            log("set cookie:", cookieName, c[cookieName]);
-            log(uni.setStorageSync(`cookie_${cookieName}`, c[cookieName]));
-            log(uni.getStorageSync(`cookie_${cookieName}`));
+            uni.setStorageSync(`cookie_${cookieName}`, c[cookieName]);
             break;
           }
         }
