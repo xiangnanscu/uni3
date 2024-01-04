@@ -119,10 +119,10 @@ const submit = async () => {
   formRef.value.clearValidate();
   const cleanedData = await formRef.value.validate();
   const formdata = props.model.to_post_value(cleanedData, formNames.value);
-  emit("sendData", formdata);
   if (props.valuesHook) {
     Object.assign(formdata, props.valuesHook({ data: formdata, model: props.model }));
   }
+  emit("sendData", formdata);
   if (!props.actionUrl) {
     return;
   }

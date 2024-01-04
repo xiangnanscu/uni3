@@ -10,9 +10,9 @@
       <div v-if="records.length">
         <div v-for="(e, i) in records" :key="e.id" class="x-row">
           <div style="margin-left: 1em; padding: 5px">
-            {{ e.usr_id__xm }}（{{ e.usr_id__username }}）
+            {{ e.branch_id__name }}（{{ e.usr_id__xm }}）
           </div>
-          <div class="x-row">
+          <div class="x-row" style="flex-shrink: 0">
             <button
               v-if="status == '待审核' || status == '拒绝'"
               style="
