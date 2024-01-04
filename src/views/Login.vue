@@ -35,7 +35,7 @@
 <script setup>
 const avatarSize = process.env.ALIOSS_AVATAR_SIZE || "500K";
 const query = useQuery();
-const sessionUser = useUser();
+const user = useUser();
 const redirectUrl = useRedirect();
 const { login } = useAuth();
 
@@ -81,6 +81,7 @@ const needCompleteProfile = ref(false);
 
 onLoad(async (options) => {
   const { user, roles } = await helpers.getWxUser();
+  log("Login onload", { user, roles });
   userData.value.id = user.id;
   userData.value.openid = user.openid;
   userData.value.permission = user.permission;
