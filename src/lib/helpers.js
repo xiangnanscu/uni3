@@ -45,7 +45,7 @@ export async function autoLogin(force) {
     try {
       store.disableLoading = true;
       const { user, roles } = await getWxUser();
-      const { login } = useSession();
+      const { login } = useAuth();
       login({ user, roles });
     } finally {
       store.disableLoading = false;

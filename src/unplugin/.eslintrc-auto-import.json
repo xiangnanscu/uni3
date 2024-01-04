@@ -316,6 +316,7 @@
     "ExtractPublicPropTypes": true,
     "onReachBottom": true,
     "useRealNameCert": true,
-    "helpers": true
+    "helpers": true,
+    "useAuth": true
   }
 }

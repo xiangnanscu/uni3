@@ -21,7 +21,7 @@
 <script setup>
 const query = useQuery();
 const redirectUrl = useRedirect();
-const { session, login } = useSession();
+const { session, login } = useAuth();
 const showForm = ref();
 let wx_phone = true;
 // #ifdef H5
@@ -44,7 +44,7 @@ const profileModel = Model.create_model({
 
 const successPost = (user) => {
   const newUser = { ...userData.value, ...user };
-  login(newUser);
+  login({ user: newUser });
 };
 onLoad(async () => {
   await helpers.autoLogin();

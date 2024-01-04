@@ -37,7 +37,7 @@ const avatarSize = process.env.ALIOSS_AVATAR_SIZE || "500K";
 const query = useQuery();
 const sessionUser = useUser();
 const redirectUrl = useRedirect();
-const { login } = useSession();
+const { login } = useAuth();
 
 // #ifdef H5
 const loginModel = Model.create_model({
@@ -61,7 +61,7 @@ const userData = ref({
   openid: "",
 });
 const successPostWX = (user) => {
-  login({ ...userData.value, ...user });
+  login({ user: { ...userData.value, ...user } });
 };
 
 const profileModel = Model.create_model({
