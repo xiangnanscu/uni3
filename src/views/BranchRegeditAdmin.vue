@@ -7,7 +7,12 @@
           <p>此处申请成为团组织管理员</p>
         </uni-card>
         <fui-preview :previewData="previewData"></fui-preview>
-        <x-button v-if="branchAdminRole" disabled>已申请</x-button>
+        <view v-if="branchAdminRole">
+          <x-button disabled>已申请</x-button>
+          <div v-if="query.branch_id && branchAdminRole.branch_id !== query.branch_id">
+            你当前已是{{ branchAdminRole.branch_id__name }}的管理员,不能再申请其他的管理员
+          </div>
+        </view>
         <x-button v-else @click="regeditPrincipal">申请</x-button>
       </div>
       <div v-else-if="sysAdminRole || branchAdminRole">
