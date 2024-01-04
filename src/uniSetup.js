@@ -41,8 +41,10 @@ const setupRequest = () => {
         uni.showLoading();
       }
       // #ifdef MP-WEIXIN
+      // 读取storage手动附上cookie
       for (const cookieName of cookieNames) {
         const cookieStr = uni.getStorageSync(`cookie_${cookieName}`);
+        log(`cookie_${cookieName}:`, cookieStr);
         if (cookieStr) {
           if (header.cookie) {
             header.cookie = `${header.cookie};${cookieName}=${cookieStr}`;
@@ -85,6 +87,7 @@ const setupRequest = () => {
           if (c[cookieName]) {
             log("set cookie:", cookieName, c[cookieName]);
             log(uni.setStorageSync(`cookie_${cookieName}`, c[cookieName]));
+            log(uni.getStorageSync(`cookie_${cookieName}`));
             break;
           }
         }
