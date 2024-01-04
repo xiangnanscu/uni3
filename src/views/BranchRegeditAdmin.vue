@@ -11,12 +11,21 @@
               branchAdminRole.branch_id !== query.branch_id
             "
           >
-            你当前已是{{ branchAdminRole.branch_id__name }}的管理员,不能再申请其他的管理员
+            <template v-if="branchAdminRole.status == '通过'">
+              你当前已是{{
+                branchAdminRole.branch_id__name
+              }}的管理员,不能再申请其他的管理员
+            </template>
+            <template v-else-if="branchAdminRole.status == '待审核'">
+              你当前正在申请{{
+                branchAdminRole.branch_id__name
+              }}的管理员,不能再申请其他的管理员
+            </template>
           </div>
           <p v-else>此处申请成为团组织管理员</p>
         </uni-card>
         <fui-preview :previewData="previewData"></fui-preview>
-        <x-button v-if="branchAdminRole" disabled>已申请</x-button>
+        <x-button v-if="branchAdminRole.status !== '拒绝'" disabled>已申请</x-button>
         <x-button v-else @click="regeditPrincipal">申请</x-button>
       </div>
       <div v-else-if="sysAdminRole || branchAdminRole">
