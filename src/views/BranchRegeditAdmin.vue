@@ -124,6 +124,7 @@ const regeditPrincipal = async () => {
 };
 let branchModel;
 onLoad(async () => {
+  helpers.autoLogin(true); // 刷新账号roles信息
   helpers.checkRealName();
   const roles = await helpers.getRoles(); // 不用passedRoles,为了显示已发起的申请
   sysAdminRole.value = roles.sys_admin;
