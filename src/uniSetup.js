@@ -73,6 +73,7 @@ const setupRequest = () => {
       }
       store.loading = false;
       const cookies = args.cookies || [];
+      log("cookies", args.cookies);
       // #ifdef H5
       if (cookies.length === 0 && args.header["set-cookie-patch"]) {
         cookies.push(...args.header["set-cookie-patch"].split(", "));
