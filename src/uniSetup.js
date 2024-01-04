@@ -83,7 +83,8 @@ const setupRequest = () => {
         const c = cookie.parse(cookieStr);
         for (const cookieName of cookieNames) {
           if (c[cookieName]) {
-            uni.setStorageSync(`cookie_${cookieName}`, c[cookieName]);
+            log("set cookie:", cookieName, c[cookieName]);
+            log(uni.setStorageSync(`cookie_${cookieName}`, c[cookieName]));
             break;
           }
         }
