@@ -21,6 +21,7 @@ const getAnonymousSession = () =>
       openid: "",
       avatar: "",
     },
+    roles: {},
   });
 const removeSession = () => {
   uni.removeStorageSync("session");
@@ -79,13 +80,15 @@ export const useSession = defineStore("session", () => {
   if (!session.user.id) {
     removeSession();
   }
-  function login(user) {
+  function login({ user, roles }) {
     Object.assign(session.user, user);
+    Object.assign(session.roles, roles);
     session.expire = LIFETIME_SECONDS * 1000 + new Date().getTime();
     uni.setStorageSync("session", JSON.stringify(session));
   }
   function logout() {
     session.user = getAnonymousSession().user;
+    session.roles = {};
     removeSession();
   }
   return {

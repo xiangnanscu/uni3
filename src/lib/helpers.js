@@ -15,10 +15,10 @@ export async function getWxUser() {
   if (errMsg !== "login:ok") {
     throw new Error(errMsg);
   }
-  const user = await usePost("/wx_login", {
+  const { user, roles } = await usePost("/wx_login", {
     code,
   });
-  return user;
+  return { user, roles };
 }
 
 export const isLogin = () => {
@@ -44,9 +44,9 @@ export async function autoLogin(force) {
     const store = useStore();
     try {
       store.disableLoading = true;
-      const user = await getWxUser();
+      const { user, roles } = await getWxUser();
       const { login } = useSession();
-      login(user);
+      login({ user, roles });
     } finally {
       store.disableLoading = false;
     }

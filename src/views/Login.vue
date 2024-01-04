@@ -80,7 +80,7 @@ const profileModel = Model.create_model({
 const needCompleteProfile = ref(false);
 
 onLoad(async (options) => {
-  const user = await helpers.getWxUser();
+  const { user, roles } = await helpers.getWxUser();
   userData.value.id = user.id;
   userData.value.openid = user.openid;
   userData.value.permission = user.permission;
@@ -92,7 +92,7 @@ onLoad(async (options) => {
   } else {
     userData.value.nickname = user.nickname;
     userData.value.avatar = user.avatar;
-    login(userData.value);
+    login({ user: userData.value, roles });
     await utils.redirect(redirectUrl.value);
   }
 });
