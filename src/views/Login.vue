@@ -94,6 +94,7 @@ onLoad(async (options) => {
     userData.value.nickname = user.nickname;
     userData.value.avatar = user.avatar;
     login({ user: userData.value, roles });
+    log("login success redirect to:", redirectUrl.value);
     await utils.redirect(redirectUrl.value);
   }
 });
