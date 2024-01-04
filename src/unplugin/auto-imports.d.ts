@@ -37,6 +37,7 @@ declare global {
   const effectScope: typeof import('vue')['effectScope']
   const extendRef: typeof import('@vueuse/core')['extendRef']
   const getActivePinia: typeof import('pinia')['getActivePinia']
+  const getAnonymousSession: typeof import('../store/useSession.js')['getAnonymousSession']
   const getCurrentInstance: typeof import('vue')['getCurrentInstance']
   const getCurrentScope: typeof import('vue')['getCurrentScope']
   const h: typeof import('vue')['h']
@@ -99,6 +100,7 @@ declare global {
   const refThrottled: typeof import('@vueuse/core')['refThrottled']
   const refWithControl: typeof import('@vueuse/core')['refWithControl']
   const regeneratorRuntime: typeof import('regenerator-runtime')['default']
+  const removeSession: typeof import('../store/useSession.js')['removeSession']
   const resolveComponent: typeof import('vue')['resolveComponent']
   const resolveRef: typeof import('@vueuse/core')['resolveRef']
   const resolveUnref: typeof import('@vueuse/core')['resolveUnref']
@@ -141,7 +143,7 @@ declare global {
   const useAsyncQueue: typeof import('@vueuse/core')['useAsyncQueue']
   const useAsyncState: typeof import('@vueuse/core')['useAsyncState']
   const useAttrs: typeof import('vue')['useAttrs']
-  const useAuth: typeof import('../store/index')['useAuth']
+  const useAuth: typeof import('../store/useAuth.js')['useAuth']
   const useBadgeNumber: typeof import('../composables/useBadgeNumber.js')['useBadgeNumber']
   const useBase64: typeof import('@vueuse/core')['useBase64']
   const useBattery: typeof import('@vueuse/core')['useBattery']
@@ -246,7 +248,7 @@ declare global {
   const useScriptTag: typeof import('@vueuse/core')['useScriptTag']
   const useScroll: typeof import('@vueuse/core')['useScroll']
   const useScrollLock: typeof import('@vueuse/core')['useScrollLock']
-  const useSession: typeof import('../store/index')['useSession']
+  const useSession: typeof import('../store/useSession.js')['useSession']
   const useSessionStorage: typeof import('@vueuse/core')['useSessionStorage']
   const useShare: typeof import('@vueuse/core')['useShare']
   const useSlots: typeof import('vue')['useSlots']
@@ -313,7 +315,7 @@ declare global {
 // for type re-export
 declare global {
   // @ts-ignore
-  export type { Component, ComponentPublicInstance, ComputedRef, InjectionKey, PropType, Ref, VNode, WritableComputedRef } from 'vue'
+  export type { Component, ComponentPublicInstance, ComputedRef, ExtractDefaultPropTypes, ExtractPropTypes, ExtractPublicPropTypes, InjectionKey, PropType, Ref, VNode, WritableComputedRef } from 'vue'
 }
 // for vue template auto import
 import { UnwrapRef } from 'vue'
@@ -351,6 +353,7 @@ declare module 'vue' {
     readonly effectScope: UnwrapRef<typeof import('vue')['effectScope']>
     readonly extendRef: UnwrapRef<typeof import('@vueuse/core')['extendRef']>
     readonly getActivePinia: UnwrapRef<typeof import('pinia')['getActivePinia']>
+    readonly getAnonymousSession: UnwrapRef<typeof import('../store/useSession.js')['getAnonymousSession']>
     readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
     readonly h: UnwrapRef<typeof import('vue')['h']>
@@ -413,6 +416,7 @@ declare module 'vue' {
     readonly refThrottled: UnwrapRef<typeof import('@vueuse/core')['refThrottled']>
     readonly refWithControl: UnwrapRef<typeof import('@vueuse/core')['refWithControl']>
     readonly regeneratorRuntime: UnwrapRef<typeof import('regenerator-runtime')['default']>
+    readonly removeSession: UnwrapRef<typeof import('../store/useSession.js')['removeSession']>
     readonly resolveComponent: UnwrapRef<typeof import('vue')['resolveComponent']>
     readonly resolveRef: UnwrapRef<typeof import('@vueuse/core')['resolveRef']>
     readonly resolveUnref: UnwrapRef<typeof import('@vueuse/core')['resolveUnref']>
@@ -455,7 +459,7 @@ declare module 'vue' {
     readonly useAsyncQueue: UnwrapRef<typeof import('@vueuse/core')['useAsyncQueue']>
     readonly useAsyncState: UnwrapRef<typeof import('@vueuse/core')['useAsyncState']>
     readonly useAttrs: UnwrapRef<typeof import('vue')['useAttrs']>
-    readonly useAuth: UnwrapRef<typeof import('../store/index')['useAuth']>
+    readonly useAuth: UnwrapRef<typeof import('../store/useAuth.js')['useAuth']>
     readonly useBadgeNumber: UnwrapRef<typeof import('../composables/useBadgeNumber.js')['useBadgeNumber']>
     readonly useBase64: UnwrapRef<typeof import('@vueuse/core')['useBase64']>
     readonly useBattery: UnwrapRef<typeof import('@vueuse/core')['useBattery']>
@@ -559,7 +563,7 @@ declare module 'vue' {
     readonly useScriptTag: UnwrapRef<typeof import('@vueuse/core')['useScriptTag']>
     readonly useScroll: UnwrapRef<typeof import('@vueuse/core')['useScroll']>
     readonly useScrollLock: UnwrapRef<typeof import('@vueuse/core')['useScrollLock']>
-    readonly useSession: UnwrapRef<typeof import('../store/index')['useSession']>
+    readonly useSession: UnwrapRef<typeof import('../store/useSession.js')['useSession']>
     readonly useSessionStorage: UnwrapRef<typeof import('@vueuse/core')['useSessionStorage']>
     readonly useShare: UnwrapRef<typeof import('@vueuse/core')['useShare']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
@@ -658,6 +662,7 @@ declare module '@vue/runtime-core' {
     readonly effectScope: UnwrapRef<typeof import('vue')['effectScope']>
     readonly extendRef: UnwrapRef<typeof import('@vueuse/core')['extendRef']>
     readonly getActivePinia: UnwrapRef<typeof import('pinia')['getActivePinia']>
+    readonly getAnonymousSession: UnwrapRef<typeof import('../store/useSession.js')['getAnonymousSession']>
     readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
     readonly h: UnwrapRef<typeof import('vue')['h']>
@@ -720,6 +725,7 @@ declare module '@vue/runtime-core' {
     readonly refThrottled: UnwrapRef<typeof import('@vueuse/core')['refThrottled']>
     readonly refWithControl: UnwrapRef<typeof import('@vueuse/core')['refWithControl']>
     readonly regeneratorRuntime: UnwrapRef<typeof import('regenerator-runtime')['default']>
+    readonly removeSession: UnwrapRef<typeof import('../store/useSession.js')['removeSession']>
     readonly resolveComponent: UnwrapRef<typeof import('vue')['resolveComponent']>
     readonly resolveRef: UnwrapRef<typeof import('@vueuse/core')['resolveRef']>
     readonly resolveUnref: UnwrapRef<typeof import('@vueuse/core')['resolveUnref']>
@@ -762,7 +768,7 @@ declare module '@vue/runtime-core' {
     readonly useAsyncQueue: UnwrapRef<typeof import('@vueuse/core')['useAsyncQueue']>
     readonly useAsyncState: UnwrapRef<typeof import('@vueuse/core')['useAsyncState']>
     readonly useAttrs: UnwrapRef<typeof import('vue')['useAttrs']>
-    readonly useAuth: UnwrapRef<typeof import('../store/index')['useAuth']>
+    readonly useAuth: UnwrapRef<typeof import('../store/useAuth.js')['useAuth']>
     readonly useBadgeNumber: UnwrapRef<typeof import('../composables/useBadgeNumber.js')['useBadgeNumber']>
     readonly useBase64: UnwrapRef<typeof import('@vueuse/core')['useBase64']>
     readonly useBattery: UnwrapRef<typeof import('@vueuse/core')['useBattery']>
@@ -866,7 +872,7 @@ declare module '@vue/runtime-core' {
     readonly useScriptTag: UnwrapRef<typeof import('@vueuse/core')['useScriptTag']>
     readonly useScroll: UnwrapRef<typeof import('@vueuse/core')['useScroll']>
     readonly useScrollLock: UnwrapRef<typeof import('@vueuse/core')['useScrollLock']>
-    readonly useSession: UnwrapRef<typeof import('../store/index')['useSession']>
+    readonly useSession: UnwrapRef<typeof import('../store/useSession.js')['useSession']>
     readonly useSessionStorage: UnwrapRef<typeof import('@vueuse/core')['useSessionStorage']>
     readonly useShare: UnwrapRef<typeof import('@vueuse/core')['useShare']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>

@@ -317,6 +317,8 @@
     "onReachBottom": true,
     "useRealNameCert": true,
     "helpers": true,
-    "useAuth": true
+    "useAuth": true,
+    "getAnonymousSession": true,
+    "removeSession": true
   }
 }

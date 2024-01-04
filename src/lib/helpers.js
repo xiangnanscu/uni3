@@ -1,6 +1,7 @@
 import { usePost } from "@/composables/usePost";
 import { useUser } from "@/composables/useUser";
-import { useStore, useSession } from "@/store";
+import { useStore } from "@/store";
+import { useSession } from "@/store/useSession";
 
 export async function getRoles(data) {
   return await usePost(`/role/get_roles`, data);
