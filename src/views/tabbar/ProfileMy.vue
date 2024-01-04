@@ -185,7 +185,7 @@ export default {
   },
   methods: {
     logoutToHomePage(event) {
-      const { logout } = useSession();
+      const { logout } = useAuth();
       logout();
     },
     toCertPage(event) {

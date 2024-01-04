@@ -90,8 +90,8 @@ export const useAuth = defineStore("auth", () => {
     if (user) Object.assign(session.user, user);
     if (roles) Object.assign(session.roles, roles);
     session.expire = LIFETIME_SECONDS * 1000 + new Date().getTime();
-    log("encode session", session);
-    uni.setStorageSync("session", JSON.stringify(session));
+    log("encode session", JSON.stringify({ ...session }));
+    uni.setStorageSync("session", JSON.stringify({ ...session }));
   }
   function logout() {
     session.user = getAnonymousSession().user;
