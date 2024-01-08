@@ -115,7 +115,7 @@ useWxShare({
       //已确定邀请团组织
       shareUrl = `/${page.route}?branch_id=${inviteData.value.branch_id}`;
     else if (branchAdminRole.value?.branch_id)
-      //团组织管理员分享
+      //团组织管理员未选择，点击右上角分享
       shareUrl = `/${page.route}?pid=${branchAdminRole.value.branch_id}`;
     else shareUrl = page.$page?.fullPath;
     console.log("shareUrl:", shareUrl);
