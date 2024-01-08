@@ -25,7 +25,7 @@
           <p v-else>此处申请成为团组织管理员</p>
         </uni-card>
         <fui-preview :previewData="previewData"></fui-preview>
-        <x-button v-if="branchAdminRole.status !== '拒绝'" disabled>已申请</x-button>
+        <x-button v-if="branchAdminRole?.status !== '拒绝'" disabled>已申请</x-button>
         <x-button v-else @click="regeditPrincipal">申请</x-button>
       </div>
       <div v-else-if="sysAdminRole || branchAdminRole">
