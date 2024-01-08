@@ -70,7 +70,7 @@
           <div :class="{ tigan: true, center: onlyOne }" style="width: 100%">
             <span v-if="!onlyOne"> {{ index + 1 }} 、 </span>{{ 题干 }}
           </div>
-          <x-radio
+          <x-radio-poll
             v-if="类型 == '单选'"
             v-model="answers[index]"
             :choices="
@@ -81,8 +81,8 @@
                 image: 选项图[i],
               }))
             "
-          ></x-radio>
-          <x-checkbox
+          ></x-radio-poll>
+          <x-checkbox-poll
             v-else-if="类型 == '多选'"
             v-model="answers[index]"
             :choices="
@@ -96,7 +96,7 @@
             :min="最小选择数"
             :max="最大选择数"
             mode="list"
-          ></x-checkbox>
+          ></x-checkbox-poll>
           <uni-easyinput v-else v-model.trim="answers[index]" type="text" />
         </template>
         <div style="height: 3em"></div>

@@ -86,7 +86,7 @@ const mainKist = [
     badge: "",
     pagePath: "/views/BranchAdmin",
     type: "error",
-    roles: ["sys_admin", "principal", "class_director"],
+    roles: ["sys_admin", "branch_admin"],
   },
 ];
 const permissionMenu = computed(() =>
