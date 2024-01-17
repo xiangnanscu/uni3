@@ -784,28 +784,36 @@ Xodel.to_post_value = function (values, names) {
   }
   return data;
 };
+Xodel._resolve_choices_url = async function ({ field, options }) {
+  const fetch_choices = async (opts = {}) => {
+    const choices_url = options.is_admin_mode
+      ? field.choices_url_admin || field.choices_url // 如果不是fk,那么choices_url_admin不会定义
+      : field.choices_url;
+    const keyword = opts.keyword;
+    const { data: choices } = await this.Http[field.choices_url_method || "post"](
+      choices_url +
+        (keyword
+          ? `${choices_url.includes("?") ? "&" : "?"}${
+              field.keyword_query_name
+            }=${keyword}`
+          : ""),
+    );
+    const res = options.choices_callback
+      ? options.choices_callback(choices, field)
+      : choices;
+    return res;
+  };
+  if (field.preload) {
+    field.choices = await fetch_choices();
+  } else {
+    field.choices = fetch_choices;
+  }
+};
 Xodel.create_model_async = async function (options) {
   for (const name of options.field_names || Object.keys(options.fields)) {
     const field = options.fields[name];
     if (field.choices_url && !field.choices) {
-      const fetch_choices = async (opts = {}) => {
-        const choices_url = options.is_admin_mode
-          ? field.choices_url_admin || field.choices_url // 如果不是fk,那么choices_url_admin不会定义
-          : field.choices_url;
-        const keyword = opts.keyword;
-        const { data: choices } = await this.Http[field.choices_url_method || "post"](
-          choices_url + (keyword ? `?${field.keyword_query_name}=${keyword}` : ""),
-        );
-        const res = options.choices_callback
-          ? options.choices_callback(choices, field)
-          : choices;
-        return res;
-      };
-      if (field.preload) {
-        field.choices = await fetch_choices();
-      } else {
-        field.choices = fetch_choices;
-      }
+      await this._resolve_choices_url({ field, options });
     }
     if (field.type == "foreignkey" && typeof field.reference == "string") {
       if (field.reference == field.table_name) {
@@ -816,6 +824,9 @@ Xodel.create_model_async = async function (options) {
           : field.reference_url || field.reference;
         field.reference = await this.get_http_model(model_url, options.is_admin_mode);
       }
+    }
+    if (field.type == "array" && field.field.choices_url && !field.field.choices) {
+      await this._resolve_choices_url({ field: field.field, options });
     }
     if (field.type == "table" && !field.model?.__is_model_class__) {
       const model_key = field.model.table_name;

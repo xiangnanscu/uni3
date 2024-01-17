@@ -46,7 +46,7 @@ if args.production:
 if platform.system().lower() == 'windows':
     if args.github:
        exec('git push origin master')
-elif platform.system().lower() == 'linux':
+else:
   if args.github:
     exec('''while true
 do

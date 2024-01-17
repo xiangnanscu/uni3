@@ -388,7 +388,7 @@ class string extends basefield {
 }
 
 class text extends basefield {
-  static option_names = ["trim", "pattern"];
+  static option_names = ["trim", "pattern", "length", "minlength", "maxlength"];
   constructor(options) {
     super({ type: "text", db_type: "text", ...options });
     if (this.default === undefined) {
@@ -397,6 +397,20 @@ class text extends basefield {
     if (this.attrs.auto_size === undefined) {
       this.attrs.auto_size = false;
     }
+  }
+  get_validators(validators) {
+    for (const e of ["pattern", "length", "minlength", "maxlength"]) {
+      if (this[e]) {
+        validators.unshift(Validators[e](this[e], this.get_error_message(e)));
+      }
+    }
+    if (this.compact) {
+      validators.unshift(Validators.delete_spaces);
+    } else if (this.trim) {
+      validators.unshift(Validators.trim);
+    }
+    validators.unshift(Validators.string);
+    return super.get_validators(validators);
   }
 }
 
