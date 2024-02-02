@@ -23,33 +23,49 @@
       <tinymce-text :html="record.content"></tinymce-text>
       <template #actions> </template>
     </uni-card>
-    <div style="height: 3em"></div>
-    <x-bottom>
-      <generic-actions :target="record" target-model="ad" style="width: 100%" />
-    </x-bottom>
+    <generic-actions :target="record" target-model="ad" style="width: 100%" />
+    <div style="height: 2em"></div>
+    <thread-body
+      class="chat-body"
+      :posts="posts"
+      target-model="ad"
+      @deletePost="deletePost"
+      @replyPost="replyPost"
+      @replyPostComment="replyPostComment"
+    ></thread-body>
+    <fui-divider text="到底了" />
+    <div style="height: 2em"></div>
+    <div v-if="showChatBar">
+      <x-chatbar
+        v-model.trim:modelValue="messageText"
+        @sendMessage="sendMessage"
+        :title="`回复：${messageType == 'replyPost' ? post?.digest : record.title}`"
+      >
+      </x-chatbar>
+    </div>
   </page-layout>
+  <fui-fab
+    v-if="showFloatPlus"
+    :distance="30"
+    position="right"
+    :isDrag="true"
+    @click="showChatBarReplyThread"
+  ></fui-fab>
 </template>
 
 <script>
 import MixinShare from "./MixinShare";
+import MixinThreadPost from "./MixinThreadPost";
 
 export default {
-  mixins: [MixinShare],
+  mixins: [MixinShare, MixinThreadPost],
   data() {
     return {
+      target_model: "ad",
       record: null,
     };
   },
-  async onLoad(query) {
-    this.query = query;
-    await this.fetchData(query);
-  },
-  methods: {
-    async fetchData(query) {
-      const { data: ad } = await Http.get(`/ad/detail/${query.id}`);
-      this.record = ad;
-    },
-  },
+  methods: {},
 };
 </script>
 
