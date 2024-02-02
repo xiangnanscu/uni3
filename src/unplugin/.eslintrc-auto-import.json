@@ -319,6 +319,7 @@
     "helpers": true,
     "useAuth": true,
     "getAnonymousSession": true,
-    "removeSession": true
+    "removeSession": true,
+    "useRoles": true
   }
 }

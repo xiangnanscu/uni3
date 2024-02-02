@@ -13,7 +13,7 @@
     </view>
     <div class="x-card">
       <div class="thread-title">{{ target.title }}</div>
-      <x-text class="thread-content">{{ target.content }}</x-text>
+      <x-text class="thread-content" :text="target.content"></x-text>
       <x-album v-if="picsUrls.length" :urls="picsUrls" :columns="1"></x-album>
       <generic-actions :target="target" :target-model="targetModel" />
     </div>
