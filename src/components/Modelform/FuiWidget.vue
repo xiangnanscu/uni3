@@ -24,17 +24,17 @@ const blurValidate = (event) => {
   sendError("");
   emit("blur:validate", event);
 };
-
+// https://uniapp.dcloud.net.cn/component/input.html#type
+//idcard,tel
 const easyInputTypeMap = {
   integer: "number",
   float: "digit",
-  password: "password",
-  nickname: "nickname",
-  textarea: "textarea",
-  text: "textarea",
+  password: "safe-password",
+  text: "text",
+  sfzh: "idcard",
 };
 const easyType = computed(
-  () => easyInputTypeMap[props.field.type] || easyInputTypeMap[props.field.input_type],
+  () => easyInputTypeMap[props.field.type] || props.field.input_type,
 );
 const getPhoneNumber = async (event) => {
   // fui-button接口不一样, 不用event.detail
@@ -618,6 +618,7 @@ const fileList = computed(() =>
     @update:modelValue="sendValue"
     :modelValue="props.modelValue"
     :placeholder="placeholder"
+    :type="easyType || 'text'"
   ></fui-input>
 </template>
 <style scoped>
