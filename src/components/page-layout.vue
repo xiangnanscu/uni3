@@ -2,9 +2,9 @@
   <view class="page-layout">
     <div v-if="message" class="global-message">{{ message }}</div>
     <div v-if="error" class="global-error">{{ error }}</div>
-    <fui-card :margin="margin" :showBorder="false" shadow="0 2rpx 4rpx 0 #fff">
+    <div style="margin-left: 15px; margin-right: 15px">
       <slot />
-    </fui-card>
+    </div>
   </view>
   <!-- <fui-safe-area></fui-safe-area> -->
 </template>

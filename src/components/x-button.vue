@@ -36,10 +36,4 @@ export default {
   options: { styleIsolation: "shared" },
 };
 </script>
-<style scoped>
-.x {
-  color: #ffffff;
-  backgroundcolor: #465cff;
-  bordercolor: #465cff;
-}
-</style>
+<style scoped></style>

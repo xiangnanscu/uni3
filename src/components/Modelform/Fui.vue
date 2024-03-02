@@ -9,6 +9,7 @@ const props = defineProps({
   syncValues: { type: Boolean, default: false },
   valuesHook: { type: Function },
   names: { type: Array },
+  errorReport: { type: Function },
 
   actionUrl: { type: String, required: false },
   successUrl: { type: [Object, String] },
@@ -147,6 +148,7 @@ const submit = async () => {
     validateResult = await formRef.value.validator(values, rules.value, true);
   } catch (error) {
     console.log("fui表单校验异常:", error);
+    await props.errorReport?.(error);
     return;
   }
   if (!validateResult.isPassed) {
@@ -223,6 +225,7 @@ const submit = async () => {
         });
       }
     } else {
+      await props.errorReport?.(error);
       uni.showModal({
         title: "错误",
         content: error.errMsg || error.message,
