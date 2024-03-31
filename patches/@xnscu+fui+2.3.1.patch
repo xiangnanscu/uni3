@@ -1,0 +1,105 @@
+diff --git a/node_modules/@xnscu/fui/firstui/fui-form-item/fui-form-item.vue b/node_modules/@xnscu/fui/firstui/fui-form-item/fui-form-item.vue
+index cd1ff2c..ee032ae 100644
+--- a/node_modules/@xnscu/fui/firstui/fui-form-item/fui-form-item.vue
++++ b/node_modules/@xnscu/fui/firstui/fui-form-item/fui-form-item.vue
+@@ -15,7 +15,7 @@
+ 				<view class="fui-form__asterisk" v-if="asterisk"
+ 					:style="{color:asteriskColor || akColor || dangerColor,left:getAkPosi}">*</view>
+ 				<!-- #endif -->
+-				<text class="fui-form__item-sizing"
++				<text :class="{'fui-form__item-sizing':true, [`fui-form__item-required-${required}`]:true}"
+ 					:style="{width:getLabelWidth,fontSize:getLabelSize,color:labelColor || lColor || '#333',paddingRight:getLabelRight,textAlign:getLabelAlign,fontWeight:getLabelWeight}"
+ 					v-if="label">{{label}}</text>
+ 				<view class="fui-form__item-content">
+@@ -74,6 +74,7 @@
+ 				type: [Number, String],
+ 				default: 0
+ 			},
++      required: {type: Boolean},
+ 			//标签文本
+ 			label: {
+ 				type: String,
+@@ -409,6 +410,17 @@
+ </script>
+ 
+ <style scoped>
++  .fui-form__item-required-true::before {
++    content: "*";
++    color: red;
++    margin-right: 5px;
++	}
++  .fui-form__item-required-false::before {
++    content: "*";
++    color: transparent;
++    margin-right: 5px;
++	}
++
+ 	.fui-form__item-wrap,
+ 	.fui-form__item-outer {
+ 		position: relative;
+diff --git a/node_modules/@xnscu/fui/firstui/fui-form/fui-validator.js b/node_modules/@xnscu/fui/firstui/fui-form/fui-validator.js
+index 875a2ce..a3eaf37 100644
+--- a/node_modules/@xnscu/fui/firstui/fui-form/fui-validator.js
++++ b/node_modules/@xnscu/fui/firstui/fui-form/fui-validator.js
+@@ -19,9 +19,7 @@ const form = {
+ 			const msgArr = item.msg || [];
+ 			const ruleLen = rule.length;
+ 			const validatorLen = validator.length;
+-			if (!key || (ruleLen === 0 && validatorLen === 0) || (!~rule.indexOf("required") &&
+-					formData[key].toString()
+-					.length === 0)) {
++			if (!key || (ruleLen === 0 && validatorLen === 0) || (!~rule.indexOf("required") && (formData[key] == null || formData[key] === ""))) {
+ 				continue;
+ 			}
+ 			if (ruleLen) {
+@@ -133,22 +131,34 @@ const form = {
+ 			if (validatorLen) {
+ 				for (let model of validator) {
+ 					let func = model.method;
+-					if (func && !func(formData[key])) {
+-						result.isPassed = false;
+-						if (checkAll) {
+-							const index = result.errorMsg.findIndex(item => item.name === key)
+-							if (index === -1) {
+-								result.errorMsg.push({
+-									name: key,
+-									msg: model.msg || `${key} error !`
+-								})
+-							}
+-							break;
+-						} else {
+-							result.errorMsg = model.msg || `${key} error !`;
+-							return result;
+-						}
+-					}
++          if (!func) {
++            continue
++          }
++          let passed, errorMsg
++          try {
++            passed = func(formData[key], formData)
++            errorMsg = model.msg
++          } catch (error) {
++            passed = false
++            errorMsg = error.message
++          }
++          if (passed) {
++            continue
++          }
++          result.isPassed = false;
++          if (checkAll) {
++            const index = result.errorMsg.findIndex(item => item.name === key)
++            if (index === -1) {
++              result.errorMsg.push({
++                name: key,
++                msg: errorMsg || `${key} error !`
++              })
++            }
++            break;
++          } else {
++            result.errorMsg = errorMsg || `${key} error !`;
++            return result;
++          }
+ 				}
+ 			}
+ 		}
