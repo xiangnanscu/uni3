@@ -51,10 +51,15 @@ export default {
       },
       panelVolplan: { head: "志愿服务", list: [] },
       panelAd: { head: "杂文轩", list: [] },
+      panelJob: { head: "招聘求职", list: [] },
       panelPoll: { head: "问卷调查", list: [] },
       searchValue: "",
       goddess: null,
       ads: null,
+      jobs: [
+        { id: 1, pic: "../../static/zdnl.jpg", title: "职等你来!2024年江安春节招聘" },
+        { id: 2, pic: "../../static/zdnl.jpg", title: "国企专场!2024年江安春节招聘" },
+      ],
       polls: null,
       news: null,
       wheels: null,
@@ -319,6 +324,47 @@ export default {
         </view>
       </uni-grid-item>
     </uni-grid>
+    <fui-panel
+      v-if="jobs?.length"
+      :panelData="panelJob"
+      :marginTop="24"
+      :size="25"
+      :descSize="26"
+    >
+      <fui-card>
+        <view class="fui-list__item">
+          <swiper
+            class="swiper"
+            circular
+            :indicator-dots="true"
+            :autoplay="true"
+            :interval="2000"
+            :duration="500"
+          >
+            <swiper-item v-for="e in jobs" :key="e.id">
+              <view>
+                <image
+                  @click="onJobClick(e)"
+                  style="width: 100%"
+                  :src="e.pic"
+                  mode="widthFix"
+                />
+                <div style="text-align: center; font-size: 80%">{{ e.title }}</div>
+              </view>
+            </swiper-item>
+          </swiper>
+        </view>
+      </fui-card>
+      <fui-list-cell
+        arrow
+        :bottomBorder="false"
+        topBorder
+        topLeft="32"
+        @click="onAdListClick"
+      >
+        <text class="fui-text__link"> 查看更多</text>
+      </fui-list-cell>
+    </fui-panel>
     <fui-panel
       v-if="panelNews.list.length > 0"
       @click="newsClick"
