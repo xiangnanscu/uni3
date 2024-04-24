@@ -186,13 +186,12 @@ const submit = async () => {
       await uni.showToast({ title: props.successMessage });
     }
   } catch (error) {
-    console.error("uni-form error:", utils.repr(error));
     if (error.type == "uni_error") {
       const formerror = error.data;
       const dataType = formerror.type;
       if (dataType == "field_error") {
         errors[formerror.name] = formerror.message;
-        if (props.showModal && props.errShowType !== "modal") {
+        if (props.showModal) {
           uni.showModal({
             title: `“${formerror.label}”:${formerror.message}`,
             showCancel: false,
@@ -213,24 +212,26 @@ const submit = async () => {
           .map(([name, message]) => `${props.model.name_to_label[name]}: ${message}`)
           .join("\n");
         uni.showModal({
-          title: `错误`,
+          title: `提交错误`,
           content: messages,
           showCancel: false,
         });
       } else {
         uni.showModal({
-          title: "错误",
+          title: "提交错误",
           content: JSON.stringify(formerror),
           showCancel: false,
         });
       }
     } else {
-      await props.errorReport?.(error);
-      uni.showModal({
-        title: "错误",
-        content: error.errMsg || error.message,
-        showCancel: false,
-      });
+      if (props.errorReport) {
+        try {
+          await props.errorReport(error);
+        } catch (reportError) {
+          console.log("errorReport error:", reportError);
+        }
+      }
+      throw error; // 抛给全局errorHandler
     }
   } finally {
     submiting.value = false;

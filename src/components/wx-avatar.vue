@@ -165,7 +165,7 @@ export default {
   methods: {
     async choose(event) {
       const avatar = event.detail?.avatarUrl;
-      const key = `${process.env.VITE_APP_NAME}/wx/${utils.uuid()}.${avatar
+      const key = `${process.env.VITE_NAME}/wx/${utils.uuid()}.${avatar
         .split(".")
         .pop()}`;
       this.$emit("update:error", "");

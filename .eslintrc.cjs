@@ -31,10 +31,10 @@ module.exports = {
       "warn",
       {
         trailingComma: "all", // 使用rvest.vs-code-prettier-eslint时, 这里需要配置
-        printWidth: 90,
+        printWidth: 100,
       },
     ],
-    "max-len": ["warn", { code: 90, ignoreComments: true, ignoreStrings: true }],
+    "max-len": ["warn", { code: 100, ignoreComments: true, ignoreStrings: true }],
     "prefer-const": [
       "error",
       {

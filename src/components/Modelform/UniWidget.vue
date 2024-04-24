@@ -6,14 +6,14 @@
 //   image: {
 //     width: 480,
 //     height: 320,
-//     location: "blob:http://localhost:5173/04cacb45-6257-4bbb-aa8a-3776cf839ef1"
+//     location: "blob:http://localhost:5183/04cacb45-6257-4bbb-aa8a-3776cf839ef1"
 //   },
 //   name: "hx2.png",
-//   path: "blob:http://localhost:5173/04cacb45-6257-4bbb-aa8a-3776cf839ef1",
+//   path: "blob:http://localhost:5183/04cacb45-6257-4bbb-aa8a-3776cf839ef1",
 //   progress: 0,
 //   size: 7942,
 //   status: "ready", // error|success|ready
-//   url: "blob:http://localhost:5173/04cacb45-6257-4bbb-aa8a-3776cf839ef1",
+//   url: "blob:http://localhost:5183/04cacb45-6257-4bbb-aa8a-3776cf839ef1",
 //   uuid: 1684568038130
 // };
 const emit = defineEmits([

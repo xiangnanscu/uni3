@@ -32,10 +32,10 @@
       </view>
     </view>
     <!-- #ifdef APP-NVUE -->
-    <fui-safe-area background="#f8f8f8"></fui-safe-area>
+    <fui-safe-area background="#fffffe"></fui-safe-area>
     <!-- #endif -->
     <!-- #ifndef APP-NVUE -->
-    <fui-safe-area background="#f8f8f8" v-if="!focus"></fui-safe-area>
+    <fui-safe-area background="#fffffe" v-if="!focus"></fui-safe-area>
     <!-- #endif -->
   </view>
 </template>
@@ -83,7 +83,7 @@ export default {
   text-align: center;
   font-size: 80%;
   padding: 5px;
-  background: #f8f8f8;
+  background: #fffffe;
   color: #666;
 }
 /* #ifndef APP-NVUE */
@@ -114,7 +114,7 @@ page {
   flex-direction: row;
   align-items: flex-end;
   justify-content: space-between;
-  background: #f8f8f8;
+  background: #fffffe;
 }
 
 .fui-chatbar__input-box {

@@ -64,18 +64,23 @@ export function createApp() {
         });
       } else if (typeof err == "string") {
         uni.showModal({
-          title: `错误`,
+          title: `捕获错误`,
           content: err,
           showCancel: false,
         });
       } else if (err.type == "uni_error") {
         uni.showModal({
-          title: `错误`,
+          title: `捕获错误`,
           content: err.message,
           showCancel: false,
         });
       } else {
-        console.error(err);
+        log(`捕获异常:`, JSON.stringify(err));
+        // uni.showModal({
+        //   title: `捕获异常`,
+        //   content: JSON.stringify(err),
+        //   showCancel: false,
+        // });
       }
     };
   });

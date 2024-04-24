@@ -95,7 +95,7 @@ const envKeys = Object.fromEntries(
 );
 const VITE_PROXY_PREFIX = process.env.VITE_PROXY_PREFIX || "/proxy";
 const VITE_PROXY_PREFIX_REGEX = new RegExp("^" + VITE_PROXY_PREFIX);
-const VITE_APP_NAME = process.env.VITE_APP_NAME;
+const VITE_NAME = process.env.VITE_NAME;
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins,
@@ -122,7 +122,7 @@ export default defineConfig({
   server: {
     // https://vitejs.dev/config/server-options.html#server-proxy
     // https://github.com/http-party/node-http-proxy#options
-    port: Number(env.VITE_APP_PORT),
+    port: Number(env.VITE_PORT),
     strictPort: true,
     proxy: {
       [VITE_PROXY_PREFIX]: {

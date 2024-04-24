@@ -57,7 +57,7 @@ const fileInput = null;
 const ALIOSS_IMAGE_SIZE = process.env.ALIOSS_IMAGE_SIZE;
 const ALIOSS_LIFETIME = process.env.ALIOSS_LIFETIME;
 const ALIOSS_BUCKET = process.env.ALIOSS_BUCKET;
-const ALIOSS_IMAGE_PREFIX = process.env.VITE_APP_NAME;
+const ALIOSS_IMAGE_PREFIX = process.env.VITE_NAME;
 const ALIOSS_URL = `https://${process.env.ALIOSS_HOST}/`;
 const ALIOSS_PAYLOAD_URL = process.env.ALIOSS_PAYLOAD_URL;
 

@@ -2,7 +2,7 @@
   <page-layout>
     <f-alert v-if="query.message"> {{ query.message }} </f-alert>
     <!-- #ifdef H5 -->
-    <modelform-uni
+    <modelform-fui
       :model="loginModel"
       action-url="/login_h5"
       label-position="left"
@@ -12,12 +12,12 @@
       :success-use-redirect="true"
       @success-post="login"
     >
-    </modelform-uni>
+    </modelform-fui>
     <!-- #endif -->
     <!-- #ifdef MP-WEIXIN -->
     <div v-if="needCompleteProfile">
       <uni-notice-bar text="首次登陆，请完善头像和昵称" style="text-align: center" />
-      <modelform-uni
+      <modelform-fui
         :model="profileModel"
         :values="userData"
         :sync-values="true"
@@ -26,7 +26,7 @@
         @success-post="successPostWX"
         submit-button-text="微信登录"
         action-url="/update_profile?update_session=1"
-      ></modelform-uni>
+      ></modelform-fui>
     </div>
     <!-- #endif -->
   </page-layout>

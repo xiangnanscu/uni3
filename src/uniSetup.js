@@ -18,7 +18,7 @@ if (process.env.NODE_ENV == "production") {
   baseURL = `${viteEnv.VITE_HTTPS == "on" ? "https" : "http"}://${viteEnv.VITE_HOST}`;
 } else {
   // #ifdef H5
-  baseURL = `http://localhost:${viteEnv.VITE_APP_PORT}${viteEnv.VITE_PROXY_PREFIX}`;
+  baseURL = `http://localhost:${viteEnv.VITE_PORT}${viteEnv.VITE_PROXY_PREFIX}`;
   // #endif
   // #ifdef MP-WEIXIN
   baseURL = `http://localhost:${process.env.NGINX_listen}`;
