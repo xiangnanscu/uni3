@@ -1,21 +1,19 @@
 <template>
   <page-layout>
-    <modelform-uni
+    <x-text text="头像、昵称用于评论" :size="0.8"></x-text>
+    <modelform-fui
       v-if="ready"
       :model="profileModel"
       :values="userData"
       :success-url="redirectUrl"
       action-url="/update_profile"
-      @success-post="successPost"
-    ></modelform-uni>
+      @success-post="login"
+    ></modelform-fui>
   </page-layout>
 </template>
 
 <script setup>
 const { session, login } = useAuth();
-const successPost = (user) => {
-  login({ user });
-};
 const redirectUrl = useRedirect();
 let wx_avatar = true;
 // #ifdef H5

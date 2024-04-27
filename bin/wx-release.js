@@ -19,7 +19,7 @@ const project = new ci.Project({
   appid: exposedEnvs.WX_MINI_APPID,
   type: "miniProgram",
   projectPath: "./dist/build/mp-weixin",
-  privateKeyPath: `./conf/private.${exposedEnvs.WX_MINI_APPID}.key`,
+  privateKeyPath: `./conf/private.key`,
   ignores: ["node_modules/**/*"],
 });
 

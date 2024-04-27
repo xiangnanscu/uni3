@@ -12,7 +12,7 @@
           <uni-easyinput v-model="PasswordSetData.password" />
         </uni-forms-item>
       </uni-forms>
-      <x-button @click="submit('valiForm')">提交</x-button>
+      <x-button @click="submit('valiForm')" text="提交">提交</x-button>
     </view>
   </page-layout>
 </template>

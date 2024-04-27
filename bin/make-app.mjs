@@ -1,7 +1,6 @@
 import { $, chalk, argv } from "zx";
 import fs from "fs";
 import ejs from "ejs";
-import makeControllers from "./make-controllers.mjs";
 
 const green = (s) => console.log(chalk.green(s));
 const red = (s) => console.log(chalk.red(s));
@@ -18,12 +17,18 @@ const toPascalName = (s) => {
 };
 
 async function preprocess(opts) {
+  if (!opts.name) {
+    opts.name = "xxx";
+  }
   if (opts.model) {
     if (!Array.isArray(opts.model)) {
       opts.model = opts.model.split(",");
     }
   } else {
     opts.model = opts._;
+  }
+  if (!opts.table_name) {
+    opts.table_name = opts.model.map((m) => m.toLowerCase());
   }
 }
 
@@ -52,15 +57,8 @@ async function make(opts) {
       green(`MAKE: ${dest}`);
     });
   };
-  renderFile({
-    src: "template/Model.vue.ejs",
-    dest: `src/views/${appName}.vue`,
-  });
-  renderFile({
-    src: "template/ModelPanel.vue.ejs",
-    dest: `src/views/${appName}/${appName}Panel.vue`,
-  });
   for (const [i, modelName] of opts.model.map(toPascalName).entries()) {
+    await $`mkdir -p src/views/${modelName}`;
     for (const actionName of ["Create", "Update", "List", "Detail"]) {
       renderFile({
         src: `template/Model${actionName}.vue.ejs`,
@@ -77,9 +75,6 @@ async function clear(opts) {
   await $`rm src/views/${appName}.vue`;
   red(`DELETE src/views/${appName}`);
   red(`DELETE src/views/${appName}.vue`);
-  if (opts.controllers || opts.c) {
-    await makeControllers(opts);
-  }
 }
 async function main(opts = argv) {
   // console.log("make-app:", opts);

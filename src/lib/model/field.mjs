@@ -1,12 +1,5 @@
 // get_options 和后端不同, attrs必存在
-import {
-  clone,
-  assert,
-  NULL,
-  FK_TYPE_NOT_DEFIEND,
-  get_localtime,
-  parse_size,
-} from "./utils.mjs";
+import { clone, assert, NULL, FK_TYPE_NOT_DEFIEND, get_localtime, parse_size } from "./utils.mjs";
 import * as Validators from "./validator.mjs";
 import { Model } from "./model.mjs";
 
@@ -160,10 +153,7 @@ class basefield {
         this.null = true;
       }
     }
-    if (
-      !this.group &&
-      (Array.isArray(this.choices) || typeof this.choices === "string")
-    ) {
+    if (!this.group && (Array.isArray(this.choices) || typeof this.choices === "string")) {
       this.choices = get_choices(this.choices);
     }
     if (this.autocomplete) {
@@ -192,9 +182,7 @@ class basefield {
       this.choices.length &&
       (this.strict === undefined || this.strict)
     ) {
-      validators.push(
-        get_choices_validator(this.choices, this.get_error_message("choices")),
-      );
+      validators.push(get_choices_validator(this.choices, this.get_error_message("choices")));
     }
     return validators;
   }
@@ -328,9 +316,7 @@ class string extends basefield {
   ];
   constructor(options) {
     if (!options.choices && !options.length && !options.maxlength) {
-      throw new Error(
-        `field '${options.name}' must define maxlength or choices or length`,
-      );
+      throw new Error(`field '${options.name}' must define maxlength or choices or length`);
     }
     super({
       type: "string",
@@ -344,10 +330,7 @@ class string extends basefield {
     }
     if (Array.isArray(this.choices) && this.choices.length > 0) {
       const n = get_max_choice_length(this.choices);
-      assert(
-        n > 0,
-        "invalid string choices(empty choices or zero length value):" + this.name,
-      );
+      assert(n > 0, "invalid string choices(empty choices or zero length value):" + this.name);
       const m = this.length || this.maxlength;
       if (!m || n > m) {
         this.maxlength = n;
@@ -384,6 +367,22 @@ class string extends basefield {
   }
   to_post_value(value) {
     return this.compact ? value?.replace(/\s/g, "") : value || "";
+  }
+}
+
+class uuid extends basefield {
+  constructor(options) {
+    super({ type: "uuid", db_type: "uuid", ...options });
+    if (this.default === undefined) {
+      this.default = () => `gen_random_uuid()`;
+    }
+  }
+  json(self) {
+    const json = basefield.json(self);
+    if (json.disabled === undefined) {
+      json.disabled = true;
+    }
+    return json;
   }
 }
 
@@ -675,10 +674,7 @@ class foreignkey extends basefield {
       `a foreignkey must define a reference model. not ${fk_model}(type: ${typeof fk_model})`,
     );
     const rc =
-      this.reference_column ||
-      fk_model.primary_key ||
-      fk_model.DEFAULT_PRIMARY_KEY ||
-      "id";
+      this.reference_column || fk_model.primary_key || fk_model.DEFAULT_PRIMARY_KEY || "id";
     const fk = fk_model.fields[rc];
     assert(
       fk,
@@ -836,10 +832,7 @@ class array extends basearray {
   static option_names = ["field", "min"];
   constructor(options) {
     super({ type: "array", min: 1, ...options });
-    assert(
-      typeof this.field === "object",
-      `array field "${this.name}" must define field`,
-    );
+    assert(typeof this.field === "object", `array field "${this.name}" must define field`);
     if (!this.field.name) {
       // 为了解决validateFunction内array field覆盖paren值的问题
       this.field.name = this.name;
@@ -1167,6 +1160,7 @@ class alioss_image_list extends alioss_list {
 export {
   basefield,
   string,
+  uuid,
   sfzh,
   email,
   password,

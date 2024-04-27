@@ -21,6 +21,7 @@ const getAnonymousSession = () =>
     },
     roles: {},
   });
+
 const removeSession = () => {
   uni.removeStorageSync("session");
   uni.removeStorageSync("cookie_session");
@@ -56,6 +57,7 @@ const getSession = () => {
       console.log("客户端未设置expire字段，SESSION过期");
       return getAnonymousSession();
     }
+    console.log(`客户端SESSION过期时间:${new Date(session.expire)}`);
     if (new Date().getTime() > session.expire) {
       console.log("客户端SESSION过期");
       return getAnonymousSession();
@@ -64,9 +66,10 @@ const getSession = () => {
       console.log("没有从session找到登陆user");
       return getAnonymousSession();
     }
-    console.log("session有效期内");
+    console.log(`session有效期内,还有${(session.expire - new Date().getTime()) / 1000 / 3600}小时`);
     return reactive(session);
   } catch (error) {
+    removeSession();
     return getAnonymousSession();
   }
 };

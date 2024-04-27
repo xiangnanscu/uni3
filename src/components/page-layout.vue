@@ -2,9 +2,7 @@
   <view class="page-layout">
     <div v-if="message" class="global-message">{{ message }}</div>
     <div v-if="error" class="global-error">{{ error }}</div>
-    <div style="margin-left: 15px; margin-right: 15px">
-      <slot />
-    </div>
+    <slot />
   </view>
   <!-- <fui-safe-area></fui-safe-area> -->
 </template>
@@ -16,6 +14,7 @@ const props = defineProps({
 </script>
 <style>
 .page-layout {
+  margin: 0 8px;
 }
 
 .fui-spin {

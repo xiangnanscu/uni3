@@ -7,6 +7,7 @@ export const useAuth = defineStore("auth", () => {
   console.log("useAuth called");
   const session = useSession();
   function login({ user, roles }) {
+    log("login:", user, roles);
     if (user) Object.assign(session.user, user);
     if (roles) Object.assign(session.roles, roles);
     session.expire = LIFETIME_SECONDS * 1000 + new Date().getTime();
@@ -15,7 +16,7 @@ export const useAuth = defineStore("auth", () => {
       roles: session.roles,
       expire: session.expire,
     });
-    log("encode session", sessionStr);
+    log("login encode session", sessionStr);
     uni.setStorageSync("session", sessionStr);
     // throw new Error("登录成功");
   }

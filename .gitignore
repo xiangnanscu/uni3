@@ -7,7 +7,7 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
+node_modules*
 *.local
 
 .idea
@@ -20,11 +20,6 @@ node_modules
 
 .npmrc
 # Editor directories and files
-conf/*.key
 settings.json
 **/dist/*
-!**/dist/*.html
-!**/dist/*.txt
-dist/logs.html
-!bin/template/.env
-!bin/template/.env.local
+tmp

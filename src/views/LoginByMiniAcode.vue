@@ -1,7 +1,12 @@
 <template>
   <page-layout>
     <f-alert v-if="status == 'init'">登陆中... </f-alert>
-    <f-alert v-else type="danger">登陆失败,请重扫</f-alert>
+    <div v-else>
+      <f-alert type="danger">登陆失败，请重扫:</f-alert>
+      <span>
+        {{ status }}
+      </span>
+    </div>
   </page-layout>
 </template>
 
@@ -9,13 +14,16 @@
 const query = useQuery();
 const status = ref("init");
 onLoad(async (options) => {
-  log({ options, query });
-  const user = await helpers.autoLogin();
-  const loginRes = await useGet(`/wx/login_mini?uuid=${query.scene}`);
-  if (loginRes == "ok") {
-    utils.redirect(`SuccessPage`, { title: "登陆成功" });
-  } else {
-    status.value = "error";
+  await helpers.autoLogin();
+  try {
+    const loginRes = await useGet(`/wx/login_mini?uuid=${query.scene}`);
+    if (loginRes == "ok") {
+      utils.redirect(`SuccessPage`, { title: "登陆成功" });
+    } else {
+      status.value = JSON.stringify(loginRes);
+    }
+  } catch (error) {
+    status.value = JSON.stringify(error);
   }
 });
 </script>
