@@ -1,7 +1,5 @@
 <template>
-  <view class="x-title">
-    <slot />
-  </view>
+  <view class="x-title"> <slot /> </view>
 </template>
 
 <script setup>
@@ -9,7 +7,7 @@ const props = defineProps({
   sizeRate: { type: Number, default: 1 },
   color: { type: String, default: "black" },
 });
-const fontSize = props.sizeRate * 120 + "%";
+const fontSize = props.sizeRate * 150 + "%";
 const fontColor = props.color;
 </script>
 
@@ -20,5 +18,6 @@ const fontColor = props.color;
   color: v-bind(fontColor);
   font-weight: bold;
   padding: 20rpx;
+  line-height: v-bind(fontSize);
 }
 </style>

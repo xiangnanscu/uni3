@@ -14,22 +14,23 @@ const PRIMITIVE_TYPES = {
 };
 
 function clean_choice(c) {
-  let v;
-  if (c.value !== undefined) {
-    v = c.value;
+  if (Array.isArray(c)) {
+    const [value, label, hint] = c;
+    return [value, label || value, hint];
   } else {
-    v = c[0];
+    const { value, label, hint } = c;
+    return [value, label || value, hint];
   }
-  assert(v !== undefined, "you must provide a value for a choice");
-  let l;
-  if (c.label !== undefined) {
-    l = c.label;
-  } else if (c[1] !== undefined) {
-    l = c[1];
+}
+function normalize_choice(choice) {
+  if (PRIMITIVE_TYPES[typeof choice]) {
+    return { value: choice, label: String(choice) };
+  } else if (typeof choice == "object") {
+    const [value, label, hint] = clean_choice(choice);
+    return { ...choice, value, label, hint };
   } else {
-    l = v;
+    return { value: String(choice), label: String(choice) };
   }
-  return [v, l, c.hint || c[2]];
 }
 function string_choices_to_array(s) {
   const choices = [];
@@ -49,21 +50,7 @@ function get_choices(raw_choices) {
   if (!Array.isArray(raw_choices)) {
     throw new Error(`choices type must be table ,not ${typeof raw_choices}`);
   }
-  const choices = [];
-  for (let c of raw_choices) {
-    if (typeof c === "string") {
-      c = { value: c, label: c };
-    } else if (PRIMITIVE_TYPES[typeof c]) {
-      c = { value: c, label: String(c) };
-    } else if (typeof c === "object") {
-      const [value, label, hint] = clean_choice(c);
-      c = { ...c, value, label, hint };
-    } else {
-      throw new Error("invalid choice type:" + typeof c);
-    }
-    choices.push(c);
-  }
-  return choices;
+  return raw_choices.map(normalize_choice);
 }
 function serialize_choice(choice) {
   return String(choice.value);
@@ -72,22 +59,66 @@ function get_choices_error_message(choices) {
   const valid_choices = choices.map(serialize_choice).join("，");
   return `限下列选项：${valid_choices}`;
 }
-function get_choices_validator(choices, message) {
+
+function get_choices_validator(choices, message, is_array) {
   if (choices.length <= CHOICES_ERROR_DISPLAY_COUNT) {
     message = `${message}，${get_choices_error_message(choices)}`;
   }
-  const is_choice = {};
+  const is_choice = [];
   for (const c of choices) {
     is_choice[c.value] = true;
   }
-  function choices_validator(value) {
-    if (!is_choice[value]) {
-      throw new Error(message);
-    } else {
+  if (is_array) {
+    const array_choices_validator = (value) => {
+      if (!Array.isArray(value)) {
+        throw new Error("类型必须是数组");
+      }
+      for (const e of value) {
+        if (!is_choice[e]) {
+          throw new Error(`“${e}”${message}`);
+        }
+      }
       return value;
-    }
+    };
+    return array_choices_validator;
+  } else {
+    const choices_validator = (value) => {
+      if (!is_choice[value]) {
+        throw new Error(`“${value}”${message}`);
+      } else {
+        return value;
+      }
+    };
+    return choices_validator;
   }
-  return choices_validator;
+}
+
+function get_fields() {
+  return {
+    string: StringField,
+    uuid: UUIDField,
+    sfzh: SfzhField,
+    email: EmailField,
+    password: PasswordField,
+    text: TextField,
+    integer: IntegerField,
+    float: FloatField,
+    datetime: DatetimeField,
+    date: DateField,
+    year_month: YearMonthField,
+    year: YearField,
+    month: MonthField,
+    time: TimeField,
+    json: JsonField,
+    array: ArrayField,
+    table: TableField,
+    foreignkey: ForeignkeyField,
+    boolean: BooleanField,
+    alioss: AliossField,
+    alioss_image: AliossImageField,
+    alioss_list: AliossListField,
+    alioss_image_list: AliossImageListField,
+  };
 }
 const base_option_names = [
   "primary_key",
@@ -104,7 +135,6 @@ const base_option_names = [
   "choices",
   "strict",
   "choices_url",
-  "choices_url_admin",
   "choices_url_method",
   "autocomplete",
   "max_display_count", //前端autocomplete.choices最大展示数
@@ -115,7 +145,7 @@ const base_option_names = [
   "group",
   "attrs",
 ];
-class basefield {
+class BaseField {
   static option_names = [];
   static __is_field_class__ = true;
   static get_choices = get_choices;
@@ -182,7 +212,13 @@ class basefield {
       this.choices.length &&
       (this.strict === undefined || this.strict)
     ) {
-      validators.push(get_choices_validator(this.choices, this.get_error_message("choices")));
+      validators.push(
+        get_choices_validator(
+          this.choices,
+          this.get_error_message("choices"),
+          this.type == "array",
+        ),
+      );
     }
     return validators;
   }
@@ -219,7 +255,7 @@ class basefield {
     if (res.tag === "input" && res.lazy === undefined) {
       res.lazy = true;
     }
-    if (res.preload === undefined && (res.choices_url || res.choices_url_admin)) {
+    if (res.preload === undefined && res.choices_url) {
       res.preload = false;
     }
     return res;
@@ -282,13 +318,7 @@ class basefield {
     return rule;
   }
   choices_callback(choice) {
-    if (PRIMITIVE_TYPES[typeof choice]) {
-      return { value: choice, label: String(choice) };
-    } else if (typeof choice == "object") {
-      return { value: choice.value, label: choice.label, hint: choice.hint };
-    } else {
-      return { value: String(choice), label: String(choice) };
-    }
+    return normalize_choice(choice);
   }
 }
 
@@ -304,7 +334,7 @@ function get_max_choice_length(choices) {
   return n;
 }
 
-class string extends basefield {
+class StringField extends BaseField {
   static option_names = [
     "compact",
     "trim",
@@ -354,7 +384,7 @@ class string extends basefield {
   widget_attrs(extra_attrs) {
     const attrs = { minlength: this.minlength };
     return {
-      ...basefield.prototype.widget_attrs.call(this),
+      ...BaseField.prototype.widget_attrs.call(this),
       ...attrs,
       ...extra_attrs,
     };
@@ -370,7 +400,7 @@ class string extends basefield {
   }
 }
 
-class uuid extends basefield {
+class UUIDField extends BaseField {
   constructor(options) {
     super({ type: "uuid", db_type: "uuid", ...options });
     if (this.default === undefined) {
@@ -378,7 +408,7 @@ class uuid extends basefield {
     }
   }
   json(self) {
-    const json = basefield.json(self);
+    const json = BaseField.json(self);
     if (json.disabled === undefined) {
       json.disabled = true;
     }
@@ -386,7 +416,7 @@ class uuid extends basefield {
   }
 }
 
-class text extends basefield {
+class TextField extends BaseField {
   static option_names = ["trim", "pattern", "length", "minlength", "maxlength"];
   constructor(options) {
     super({ type: "text", db_type: "text", ...options });
@@ -413,7 +443,7 @@ class text extends basefield {
   }
 }
 
-class sfzh extends string {
+class SfzhField extends StringField {
   constructor(options) {
     super({ type: "sfzh", db_type: "varchar", length: 18, ...options });
   }
@@ -423,7 +453,7 @@ class sfzh extends string {
   }
 }
 
-class email extends string {
+class EmailField extends StringField {
   constructor(options) {
     super({ type: "email", db_type: "varchar", maxlength: 255, ...options });
   }
@@ -433,13 +463,13 @@ class email extends string {
   }
 }
 
-class password extends string {
+class PasswordField extends StringField {
   constructor(options) {
     super({ type: "password", db_type: "varchar", maxlength: 255, ...options });
   }
 }
 
-class year_month extends string {
+class YearMonthField extends StringField {
   constructor(options) {
     super({ type: "year_month", db_type: "varchar", length: 7, ...options });
   }
@@ -457,7 +487,7 @@ function add_min_or_max_validators(self, validators) {
   }
 }
 
-class integer extends basefield {
+class IntegerField extends BaseField {
   static option_names = ["min", "max", "step", "serial"];
   constructor(options) {
     super({ type: "integer", db_type: "integer", ...options });
@@ -483,7 +513,7 @@ class integer extends basefield {
   }
 }
 
-class year extends integer {
+class YearField extends IntegerField {
   constructor(options) {
     super({
       type: "year",
@@ -495,13 +525,13 @@ class year extends integer {
   }
 }
 
-class month extends integer {
+class MonthField extends IntegerField {
   constructor(options) {
     super({ type: "month", db_type: "integer", min: 1, max: 12, ...options });
   }
 }
 
-class float extends basefield {
+class FloatField extends BaseField {
   static option_names = ["min", "max", "step", "precision"];
   constructor(options) {
     super({ type: "float", db_type: "float", ...options });
@@ -524,7 +554,7 @@ const DEFAULT_BOOLEAN_CHOICES = [
   { label: "是", value: "true", text: "是" },
   { label: "否", value: "false", text: "否" },
 ];
-class boolean extends basefield {
+class BooleanField extends BaseField {
   static option_names = ["cn"];
   constructor(options) {
     super({ type: "boolean", ...options });
@@ -550,7 +580,7 @@ class boolean extends basefield {
   }
 }
 
-class datetime extends basefield {
+class DatetimeField extends BaseField {
   static option_names = ["auto_now_add", "auto_now", "precision", "timezone"];
   constructor(options) {
     super({
@@ -587,7 +617,7 @@ class datetime extends basefield {
   }
 }
 
-class date extends basefield {
+class DateField extends BaseField {
   constructor(options) {
     super({ type: "date", ...options });
   }
@@ -604,7 +634,7 @@ class date extends basefield {
   }
 }
 
-class time extends basefield {
+class TimeField extends BaseField {
   static option_names = ["precision", "timezone"];
   constructor(options) {
     super({ type: "time", precision: 0, timezone: true, ...options });
@@ -633,13 +663,12 @@ const VALID_FOREIGN_KEY_TYPES = {
   time: Validators.time,
 };
 
-class foreignkey extends basefield {
+class ForeignkeyField extends BaseField {
   static option_names = [
     "reference",
     "reference_column",
     "reference_label_column",
     "reference_url",
-    "reference_url_admin",
     "on_delete",
     "on_update",
     "table_name",
@@ -718,8 +747,6 @@ class foreignkey extends basefield {
     const ret = super.json();
     ret.reference = this.reference.table_name;
     ret.autocomplete = true;
-    ret.choices_url_admin = `/${ret.admin_url_name}/${ret.models_url_name}/${ret.table_name}/fk/${ret.name}/${ret.reference_label_column}`;
-    ret.reference_url_admin = `/${ret.admin_url_name}/${ret.models_url_name}/${ret.reference}`;
     if (ret.choices_url === undefined) {
       ret.choices_url = `/${ret.reference}/choices?value=${ret.reference_column}&label=${ret.reference_label_column}`;
     }
@@ -755,7 +782,7 @@ class foreignkey extends basefield {
   }
 }
 
-class json extends basefield {
+class JsonField extends BaseField {
   constructor(options) {
     super({ type: "json", db_type: "jsonb", ...options });
   }
@@ -799,7 +826,7 @@ function non_empty_array_required(message) {
   return array_required_validator;
 }
 
-class basearray extends json {
+class BaseArrayField extends JsonField {
   constructor(options) {
     super(options);
     if (typeof this.default === "string") {
@@ -828,81 +855,66 @@ class basearray extends json {
   }
 }
 
-class array extends basearray {
+class ArrayField extends BaseArrayField {
   static option_names = ["field", "min"];
   constructor(options) {
     super({ type: "array", min: 1, ...options });
-    assert(typeof this.field === "object", `array field "${this.name}" must define field`);
-    if (!this.field.name) {
-      // 为了解决validateFunction内array field覆盖paren值的问题
-      this.field.name = this.name;
+    if (this.field) {
+      if (!this.field.name) {
+        // 为了解决validateFunction内array field覆盖paren值的问题
+        this.field.name = this.name;
+      }
+      const fields = get_fields();
+      const array_field_cls = fields[this.field.type || "string"];
+      if (!array_field_cls) {
+        throw new Error("invalid array type: " + this.field.type);
+      }
+      this.field = array_field_cls.create_field(this.field);
     }
-    const fields = {
-      // basefield,
-      string,
-      sfzh,
-      email,
-      password,
-      text,
-      integer,
-      float,
-      datetime,
-      date,
-      year_month,
-      year,
-      month,
-      time,
-      // json,
-      // array: array,
-      // table: table,
-      foreignkey,
-      boolean,
-      alioss,
-      alioss_image,
-      // alioss_list: alioss_list,
-      // alioss_image_list: alioss_image_list,
-    };
-    const array_field_cls = fields[this.field.type || "string"];
-    if (!array_field_cls) {
-      throw new Error("invalid array type: " + this.field.type);
-    }
-    this.field = array_field_cls.create_field(this.field);
   }
   get_options() {
     const options = super.get_options();
-    const array_field_options = this.field.get_options();
-    options.field = array_field_options;
+    if (this.field) {
+      const array_field_options = this.field.get_options();
+      options.field = array_field_options;
+    }
     return options;
   }
   get_validators(validators) {
-    const array_validator = (value) => {
-      const res = [];
-      const field = this.field;
-      for (const [i, e] of value.entries()) {
-        try {
-          let val = field.validate(e);
-          if (field.default && (val === undefined || val === "")) {
-            if (typeof field.default !== "function") {
-              val = field.default;
-            } else {
-              val = field.default();
+    if (this.field) {
+      const array_validator = (value) => {
+        const res = [];
+        const field = this.field;
+        for (const [i, e] of value.entries()) {
+          try {
+            let val = field.validate(e);
+            if (field.default && (val === undefined || val === "")) {
+              if (typeof field.default !== "function") {
+                val = field.default;
+              } else {
+                val = field.default();
+              }
             }
+            res[i] = val;
+          } catch (error) {
+            error.index = i;
+            throw error;
           }
-          res[i] = val;
-        } catch (error) {
-          error.index = i;
-          throw error;
         }
-      }
-      return res;
-    };
-    validators.unshift(array_validator);
+        return res;
+      };
+      validators.unshift(array_validator);
+    }
     return super.get_validators(validators);
   }
   to_post_value(value) {
     if (Array.isArray(value)) {
       // 拷贝, 避免弹出表格修改了值但没有提交
-      return [...value.map((e) => this.field.to_post_value(e))];
+      if (this.field) {
+        return [...value.map((e) => this.field.to_post_value(e))];
+      } else {
+        return [...value];
+      }
     } else if (value === undefined) {
       return [];
     } else {
@@ -910,19 +922,27 @@ class array extends basearray {
     }
   }
   to_form_value(value) {
-    let res;
-    if (Array.isArray(value)) {
-      res = [...value.map((e) => this.field.to_form_value(e))];
+    if (this.field) {
+      let res;
+      if (Array.isArray(value)) {
+        res = [...value.map((e) => this.field.to_form_value(e))];
+      } else {
+        res = [];
+      }
+      if (this.min && res.length < this.min) {
+        const m = this.min - res.length;
+        for (let i = 0; i < m; i++) {
+          res.push(this.field.get_default());
+        }
+      }
+      return res;
     } else {
-      res = [];
-    }
-    if (this.min && res.length < this.min) {
-      const m = this.min - res.length;
-      for (let i = 0; i < m; i++) {
-        res.push(this.field.get_default());
+      if (Array.isArray(value)) {
+        return value;
+      } else {
+        return [];
       }
     }
-    return res;
   }
 }
 
@@ -930,7 +950,7 @@ function make_empty_array() {
   return [];
 }
 
-class table extends basearray {
+class TableField extends BaseArrayField {
   static option_names = ["model", "max_rows", "uploadable", "columns"];
   constructor(options) {
     super({ type: "table", max_rows: TABLE_MAX_ROWS, ...options });
@@ -1008,7 +1028,7 @@ const map_to_antd_file_value = (url = "") => {
         ossUrl: url,
       };
 };
-class alioss extends string {
+class AliossField extends StringField {
   static option_names = [
     "size",
     "size_arg",
@@ -1053,7 +1073,7 @@ class alioss extends string {
     return [];
   }
   async get_payload(options) {
-    const { data } = await basefield.Http.post(this.payload_url, {
+    const { data } = await BaseField.Http.post(this.payload_url, {
       ...options,
       size: options.size || this.size,
       lifetime: options.lifetime || this.lifetime,
@@ -1100,7 +1120,7 @@ class alioss extends string {
   }
 }
 
-class alioss_image extends alioss {
+class AliossImageField extends AliossField {
   constructor(options) {
     super({
       type: "alioss_image",
@@ -1112,23 +1132,23 @@ class alioss_image extends alioss {
   }
 }
 
-class alioss_list extends basearray {
+class AliossListField extends BaseArrayField {
   constructor(options) {
     super({
       type: "alioss_list",
       db_type: "jsonb",
       ...options,
     });
-    alioss.prototype.setup.call(this, options);
+    AliossField.prototype.setup.call(this, options);
   }
   async get_payload(options) {
-    return await alioss.prototype.get_payload.call(this, options);
+    return await AliossField.prototype.get_payload.call(this, options);
   }
   get_options() {
-    return alioss.prototype.get_options.call(this);
+    return AliossField.prototype.get_options.call(this);
   }
   json() {
-    return { ...alioss.prototype.json.call(this), ...super.json() };
+    return { ...AliossField.prototype.json.call(this), ...super.json() };
   }
   to_form_value(urls) {
     if (Array.isArray(urls)) {
@@ -1146,7 +1166,7 @@ class alioss_list extends basearray {
   }
 }
 
-class alioss_image_list extends alioss_list {
+class AliossImageListField extends AliossListField {
   constructor(options) {
     super({
       type: "alioss_image_list",
@@ -1158,28 +1178,28 @@ class alioss_image_list extends alioss_list {
 }
 
 export {
-  basefield,
-  string,
-  uuid,
-  sfzh,
-  email,
-  password,
-  text,
-  integer,
-  float,
-  datetime,
-  date,
-  year_month,
-  year,
-  month,
-  time,
-  json,
-  array,
-  table,
-  foreignkey,
-  boolean,
-  alioss,
-  alioss_image,
-  alioss_list,
-  alioss_image_list,
+  BaseField as basefield,
+  StringField as string,
+  UUIDField as uuid,
+  SfzhField as sfzh,
+  EmailField as email,
+  PasswordField as password,
+  TextField as text,
+  IntegerField as integer,
+  FloatField as float,
+  DatetimeField as datetime,
+  DateField as date,
+  YearMonthField as year_month,
+  YearField as year,
+  MonthField as month,
+  TimeField as time,
+  JsonField as json,
+  ArrayField as array,
+  TableField as table,
+  ForeignkeyField as foreignkey,
+  BooleanField as boolean,
+  AliossField as alioss,
+  AliossImageField as alioss_image,
+  AliossListField as alioss_list,
+  AliossImageListField as alioss_image_list,
 };

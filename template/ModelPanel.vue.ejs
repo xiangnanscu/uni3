@@ -1,0 +1,27 @@
+<route lang="yaml"></route>
+<script setup>
+import { RouterView } from "vue-router";
+
+const route = useRoute();
+const matchedKeys = route.matched.map((m) => m.name);
+const siderKeys = ref(matchedKeys);
+</script>
+
+<template>
+  <a-layout-sider>
+    <a-menu
+      v-model:selectedKeys="siderKeys"
+      mode="inline"
+      :style="{ height: '100%', borderRight: 0 }"
+    >
+      <% for( let [i, model] of modelPascalNames.entries() ) { %>
+      <route-menu name="<%= model %>List"><%= labels[i] %></route-menu>
+      <% } %>
+    </a-menu>
+  </a-layout-sider>
+  <a-layout-content :style="{ 'background-color': '#fff', padding: '8px' }">
+    <router-view />
+  </a-layout-content>
+</template>
+
+<style></style>

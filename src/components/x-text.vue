@@ -1,6 +1,6 @@
 <template>
   <div>
-    <template v-for="(line, i) in props.text.split('\n')" :key="i">
+    <template v-for="(line, i) in (props.text || ``).split('\n')" :key="i">
       <div class="padding color" style="line-height: 200%">
         <text
           v-if="line.trim()"
@@ -15,14 +15,7 @@
 </template>
 
 <script setup>
-const props = defineProps([
-  "text",
-  "size",
-  "indent",
-  "color",
-  "padding",
-  "firstLineNoIndent",
-]);
+const props = defineProps(["text", "size", "indent", "color", "padding", "firstLineNoIndent"]);
 const textIndent = props.indent || "0";
 const fontSize = props.size || "36rpx";
 const padding = props.padding || "10rpx 5rpx";

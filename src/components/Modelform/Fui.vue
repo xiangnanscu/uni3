@@ -2,6 +2,8 @@
 import { repr } from "@/lib/utils.mjs";
 
 const emit = defineEmits(["sendData", "successPost"]);
+const slots = useSlots();
+console.log("slots", slots);
 const props = defineProps({
   model: { type: [Object, Function], required: true },
   values: { type: Object, default: () => ({}) }, //	formdata，结合FormItem组件校验时必传
@@ -30,17 +32,16 @@ const props = defineProps({
   disabled: { type: Boolean, default: false }, //是否禁用该表单内的所有组件,透明遮罩层
   errorPosition: { type: [String, Number], default: 1 }, //FormItem 组件错误提示定位方式方式：1-absolute 2-relative
   errorAlign: { type: String, default: "center" }, //FormItem 组件错误提示显示对齐方式，可选值：left、center、right
+  labelColor: { type: String, default: "" },
+  labelWeight: { type: String, default: "" },
+  labelPosition: { type: String, default: "" }, // top
   labelWidth: { type: [String, Number] },
   labelSize: { type: [String, Number], default: 32 }, // 32是系统默认
   labelAlign: { type: String, default: "left" }, //left, right
 });
 const deepcopy = (o) => JSON.parse(JSON.stringify(o));
-const values = props.syncValues
-  ? reactive(props.values)
-  : reactive(deepcopy(props.values));
-const formNames = computed(
-  () => props.names || props.model.admin?.form_names || props.model.names,
-);
+const values = props.syncValues ? reactive(props.values) : reactive(deepcopy(props.values));
+const formNames = computed(() => props.names || props.model.admin?.form_names || props.model.names);
 Object.assign(values, props.model.to_form_value(values, formNames.value));
 const fieldsArray = computed(() =>
   formNames.value.map((name) => props.model.fields[name]).filter((e) => e),
@@ -124,11 +125,22 @@ const smartLabelWidth = computed(() => {
     return `${(maxLabelLength + 2) * props.labelSize}`;
   }
 });
+const smartLabelPosition = computed(() => {
+  if (props.labelPosition) {
+    return props.labelPosition;
+  } else {
+    return !fieldsArray.value.every((f) => f.type !== "table") ? "top" : "left";
+  }
+});
 const showArrow = ref();
 const resetErrors = () => {
-  for (const field of fieldsArray.value) {
-    errors[field.name] = field.type == "array" ? [] : "";
-  }
+  fieldsArray.value.forEach((field) => {
+    if (field.type === "array" && field.field) {
+      errors[field.name] = [...Array(getArrayKeyNumber(field)).keys()].map(() => "");
+    } else {
+      errors[field.name] = "";
+    }
+  });
 };
 resetErrors();
 const shouldDisabled = computed(() => props.disableSubmit(values));
@@ -219,7 +231,7 @@ const submit = async () => {
       } else {
         uni.showModal({
           title: "提交错误",
-          content: JSON.stringify(formerror),
+          content: typeof formerror == 'string'?formerror:JSON.stringify(formerror),
           showCancel: false,
         });
       }
@@ -255,6 +267,12 @@ const getBottomBorder = (field) => {
   }
 };
 const ready = ref();
+const topLabelStyle = computed(() => ({
+  fontWeight: props.labelWeight,
+  marginBottom: "5px",
+  fontSize: props.labelSize + "rpx",
+  color: props.labelColor,
+}));
 onMounted(async () => {
   for (const field of fieldsArray.value) {
     if (typeof field.choices == "function") {
@@ -279,16 +297,19 @@ onMounted(async () => {
     :padding="props.padding"
     :error-position="props.errorPosition"
     :error-align="props.errorAlign"
-    :label-align="props.labelAlign"
+    :label-align2="props.labelAlign"
     :label-width2="smartLabelWidth"
   >
     <template v-for="field in fieldsArray" :key="field.name">
       <fui-form-item
         :prop2="field.name"
-        :label-width="smartLabelWidth"
-        :label-size="props.labelSize"
-        :label="field.label"
         :asterisk2="field.required"
+        :labelWeight="props.labelWeight"
+        :labelAlign="props.labelAlign"
+        :labelWidth="smartLabelWidth"
+        :labelSize="props.labelSize"
+        :label="smartLabelPosition == 'left' ? field.label : ''"
+        :labelColor="props.labelColor"
         :required="field.required"
         :arrow="showArrow"
         :highlight="showArrow"
@@ -296,13 +317,28 @@ onMounted(async () => {
         :bottomBorder="false"
         :padding="field.attrs.padding || ['0rpx', '0rpx', '60rpx', '0rpx']"
       >
-        <modelform-fui-widget
+        <div
+          v-if="smartLabelPosition == 'top'"
+          :class="{ [`top-label-required-${field.required}`]: true }"
+          :style="topLabelStyle"
+        >
+          {{ field.label }}：
+        </div>
+        <modelform-fui-table-field
+          v-if="field.type == 'table'"
           :modelValue="values[field.name]"
           @update:modelValue="values[field.name] = $event"
-          @blur:validate="validateField"
+          v-model:error="errors[field.name]"
+          :field="field"
+        />
+        <modelform-fui-widget
+          v-else
+          :modelValue="values[field.name]"
+          @update:modelValue="values[field.name] = $event"
           @update:values="updateValues"
           v-model:error="errors[field.name]"
           :field="field"
+          @blur:validate="validateField"
         />
         <div v-if="errors[field.name]" class="field-error">
           {{ errors[field.name] }}
@@ -310,6 +346,7 @@ onMounted(async () => {
         <div v-if="field.hint2" class="field-hint">
           {{ field.hint }}
         </div>
+        <slot name="helpText" :field="field"> </slot>
       </fui-form-item>
     </template>
     <fui-button
@@ -353,5 +390,15 @@ onMounted(async () => {
 
 .dynamic-delete-button:hover {
   color: red;
+}
+.top-label-required-true::before {
+  content: "*";
+  color: red;
+  margin-right: 5px;
+}
+.top-label-required-false::before {
+  content: "";
+  color: transparent;
+  margin-right: 5px;
 }
 </style>

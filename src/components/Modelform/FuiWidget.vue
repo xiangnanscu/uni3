@@ -1,10 +1,5 @@
 <script setup>
-const emit = defineEmits([
-  "update:modelValue",
-  "update:error",
-  "blur:validate",
-  "update:values",
-]);
+const emit = defineEmits(["update:modelValue", "update:error", "blur:validate", "update:values"]);
 const props = defineProps({
   field: { type: Object, required: true },
   modelValue: { required: true },
@@ -33,9 +28,7 @@ const easyInputTypeMap = {
   text: "text",
   sfzh: "idcard",
 };
-const easyType = computed(
-  () => easyInputTypeMap[props.field.type] || props.field.input_type,
-);
+const easyType = computed(() => easyInputTypeMap[props.field.type] || props.field.input_type);
 const getPhoneNumber = async (event) => {
   // fui-button接口不一样, 不用event.detail
   // 用户允许: e = {errMsg: "getPhoneNumber:ok", code: "??", encryptedData: "??", iv: "??"}
@@ -114,7 +107,7 @@ const fieldChoices = computed(() => {
       }
     }
     return choices;
-  } else if (fieldType.value === "array") {
+  } else if (fieldType.value === "array" && props.field.field) {
     return props.field.field.choices.map((e) => ({
       ...e, // 保留其他属性
       text: e.label,
@@ -136,9 +129,7 @@ const fuiChoices = computed(() =>
 );
 const fuiUploader = ref();
 const fuiUploadStatus = ref();
-const fileLimit = computed(() =>
-  fieldType.value.endsWith("_list") ? props.field.limit || 9 : 1,
-);
+const fileLimit = computed(() => (fieldType.value.endsWith("_list") ? props.field.limit || 9 : 1));
 const fuiUploadComplete = async (e) => {
   console.log("fuiUploadComplete", e);
   if (e.action == "choose" && e.status == "preupload") {
@@ -189,9 +180,9 @@ const fuiUploadCallback = async (file) => {
       // #ifdef H5
       const current = (file.size / 1024 / 1024).toFixed(1);
       sendError(
-        `文件过大(当前${
-          current > 1 ? current + "MB" : (file.size / 1024).toFixed(1) + "KB"
-        },上限${props.field.size_arg})`,
+        `文件过大(当前${current > 1 ? current + "MB" : (file.size / 1024).toFixed(1) + "KB"},上限${
+          props.field.size_arg
+        })`,
       );
       fuiDeleteFile(file);
       return;
@@ -218,9 +209,9 @@ const fuiUploadVideoCallback = async (path, index) => {
   if (file.size > props.field.size) {
     const current = (file.size / 1024 / 1024).toFixed(1);
     sendError(
-      `视频过大(当前${
-        current > 1 ? current + "MB" : (file.size / 1024).toFixed(1) + "KB"
-      },上限${props.field.size_arg})`,
+      `视频过大(当前${current > 1 ? current + "MB" : (file.size / 1024).toFixed(1) + "KB"},上限${
+        props.field.size_arg
+      })`,
     );
     fuiDeleteFile(file);
     return;
@@ -240,8 +231,7 @@ const fuiCallUpload = async (index) => {
   //   console.log(index);
   //   return;
   // }
-  const callback =
-    props.field.media_type == "video" ? fuiUploadVideoCallback : fuiUploadCallback;
+  const callback = props.field.media_type == "video" ? fuiUploadVideoCallback : fuiUploadCallback;
   await fuiUploader.value.upload(callback, index);
 };
 const fuiReUpload = async (e) => {
@@ -305,11 +295,7 @@ const fileList = computed(() =>
           :value="choice.value"
         >
         </fui-radio>
-        <fui-text
-          :size="28"
-          :text="choice.text"
-          :padding="['0', '30rpx', '0', '16rpx']"
-        ></fui-text>
+        <fui-text :size="28" :text="choice.text" :padding="['0', '30rpx', '0', '16rpx']"></fui-text>
       </fui-label>
     </fui-radio-group>
     <fui-checkbox-group
@@ -323,18 +309,20 @@ const fileList = computed(() =>
         :inline="fieldInline"
         :margin="fieldInline ? ['0', '0'] : ['0.618em', '0']"
       >
-        <fui-checkbox
-          :checked="props.modelValue === choice.value"
-          :scaleRatio="props.field.attrs.scaleRatio || 1"
-          :value="choice.value"
-          borderRadius="8rpx"
-        >
-        </fui-checkbox>
-        <fui-text
-          :size="28"
-          :text="choice.text"
-          :padding="['0', '30rpx', '0', '16rpx']"
-        ></fui-text>
+        <div style="display: flex; align-items: center">
+          <fui-checkbox
+            :checked="props.modelValue === choice.value"
+            :scaleRatio="props.field.attrs.scaleRatio || 1"
+            :value="choice.value"
+            borderRadius="8rpx"
+          >
+          </fui-checkbox>
+          <fui-text
+            :size2="28"
+            :text="choice.text"
+            :padding="['0', '30rpx', '0', '16rpx']"
+          ></fui-text>
+        </div>
       </fui-label>
     </fui-checkbox-group>
     <template v-else-if="props.field.attrs.button">
@@ -601,9 +589,7 @@ const fileList = computed(() =>
     :bottomBorder="false"
     borderColor="transparent"
   >
-    {{
-      props.modelValue ? `${props.modelValue.name}（${props.modelValue.address}）` : ""
-    }}
+    {{ props.modelValue ? `${props.modelValue.name}（${props.modelValue.address}）` : "" }}
     <view class="fui-list-input" :style="{ 'background-color': borderColor }"> </view>
   </fui-list-cell>
   <fui-input

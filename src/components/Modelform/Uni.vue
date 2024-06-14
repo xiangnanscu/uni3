@@ -28,12 +28,8 @@ const props = defineProps({
   labelAlign: { type: String, default: "right" }, //center, right
 });
 const deepcopy = (o) => JSON.parse(JSON.stringify(o));
-const values = props.syncValues
-  ? reactive(props.values)
-  : reactive(deepcopy(props.values));
-const formNames = computed(
-  () => props.names || props.model.admin?.form_names || props.model.names,
-);
+const values = props.syncValues ? reactive(props.values) : reactive(deepcopy(props.values));
+const formNames = computed(() => props.names || props.model.admin?.form_names || props.model.names);
 Object.assign(values, props.model.to_form_value(values, formNames.value));
 const fieldsArray = computed(() =>
   formNames.value.map((name) => props.model.fields[name]).filter((e) => e),
@@ -206,7 +202,7 @@ const submit = async () => {
     @validate="emit('validate', $event)"
   >
     <template v-for="(field, fieldIndex) in fieldsArray" :key="fieldIndex">
-      <template v-if="field.type == 'array' && !field.choices">
+      <template v-if="field.type == 'array' && field.field">
         <template v-for="(value, index) in values[field.name]" :key="index">
           <uni-forms-item
             :ref="(el) => (formsItemRefs[field.name + index] = el)"
@@ -272,9 +268,7 @@ const submit = async () => {
         :label="field.label"
         :required="field.required"
         :name="field.name"
-        :error-message="
-          field.type == 'array' ? errors[field.name].join('') : errors[field.name]
-        "
+        :error-message="field.type == 'array' ? errors[field.name].join('') : errors[field.name]"
       >
         <modelform-uni-widget
           :modelValue="values[field.name]"

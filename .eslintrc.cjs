@@ -18,9 +18,9 @@ module.exports = {
   },
   extends: [
     "./src/unplugin/.eslintrc-auto-import.json",
-    "@vue/eslint-config-typescript",
     "plugin:vue/vue3-essential",
     "eslint:recommended",
+    "@vue/eslint-config-typescript",
     "@vue/eslint-config-prettier/skip-formatting",
   ],
   parserOptions: {
@@ -48,10 +48,7 @@ module.exports = {
         ignorePattern: "^_",
       },
     ],
-    "no-unused-vars": [
-      "warn",
-      { vars: "all", args: "after-used", argsIgnorePattern: "^_" },
-    ],
+    "no-unused-vars": ["warn", { vars: "all", args: "after-used", argsIgnorePattern: "^_" }],
     "vue/multi-word-component-names": "off",
   },
 };

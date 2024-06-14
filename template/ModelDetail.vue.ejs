@@ -1,0 +1,17 @@
+<script setup>
+import { Model } from "@/lib/model";
+import { useGet } from "@/composables/useGet";
+
+const { query } = useRoute();
+const record = await useGet(`/<%= tableName %>/detail/${query.id}`);
+const modelJson = await useGet(`/<%= tableName %>/json`);
+const model = await Model.create_model_async(modelJson);
+</script>
+<template>
+  <div style="margin: auto; width: 800px">
+    <model-detail
+      :model="model"
+      :record="record"
+    ></model-detail>
+  </div>
+</template>

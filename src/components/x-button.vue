@@ -1,7 +1,7 @@
 <template>
   <button
     :style="
-      `color:#ffffff;background-color:#465CFF;border-color:#465CFF;margin-top:1em` +
+      `color:#ffffff;background-color:#465CFF;border-color:#465CFF;margin-top:1em;` +
       props.styleString
     "
     :type="props.type"

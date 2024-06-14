@@ -1,4 +1,4 @@
-import { NeedLoginError } from "@/lib/helpers.js";
+import { NeedLoginError, globalErrorHandler } from "@/lib/helpers.js";
 
 class WxResquestError extends Error {
   constructor({ type, status, data }) {
@@ -17,11 +17,11 @@ const throwOnUniError = (response) => {
       console.log("权限不足，需要登陆");
       throw new NeedLoginError();
     } else if (data.status >= 500) {
-      throw new WxResquestError(data);
+      globalErrorHandler(data);
     } else if (data.status === 404) {
-      throw new WxResquestError(data);
+      globalErrorHandler(data);
     } else {
-      throw new WxResquestError(data);
+      globalErrorHandler(data);
     }
   } else {
     return response;

@@ -2,6 +2,7 @@ import { usePost } from "@/composables/usePost";
 import { useUser } from "@/composables/useUser";
 import { useStore } from "@/store";
 import { useSession } from "@/store/useSession";
+import { getFullPath } from "@/lib/utils";
 
 export async function getRoles(data) {
   return await usePost(`/role/get_roles`, data);
@@ -86,5 +87,39 @@ export function gotoPageWithSuccess(params) {
     setTimeout(async () => {
       await utils.gotoPage(params.url);
     }, 1000);
+  }
+}
+
+const UNI_LOGIN_PAGE = process.env.UNI_LOGIN_PAGE;
+const LOGIN_HINT = "login required";
+export function globalErrorHandler(err) {
+  console.error("errorHandler captured...", err);
+  if (err instanceof NeedLoginError || err.message == LOGIN_HINT) {
+    console.log("NeedLoginError需要登录");
+    utils.redirect(UNI_LOGIN_PAGE, {
+      message: "此操作需要登录",
+      redirect: utils.getSafeRedirect(getFullPath()),
+    });
+  } else if (err instanceof NeedRealNameError) {
+    console.log("NeedRealNameError需要实名认证");
+    utils.redirect("/views/RealNameCert", {
+      justCheck: 1,
+      message: "此操作需要实名认证",
+      redirect: utils.getSafeRedirect(getFullPath()),
+    });
+  } else if (typeof err == "string") {
+    uni.showModal({
+      title: `错误`,
+      content: err,
+      showCancel: false,
+    });
+  } else if (err.type == "uni_error") {
+    uni.showModal({
+      title: `错误`,
+      content: err.message || err.data,
+      showCancel: false,
+    });
+  } else {
+    log(`捕获异常:`, err);
   }
 }

@@ -73,10 +73,9 @@ const getSession = () => {
     return getAnonymousSession();
   }
 };
-
+const session = getSession();
 export const useSession = defineStore("session", () => {
   console.log("useSession called");
-  const session = getSession();
   if (!session.user.id) {
     removeSession();
   }
