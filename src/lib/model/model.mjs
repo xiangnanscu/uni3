@@ -752,6 +752,9 @@ Xodel.to_form_value = function (values, names) {
   const res = {};
   for (const name of names || this.field_names) {
     const field = this.fields[name];
+    if (!field) {
+      throw `invalid name ${name}`;
+    }
     const value = field.to_form_value(values[name], values);
     if (value !== undefined) {
       res[name] = value;
@@ -788,6 +791,10 @@ Xodel._resolve_choices_url = async function ({ field, options, fetch }) {
   }
 };
 Xodel.create_model_async = async function (options) {
+  if (typeof options == "string") {
+    const { data } = await this.Http.get(options);
+    options = data;
+  }
   for (const name of options.field_names || Object.keys(options.fields)) {
     const field = options.fields[name];
     if (field.type == "array") {
@@ -796,7 +803,7 @@ Xodel.create_model_async = async function (options) {
         if (field.field.choices_url && !field.field.choices) {
           await this._resolve_choices_url({ field: field.field, options, fetch: true });
         }
-      } else {
+      } else if (field.choices_url && !field.choices) {
         // static array (checkbox)
         await this._resolve_choices_url({ field, options, fetch: true });
       }
