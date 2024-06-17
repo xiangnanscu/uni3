@@ -8,10 +8,15 @@ const props = defineProps({
   field: { type: Object, required: true },
   modelValue: { required: true },
   error: {},
-  textAlign: { type: String, default: "left" },
+  cellTextAlign: { type: String, default: "left" },
   showTableHeader: { type: Boolean },
   showRowNumber: { type: Boolean },
   showRowAction: { type: Boolean },
+  labelStyle: { type: Object },
+  labelWeight: { type: String, default: "" },
+  labelSize: { type: [String, Number], default: 32 }, // 32是系统默认
+  labelPosition: { type: String, default: "" },
+  labelAlign: { type: String, default: "left" }, //left, right
 });
 
 const adminModel = computed(() => props.field.model);
@@ -97,8 +102,25 @@ const longpress = (index) => {
   deleteConfirmRef.value.open();
   deleteIndex.value = index;
 };
+const labelButtonStyle = {
+  color: "#ffffff",
+  backgroundColor: "#465cff",
+  borderColor: "#465cff",
+  padding: "8px",
+  fontSize: "90%",
+  borderRadius: "5px",
+  cursor: "pointer",
+};
 </script>
 <template>
+  <div style="display: flex; justify-content: space-between; align-items: center">
+    <div :class="{ [`top-label-required-${field.required}`]: true }" :style="labelStyle">
+      {{ field.label }}
+    </div>
+    <div @click="openCreateForm" :style="{ ...labelStyle, ...labelButtonStyle }">
+      添加{{ props.modelValue.length ? "" : field.label }}
+    </div>
+  </div>
   <table
     v-if="props.modelValue.length"
     class="x-table"
@@ -173,10 +195,6 @@ const longpress = (index) => {
       </td>
     </tr>
   </table>
-  <x-button size="mini" @click="openCreateForm" style-string="padding: 0 1em">
-    <uni-icons type="plusempty" color="#fff"></uni-icons>
-    添加{{ props.modelValue.length ? field.label : "" }}
-  </x-button>
   <uni-popup
     ref="createFormRef"
     :is-mask-click="true"
@@ -188,8 +206,10 @@ const longpress = (index) => {
       <modelform-fui
         v-if="showCreateForm"
         @sendData="onSuccessCreate"
-        labelPosition="top"
-        labelWeight="bold"
+        :labelPosition="labelPosition"
+        :labelWeight="labelWeight"
+        :labelAlign="labelAlign"
+        :labelSize="labelSize"
         :model="adminModel"
         :values="adminModel.get_defaults()"
       ></modelform-fui>
@@ -234,13 +254,13 @@ const longpress = (index) => {
   border-collapse: collapse;
 
   .x-th {
-    text-align: center;
+    text-align: v-bind(cellTextAlign);
     padding: 20rpx 0;
     display: table-cell;
   }
 
   .x-td {
-    text-align: v-bind(textAlign);
+    text-align: v-bind(cellTextAlign);
     background: #ffffff;
     padding: 20rpx 0;
     display: table-cell;
@@ -259,5 +279,15 @@ const longpress = (index) => {
 .admin-list-avatar {
   max-width: 100px;
   max-height: 100px;
+}
+.top-label-required-true::before {
+  content: "*";
+  color: red;
+  margin-right: 5px;
+}
+.top-label-required-false::before {
+  content: "";
+  color: transparent;
+  margin-right: 5px;
 }
 </style>

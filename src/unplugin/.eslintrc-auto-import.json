@@ -320,6 +320,7 @@
     "useAuth": true,
     "getAnonymousSession": true,
     "removeSession": true,
-    "useRoles": true
+    "useRoles": true,
+    "useMapNavigate": true
   }
 }

@@ -41,9 +41,7 @@ export default {
         ],
       },
       volplan: {
-        pics: [
-          "//lzwlkj.oss-cn-shenzhen.aliyuncs.com/jaqn/vc-upload-1698107988250-8.jpg",
-        ],
+        pics: ["//lzwlkj.oss-cn-shenzhen.aliyuncs.com/jaqn/vc-upload-1698107988250-8.jpg"],
         views: 15,
         title: "大妙镇防灭火宣传志愿服务活动",
         ctime: "2023-10-24 08:46:08+08",
@@ -129,9 +127,7 @@ export default {
     store.disableLoading = true;
     try {
       await useBadgeNumber({ isTabbar: true });
-      const { noticeText, goddess, volplan, ads, polls, news } = await usePost(
-        `/home_data`,
-      );
+      const { noticeText, goddess, volplan, ads, polls, news } = await usePost(`/home_data`);
       this.noticeText = noticeText;
       this.goddess = goddess[0];
       this.volplan = volplan[0];
@@ -151,6 +147,9 @@ export default {
     }
   },
   methods: {
+    onJobClick() {
+      utils.gotoPage(`JobList`);
+    },
     updateApp() {
       const updateManager = uni.getUpdateManager();
 
@@ -293,21 +292,11 @@ export default {
         iconClick="onClick"
       ></uni-easyinput>
     </view>
-    <uni-notice-bar
-      class="notice-bar"
-      :speed="50"
-      show-icon
-      scrollable
-      :text="noticeText"
-    />
+    <uni-notice-bar class="notice-bar" :speed="50" show-icon scrollable :text="noticeText" />
     <uni-grid :column="4" :show-border="false" :square="false" @change="change">
       <uni-grid-item v-for="(item, index) in mainKist" :index="index" :key="index">
         <view class="grid-item-box" style="text-align: center">
-          <x-navigator
-            :url="item.pagePath"
-            hover-class="navigator-hover"
-            open-type="navigate"
-          >
+          <x-navigator :url="item.pagePath" hover-class="navigator-hover" open-type="navigate">
             <image
               class="banner-image"
               :src="item.url"
@@ -324,13 +313,7 @@ export default {
         </view>
       </uni-grid-item>
     </uni-grid>
-    <fui-panel
-      v-if="jobs?.length"
-      :panelData="panelJob"
-      :marginTop="24"
-      :size="25"
-      :descSize="26"
-    >
+    <fui-panel v-if="jobs?.length" :panelData="panelJob" :marginTop="24" :size="25" :descSize="26">
       <fui-card>
         <view class="fui-list__item">
           <swiper
@@ -343,25 +326,14 @@ export default {
           >
             <swiper-item v-for="e in jobs" :key="e.id">
               <view>
-                <image
-                  @click="onJobClick(e)"
-                  style="width: 100%"
-                  :src="e.pic"
-                  mode="widthFix"
-                />
+                <image @click="onJobClick(e)" style="width: 100%" :src="e.pic" mode="widthFix" />
                 <div style="text-align: center; font-size: 80%">{{ e.title }}</div>
               </view>
             </swiper-item>
           </swiper>
         </view>
       </fui-card>
-      <fui-list-cell
-        arrow
-        :bottomBorder="false"
-        topBorder
-        topLeft="32"
-        @click="onAdListClick"
-      >
+      <fui-list-cell arrow :bottomBorder="false" topBorder topLeft="32" @click="onAdListClick">
         <text class="fui-text__link"> 查看更多</text>
       </fui-list-cell>
     </fui-panel>
@@ -375,13 +347,7 @@ export default {
       :size="25"
       :descSize="26"
     >
-      <fui-list-cell
-        arrow
-        :bottomBorder="false"
-        topBorder
-        topLeft="32"
-        @click="gotoNewsPage"
-      >
+      <fui-list-cell arrow :bottomBorder="false" topBorder topLeft="32" @click="gotoNewsPage">
         <text class="fui-text__link">查看更多</text>
       </fui-list-cell>
     </fui-panel>
@@ -404,22 +370,10 @@ export default {
           />
         </view>
       </fui-card>
-      <fui-list-cell
-        arrow
-        :bottomBorder="false"
-        topBorder
-        topLeft="32"
-        @click="onGoddessClick"
-      >
+      <fui-list-cell arrow :bottomBorder="false" topBorder topLeft="32" @click="onGoddessClick">
         <text class="fui-text__link"> {{ goddess.title }}</text>
       </fui-list-cell>
-      <fui-list-cell
-        arrow
-        :bottomBorder="false"
-        topBorder
-        topLeft="32"
-        @click="onGoddessListClick"
-      >
+      <fui-list-cell arrow :bottomBorder="false" topBorder topLeft="32" @click="onGoddessListClick">
         <text class="fui-text__link"> 查看更多</text>
       </fui-list-cell>
     </fui-panel>
@@ -442,32 +396,14 @@ export default {
           />
         </view>
       </fui-card>
-      <fui-list-cell
-        arrow
-        :bottomBorder="false"
-        topBorder
-        topLeft="32"
-        @click="onVolplanClick"
-      >
+      <fui-list-cell arrow :bottomBorder="false" topBorder topLeft="32" @click="onVolplanClick">
         <text class="fui-text__link"> {{ volplan.title }}</text>
       </fui-list-cell>
-      <fui-list-cell
-        arrow
-        :bottomBorder="false"
-        topBorder
-        topLeft="32"
-        @click="onVolplanListClick"
-      >
+      <fui-list-cell arrow :bottomBorder="false" topBorder topLeft="32" @click="onVolplanListClick">
         <text class="fui-text__link"> 查看更多</text>
       </fui-list-cell>
     </fui-panel>
-    <fui-panel
-      v-if="ads?.length"
-      :panelData="panelAd"
-      :marginTop="24"
-      :size="25"
-      :descSize="26"
-    >
+    <fui-panel v-if="ads?.length" :panelData="panelAd" :marginTop="24" :size="25" :descSize="26">
       <fui-card>
         <view class="fui-list__item">
           <swiper
@@ -480,24 +416,13 @@ export default {
           >
             <swiper-item v-for="e in ads" :key="e.id">
               <view>
-                <image
-                  @click="onAdClick(e)"
-                  style="width: 100%"
-                  :src="e.pics[0]"
-                  mode="widthFix"
-                />
+                <image @click="onAdClick(e)" style="width: 100%" :src="e.pics[0]" mode="widthFix" />
               </view>
             </swiper-item>
           </swiper>
         </view>
       </fui-card>
-      <fui-list-cell
-        arrow
-        :bottomBorder="false"
-        topBorder
-        topLeft="32"
-        @click="onAdListClick"
-      >
+      <fui-list-cell arrow :bottomBorder="false" topBorder topLeft="32" @click="onAdListClick">
         <text class="fui-text__link"> 查看更多</text>
       </fui-list-cell>
     </fui-panel>

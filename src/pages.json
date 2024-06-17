@@ -222,7 +222,15 @@
     {
       "path": "views/BranchRegeditAdmin",
       "style": { "navigationBarTitleText": "" }
-    }
+    },
+    { "path": "views/CommonList", "style": { "navigationBarTitleText": "" } },
+    {
+      "path": "views/RegeditSuccessPage",
+      "style": { "navigationBarTitleText": "" }
+    },
+    { "path": "views/JobDetail", "style": { "navigationBarTitleText": "" } },
+    { "path": "views/JobList", "style": { "navigationBarTitleText": "" } },
+    { "path": "views/JobSubmit", "style": { "navigationBarTitleText": "" } }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",

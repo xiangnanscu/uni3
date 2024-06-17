@@ -34,7 +34,7 @@ const props = defineProps({
   errorAlign: { type: String, default: "center" }, //FormItem 组件错误提示显示对齐方式，可选值：left、center、right
   labelColor: { type: String, default: "" },
   labelWeight: { type: String, default: "" },
-  labelPosition: { type: String, default: "" }, // top
+  labelPosition: { type: String, default: "" }, // top,left
   labelWidth: { type: [String, Number] },
   labelSize: { type: [String, Number], default: 32 }, // 32是系统默认
   labelAlign: { type: String, default: "left" }, //left, right
@@ -231,7 +231,7 @@ const submit = async () => {
       } else {
         uni.showModal({
           title: "提交错误",
-          content: typeof formerror == 'string'?formerror:JSON.stringify(formerror),
+          content: typeof formerror == "string" ? formerror : JSON.stringify(formerror),
           showCancel: false,
         });
       }
@@ -308,7 +308,7 @@ onMounted(async () => {
         :labelAlign="props.labelAlign"
         :labelWidth="smartLabelWidth"
         :labelSize="props.labelSize"
-        :label="smartLabelPosition == 'left' ? field.label : ''"
+        :label="field.type == 'table' ? '' : smartLabelPosition == 'left' ? field.label : ''"
         :labelColor="props.labelColor"
         :required="field.required"
         :arrow="showArrow"
@@ -318,17 +318,23 @@ onMounted(async () => {
         :padding="field.attrs.padding || ['0rpx', '0rpx', '60rpx', '0rpx']"
       >
         <div
-          v-if="smartLabelPosition == 'top'"
+          v-if="field.type !== 'table' && smartLabelPosition == 'top'"
           :class="{ [`top-label-required-${field.required}`]: true }"
           :style="topLabelStyle"
         >
-          {{ field.label }}：
+          {{ field.label }}
         </div>
         <modelform-fui-table-field
           v-if="field.type == 'table'"
           :modelValue="values[field.name]"
           @update:modelValue="values[field.name] = $event"
           v-model:error="errors[field.name]"
+          :showTableHeader="!!field.attrs.showTableHeader"
+          :labelStyle="topLabelStyle"
+          :labelWeight="labelWeight"
+          :labelPosition="smartLabelPosition"
+          :labelAlign="props.labelAlign"
+          :labelSize="props.labelSize"
           :field="field"
         />
         <modelform-fui-widget

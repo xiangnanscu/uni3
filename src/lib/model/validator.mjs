@@ -80,7 +80,7 @@ function trim(v) {
   return v.trim();
 }
 function year_month(v) {
-  if (/^\d{4}[.][01]\d$/.test(v)) {
+  if (/^\d{4}[-.][01]\d$/.test(v)) {
     return v;
   } else {
     throw new Error("格式不正确，正确举例：2010.01");

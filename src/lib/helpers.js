@@ -64,9 +64,10 @@ export class NeedRealNameError extends Error {}
 
 export function checkLogin() {
   const user = useUser();
-  if (!user.id) {
+  if (!user || !user.id) {
     throw new NeedLoginError(`需要登录`);
   }
+  return user;
 }
 
 export function checkRealName() {
