@@ -1,7 +1,8 @@
 <template>
   <page-layout>
     <div v-if="ready">
-      <x-title> </x-title>
+      <x-title> {{ jobSpecial.title }}</x-title>
+      <image style="width: 100%" :src="jobSpecial.image" mode="widthFix" />
       <uni-list v-if="records.length">
         <uni-list-item
           v-for="e in records"
@@ -28,8 +29,11 @@
 const ready = ref();
 const query = useQuery();
 const records = ref([]);
+const jobSpecial = ref();
 onLoad(async () => {
-  records.value = await usePost(`/job/records`);
+  const { jobs, special } = await usePost(`/job/by_special/${query.id}`);
+  records.value = jobs;
+  jobSpecial.value = special;
   ready.value = true;
 });
 </script>

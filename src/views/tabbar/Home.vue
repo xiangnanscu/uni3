@@ -127,7 +127,10 @@ export default {
     store.disableLoading = true;
     try {
       await useBadgeNumber({ isTabbar: true });
-      const { noticeText, goddess, volplan, ads, polls, news } = await usePost(`/home_data`);
+      const { noticeText, goddess, volplan, ads, polls, news, specials } = await usePost(
+        `/home_data`,
+      );
+      this.specials = specials;
       this.noticeText = noticeText;
       this.goddess = goddess[0];
       this.volplan = volplan[0];
@@ -147,8 +150,8 @@ export default {
     }
   },
   methods: {
-    onJobClick() {
-      utils.gotoPage(`JobList`);
+    onJobClick(e) {
+      utils.gotoPage({ name: `JobSpecialDetail`, query: { id: e.id } });
     },
     updateApp() {
       const updateManager = uni.getUpdateManager();
@@ -313,29 +316,27 @@ export default {
         </view>
       </uni-grid-item>
     </uni-grid>
-    <fui-panel v-if="jobs?.length" :panelData="panelJob" :marginTop="24" :size="25" :descSize="26">
-      <fui-card>
-        <view class="fui-list__item">
-          <swiper
-            class="swiper"
-            circular
-            :indicator-dots="true"
-            :autoplay="true"
-            :interval="2000"
-            :duration="500"
-          >
-            <swiper-item v-for="e in jobs" :key="e.id">
-              <view>
-                <image @click="onJobClick(e)" style="width: 100%" :src="e.pic" mode="widthFix" />
-                <div style="text-align: center; font-size: 80%">{{ e.title }}</div>
-              </view>
-            </swiper-item>
-          </swiper>
-        </view>
-      </fui-card>
-      <fui-list-cell arrow :bottomBorder="false" topBorder topLeft="32" @click="onAdListClick">
-        <text class="fui-text__link"> 查看更多</text>
-      </fui-list-cell>
+    <fui-panel
+      v-if="specials?.length"
+      :panelData="panelJob"
+      :marginTop="24"
+      :size="25"
+      :descSize="26"
+    >
+      <swiper
+        class="swiper"
+        circular
+        :indicator-dots="true"
+        :autoplay="true"
+        :interval="2000"
+        :duration="500"
+      >
+        <swiper-item v-for="e in specials" :key="e.id">
+          <view class="swiper-item">
+            <image @click="onJobClick(e)" style="width: 100%" :src="e.image" mode="widthFix" />
+          </view>
+        </swiper-item>
+      </swiper>
     </fui-panel>
     <fui-panel
       v-if="panelNews.list.length > 0"
@@ -465,6 +466,14 @@ export default {
 </template>
 
 <style scoped>
+.swiper-item {
+  width: 100%;
+  height: 600rpx;
+  display: flex;
+  justify-content: center;
+  font-size: 34rpx;
+  font-weight: 600;
+}
 .fui-section__title {
   margin-left: 32rpx;
 }

@@ -5,73 +5,67 @@
       {{ utils.fromNow(record.ctime) }}
     </x-title>
     <fui-preview :previewData="previewData"></fui-preview>
+    <div style="padding: 0 1rem">
+      <tinymce-text :html="record.job_details"></tinymce-text>
+    </div>
+
     <x-button @click="submitResume" :plain="false" size="default" type="default">投</x-button>
     <div style="height: 4em"></div>
   </page-layout>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      disableJoinButton: false,
-      record: null,
-    };
-  },
-  async onLoad(query) {
-    this.query = query;
-    await this.fetchData(query);
-  },
-  computed: {
-    previewData() {
-      return {
-        list: [
-          {
-            label: "公司名称",
-            value: `${this.record.company_id__name}`,
-          },
-          {
-            label: "职位待遇",
-            value: `${this.record.salary_min}-${this.record.salary_max}元/月`,
-          },
-          {
-            label: "招聘人数",
-            value: this.record.hire_number,
-          },
-          {
-            label: "经验要求",
-            value: this.record.exp_req.join(),
-          },
-          {
-            label: "学历要求",
-            value: this.record.edu_req.join(),
-          },
-        ],
-      };
-    },
-  },
-  methods: {
-    async fetchData(query) {
-      this.record = await useGet(`/job/detail/${query.id}`);
-    },
-    async submitResume() {
-      const logs = await usePost(`/resume_submission/records`, {
-        usr_id: this.user.id,
-        job_id: this.query.id,
-      });
-      log(logs);
-      await utils.gotoPage(`/views/JobSubmit?job_id=${this.query.id}`);
-    },
-  },
-};
-</script>
+<script setup>
+import { ref, computed } from "vue";
 
-<style scoped>
-.stage-title {
-  color: black;
-  text-align: center;
-  font-size: 150%;
-  font-weight: bold;
-  margin-bottom: 1em;
+const record = ref(null);
+const query = useQuery();
+
+async function fetchData() {
+  record.value = await useGet(`/job/detail/${query.id}`);
 }
-</style>
+
+const previewData = computed(() => {
+  const campany = record.value?.company_id__name;
+  const list = [
+    {
+      label: "职位待遇",
+      value: `${record.value?.salary_min}-${record.value?.salary_max}元/月`,
+    },
+    {
+      label: "招聘人数",
+      value: record.value?.hire_number,
+    },
+    {
+      label: "经验要求",
+      value: record.value?.exp_req.join(),
+    },
+    {
+      label: "学历要求",
+      value: record.value?.edu_req.join(),
+    },
+  ];
+  if (campany) {
+    list.unshift({
+      label: "公司名称",
+      value: campany,
+    });
+  }
+  return { list };
+});
+
+async function submitResume() {
+  const logs = await usePost(`/resume_submission/records?select=status`, {
+    usr_id: query.usr_id, // 假设 user 对象在组件外部定义并传递进来
+    job_id: query.id,
+  });
+  const queryData = { job_id: record.value?.id, job_name: record.value?.job_name };
+  if (logs.length === 1) {
+    queryData.status = logs[0].status;
+  }
+  await utils.gotoPage({ name: `JobSubmit`, query: queryData });
+}
+
+onLoad(async () => {
+  await fetchData(query);
+});
+</script>

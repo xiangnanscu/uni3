@@ -230,7 +230,11 @@
     },
     { "path": "views/JobDetail", "style": { "navigationBarTitleText": "" } },
     { "path": "views/JobList", "style": { "navigationBarTitleText": "" } },
-    { "path": "views/JobSubmit", "style": { "navigationBarTitleText": "" } }
+    { "path": "views/JobSubmit", "style": { "navigationBarTitleText": "" } },
+    {
+      "path": "views/JobSpecialDetail",
+      "style": { "navigationBarTitleText": "" }
+    }
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",

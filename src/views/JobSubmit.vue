@@ -1,7 +1,12 @@
 <template>
   <page-layout>
+    <x-title>{{ query.job_name }}</x-title>
+    <x-title :size-rate="0.6">
+      {{ hintMessage }}
+    </x-title>
     <modelform-fui
       v-if="ready"
+      :disabled="disableForm"
       label-position="left"
       label-align="left"
       :model="ResumeSubmissionModel"
@@ -9,6 +14,7 @@
       :sync-values="true"
       success-url="SuccessPage"
       action-url="/resume_submission/create"
+      :hide-submit-button="disableForm"
     ></modelform-fui>
   </page-layout>
 </template>
@@ -53,13 +59,35 @@ const query = useQuery();
 const values = ref({});
 const ResumeSubmissionModel = ref();
 const ready = ref(false);
+const hintMessage = computed(() => {
+  if (!query.status) {
+    return ``;
+  } else if (query.status == "待审核") {
+    return `已投简历,请耐心等待审核`;
+  } else if (query.status == "拒绝") {
+    return `简历被拒绝`;
+  } else if (query.status == "通过") {
+    return `简历已通过审核`;
+  } else {
+    return ``;
+  }
+});
+const disableForm = computed(() => query.status === "通过" || query.status === "待审核");
 onLoad(async () => {
   ResumeSubmissionModel.value = await Model.create_model_async(`/resume_submission/form_json`);
-  const currentResume = await usePost(`/resume_submission/get_or_create`, [
-    { usr_id: user.id, job_id: query.job_id },
-    {},
-    ResumeSubmissionModel.value.names,
-  ]);
+  let currentResume;
+  if (!query.status) {
+    currentResume = await usePost(`/resume/get_or_create`, [
+      { usr_id: user.id },
+      {},
+      ResumeSubmissionModel.value.names.filter((name) => name !== "status"),
+    ]);
+  } else {
+    currentResume = await usePost(`/resume_submission/get`, {
+      job_id: query.job_id,
+      usr_id: user.id,
+    });
+  }
   Object.assign(values.value, { job_id: query.job_id, usr_id: user.id }, currentResume);
   ready.value = true;
 });
