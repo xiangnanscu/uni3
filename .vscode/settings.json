@@ -60,8 +60,5 @@
   },
   "Lua.diagnostics.disable": [
     "duplicate-set-field"
-  ],
-  "[wxml]": {
-    "editor.defaultFormatter": "qiu8310.minapp-vscode"
-  }
+  ]
 }

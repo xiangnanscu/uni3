@@ -955,6 +955,8 @@ class TableField extends BaseArrayField {
   constructor(options) {
     super({ type: "table", max_rows: TABLE_MAX_ROWS, ...options });
     if (!this.model?.__is_model_class__) {
+      //TODO: 这里无法处理foreignkey的情况,因为不能使用异步方法create_model_async
+      //考虑限制只能传入model,不能传json
       this.model = Model.create_model(this.model);
       // throw new Error("please define model for a table field: " + this.name);
     }
