@@ -10,7 +10,7 @@ const props = defineProps({
   uploadUrl: { type: String },
   downloadUrl: { type: String },
   uniqueKey: { type: [String, Array] },
-  names: { type: Array }
+  names: { type: Array },
 });
 const batchModel = !props.model.__is_model_class__
   ? Model.create_model({ ...props.model })
@@ -21,9 +21,7 @@ const ensureUnique = (rows) => {
   const key = props.uniqueKey;
   if (key) {
     const uniqueCallback =
-      typeof key == "string"
-        ? (row) => row[key]
-        : (row) => key.map((k) => row[k]).join("|");
+      typeof key == "string" ? (row) => row[key] : (row) => key.map((k) => row[k]).join("|");
     const dups = findDups(rows, uniqueCallback);
     if (dups.length) {
       emit("findDuplicates", dups);
@@ -50,7 +48,7 @@ const onXlsxRead = async ({ ok, message, rows }) => {
   } else {
     try {
       const [cleanedRows, columns] = batchModel.validate_create_data(
-        ensureUnique(rows.map(prepareForDb))
+        ensureUnique(rows.map(prepareForDb)),
       );
       emit("uploadRows", cleanedRows);
       if (!props.rows) {
@@ -61,13 +59,11 @@ const onXlsxRead = async ({ ok, message, rows }) => {
     } catch (error) {
       if (error.name == "AxiosError") {
         const {
-          response: { data, status }
+          response: { data, status },
         } = error;
         Notice.error(typeof data == "object" ? JSON.stringify(data) : data);
       } else if (error instanceof Model.ValidateBatchError) {
-        Notice.error(
-          `第${error.index + 1}行“${error.label}”错误：${error.message}`
-        );
+        Notice.error(`第${error.index + 1}行“${error.label}”错误：${error.message}`);
       } else {
         Notice.error(error.message);
       }
@@ -75,15 +71,13 @@ const onXlsxRead = async ({ ok, message, rows }) => {
   }
 };
 const downloadRows = async () => {
-  const { data } = props.rows
-    ? { data: props.rows }
-    : await Http.get(props.downloadUrl);
+  const { data } = props.rows ? { data: props.rows } : await Http.get(props.downloadUrl);
   Xlsx.arrayToFile({
     filename: `${batchModel.label}-${new Date().getTime()}`,
     data: [
       ["#", ...names.map((k) => batchModel.name_to_label[k])],
-      ...data.map((row, index) => [index + 1, ...names.map((k) => row[k])])
-    ]
+      ...data.map((row, index) => [index + 1, ...names.map((k) => row[k])]),
+    ],
   });
   Notice.success("下载成功，请留意浏览器下载目录");
 };

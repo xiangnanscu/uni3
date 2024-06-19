@@ -1,14 +1,8 @@
 <template>
   <page-layout>
-    <fui-result
-      :type="query.type"
-      :title="query.title || `操作成功`"
-      :descr="query.descr"
-    >
+    <fui-result :type="query.type" :title="query.title || `操作成功`" :descr="query.descr">
       <p style="text-align: center; margin-bottom: 1em">请等待管理员审核</p>
-      <p style="text-align: center; margin-bottom: 1em">
-        点击下方“订阅通知”，及时收到微信提醒。
-      </p>
+      <p style="text-align: center; margin-bottom: 1em">点击下方“订阅通知”，及时收到微信提醒。</p>
       <fui-button
         @click="onSubsribeChange"
         width="400rpx"

@@ -15,19 +15,14 @@
     <slot name="content" />
     <slot name="right" />
   </fui-alert> -->
-  <uni-notice-bar
-    class="notice-bar"
-    :text="props.title"
-    :icon-type="props.iconType"
-    show-icon
-  />
+  <uni-notice-bar class="notice-bar" :text="props.title" :icon-type="props.iconType" show-icon />
 </template>
 
 <script setup>
 const props = defineProps({
   iconType: { type: String, default: "info" },
   mainColor: { type: String, default: "#ffb703" },
-  title: { type: String, default: "" }
+  title: { type: String, default: "" },
 });
 const alertStyle = computed(() => ({ border: `1px solid ${props.mainColor}` }));
 </script>

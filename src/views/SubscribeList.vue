@@ -32,9 +32,7 @@ onLoad(async (opts) => {
       openid: user.openid,
     },
   );
-  const enabledIds = subscribeLogs
-    .filter((e) => e.status == "启用")
-    .map((e) => e.template_id);
+  const enabledIds = subscribeLogs.filter((e) => e.status == "启用").map((e) => e.template_id);
   for (const t of templates) {
     t.checked = enabledIds.includes(t.priTmplId) ? true : false;
   }

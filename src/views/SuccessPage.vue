@@ -1,6 +1,6 @@
 <template>
   <page-layout>
-    <fui-result :type="query.type" :title="query.title||`操作成功`" :descr="query.descr">
+    <fui-result :type="query.type" :title="query.title || `操作成功`" :descr="query.descr">
       <fui-button
         @click="goBack"
         width="400rpx"

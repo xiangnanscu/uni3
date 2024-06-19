@@ -12,7 +12,7 @@ onMounted(() => {
     redirect_uri,
     state: "",
     style: "",
-    href: ""
+    href: "",
   });
 });
 

@@ -17,13 +17,15 @@ onLoad(async (options) => {
   await helpers.autoLogin();
   try {
     const loginRes = await useGet(`/wx/login_mini?uuid=${query.scene}`);
+    console.log("loginRes", loginRes);
     if (loginRes == "ok") {
       utils.redirect(`SuccessPage`, { title: "登陆成功" });
     } else {
       status.value = JSON.stringify(loginRes);
     }
   } catch (error) {
-    status.value = JSON.stringify(error);
+    console.log(error);
+    status.value = error.message || error.data;
   }
 });
 </script>

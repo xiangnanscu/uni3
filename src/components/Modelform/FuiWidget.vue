@@ -1,4 +1,7 @@
 <script setup>
+const ALIOSS_UPLOAD_PREFIX = process.env.ALIOSS_UPLOAD_PREFIX;
+const ALIOSS_URL = process.env.ALIOSS_URL;
+
 const emit = defineEmits(["update:modelValue", "update:error", "blur:validate", "update:values"]);
 const props = defineProps({
   field: { type: Object, required: true },
@@ -164,9 +167,8 @@ const compressJPG = async (file) => {
   // log("after compress", await uni.getImageInfo({ src: cfile.tempFilePath }));
   return cfile.tempFilePath;
 };
-const fuiUploadCallback = async (file) => {
-  // log("fuiUploadCallback", file);
-  //上传的文件信息
+const uploadImageCallback = async (file) => {
+  console.log("uploadImageCallback", file);
   try {
     // #ifdef MP-WEIXIN
     // 微信平台file对象只有path和size属性
@@ -188,50 +190,103 @@ const fuiUploadCallback = async (file) => {
       return;
       // #endif
     }
-    const url = await Alioss.uploadUni({
-      file,
-      size: props.field.size,
-      prefix: "img",
+    const ossKey = Alioss.getOssKey({ file, prefix: "img" });
+    const payload = await Alioss.getPayload({ size: props.field.size, key: ossKey });
+    return new Promise((resolve, reject) => {
+      //调用api上传，所有需要参数自行补充
+      const uploadTask = uni.uploadFile({
+        url: ALIOSS_URL,
+        name: "file",
+        formData: {
+          key: ossKey,
+          ...payload,
+        },
+        filePath: file.path,
+        success: (res) => {
+          console.log("uni.uploadFile.success", res);
+          if (res.errMsg === "uploadFile:ok") {
+            //返回上传成功后的图片（约定返回格式，不可修改）
+            const url = ALIOSS_URL + ossKey;
+            resolve(url);
+            sendValue([...props.modelValue, url]);
+            sendError("");
+          } else {
+            //上传失败（约定返回格式，不可修改）
+            reject(false);
+          }
+        },
+        fail: (res) => {
+          //上传失败（约定返回格式，不可修改）
+          console.log("uni.uploadFile.fail", res);
+          reject(false);
+        },
+      });
+      //更新上传进度
+      uploadTask.onProgressUpdate((res) => {
+        //调用方法更新组件内当前图片上传进度
+        console.log("uploadTask.onProgressUpdate", res.progress);
+        fuiUploader.value.setProgress(res.progress, index);
+      });
     });
-    sendValue([...props.modelValue, url]);
-    sendError("");
-    return url;
   } catch (error) {
     console.log("error:", error);
     sendError(`上传错误：${error.message || error.errMsg}`);
     fuiDeleteFile(file);
   }
 };
-const fuiUploadVideoCallback = async (path, index) => {
-  //上传的文件信息
-  const file = fuiUploader.value.tempFiles[index];
-  // console.log("fuiUploadVideoCallback file", file);
-  if (file.size > props.field.size) {
-    const current = (file.size / 1024 / 1024).toFixed(1);
-    sendError(
-      `视频过大(当前${current > 1 ? current + "MB" : (file.size / 1024).toFixed(1) + "KB"},上限${
-        props.field.size_arg
-      })`,
-    );
-    fuiDeleteFile(file);
-    return;
-  }
-  const url = await Alioss.uploadUni({
-    file,
-    size: props.field.size,
-    prefix: "video",
+const uploadVideoCallback = async (filePath, index) => {
+  // uni.chooseVideo非H5平台无法获取file对象,只有path
+  console.log("uploadVideoCallback", {
+    path: filePath,
+    index,
   });
-  sendValue([...props.modelValue, url]);
-  sendError("");
-  return url;
+  try {
+    const ossKey = Alioss.getOssKey({ path: filePath, prefix: "video" });
+    const payload = await Alioss.getPayload({ size: props.field.size, key: ossKey });
+    return new Promise((resolve, reject) => {
+      //调用api上传，所有需要参数自行补充
+      const uploadTask = uni.uploadFile({
+        url: ALIOSS_URL,
+        name: "file",
+        formData: {
+          key: ossKey,
+          ...payload,
+        },
+        filePath,
+        success: (res) => {
+          console.log("uni.uploadFile.success", res);
+          if (res.errMsg === "uploadFile:ok") {
+            //返回上传成功后的视频（约定返回格式，不可修改）
+            const url = ALIOSS_URL + ossKey;
+            resolve(url);
+            sendValue([...props.modelValue, url]);
+            sendError("");
+          } else {
+            //上传失败（约定返回格式，不可修改）
+            reject(false);
+          }
+        },
+        fail: (res) => {
+          //上传失败（约定返回格式，不可修改）
+          console.log("uni.uploadFile.fail", res);
+          reject(false);
+        },
+      });
+      //更新上传进度
+      uploadTask.onProgressUpdate((res) => {
+        //调用方法更新组件内当前视频上传进度
+        console.log("uploadTask.onProgressUpdate", res.progress);
+        fuiUploader.value.setProgress(res.progress, index);
+      });
+    });
+  } catch (error) {
+    console.log("error:", error);
+    sendError(`上传错误：${error.message || error.errMsg}`);
+  }
 };
 const fuiCallUpload = async (index) => {
-  // if (!fuiUploadStatus.value || fuiUploadStatus.value !== "preupload") {
-  //   // uni.showToast({ title: "请选择需要上传的视频！" });
-  //   console.log(index);
-  //   return;
-  // }
-  const callback = props.field.media_type == "video" ? fuiUploadVideoCallback : fuiUploadCallback;
+  console.log("fuiCallUpload", index);
+  const callback = props.field.media_type == "video" ? uploadVideoCallback : uploadImageCallback;
   await fuiUploader.value.upload(callback, index);
 };
 const fuiReUpload = async (e) => {
@@ -239,12 +294,12 @@ const fuiReUpload = async (e) => {
   await fuiCallUpload(e.index);
 };
 const fuiUploadSuccess = async (e) => {
-  fuiUploadStatus.value = e.status;
   console.log("fuiUploadSuccess", e);
+  fuiUploadStatus.value = e.status;
 };
 const fuiUploadError = async (e) => {
-  fuiUploadStatus.value = e.status;
   console.log("fuiUploadError", e);
+  fuiUploadStatus.value = e.status;
 };
 const fuiUploadPreview = async (e) => {
   console.log("fuiUploadPreview", e);
@@ -412,7 +467,8 @@ const fileList = computed(() =>
     <fui-upload-video
       v-else-if="props.field.media_type == 'video'"
       ref="fuiUploader"
-      call-upload
+      immediate2
+      :call-upload="true"
       :max="fileLimit"
       :disabled="props.field.disabled"
       :radius="16"
@@ -434,7 +490,7 @@ const fileList = computed(() =>
     <fui-upload
       v-else
       ref="fuiUploader"
-      call-upload
+      :call-upload="true"
       :max="fileLimit"
       :disabled="props.field.disabled"
       :radius="16"

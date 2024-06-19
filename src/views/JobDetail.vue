@@ -9,7 +9,7 @@
       <tinymce-text :html="record.job_details"></tinymce-text>
     </div>
 
-    <x-button @click="submitResume" :plain="false" size="default" type="default">投</x-button>
+    <x-button @click="submitResume" :plain="false" size="default" type="default">投简历</x-button>
     <div style="height: 4em"></div>
   </page-layout>
 </template>

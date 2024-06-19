@@ -4,19 +4,9 @@
       open-type="share"
       size="mini"
       class="actions"
-      style="
-        display: inline-block;
-        margin: 0;
-        padding: 0;
-        background-color: transparent;
-        border: 0;
-      "
+      style="display: inline-block; margin: 0; padding: 0; background-color: transparent; border: 0"
     >
-      <image
-        @click="onShare"
-        src="../static/img/tabbar/share-tpp.png"
-        class="actions"
-      ></image>
+      <image @click="onShare" src="../static/img/tabbar/share-tpp.png" class="actions"></image>
     </button>
     <uni-badge
       class="uni-badge-left-margin"
@@ -28,7 +18,7 @@
         'font-size': '100%',
         color: '#515151',
         'background-color': 'transparent',
-        border: '0'
+        border: '0',
       }"
       :offset2="[5, 5]"
       size="normal"
@@ -46,15 +36,13 @@
       absolute="rightTop"
       size="normal"
       :custom-style="{
-        'z-index': 3
+        'z-index': 3,
       }"
       :offset2="[5, 5]"
     >
       <image
         @click="onLike"
-        :src="`../static/img/tabbar/appreciate${
-          likeStatus ? '_fill_yellow' : ''
-        }.png`"
+        :src="`../static/img/tabbar/appreciate${likeStatus ? '_fill_yellow' : ''}.png`"
         class="actions"
       ></image>
     </uni-badge>
@@ -66,7 +54,7 @@
 <script setup>
 const props = defineProps({
   targetModel: { type: String, required: true },
-  target: { type: Object, required: true }
+  target: { type: Object, required: true },
 });
 const {
   actionsReady,
@@ -79,10 +67,10 @@ const {
   shareCount,
   onLike,
   onFav,
-  onShare
+  onShare,
 } = useGenericActions({
   targetModel: props.targetModel,
-  target: props.target
+  target: props.target,
 });
 </script>
 

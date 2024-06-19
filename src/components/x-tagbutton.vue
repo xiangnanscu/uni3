@@ -12,7 +12,7 @@
 const emit = defineEmits(["click"]);
 const props = defineProps({
   type: { type: String, default: "default" },
-  text: { type: String }
+  text: { type: String },
 });
 const store = useStore();
 </script>

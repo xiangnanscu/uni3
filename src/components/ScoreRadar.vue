@@ -56,17 +56,11 @@ const container = ref(null);
 const canvasArea = ref(null);
 
 const shrinkRadius = computed(() => props.radius * props.rate);
-const dataRate = computed(
-  () => shrinkRadius.value / (props.fullScore - props.baseScore)
-);
+const dataRate = computed(() => shrinkRadius.value / (props.fullScore - props.baseScore));
 const rawDataRate = computed(() => shrinkRadius.value / props.fullScore);
 const realScores = computed(() => props.scores.map((n) => n - props.baseScore));
-const rawScores = computed(() =>
-  props.scores.map((n) => n * rawDataRate.value)
-);
-const ratedScores = computed(() =>
-  realScores.value.map((n) => n * dataRate.value)
-);
+const rawScores = computed(() => props.scores.map((n) => n * rawDataRate.value));
+const ratedScores = computed(() => realScores.value.map((n) => n * dataRate.value));
 
 const getArea = (points) => {
   let t = 0;
@@ -122,17 +116,13 @@ const points = computed(() => getPoints(ratedScores.value));
 const rawPoints = computed(() => getPoints(rawScores.value));
 // 显示分数的坐标，应在topPoints外侧
 const scoreShowPoints = computed(() =>
-  getTopPoints(ratedScores.value.length, 1.2).map(beautifyPosition)
+  getTopPoints(ratedScores.value.length, 1.2).map(beautifyPosition),
 );
 const n = ratedScores.value.length;
 const areaScore = computed(() =>
-  Math.sqrt(
-    (getArea(rawPoints.value) / getArea(rawTopPoints.value)) * 10000
-  ).toFixed(2)
+  Math.sqrt((getArea(rawPoints.value) / getArea(rawTopPoints.value)) * 10000).toFixed(2),
 );
-const avgScore = computed(() =>
-  (ratedScores.value.reduce((x, y) => x + y) / n).toFixed(2)
-);
+const avgScore = computed(() => (ratedScores.value.reduce((x, y) => x + y) / n).toFixed(2));
 
 const reDraw = () => {
   const canvas = canvasArea.value;
