@@ -1,7 +1,7 @@
 #!/bin/bash
 
 xodel_dirs=('src/views')
-sync_dirs=('bin' 'patches' 'template' 'components' 'composables' 'globals' 'lib' 'src/components' 'src/composables' 'src/lib'  )
+sync_dirs=('bin' 'patches' 'template' 'components' 'composables' 'globals' 'lib' 'src/components' 'src/lib'  )
 down_dirs=("${xodel_dirs[@]}" "${sync_dirs[@]}")
 skip_files=('Home.vue' 'wx_verify.lua' 'init-certbot.sh.ejs' 'init-certbot.sh' 'index.ts' 'tabbar')
 top_files=('.eslintrc.cjs' 'tsconfig.json' 'tsconfig.node.json' 'vite.config.ts')
