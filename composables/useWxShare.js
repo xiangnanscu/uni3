@@ -7,8 +7,7 @@ export function useWxShare({ title, imageUrl, desc, path }) {
       title: typeof title == "function" ? title() : title,
       desc,
       path: shareUrl,
-      imageUrl:
-        typeof imageUrl == "function" ? imageUrl() : imageUrl || "../static/cover-share.jpg",
+      imageUrl: typeof imageUrl == "function" ? imageUrl() : imageUrl || "../static/cover-share.jpg",
     };
   });
   onShareAppMessage(async (options) => {
@@ -19,8 +18,7 @@ export function useWxShare({ title, imageUrl, desc, path }) {
       title: typeof title == "function" ? title() : title,
       desc,
       path: shareUrl,
-      imageUrl:
-        typeof imageUrl == "function" ? imageUrl() : imageUrl || "../static/cover-share.jpg",
+      imageUrl: typeof imageUrl == "function" ? imageUrl() : imageUrl || "../static/cover-share.jpg",
     };
   });
 }
