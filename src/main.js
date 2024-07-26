@@ -1,28 +1,21 @@
 import "regenerator-runtime/runtime";
 import { createSSRApp } from "vue";
 import App from "./App.vue";
-import { createPinia } from "pinia";
 import uniSetup from "./uniSetup";
-import { isLogin, NeedLoginError, NeedRealNameError } from "@/lib/helpers.js";
-import { Model } from "@/lib/model/model.mjs";
-import { basefield } from "@/lib/model/field.mjs";
-import { getFullPath } from "@/lib/utils";
-import Http from "@/globals/Http.js";
+import { isLogin, globalErrorHandler } from "~/lib/helpers.js";
+import { Model } from "~/lib/model/model.mjs";
+import { BaseField } from "~/lib/model/field.mjs";
+import { request } from "~/lib/Http";
+import { useSession } from "~/composables/useSession";
 
-Model.Http = Http;
-basefield.Http = Http;
-const pinia = createPinia();
 const LOGIN_HINT = "login required";
-const UNI_LOGIN_PAGE = process.env.UNI_LOGIN_PAGE;
+Model.request = request;
+BaseField.request = request;
 globalThis.log = console.log;
-// https://pinia.vuejs.org/core-concepts/plugins.html#adding-new-external-properties
-// pinia.use(({ store }) => {
-//   store.router = markRaw(router);
-// });
+
 export function createApp() {
   uniSetup();
   const app = createSSRApp(App);
-  app.use(pinia);
   app.mixin({
     computed: {
       user() {
@@ -47,42 +40,7 @@ export function createApp() {
     },
   });
   setTimeout(() => {
-    app.config.errorHandler = (err, instance, info) => {
-      console.error("errorHandler captured...", err, { instance, info });
-      if (err instanceof NeedLoginError || err.message == LOGIN_HINT) {
-        console.log("NeedLoginError需要登录");
-        utils.redirect(UNI_LOGIN_PAGE, {
-          message: "此操作需要登录",
-          redirect: utils.getSafeRedirect(getFullPath()),
-        });
-      } else if (err instanceof NeedRealNameError) {
-        console.log("NeedRealNameError需要实名认证");
-        utils.redirect("/views/RealNameCert", {
-          justCheck: 1,
-          message: "此操作需要实名认证",
-          redirect: utils.getSafeRedirect(getFullPath()),
-        });
-      } else if (typeof err == "string") {
-        uni.showModal({
-          title: `捕获错误`,
-          content: err,
-          showCancel: false,
-        });
-      } else if (err.type == "uni_error") {
-        uni.showModal({
-          title: `捕获错误`,
-          content: err.message,
-          showCancel: false,
-        });
-      } else {
-        log(`捕获异常:`, JSON.stringify(err));
-        // uni.showModal({
-        //   title: `捕获异常`,
-        //   content: JSON.stringify(err),
-        //   showCancel: false,
-        // });
-      }
-    };
+    app.config.errorHandler = globalErrorHandler;
   });
   return {
     app,

@@ -1,11 +1,10 @@
 export const useBadgeNumber = async (opts = {}) => {
-  const { setFriendsApplyCount, setFriendsMessageCount, setSystemMessageCount } =
-    useStore();
-  const { friendsApplyCount, friendsMessageCount, systemMessageCount } = storeToRefs(
-    useStore(),
+  const { setFriendsApplyCount, setFriendsMessageCount, setSystemMessageCount } = useStore();
+  const { friendsApplyCount, friendsMessageCount, systemMessageCount } = useStore();
+  const { friends_apply_count, friends_message_count, system_message_count } = await usePost(
+    `/badge_number`,
+    opts || {},
   );
-  const { friends_apply_count, friends_message_count, system_message_count } =
-    await usePost(`/badge_number`, opts || {});
   if (typeof friends_apply_count == "number") {
     setFriendsApplyCount(friends_apply_count);
   }

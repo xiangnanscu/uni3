@@ -1,6 +1,6 @@
 {
   "name": "uni3",
-  "version": "1.492.0",
+  "version": "1.493.0",
   "license": "ISC",
   "scripts": {
     "prerc": "npm --no-git-tag-version version minor",
@@ -60,7 +60,6 @@
     "lodash-es": "^4.17.21",
     "mime-types": "^2.1.35",
     "nanoid": "4.0.2",
-    "pinia": "2.0.36",
     "qrcode": "^1.5.1",
     "regenerator-runtime": "^0.13.11",
     "stream-browserify": "^3.0.0",

@@ -1,5 +1,5 @@
 import cookie from "cookie";
-import { useStore } from "@/store";
+import { useStore } from "~/composables/useStore";
 import { version } from "../package.json";
 
 const viteEnv = import.meta.env;
@@ -30,18 +30,16 @@ const cookieNames = ["session"];
 const setupRequest = () => {
   uni.addInterceptor("request", {
     invoke(args) {
-      console.log("global uni.request invoke:", args);
       const store = useStore();
-      const showLoading = !args?.disableLoading && !store.disableLoading;
-      store.loading = true;
-      store.message = "";
-      store.error = "";
+      const showLoading = !args?.disableLoading && !store.disableLoading.value;
+      store.loading.value = true;
+      store.message.value = "";
+      store.error.value = "";
       const header = args.header || {};
       if (showLoading) {
         uni.showLoading();
       }
       // #ifdef MP-WEIXIN
-      // 读取storage手动附上cookie
       for (const cookieName of cookieNames) {
         const cookieStr = uni.getStorageSync(`cookie_${cookieName}`);
         if (cookieStr) {
@@ -56,7 +54,10 @@ const setupRequest = () => {
       header["Uni-Request"] = "on";
       header["X-Version"] = version;
       args.header = header;
-      if (!/^https?|^\/\//.test(args.url)) args.url = baseURL + args.url;
+      if (!/^https?|^\/\//.test(args.url)) {
+        args.url = baseURL + args.url;
+      }
+      console.log("global uni.request invoke:", typeof args, args);
     },
     success(args) {
       // args.statusCode居然直接丢失了..
@@ -68,11 +69,11 @@ const setupRequest = () => {
     complete(args) {
       // console.log("global uni.request complete:", args);
       const store = useStore();
-      const showLoading = !args?.disableLoading && !store.disableLoading;
+      const showLoading = !args?.disableLoading && !store.disableLoading.value;
       if (showLoading) {
         uni.hideLoading();
       }
-      store.loading = false;
+      store.loading.value = false;
       const cookies = args.cookies || [];
       // #ifdef H5
       if (cookies.length === 0 && args.header["set-cookie-patch"]) {
@@ -94,7 +95,7 @@ const setupRequest = () => {
 
 const navHandlerList = ["navigateTo", "redirectTo", "switchTab"];
 const UNI_LOGIN_PAGE = process.env.UNI_LOGIN_PAGE;
-const realNameCertPage = "/views/RealNameCert";
+const REAL_NAME_CERT_PAGE = "/views/RealNameCert";
 const whiteList = [
   "/",
   process.env.UNI_HOME_PAGE,
@@ -129,7 +130,7 @@ const setupNav = () => {
     uni.addInterceptor(handler, {
       invoke(opts) {
         console.log("**路由拦截:", handler, opts.url);
-        const { message, error } = storeToRefs(useStore());
+        const { message, error } = useStore();
         message.value = "";
         error.value = "";
         const [route_path, ...qs] = opts.url.split("?");
@@ -150,7 +151,7 @@ const setupNav = () => {
         // 再检测是否需要实名
         if (!user.username && realNameCertList.includes(route_path)) {
           console.log("**需要实名的URL:", opts.url);
-          utils.redirect(realNameCertPage, {
+          utils.redirect(REAL_NAME_CERT_PAGE, {
             message: "此操作需要实名认证",
             redirect: utils.getSafeRedirect(opts.url),
           });

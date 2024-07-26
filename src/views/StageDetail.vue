@@ -5,20 +5,13 @@
       <x-subtitle style="padding: 0.5em 0.5em">
         <div>{{ utils.fromNow(record.ctime) }}</div>
       </x-subtitle>
-      <image
-        v-if="record.pics[0]"
-        :src="record.pics[0]"
-        mode="widthFix"
-        style="width: 100%"
-      />
+      <image v-if="record.pics[0]" :src="record.pics[0]" mode="widthFix" style="width: 100%" />
       <fui-preview :previewData="previewData"></fui-preview>
       <x-button @click="joinVol" :plain="false" size="default">申请入住</x-button>
       <tinymce-text :html="record.content" style="margin-top: 1em"></tinymce-text>
       <template #actions> </template>
     </uni-card>
-    <x-button @click="joinVol" :plain="false" size="default" type="default"
-      >申请入住</x-button
-    >
+    <x-button @click="joinVol" :plain="false" size="default" type="default">申请入住</x-button>
     <div style="height: 4em"></div>
     <x-bottom>
       <generic-actions :target="record" target-model="stage" style="width: 100%" />
@@ -27,7 +20,6 @@
 </template>
 
 <script>
-import { repr } from "@/lib/utils.mjs";
 import MixinShare from "./MixinShare";
 
 export default {

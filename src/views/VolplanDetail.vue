@@ -5,19 +5,12 @@
       <x-subtitle>
         <div>{{ utils.fromNow(record.ctime) }}</div>
       </x-subtitle>
-      <image
-        v-if="record.pics[0]"
-        :src="record.pics[0]"
-        mode="widthFix"
-        style="width: 100%; margin: auto"
-      />
+      <image v-if="record.pics[0]" :src="record.pics[0]" mode="widthFix" style="width: 100%; margin: auto" />
       <fui-preview :previewData="previewData"></fui-preview>
       <tinymce-text :html="record.content"></tinymce-text>
       <template #actions> </template>
     </uni-card>
-    <x-button @click="joinVol" :disabled="record.joined">{{
-      record.joined ? "已登记" : "我要参加"
-    }}</x-button>
+    <x-button @click="joinVol" :disabled="record.joined">{{ record.joined ? "已登记" : "我要参加" }}</x-button>
     <div style="height: 4em"></div>
     <x-bottom>
       <generic-actions :target="record" target-model="volplan" style="width: 100%" />
@@ -26,7 +19,6 @@
 </template>
 
 <script>
-import { repr } from "@/lib/utils.mjs";
 import MixinShare from "./MixinShare";
 
 export default {

@@ -7,7 +7,7 @@ const current = ref(Number(query.current || 0));
 const tabs = reactive([
   { name: "聊天", badge: 0 },
   { name: "朋友", badge: 0 },
-  { name: "待处理", badge: 0 }
+  { name: "待处理", badge: 0 },
 ]);
 const type = computed(() => tabs[current.value]?.name);
 const ready = ref(false);
@@ -24,7 +24,7 @@ const setRecordsByType = async (newType) => {
     messageGroup.value = records
       .map((e) => ({
         ...e,
-        receiver: e.target.id === user.id ? e.creator : e.target
+        receiver: e.target.id === user.id ? e.creator : e.target,
       }))
       .sort((a, b) => b.ctime.localeCompare(a.ctime));
   } else {
@@ -34,7 +34,7 @@ const setRecordsByType = async (newType) => {
         ...(e.apply.id !== user.id ? e.apply : e.approve),
         approvable: e.apply.id !== user.id,
         hello_message: e.hello_message,
-        status: e.status
+        status: e.status,
       }))
       .map((e) => ({ ...e, title: e.nickname }));
     console.log(friendsData, data);
@@ -60,16 +60,8 @@ onShow(async () => {
 </script>
 
 <template>
-  <fui-tabs
-    :tabs="tabs"
-    center
-    @change="changeActionType"
-    :current="current"
-  ></fui-tabs>
-  <friends-message
-    v-if="ready && current === 0"
-    :messages="messageGroup"
-  ></friends-message>
+  <fui-tabs :tabs="tabs" center @change="changeActionType" :current="current"></fui-tabs>
+  <friends-message v-if="ready && current === 0" :messages="messageGroup"></friends-message>
   <uni-list v-if="ready && current === 1" :border="false">
     <x-alert v-if="!friendsData.length" title="没有记录"> </x-alert>
     <uni-list-item
@@ -96,17 +88,8 @@ onShow(async () => {
       >
         <template v-slot:footer>
           <div class="slot-box">
-            <x-tagbutton
-              text="同意"
-              type="success"
-              @click="approve(e, '通过')"
-            ></x-tagbutton>
-            <x-tagbutton
-              style="margin-left: 1em"
-              text="拒绝"
-              type="warning"
-              @click="approve(e, '拒绝')"
-            ></x-tagbutton>
+            <x-tagbutton text="同意" type="success" @click="approve(e, '通过')"></x-tagbutton>
+            <x-tagbutton style="margin-left: 1em" text="拒绝" type="warning" @click="approve(e, '拒绝')"></x-tagbutton>
           </div>
         </template>
       </uni-list-item>

@@ -3,12 +3,7 @@
     <uni-card :isFull="true" :is-shadow="false" :border="false">
       <x-title>进出详情</x-title>
       <fui-preview :previewData="previewData"></fui-preview>
-      <image
-        v-if="record.avatar"
-        :src="record.avatar"
-        mode="widthFix"
-        style="width: 100%; margin: auto"
-      />
+      <image v-if="record.avatar" :src="record.avatar" mode="widthFix" style="width: 100%; margin: auto" />
       <template #actions> </template>
     </uni-card>
     <div style="height: 4em"></div>
@@ -16,8 +11,6 @@
 </template>
 
 <script>
-import { repr } from "@/lib/utils.mjs";
-
 export default {
   data() {
     return {

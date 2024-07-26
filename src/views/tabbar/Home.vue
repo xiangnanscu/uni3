@@ -6,7 +6,7 @@ onShow(async () => {});
 </script>
 
 <script>
-import { useStore } from "@/store";
+import { useStore } from "~/composables/useStore";
 // panelNews: {
 // 	head: 'First UI介绍',
 // 	list: [{
@@ -127,9 +127,7 @@ export default {
     store.disableLoading = true;
     try {
       await useBadgeNumber({ isTabbar: true });
-      const { noticeText, goddess, volplan, ads, polls, news, specials } = await usePost(
-        `/home_data`,
-      );
+      const { noticeText, goddess, volplan, ads, polls, news, specials } = await usePost(`/home_data`);
       this.specials = specials;
       this.noticeText = noticeText;
       this.goddess = goddess[0];
@@ -300,12 +298,7 @@ export default {
       <uni-grid-item v-for="(item, index) in mainKist" :index="index" :key="index">
         <view class="grid-item-box" style="text-align: center">
           <x-navigator :url="item.pagePath" hover-class="navigator-hover" open-type="navigate">
-            <image
-              class="banner-image"
-              :src="item.url"
-              mode="widthFix"
-              style="width: 64px; height: 64px"
-            />
+            <image class="banner-image" :src="item.url" mode="widthFix" style="width: 64px; height: 64px" />
             <view>
               <text class="logo-text">{{ item.text }}</text>
             </view>
@@ -316,21 +309,8 @@ export default {
         </view>
       </uni-grid-item>
     </uni-grid>
-    <fui-panel
-      v-if="specials?.length"
-      :panelData="panelJob"
-      :marginTop="24"
-      :size="25"
-      :descSize="26"
-    >
-      <swiper
-        class="swiper"
-        circular
-        :indicator-dots="true"
-        :autoplay="true"
-        :interval="2000"
-        :duration="500"
-      >
+    <fui-panel v-if="specials?.length" :panelData="panelJob" :marginTop="24" :size="25" :descSize="26">
+      <swiper class="swiper" circular :indicator-dots="true" :autoplay="true" :interval="2000" :duration="500">
         <swiper-item v-for="e in specials" :key="e.id">
           <view class="swiper-item">
             <image @click="onJobClick(e)" style="width: 100%" :src="e.image" mode="widthFix" />
@@ -363,12 +343,7 @@ export default {
     >
       <fui-card>
         <view class="fui-list__item">
-          <image
-            @click="onGoddessClick"
-            style="width: 100%"
-            :src="goddess.pics[0]"
-            mode="widthFix"
-          />
+          <image @click="onGoddessClick" style="width: 100%" :src="goddess.pics[0]" mode="widthFix" />
         </view>
       </fui-card>
       <fui-list-cell arrow :bottomBorder="false" topBorder topLeft="32" @click="onGoddessClick">
@@ -389,12 +364,7 @@ export default {
     >
       <fui-card>
         <view class="fui-list__item">
-          <image
-            @click="onVolplanClick"
-            style="width: 100%"
-            :src="volplan.pics[0]"
-            mode="widthFix"
-          />
+          <image @click="onVolplanClick" style="width: 100%" :src="volplan.pics[0]" mode="widthFix" />
         </view>
       </fui-card>
       <fui-list-cell arrow :bottomBorder="false" topBorder topLeft="32" @click="onVolplanClick">
@@ -407,14 +377,7 @@ export default {
     <fui-panel v-if="ads?.length" :panelData="panelAd" :marginTop="24" :size="25" :descSize="26">
       <fui-card>
         <view class="fui-list__item">
-          <swiper
-            class="swiper"
-            circular
-            :indicator-dots="true"
-            :autoplay="true"
-            :interval="2000"
-            :duration="500"
-          >
+          <swiper class="swiper" circular :indicator-dots="true" :autoplay="true" :interval="2000" :duration="500">
             <swiper-item v-for="e in ads" :key="e.id">
               <view>
                 <image @click="onAdClick(e)" style="width: 100%" :src="e.pics[0]" mode="widthFix" />
