@@ -1,17 +1,27 @@
-<script setup>
-import { Model } from "@/lib/model";
-import { useGet } from "@/composables/useGet";
-
-const { query } = useRoute();
-const record = await useGet(`/<%= tableName %>/detail/${query.id}`);
-const modelJson = await useGet(`/<%= tableName %>/json`);
-const model = await Model.create_model_async(modelJson);
-</script>
 <template>
-  <div style="margin: auto; width: 800px">
-    <model-detail
-      :model="model"
-      :record="record"
-    ></model-detail>
-  </div>
+  <page-layout>
+    <div v-if="ready">
+      <x-title> {{ record.id }}</x-title>
+      <x-title :size-rate="0.8"> {{ record.ctime?.slice(0, 10) }}</x-title>
+    </div>
+    <f-alert v-else>加载中</f-alert>
+  </page-layout>
 </template>
+
+<script setup>
+// onShareAppMessage
+const ready = ref();
+const query = useQuery();
+const record = ref();
+useWxShare({ title: () => `详情:${record.value.id}`, imageUrl: "" });
+onLoad(async () => {
+  record.value = await useGet(`/<%= tableName %>/detail/${query.id}`);
+  ready.value = true;
+});
+</script>
+
+<style>
+page {
+  background-color: #fff;
+}
+</style>

@@ -7,7 +7,7 @@
   <!-- <fui-safe-area></fui-safe-area> -->
 </template>
 <script setup>
-const { message, error } = storeToRefs(useStore());
+const { message, error } = useStore();
 const props = defineProps({
   margin: { type: Array },
 });

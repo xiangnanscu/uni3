@@ -16,12 +16,7 @@
 //   url: "blob:http://localhost:5183/04cacb45-6257-4bbb-aa8a-3776cf839ef1",
 //   uuid: 1684568038130
 // };
-const emit = defineEmits([
-  "update:modelValue",
-  "update:error",
-  "blur:validate",
-  "update:values",
-]);
+const emit = defineEmits(["update:modelValue", "update:error", "blur:validate", "update:values"]);
 const props = defineProps({
   field: { type: Object, required: true },
   modelValue: { required: true },
@@ -31,19 +26,13 @@ const props = defineProps({
 // const uniFormItem = inject("uniFormItem", null);
 const ready = ref(); //确保一些需要提前异步获取到数据加载完之后再渲染
 const fieldType = computed(() => props.field.type);
-const mediaType =
-  props.field.media_type == "video"
-    ? "video"
-    : fieldType.value.includes("image")
-    ? "image"
-    : "all";
+const mediaType = props.field.media_type == "video" ? "video" : fieldType.value.includes("image") ? "image" : "all";
 const filePickerRef = ref(null);
 const autocompletePopupRef = ref(null);
 const autocompleteSearchText = ref("");
 const autocompleteInputValue = ref("");
 const sendValue = (value) => {
   emit("update:modelValue", value);
-  log({ value });
 };
 const sendError = (value) => {
   emit("update:error", value);
@@ -59,12 +48,7 @@ const filePickerSelectHanlder = async ({ tempFiles, tempFilePaths }) => {
   for (const file of tempFiles) {
     const uniFileIndex = files.findIndex((f) => f.uuid == file.uuid);
     if (file.size > props.field.size) {
-      emit(
-        "update:error",
-        `文件过大(当前${Math.round(file.size / 1024 / 1024)}MB,上限${
-          props.field.size_arg
-        })`,
-      );
+      emit("update:error", `文件过大(当前${Math.round(file.size / 1024 / 1024)}MB,上限${props.field.size_arg})`);
       files.splice(uniFileIndex, 1);
       continue;
     }
@@ -89,22 +73,12 @@ const filePickerSelectHanlder = async ({ tempFiles, tempFilePaths }) => {
 };
 const filePickerDelete = ({ tempFile, tempFiles }) => {
   const index = props.modelValue.findIndex((file) => file.uuid === tempFile.uuid);
-  if (index !== -1)
-    sendValue([
-      ...props.modelValue.slice(0, index),
-      ...props.modelValue.slice(index + 1),
-    ]);
+  if (index !== -1) sendValue([...props.modelValue.slice(0, index), ...props.modelValue.slice(index + 1)]);
 };
 // 以下三个都是uniCloud专用的
 const filePickerFail = ({ tempFiles, tempFilePaths }) => {};
 const filePickerSuccess = ({ tempFiles, tempFilePaths }) => {};
-const filePickerProgress = ({
-  progress,
-  index,
-  tempFile,
-  tempFiles,
-  tempFilePaths,
-}) => {};
+const filePickerProgress = ({ progress, index, tempFile, tempFiles, tempFilePaths }) => {};
 
 const isArrayField = computed(() => props.field.type == "array");
 const easyInputTypeMap = {
@@ -115,9 +89,7 @@ const easyInputTypeMap = {
   textarea: "textarea",
   text: "textarea",
 };
-const easyType = computed(
-  () => easyInputTypeMap[props.field.type] || easyInputTypeMap[props.field.input_type],
-);
+const easyType = computed(() => easyInputTypeMap[props.field.type] || easyInputTypeMap[props.field.input_type]);
 const getPhoneNumber = async (event) => {
   // 用户允许: e.detail = {errMsg: "getPhoneNumber:ok", code: "??", encryptedData: "??", iv: "??"}
   // 用户拒绝: e.detail = {errMsg: "getPhoneNumber:fail user deny"}
@@ -152,7 +124,7 @@ const pickerInitValue = computed(() => {
   }
 });
 const onPickerConfirm = (e) => {
-  // log(e);
+  // console.log(e);
   if (props.field.group) {
     for (const [i, opts] of props.field.group.entries()) {
       emit("update:values", { [opts.form_key || opts.value_key]: e.value[i] });
@@ -201,10 +173,7 @@ const fieldChoices = computed(() => {
 });
 const showChoicesWhenSmall = (field) => {
   // console.log("showChoicesWhenSmall call");
-  if (
-    field.choices.length <
-    (field.max_display_count || Number(process.env.MAX_DISPLAY_COUNT) || 20)
-  ) {
+  if (field.choices.length < (field.max_display_count || Number(process.env.MAX_DISPLAY_COUNT) || 20)) {
     return fieldChoices.value.slice();
   } else {
     return [];
@@ -214,13 +183,7 @@ const showChoicesWhenSmall = (field) => {
 <template>
   <template v-if="fieldChoices">
     <template v-if="props.field.group">
-      <fui-list-cell
-        arrow
-        @click="showSelect = true"
-        :padding="[0]"
-        :bottomBorder="false"
-        borderColor="transparent"
-      >
+      <fui-list-cell arrow @click="showSelect = true" :padding="[0]" :bottomBorder="false" borderColor="transparent">
         {{ pickerResultText }}
         <view class="fui-list-input" :style="{ 'background-color': borderColor }"> </view>
       </fui-list-cell>
@@ -247,11 +210,7 @@ const showChoicesWhenSmall = (field) => {
           <div style="text-align: center; margin-bottom: 1em">
             {{ props.field.label }}
           </div>
-          <uni-easyinput
-            v-model="autocompleteSearchText"
-            :placeholder="props.field.hint || '输入关键字查找'"
-            focus
-          />
+          <uni-easyinput v-model="autocompleteSearchText" :placeholder="props.field.hint || '输入关键字查找'" focus />
           <scroll-view :scroll-y="true" style="height: 31em">
             <uni-list>
               <uni-list-item
@@ -291,13 +250,7 @@ const showChoicesWhenSmall = (field) => {
       :mode="isArrayField ? 'list' : 'tag'"
     ></uni-data-checkbox>
     <template v-else>
-      <fui-list-cell
-        arrow
-        @click="showSelect = true"
-        :padding="[0]"
-        :bottomBorder="false"
-        borderColor="transparent"
-      >
+      <fui-list-cell arrow @click="showSelect = true" :padding="[0]" :bottomBorder="false" borderColor="transparent">
         {{ pickerResultText }}
         <view class="fui-list-input" :style="{ 'background-color': borderColor }"> </view>
       </fui-list-cell>

@@ -1,61 +1,44 @@
-<script setup>
-import { computed, ref, createVNode } from "vue";
-import { Modal } from "ant-design-vue";
-import { ExclamationCircleOutlined, PlusOutlined } from "@ant-design/icons-vue";
-import { useGet } from "@/composables/useGet";
-import { Model } from "@/lib/model";
-
-const getUpdateRoute = ({ modelName, record }) => {
-  return { name: "<%= modelName %>Update", query: { id: record.id } };
-};
-const getCreateRoute = ({ modelName }) => {
-  return { name: "<%= modelName %>Create" };
-};
-const getDetailRoute = ({ modelName, record }) => {
-  return { name: "<%= modelName %>Detail", query: { id: record.id } };
-};
-const getDeleteRoute = ({ modelName, record }) => {
-  return { name: "<%= modelName %>Delete", query: { id: record.id } };
-};
-const modelJson = await useGet(`/<%= tableName %>/json`);
-const ListModel = await Model.create_model_async(modelJson);
-</script>
 <template>
-  <model-panel
-    v-if="ListModel"
-    :model="ListModel"
-    :pagesize="100"
-    :getUpdateRoute="getUpdateRoute"
-    :getCreateRoute="getCreateRoute"
-    :getDetailRoute="getDetailRoute"
-    :getDeleteRoute="getDeleteRoute"
-    upload-url="/<%= tableName %>/merge"
-    download-url="/<%= tableName %>/download"
-    delete-title-key="id"
-    form-width="800px"
-    detail-width="1200px"
-    :detail-names="ListModel.field_names"
-    :detail-label-col="6"
-    add-button-text="添加"
-    detail-button-text="详情"
-    :hide-download="false"
-    :hide-http-download="true"
-    :hide-upload="false"
-    :hide-search="false"
-    :hide-add="false"
-    :hide-delete="true"
-    :hide-edit="false"
-    :hide-detail="true"
-    :get-list-url="(name) => `/<%= tableName %>`"
-    :get-create-url="(name) => `/<%= tableName %>/create?detai=1`"
-    :get-update-url="(name, id) => `/<%= tableName %>/update/${id}?detai=1`"
-    :get-delete-url="(name, id) => `/<%= tableName %>/delete/${id}`"
-    :get-detail-url="(name, id) => `/<%= tableName %>/detail/${id}`"
-  >
-    <template #actions="{ record }">
-      <RouterLink
-        :to="{ name: '<%= modelName %>Detail', query: { id: record.id } }"
-      >详情</RouterLink>
-    </template>
-  </model-panel>
+  <page-layout>
+    <div v-if="ready">
+      <x-title> 列表 </x-title>
+      <uni-list v-if="<%= tableName %>s.length">
+        <uni-list-item
+          v-for="e in <%= tableName %>s"
+          :key="e.id"
+          :title="e.id"
+          :to="`/views/<%= modelName %>Detail?id=${e.id}`"
+          :rightText="utils.fromNow(e.ctime)"
+          link="navigateTo"
+        >
+        </uni-list-item>
+      </uni-list>
+      <f-alert v-else>暂无记录</f-alert>
+    </div>
+    <f-alert v-else>加载中</f-alert>
+    <fui-fab
+      :distance="30"
+      position="right"
+      :isDrag="true"
+      @click="utils.gotoPage('/views/<%= modelName %>Form')"
+    ></fui-fab>
+  </page-layout>
 </template>
+
+<script setup>
+// onShareAppMessage
+const ready = ref();
+const query = useQuery();
+const <%= tableName %>s = ref([]);
+const showFloatPlus = ref(true);
+onLoad(async () => {
+  <%= tableName %>s.value = await usePost(`/<%= tableName %>/records`);
+  ready.value = true;
+});
+</script>
+
+<style>
+page {
+  background-color: #fff;
+}
+</style>

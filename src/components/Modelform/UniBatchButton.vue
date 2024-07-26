@@ -1,6 +1,6 @@
 <script setup>
-import { findDups } from "@/lib/utils.mjs";
-import { Model } from "@/lib/model/model.mjs";
+import { findDups } from "~/lib/utils.mjs";
+import { Model } from "~/lib/model/model.mjs";
 
 const store = useStore();
 const emit = defineEmits(["findDuplicates", "uploadRows", "successPost"]);

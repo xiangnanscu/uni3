@@ -41,16 +41,10 @@
 
 <script>
 import { chooseAndUploadFile, uploadCloudFiles } from "./choose-and-upload-file.js";
-import {
-  get_file_ext,
-  get_extname,
-  get_files_and_is_max,
-  get_file_info,
-  get_file_data,
-} from "./utils.js";
+import { get_file_ext, get_extname, get_files_and_is_max, get_file_info, get_file_data } from "./utils.js";
 import uploadImage from "./upload-image.vue";
 import uploadFile from "./upload-file.vue";
-import { parseSize } from "@/lib/utils.mjs";
+import { parseSize } from "~/lib/utils.mjs";
 
 const fileInput = null;
 
@@ -70,15 +64,7 @@ export default {
   options: {
     virtualHost: true,
   },
-  emits: [
-    "select",
-    "success",
-    "fail",
-    "progress",
-    "delete",
-    "update:modelValue",
-    "input",
-  ],
+  emits: ["select", "success", "fail", "progress", "delete", "update:modelValue", "input"],
   props: {
     ossSize: { type: String, default: ALIOSS_IMAGE_SIZE },
     ossLifetime: { type: String, default: ALIOSS_LIFETIME },
@@ -323,11 +309,7 @@ export default {
      */
     choose() {
       if (this.disabled) return;
-      if (
-        this.files.length >= Number(this.limitLength) &&
-        this.showType !== "grid" &&
-        this.returnType === "array"
-      ) {
+      if (this.files.length >= Number(this.limitLength) && this.showType !== "grid" && this.returnType === "array") {
         uni.showToast({
           title: `您最多选择 ${this.limitLength} 个文件`,
           icon: "none",
@@ -423,8 +405,7 @@ export default {
     async chooseFileCallback(res) {
       const _extname = get_extname(this.fileExtname);
       const is_one =
-        (Number(this.limitLength) === 1 && this.disablePreview && !this.disabled) ||
-        this.returnType === "object";
+        (Number(this.limitLength) === 1 && this.disablePreview && !this.disabled) || this.returnType === "object";
       // 如果这有一个文件 ，需要清空本地缓存数据
       if (is_one) {
         this.files = [];
@@ -488,9 +469,7 @@ export default {
       const errorTempFilePath = [];
       for (let i = 0; i < res.length; i++) {
         const item = res[i];
-        const index = item.uuid
-          ? this.files.findIndex((p) => p.uuid === item.uuid)
-          : item.index;
+        const index = item.uuid ? this.files.findIndex((p) => p.uuid === item.uuid) : item.index;
         if (index === -1 || !this.files) break;
         // this.repr(item);
         if (item.errMsg) {
@@ -543,9 +522,7 @@ export default {
     setProgress(progressEvent, index, type) {
       const fileLenth = this.files.length;
       const percentNum = (index / fileLenth) * 100;
-      const percentCompleted = Math.round(
-        (progressEvent.loaded * 100) / progressEvent.total,
-      );
+      const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
       let idx = index;
       if (!type) {
         idx = this.files.findIndex((p) => p.uuid === progressEvent.tempFile.uuid);

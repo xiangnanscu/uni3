@@ -53,7 +53,7 @@ const onSelectClick = ({ index, options }) => {
   showSelect.value = false;
 };
 const onSelectConfirm = ({ index, options }) => {
-  // log("onSelectConfirm", { index, options });
+  // console.log("onSelectConfirm", { index, options });
   sendValue(options.value);
   sendError("");
   showSelect.value = false;
@@ -77,7 +77,7 @@ const pickerInitValue = computed(() => {
   }
 });
 const onPickerConfirm = (e) => {
-  // log(e);
+  // console.log(e);
   if (props.field.group) {
     for (const [i, opts] of props.field.group.entries()) {
       emit("update:values", { [opts.form_key || opts.value_key]: e.value[i] });
@@ -157,14 +157,14 @@ const fuiDeleteFile = (file) => {
   }
 };
 const compressJPG = async (file) => {
-  // log("before compress", await uni.getImageInfo({ src: file.path }));
+  // console.log("before compress", await uni.getImageInfo({ src: file.path }));
   const cfile = await uni.compressImage({
     src: file.path,
     quality: props.field.attrs.compress_quality || 10,
   });
-  // log({ cfile });
-  // log(file.path);
-  // log("after compress", await uni.getImageInfo({ src: cfile.tempFilePath }));
+  // console.log({ cfile });
+  // console.log(file.path);
+  // console.log("after compress", await uni.getImageInfo({ src: cfile.tempFilePath }));
   return cfile.tempFilePath;
 };
 const uploadImageCallback = async (file) => {
@@ -177,7 +177,9 @@ const uploadImageCallback = async (file) => {
     // #endif
     if (file.size > props.field.size) {
       // #ifdef MP-WEIXIN
-      file.path = await compressJPG(file);
+      if (props.field.attrs.compress) {
+        file.path = await compressJPG(file);
+      }
       // #endif
       // #ifdef H5
       const current = (file.size / 1024 / 1024).toFixed(1);
@@ -323,9 +325,7 @@ const chooseLocation = async () => {
   }
 };
 const fileList = computed(() =>
-  Array.isArray(props.modelValue)
-    ? props.modelValue.map((e) => (typeof e == "string" ? e : e.url))
-    : [],
+  Array.isArray(props.modelValue) ? props.modelValue.map((e) => (typeof e == "string" ? e : e.url)) : [],
 );
 </script>
 <template>
@@ -372,11 +372,7 @@ const fileList = computed(() =>
             borderRadius="8rpx"
           >
           </fui-checkbox>
-          <fui-text
-            :size2="28"
-            :text="choice.text"
-            :padding="['0', '30rpx', '0', '16rpx']"
-          ></fui-text>
+          <fui-text :size2="28" :text="choice.text" :padding="['0', '30rpx', '0', '16rpx']"></fui-text>
         </div>
       </fui-label>
     </fui-checkbox-group>
@@ -422,13 +418,7 @@ const fileList = computed(() =>
       ></fui-picker>
     </template>
     <template v-else>
-      <fui-list-cell
-        arrow
-        @click="showSelect = true"
-        :padding="[0]"
-        :bottomBorder="false"
-        borderColor="transparent"
-      >
+      <fui-list-cell arrow @click="showSelect = true" :padding="[0]" :bottomBorder="false" borderColor="transparent">
         <template v-if="props.field.group">
           {{ pickerResultText }}
         </template>
@@ -448,11 +438,7 @@ const fileList = computed(() =>
         @cancel="showSelect = false"
       ></fui-picker>
     </template>
-    <div
-      v-if="!props.error && props.field.hint"
-      class="field-hint"
-      :style="props.field.attrs.hint_style"
-    >
+    <div v-if="!props.error && props.field.hint" class="field-hint" :style="props.field.attrs.hint_style">
       {{ props.field.hint }}
     </div>
   </template>
@@ -495,7 +481,7 @@ const fileList = computed(() =>
       :disabled="props.field.disabled"
       :radius="16"
       :fileList="fileList"
-      :sizeType="props.field.attrs.sizeType || ['compressed']"
+      :sizeType="props.field.attrs.sizeType || ['original', 'compressed']"
       :suffix="props.field.attrs.suffix"
       :width="props.field.attrs.width"
       :height="props.field.attrs.height"
@@ -508,11 +494,7 @@ const fileList = computed(() =>
       @preview="fuiUploadPreview"
     >
     </fui-upload>
-    <div
-      v-if="!props.error && props.field.hint"
-      class="field-hint"
-      :style="props.field.attrs.hint_style"
-    >
+    <div v-if="!props.error && props.field.hint" class="field-hint" :style="props.field.attrs.hint_style">
       {{ props.field.hint }}
     </div>
   </template>

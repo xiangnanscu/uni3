@@ -2,6 +2,8 @@ import { $, chalk, argv } from "zx";
 import fs from "fs";
 import ejs from "ejs";
 
+// yarn app -f display --table_name=display
+
 const green = (s) => console.log(chalk.green(s));
 const red = (s) => console.log(chalk.red(s));
 
@@ -59,7 +61,7 @@ async function make(opts) {
   };
   for (const [i, modelName] of opts.model.map(toPascalName).entries()) {
     await $`mkdir -p src/views/${modelName}`;
-    for (const actionName of ["Create", "Update", "List", "Detail"]) {
+    for (const actionName of ["Form", "List", "Detail"]) {
       renderFile({
         src: `template/Model${actionName}.vue.ejs`,
         dest: `src/views/${modelName}${actionName}.vue`,

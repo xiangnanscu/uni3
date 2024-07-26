@@ -33,6 +33,9 @@
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "~/*": [
+        "./*"
       ]
     },
     "esModuleInterop": true,
@@ -41,6 +44,11 @@
     "allowJs": true
   },
   "include": [
+    "env.d.ts",
+    "lib/**/*",
+    "composables/**/*",
+    "src/components/**/*",
+    "globals/**/*",
     "src/**/*.ts",
     "src/**/*.d.ts",
     "src/**/*.tsx",

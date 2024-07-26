@@ -12,7 +12,7 @@ const env = process.env;
 const plugins = [
   Components({
     // https://github.com/antfu/unplugin-vue-components#configuration
-    dirs: ["./src/components"],
+    dirs: ["./components", "./src/components", "./src/localComponents"],
     extensions: ["vue", "jsx"],
     dts: "./src/unplugin/components.d.ts",
     directoryAsNamespace: true,
@@ -28,7 +28,6 @@ const plugins = [
     },
     imports: [
       "vue",
-      "pinia",
       "@vueuse/core",
       {
         "@dcloudio/uni-app": [
@@ -49,9 +48,13 @@ const plugins = [
     vueTemplate: true,
     include: [/\.[tj]sx?$/, /\.vue$/, /\.vue\?vue/],
     dirs: [
-      "./src/globals",
+      "./components", // only root modules
+      "./composables", // only root modules
+      "./globals",
+      "./src/components", // only root modules
       "./src/composables", // only root modules
-      "./src/store/**", // all nested modules
+      "./src/localComponents", // only root modules
+      "./src/localComposables", // only root modules
     ],
   }),
   // https://docs.sheetjs.com/docs/demos/static/vitejs
@@ -90,9 +93,7 @@ const { parsed: exposedEnvs } = expand({
   }),
   ignoreProcessEnv: true,
 });
-const envKeys = Object.fromEntries(
-  Object.entries(exposedEnvs).map(([k, v]) => [`process.env.${k}`, toLiteral(v)]),
-);
+const envKeys = Object.fromEntries(Object.entries(exposedEnvs).map(([k, v]) => [`process.env.${k}`, toLiteral(v)]));
 const VITE_PROXY_PREFIX = process.env.VITE_PROXY_PREFIX || "/proxy";
 const VITE_PROXY_PREFIX_REGEX = new RegExp("^" + VITE_PROXY_PREFIX);
 const VITE_NAME = process.env.VITE_NAME;
@@ -105,6 +106,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
+      "~/": fileURLToPath(new URL("./", import.meta.url)) + "/",
       "@/": fileURLToPath(new URL("./src", import.meta.url)) + "/",
       stream: "stream-browserify",
       // vm: "vm-browserify",

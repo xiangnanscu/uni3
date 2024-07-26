@@ -1,3 +1,6 @@
+import { reactive } from "vue";
+import { onLoad } from "@dcloudio/uni-app";
+
 export function useQuery() {
   const query = reactive({});
   onLoad((options) => {

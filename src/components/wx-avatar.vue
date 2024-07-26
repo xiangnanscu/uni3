@@ -8,19 +8,11 @@
           mode="aspectFill"
           @click.stop="prviewImage(modelValue, 0)"
         ></image>
-        <view
-          v-if="delIcon && !readonly"
-          class="icon-del-box"
-          @click.stop="delFile(0)"
-        >
+        <view v-if="delIcon && !readonly" class="icon-del-box" @click.stop="delFile(0)">
           <view class="icon-del"></view>
           <view class="icon-del rotate"></view>
         </view>
-        <view
-          v-if="modelValue.errMsg"
-          class="file-picker__mask"
-          @click.stop="uploadFiles(modelValue, 0)"
-        >
+        <view v-if="modelValue.errMsg" class="file-picker__mask" @click.stop="uploadFiles(modelValue, 0)">
           点击重试
         </view>
       </view>
@@ -45,18 +37,11 @@
 const ossUrl = `https://${process.env.ALIOSS_HOST}/`;
 
 export default {
-  name: "uploadImage",
-  emits: [
-    "uploadFiles",
-    "choose",
-    "delFile",
-    "update:modelValue",
-    "update:error"
-  ],
+  name: "WxAvatar",
+  emits: ["uploadFiles", "choose", "delFile", "update:modelValue", "update:error"],
   data() {
-    console.log("modelValue", this.modelValue);
     return {
-      localValue: []
+      localValue: [],
     };
   },
   props: {
@@ -66,15 +51,15 @@ export default {
       type: Object,
       default() {
         return { url: "", errMsg: "" };
-      }
+      },
     },
     disabled: {
       type: Boolean,
-      default: false
+      default: false,
     },
     disablePreview: {
       type: Boolean,
-      default: false
+      default: false,
     },
     imageStyles: {
       type: Object,
@@ -82,18 +67,18 @@ export default {
         return {
           width: "auto",
           height: "auto",
-          border: {}
+          border: {},
         };
-      }
+      },
     },
     delIcon: {
       type: Boolean,
-      default: true
+      default: true,
     },
     readonly: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   watch: {},
   computed: {
@@ -101,7 +86,7 @@ export default {
       const styles = {
         width: "auto",
         height: "auto",
-        border: {}
+        border: {},
       };
       return Object.assign(styles, this.imageStyles);
     },
@@ -152,7 +137,7 @@ export default {
           "border-width": width,
           "border-style": (border && border.style) || "solid",
           "border-color": (border && border.color) || "#eee",
-          "border-radius": radius
+          "border-radius": radius,
         };
       }
       let classles = "";
@@ -160,19 +145,17 @@ export default {
         classles += `${i}:${obj[i]};`;
       }
       return classles;
-    }
+    },
   },
   methods: {
     async choose(event) {
       const avatar = event.detail?.avatarUrl;
-      const key = `${process.env.VITE_NAME}/wx/${utils.uuid()}.${avatar
-        .split(".")
-        .pop()}`;
+      const key = `${process.env.VITE_NAME}/wx/${utils.uuid()}.${avatar.split(".").pop()}`;
       this.$emit("update:error", "");
       const { data: payload } = await Http.post("/alioss_payload", {
         key,
         size: this.size,
-        bucket: process.env.ALIOSS_BUCKET
+        bucket: process.env.ALIOSS_BUCKET,
       });
       // console.log({ ossUrl, avatar, key });
       try {
@@ -183,22 +166,18 @@ export default {
           formData: {
             key,
             success_action_status: 200,
-            ...payload
-          }
+            ...payload,
+          },
         });
         if (res.errMsg == "uploadFile:ok") {
           if (res.statusCode >= 400) {
-            if (
-              res.data.includes(
-                `Your proposed upload exceeds the maximum allowed size`
-              )
-            ) {
+            if (res.data.includes(`Your proposed upload exceeds the maximum allowed size`)) {
               this.$emit("update:error", `图片大小不能超过${this.size}`);
             } else {
               uni.showModal({
                 title: `上传出错`,
                 content: res.data,
-                showCancel: false
+                showCancel: false,
               });
             }
           } else {
@@ -212,7 +191,7 @@ export default {
         uni.showModal({
           title: `上传出错`,
           content: res.data,
-          showCancel: false
+          showCancel: false,
         });
       }
     },
@@ -230,7 +209,7 @@ export default {
 
       uni.previewImage({
         urls: urls,
-        current: index
+        current: index,
       });
     },
     value2px(value) {
@@ -242,8 +221,8 @@ export default {
         }
       }
       return value;
-    }
-  }
+    },
+  },
 };
 </script>
 

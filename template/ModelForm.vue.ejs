@@ -1,0 +1,31 @@
+<template>
+  <page-layout v-if="values">
+    <x-title v-if="!query.id"></x-title>
+    <modelform-fui :model="model" :action-url="actionUrl" @successPost="successPost" :values="values"></modelform-fui>
+  </page-layout>
+</template>
+
+<script setup>
+import modelJson from "@/models/<%= tableName %>.json";
+
+const query = useQuery();
+const actionUrl = computed(() => (query.id ? `/<%= tableName %>/update/${query.id}` : `/<%= tableName %>/create`));
+const values = ref();
+const model = Model.create_model(modelJson);
+const successPost = (data) => {
+  utils.redirect(`/views/<%= modelName %>Detail?id=${query.id || data.id}`);
+};
+onLoad(async () => {
+  if (query.id) {
+    values.value = await useGet(`/<%= tableName %>/detail/${query.id}`);
+  } else {
+    values.value = {};
+  }
+});
+</script>
+
+<style>
+page {
+  background-color: #fff;
+}
+</style>

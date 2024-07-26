@@ -1,3 +1,6 @@
+import { ref } from "vue";
+import { onLoad } from "@dcloudio/uni-app";
+
 export function usePage() {
   const page = ref(null);
   onLoad(() => {

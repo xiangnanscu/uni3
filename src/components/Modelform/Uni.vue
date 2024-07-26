@@ -13,7 +13,7 @@ const props = defineProps({
   actionUrl: { type: String, required: false },
   successUrl: { type: [Object, String] },
   successMessage: { type: String },
-  successUseRedirect: { type: Boolean, default: false },
+  successUseRedirect: { type: Boolean, default: true },
   method: { type: String, default: "POST" }, // get
   hideSubmitButton: { type: Boolean, default: false },
   submitButtonText: { type: String, default: "提交" },
@@ -31,9 +31,7 @@ const deepcopy = (o) => JSON.parse(JSON.stringify(o));
 const values = props.syncValues ? reactive(props.values) : reactive(deepcopy(props.values));
 const formNames = computed(() => props.names || props.model.admin?.form_names || props.model.names);
 Object.assign(values, props.model.to_form_value(values, formNames.value));
-const fieldsArray = computed(() =>
-  formNames.value.map((name) => props.model.fields[name]).filter((e) => e),
-);
+const fieldsArray = computed(() => formNames.value.map((name) => props.model.fields[name]).filter((e) => e));
 const getFieldRules = (field, index) => [
   { required: field.required, errorMessage: `必须填写${field.label}` },
   {
@@ -233,11 +231,7 @@ const submit = async () => {
           </uni-forms-item>
         </template>
         <uni-forms-item :label="values[field.name]?.length > 0 ? '' : field.label">
-          <x-button
-            size="mini"
-            :text="`添加${field.label}`"
-            @click="values[field.name].push(field.get_default())"
-          >
+          <x-button size="mini" :text="`添加${field.label}`" @click="values[field.name].push(field.get_default())">
             <uni-icons type="plusempty" style="color: #fff"></uni-icons>
             添加{{ field.label }}
           </x-button>

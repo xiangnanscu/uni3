@@ -27,14 +27,15 @@ module.exports = {
     ecmaVersion: "latest",
   },
   rules: {
+    "no-empty": 0,
     "prettier/prettier": [
       "warn",
       {
         trailingComma: "all", // 使用rvest.vs-code-prettier-eslint时, 这里需要配置
-        printWidth: 100,
+        printWidth: 120,
       },
     ],
-    "max-len": ["warn", { code: 100, ignoreComments: true, ignoreStrings: true }],
+    "max-len": ["warn", { code: 120, ignoreComments: true, ignoreStrings: true }],
     "prefer-const": [
       "error",
       {
