@@ -30,6 +30,7 @@
   ],
   // https://github.com/sumneko/lua-language-server/tree/master/meta/3rd
   "Lua.workspace.library": [
+    "types",
     "${3rd}/lfs/library",
     "${3rd}/luassert/library",
     "${3rd}/busted/library",
@@ -43,6 +44,7 @@
   },
   "Lua.workspace.checkThirdParty": false,
   "Lua.completion.autoRequire": false,
+  "html.format.unformatted": "wbr,%",
   "html.format.wrapAttributesIndentSize": 2,
   "html.format.wrapAttributes": "force-expand-multiline", //volar格式化template的选项
   "html.format.wrapLineLength": 80,
