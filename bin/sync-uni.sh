@@ -1,10 +1,10 @@
 #!/bin/bash
 
 xodel_dirs=('src/views')
-sync_dirs=('bin' 'patches' 'template' 'components' 'composables' 'globals' 'lib' 'src/components' 'src/lib'  )
+sync_dirs=('.vscode' 'bin' 'patches' 'template' 'components' 'composables' 'globals' 'lib' 'src/components' 'src/lib'  )
 down_dirs=("${xodel_dirs[@]}" "${sync_dirs[@]}")
 skip_files=('Home.vue' 'wx_verify.lua' 'init-certbot.sh.ejs' 'init-certbot.sh' 'index.ts' 'tabbar')
-top_files=('.eslintrc.cjs' 'tsconfig.json' 'tsconfig.node.json' 'vite.config.ts')
+top_files=('.eslintrc.cjs' 'tsconfig.json' 'tsconfig.node.json' 'vite.config.ts' 'src/main.js' 'src/vite-env.d.ts')
 working_dir=$PWD
 lib_dir="$working_dir/tmp/template"
 
@@ -23,8 +23,8 @@ function main() {
       mkdir -p "$dest_dir"
     fi
     for tf in "${top_files[@]}"; do
-      cp -rf "$src_dir/$tf" "$dest_dir"
-      echo "复制$src_dir/$tf到$dest_dir"
+      cp -rf "$src_dir/$tf" "$dest_dir/$tf"
+      echo "复制$src_dir/$tf到$dest_dir/$tf"
     done
     for dir in "${down_dirs[@]}"; do
       echo "处理 $dir"
@@ -60,8 +60,8 @@ function main() {
     mkdir -p "$dest_dir"
     echo "sync from $src_dir to $dest_dir"
     for tf in "${top_files[@]}"; do
-      cp -rf "$src_dir/$tf" "$dest_dir"
-      echo "复制$src_dir/$tf到$dest_dir"
+      cp -rf "$src_dir/$tf" "$dest_dir/$tf"
+      echo "复制$src_dir/$tf到$dest_dir/$tf"
     done
     for dir in "${xodel_dirs[@]}"; do
       echo "处理 $dir"

@@ -31,6 +31,7 @@ module.exports = {
     "prettier/prettier": [
       "warn",
       {
+        singleQuote: false,
         trailingComma: "all", // 使用rvest.vs-code-prettier-eslint时, 这里需要配置
         printWidth: 120,
       },
