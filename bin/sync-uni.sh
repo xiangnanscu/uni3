@@ -1,7 +1,7 @@
 #!/bin/bash
 
 xodel_dirs=('src/views')
-sync_dirs=('.vscode' 'bin' 'patches' 'template' 'components' 'composables' 'globals' 'lib' 'src/components' 'src/lib'  )
+sync_dirs=('.vscode' 'bin' 'patches' 'template' 'src/components' 'composables' 'globals' 'lib'  )
 down_dirs=("${xodel_dirs[@]}" "${sync_dirs[@]}")
 skip_files=('Home.vue' 'wx_verify.lua' 'init-certbot.sh.ejs' 'init-certbot.sh' 'index.ts' 'tabbar')
 top_files=('.eslintrc.cjs' 'tsconfig.json' 'tsconfig.node.json' 'vite.config.ts' 'src/main.js' 'src/vite-env.d.ts')
@@ -65,7 +65,7 @@ function main() {
     done
     for dir in "${xodel_dirs[@]}"; do
       echo "处理 $dir"
-      rm -rf "$dest_dir/$dir"
+      # rm -rf "$dest_dir/$dir"
       for file in $src_dir/$dir/*; do
         fn="$(basename $file)"
         lib_file="$dest_dir/$dir/$fn"

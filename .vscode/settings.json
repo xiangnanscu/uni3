@@ -4,6 +4,7 @@
   "files.associations": {
     "*.json": "jsonc"
   },
+  "editor.snippetSuggestions": "top",
   "search.exclude": {
     "package-lock.json": true,
     "auto_generated": true,

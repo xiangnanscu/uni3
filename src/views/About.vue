@@ -1,5 +1,5 @@
 <template>
-  <page-layout> {{ version }}11 </page-layout>
+  <page-layout> {{ version }} </page-layout>
 </template>
 
 <script>

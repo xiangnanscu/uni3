@@ -21,17 +21,15 @@
 </template>
 
 <script setup>
+// onShareAppMessage
 const excludeTitles = [];
 const subscribeItems = ref([]);
 const user = useUser();
 onLoad(async (opts) => {
   const templates = await useGet(`/wx/get_template_list`);
-  const subscribeLogs = await usePost(
-    `/subscribe/records?select=status&select=id&select=template_id`,
-    {
-      openid: user.openid,
-    },
-  );
+  const subscribeLogs = await usePost(`/subscribe/records?select=status&select=id&select=template_id`, {
+    openid: user.openid,
+  });
   const enabledIds = subscribeLogs.filter((e) => e.status == "启用").map((e) => e.template_id);
   for (const t of templates) {
     t.checked = enabledIds.includes(t.priTmplId) ? true : false;
